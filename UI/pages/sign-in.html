@@ -38,13 +38,18 @@
 
       <form role="form">
         <div class="q-form__input">
-          <label for="mail">Email</label>
-          <input type="email" placeholder="dennisritchie@email.com" id="mail" name="email">
+          <label for="mail">Email
+            <abbr title="required">*</abbr>
+          </label>
+          <input type="email" 
+            placeholder="dennisritchie@email.com" id="mail" name="email" required>
         </div>
 
         <div class="q-form__input password-input">
-          <label for="pwd">Password</label>
-          <input type="password" placeholder="************" id="pwd" name="password">
+          <label for="pwd">Password
+            <abbr title="required">*</abbr>
+          </label>
+          <input type="password" placeholder="************" id="pwd" name="password" required>
           <button class="toggle-password-visibility" type="button">show</button>
           <span id="forgot-pwd"><a href="#">Forgot password?</a></span>
         </div>
@@ -97,4 +102,5 @@
   </footer>
   <script src="../js/base.js"></script>
 </body>
+
 </html>

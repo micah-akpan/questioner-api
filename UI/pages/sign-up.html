@@ -22,7 +22,7 @@
       <nav>
         <ul>
           <span>Are you a member?
-            <li><a href="#!">Login</a></li>
+            <li><a href="./sign-in.html">Login</a></li>
           </span>
         </ul>
       </nav>
@@ -38,30 +38,40 @@
       <form>
         <div class="q-form__input">
           <div class="q-form__input-name">
-            <label for="f-name">First Name</label>
-            <input type="text" placeholder="Dennis" id="f-name" name="first-name">
+            <label for="f-name">First Name
+              <abbr title="required">*</abbr>
+            </label>
+            <input type="text" placeholder="Dennis" id="f-name" name="first-name" required>
           </div>
 
           <div class="q-form__input-name">
-            <label for="f-name">Last Name</label>
-            <input type="text" placeholder="Ritchie" id="l-name" name="last-name">
+            <label for="f-name">Last Name
+              <abbr title="required">*</abbr>
+            </label>
+            <input type="text" placeholder="Ritchie" id="l-name" name="last-name" required>
           </div>
         </div>
 
         <div class="q-form__input">
-          <label for="mail">Email</label>
-          <input type="email" placeholder="dennisritchie@email.com" id="mail" name="email">
+          <label for="mail">Email
+            <abbr title="required">*</abbr>
+          </label>
+          <input type="email" placeholder="dennisritchie@email.com" id="mail" name="email" required>
         </div>
 
         <div class="q-form__input password-input">
-          <label for="pwd">Password</label>
-          <input type="password" placeholder="************" id="pwd" name="password">
+          <label for="pwd">Password
+            <abbr title="required">*</abbr>
+          </label>
+          <input type="password" placeholder="************" id="pwd" name="password" required>
           <span class="toggle-password-visibility">show</span>
           <span>Your password must be at least 8 characters</span>
         </div>
 
         <div class="q-form__input password-input">
-          <label for="c-pwd">Confirm Password</label>
+          <label for="c-pwd">Confirm Password
+            <abbr title="required">*</abbr>
+          </label>
           <input type="password" placeholder="************" id="c-pwd">
           <span class="toggle-password-visibility">show</span>
           <span></span>
