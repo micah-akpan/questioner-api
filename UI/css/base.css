@@ -1,0 +1,277 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+html {
+  font: 14px/1.5 Roboto, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+body .container {
+  width: 80%;
+  margin: auto;
+}
+
+header {
+  min-height: 100px;
+  background-color: #116466;
+  box-shadow: 2px 2px 5px grey;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+header #q-branding {
+  float: left;
+  color: #ffffff;
+}
+
+header #q-branding a {
+  text-decoration: none;
+}
+
+header #q-branding a:link {
+  color: white;
+}
+
+header #q-branding a:hover {
+  color: #ffcb9a;
+}
+
+header #q-branding a:visited {
+  color: white;
+}
+
+header #q-branding h1 {
+  padding: 0;
+  margin-top: 30px;
+}
+
+header nav {
+  float: right;
+  margin-top: 40px;
+}
+
+header nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav span {
+  color: #ffffff;
+}
+
+header nav li {
+  display: inline;
+}
+
+header nav a {
+  display: inline-block;
+  margin-left: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #ffffff;
+  transition: color 0.2s;
+  font-weight: 600;
+}
+
+header nav a:link {
+  color: #ffffff;
+}
+
+header nav a:hover {
+  color: #ffcb9a;
+}
+
+.clear-float {
+  clear: both;
+}
+
+#q-form {
+  width: 600px;
+  min-width: 500px;
+  margin: 100px auto 200px auto;
+  border: 1px solid #116466;
+  border-radius: 3px;
+}
+
+#q-form h3 {
+  text-align: center;
+  font-size: 2rem;
+  color: #116466;
+}
+
+#q-form .q-form__input-name {
+  width: calc(90% / 2);
+  display: inline-block;
+  /* margin: 0 10px; */
+}
+
+#q-form .q-form__input {
+  margin: 10px 0;
+}
+
+#q-form .q-form__input-name:nth-child(2) {
+  margin: 0 15px;
+}
+
+#q-form input {
+  width: 90%;
+  padding: 1rem;
+  outline: none;
+  border: 1px solid #116466;
+}
+
+#q-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+#q-form #forgot-pwd {
+  float: right;
+  margin: 5px;
+}
+
+#q-form button {
+  display: block;
+  margin: 50px auto 0 auto;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: #116466;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#q-form button:hover {
+  background-color: #07504c;
+}
+
+#q-form .social-media__links--signup-option::before {
+}
+
+#q-form .social-media__links--signup-option {
+  text-align: center;
+  margin: 20px auto;
+  font-weight: 600;
+}
+
+#q-form .social-media__links--signup-option::after {
+}
+
+#q-form .social-media__links {
+  margin: 20px auto 50px;
+  transition: background-color 0.3s;
+}
+
+#q-form .social-media__links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#q-form .social-media__links li {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#q-form .social-media__links a {
+  display: inline-block;
+  width: 100%;
+  color: #ffffff;
+  background-color: grey;
+  padding: 0.8rem;
+  text-decoration: none;
+}
+
+#q-form .social-media__links .facebook {
+  background-color: #3b5998;
+  transition: background-color 0.3s;
+}
+
+#q-form .social-media__links .facebook:hover {
+  background-color: #2e4474;
+}
+
+#q-form .social-media__links .google {
+  background-color: #db4a39;
+}
+
+#q-form .social-media__links .google:hover {
+  background-color: #cb4a39;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 24px;
+  background: #ffffff;
+}
+
+footer .footer-content {
+  margin: 0 auto;
+  text-align: center;
+}
+
+footer .copyright {
+  width: 15%;
+  margin-bottom: -70px;
+  color: #116466;
+}
+
+footer .footer-sec__links {
+  margin: 50px auto;
+  text-align: center;
+  flex: 1 1 auto;
+}
+
+footer .footer-main-content {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+}
+
+footer .footer-sec__links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .footer-sec__links li {
+  display: inline;
+}
+
+footer .footer-sec__links a,
+.footer-sec__social-media a {
+  display: inline-block;
+  padding: 0 1rem;
+  text-decoration: none;
+  color: #116466;
+}
+
+footer .footer-sec__links a:hover {
+  text-decoration: underline;
+}
+
+footer .footer-sec__social-media ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer .footer-sec__social-media li {
+  display: inline;
+}
+
+footer .follow-directive {
+  /* text-align: left; */
+  color: #07504c;
+}
