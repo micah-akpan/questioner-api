@@ -137,7 +137,7 @@ header nav a:hover {
   margin: 5px;
 }
 
-#q-form button {
+#q-form .q-form__btn {
   display: block;
   margin: 50px auto 0 auto;
   width: 100%;
@@ -219,10 +219,12 @@ header nav a:hover {
   border: 1px solid #116466;
   background-color: #116466;
   color: #fff;
-  padding: 0.9rem;
+  padding: 1rem;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 0.7rem;
+  width: auto;
+  cursor: pointer;
 }
 
 footer {
