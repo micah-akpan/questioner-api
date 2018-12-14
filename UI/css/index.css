@@ -1,0 +1,8 @@
+#q-showcase {
+    width: 100%;
+    background-image: url('../assets/img/showcase1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 340px;
+}

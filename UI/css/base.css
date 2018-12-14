@@ -99,6 +99,24 @@ header nav a:hover {
   border-radius: 3px;
 }
 
+#q-form .social-media__links--option-rule {
+  width: 100%;
+  border-top: 1px solid #116466;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#q-form .social-media__links--signup-option {
+  display: block;
+  margin: -10px auto 0 auto;
+  text-align: center;
+  font-weight: 600;
+  background-color: #f4f4f4;
+  line-height: 1rem;
+  width: 60px;
+  color: #07504c;
+}
+
 #q-form h3 {
   text-align: center;
   font-size: 2rem;
@@ -158,12 +176,6 @@ header nav a:hover {
 }
 
 #q-form .social-media__links--signup-option::before {
-}
-
-#q-form .social-media__links--signup-option {
-  text-align: center;
-  margin: 20px auto;
-  font-weight: 600;
 }
 
 #q-form .social-media__links--signup-option::after {
