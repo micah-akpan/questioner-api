@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/signup.css">
+  <link rel="stylesheet" href="../css/login.css">
 </head>
 
 <body>
@@ -21,8 +21,8 @@
 
       <nav>
         <ul>
-          <span>Are you a member?
-            <li><a href="#!">Login</a></li>
+          <span>Not Registered yet?
+            <li><a href="./sign-up.html">Sign Up</a></li>
           </span>
         </ul>
       </nav>
@@ -33,21 +33,10 @@
 
   <section id="q-form">
     <div class="container">
-      <h3>Create an Account</h3>
+      <p class="welcome-back-msg">Welcome back</p>
+      <h3>Log into your account</h3>
 
-      <form>
-        <div class="q-form__input">
-          <div class="q-form__input-name">
-            <label for="f-name">First Name</label>
-            <input type="text" placeholder="Dennis" id="f-name" name="first-name">
-          </div>
-
-          <div class="q-form__input-name">
-            <label for="f-name">Last Name</label>
-            <input type="text" placeholder="Ritchie" id="l-name" name="last-name">
-          </div>
-        </div>
-
+      <form role="form">
         <div class="q-form__input">
           <label for="mail">Email</label>
           <input type="email" placeholder="dennisritchie@email.com" id="mail" name="email">
@@ -56,16 +45,9 @@
         <div class="q-form__input">
           <label for="pwd">Password</label>
           <input type="password" placeholder="************" id="pwd" name="password">
-          <span>Your password must be at least 8 characters</span>
         </div>
 
-        <div class="q-form__input">
-          <label for="c-pwd">Confirm Password</label>
-          <input type="password" placeholder="************" id="c-pwd">
-          <span></span>
-        </div>
-
-        <button type="button" q-form__btn btn>Sign Up</button>
+        <button type="button" q-form__btn btn>Login</button>
       </form>
 
       <p class="social-media__links--signup-option">OR</p>
