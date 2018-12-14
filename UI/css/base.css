@@ -137,7 +137,7 @@ header nav a:hover {
   margin: 5px;
 }
 
-#q-form button {
+#q-form .q-form__btn {
   display: block;
   margin: 50px auto 0 auto;
   width: 100%;
@@ -178,7 +178,7 @@ header nav a:hover {
 
 #q-form .social-media__links li {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 #q-form .social-media__links a {
@@ -205,6 +205,26 @@ header nav a:hover {
 
 #q-form .social-media__links .google:hover {
   background-color: #cb4a39;
+}
+
+
+#q-form .password-input {
+  position: relative;
+}
+
+#q-form .toggle-password-visibility {
+  position: absolute;
+  top: 27px;
+  right: 18px;
+  border: 1px solid #116466;
+  background-color: #116466;
+  color: #fff;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.7rem;
+  width: auto;
+  cursor: pointer;
 }
 
 footer {
