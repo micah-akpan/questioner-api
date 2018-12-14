@@ -105,6 +105,10 @@ header nav a:hover {
   color: #116466;
 }
 
+#q-form abbr[title="required"] {
+  color: #f55;
+}
+
 #q-form .q-form__input-name {
   width: calc(90% / 2);
   display: inline-block;
