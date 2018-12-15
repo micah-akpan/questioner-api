@@ -1,0 +1,114 @@
+@import url("../css/base.css");
+
+.q-right-nav a {
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.q-right-nav .sign-in,
+.q-right-nav .sign-up {
+  transition: border 0.2s linear;
+}
+
+.q-right-nav .sign-in {
+  border: 1px solid #ffcb9a;
+  text-align: center;
+  margin-right: 10px;
+  color: #ffffff;
+}
+
+.q-right-nav .sign-in:hover {
+  background-color: #ffcb9a;
+  color: #116466;
+}
+
+.q-right-nav .sign-up {
+  border: none;
+  background: #ffcb9a;
+  color: #116466;
+}
+
+.q-right-nav .sign-up:hover {
+  background: transparent;
+  border: 1px solid #ffcb9a;
+  color: #ffcb9a;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+#q-showcase {
+  width: 100%;
+  height: 400px;
+  min-height: 350px;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../assets/img/showcase2.jpg") center/cover no-repeat;
+  margin-top: 70px;
+}
+
+#q-showcase h2 {
+  padding: 0;
+  display: inline-block;
+  width: 100%;
+  margin: calc(350px / 2 - 20px) auto 0 auto;
+  text-align: center;
+}
+
+#q-showcase h2,
+#q-showcase button {
+  color: #ffffff;
+  outline: none;
+}
+
+#q-showcase button {
+  background-color: #116466;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  width: 20%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 10px auto;
+}
+
+#q-showcase button:hover {
+  background: #07504c;
+}
+
+#q-showcase button:active {
+  background: #116466;
+}
+
+.cards {
+  display: flex;
+  margin: 20px auto;
+}
+
+.cards .q-card {
+  width: calc(100% / 3 - 10px);
+  height: 300px;
+  border: 1px solid #333333;
+  margin: 0 10px;
+  border-radius: 5px;
+}
+
+.cards .q-card__no-border {
+  border: none;
+}
+
+.q-card__no-border img {
+  width: 20%;
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+#q-showcase .q-showcase-content h2 {
+  text-align: center;
+}
+
+#q-cards h3,
+.q-how-question-works h3 {
+  text-align: center;
+}

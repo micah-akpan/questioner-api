@@ -19,11 +19,13 @@ body {
   margin: 0 auto;
   line-height: 1.5;
   color: #333333;
+  overflow: auto;
 }
 
 .container {
   width: 80%;
   margin: auto;
+  overflow: hidden;
 }
 
 /* Global */
@@ -36,6 +38,12 @@ ul {
   margin: 0;
   padding: 0;
 }
+
+section {
+  margin-bottom: 40px;
+}
+
+/* App Main Header */
 
 header {
   min-height: 80px;
