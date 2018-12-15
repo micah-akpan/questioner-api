@@ -2,12 +2,12 @@
 
 html {
   font: 14px/1.5 Roboto, Helvetica, sans-serif;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
 }
 
 body .container {
@@ -18,10 +18,12 @@ body .container {
 header {
   min-height: 100px;
   background-color: #116466;
-  box-shadow: 2px 2px 5px grey;
-  position: sticky;
+  /* box-shadow: 2px 2px 5px grey; */
+  position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
+  z-index: 1000;
 }
 
 header #q-branding {
@@ -244,9 +246,9 @@ header nav a:hover {
 }
 
 footer {
-  position: fixed;
+  /* position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: 0; */
   width: 100%;
   padding: 10px 24px;
   background: #ffffff;

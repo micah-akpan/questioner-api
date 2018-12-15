@@ -1,8 +1,67 @@
+section {
+  margin-bottom: 50px;
+}
+
 #q-showcase {
-    width: 100%;
-    background-image: url('../assets/img/showcase1.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 340px;
+  height: 400px;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../assets/img/showcase2.jpg") center/cover no-repeat;
+  min-height: 350px;
+  margin-top: 100px;
+}
+
+#q-showcase h2 {
+  padding: 0;
+  display: inline-block;
+  width: 100%;
+  margin: calc(350px / 2 - 20px) auto 0 auto;
+  text-align: center;
+}
+
+#q-showcase h2,
+#q-showcase button {
+    color: #ffffff;
+}
+
+#q-showcase button {
+    background-color: #116466;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 30px;
+    width: 20%;
+    cursor: pointer;
+    transition: background-color .3s;
+}
+
+#q-showcase button:hover {
+    background: #07504c;
+}
+
+#q-showcase button {
+  display: block;
+  margin: 10px auto;
+}
+
+.cards {
+  display: flex;
+  width: 90%;
+  margin: 10px auto;
+}
+
+.cards .q-card {
+  width: calc(90% / 3 - 10px);
+  height: 250px;
+  border: 1px solid #333;
+  margin: 0 10px;
+  border-radius: 2px;
+}
+
+.cards .q-card__no-border {
+  border: none;
+}
+
+.q-card__no-border img {
+  width: 25%;
+  display: block;
+  margin: 0 auto 20px;
 }
