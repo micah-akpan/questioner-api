@@ -1,0 +1,23 @@
+#q-meetups-preview {
+  margin-top: 100px;
+}
+
+#q-meetups-preview .q-meetups-preview__block {
+  display: flex;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  #q-meetups-preview .q-meetups-preview__block {
+    flex-direction: column;
+  }
+}
+
+
+#q-meetups-preview .q-meetups-preview__block .image-preview {
+  flex: 1 1 auto;
+}
+
+#q-meetups-preview .q-meetups-preview__block .meetup-details {
+  flex: 1 1 auto;
+}
