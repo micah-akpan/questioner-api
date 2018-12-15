@@ -305,8 +305,18 @@ footer .footer-sec__social-media ul {
   padding: 0;
 }
 
+footer .footer-sec__social-media img {
+  margin-left: 0px;
+  width: 30px;
+  height: 30px;
+}
+
 footer .footer-sec__social-media li {
-  display: inline;
+  display: inline-block;
+}
+
+footer .footer-sec__social-media a {
+  padding: 0.3rem;
 }
 
 footer .follow-directive {

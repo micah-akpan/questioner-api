@@ -45,6 +45,16 @@ nav.q-right-nav .sign-up a {
     color: #116466;
 }
 
+nav.q-right-nav .sign-up:hover {
+    background:transparent;
+    border: 1px solid #ffcb9a;
+    color: #ffcb9a;
+}
+
+nav.q-right-nav .sign-up a:hover {
+    color: #ffcb9a;
+}
+
 
 section {
   margin-bottom: 50px;
