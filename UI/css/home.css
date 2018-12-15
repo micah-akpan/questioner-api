@@ -1,5 +1,9 @@
 @import url("../css/base.css");
 
+.get-started-btn:active {
+  background-color: #ffcb9a;
+}
+
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
@@ -111,4 +115,36 @@ section {
 #q-cards h3,
 .q-how-question-works h3 {
   text-align: center;
+}
+
+.q-cards__more,
+.get-started-btn {
+  color: #333333;
+  display: block;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  margin: 0 auto;
+  background-color: #ffcb9a;
+  font-weight: bold;
+}
+
+.get-started-btn {
+  text-align: center;
+  width: 30%;
+}
+
+.q-cards__more {
+  border: 1px solid #116466;
+  color: #116466;
+  padding: 0.7rem;
+  transform: background-color .3s;
+}
+
+.q-cards__more:hover {
+  background-color: transparent;
+}
+
+.get-started-btn:hover {
+  background-color: #f7b77c;
 }

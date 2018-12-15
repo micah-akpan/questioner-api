@@ -17,7 +17,6 @@ body {
   margin: 0;
   padding: 0;
   margin: 0 auto;
-  line-height: 1.5;
   color: #333333;
   overflow: auto;
 }
@@ -29,6 +28,10 @@ body {
 }
 
 /* Global */
+h3 {
+  text-align: center;
+}
+
 a {
   text-decoration: none;
 }
@@ -41,6 +44,10 @@ ul {
 
 section {
   margin-bottom: 40px;
+}
+
+section .heading-sec__primary {
+  font-size: 2.5rem;
 }
 
 /* App Main Header */
