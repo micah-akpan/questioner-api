@@ -1,0 +1,97 @@
+
+
+/* Stylings for meetups list page */
+
+@import "../css/base.css";
+@import "../css/home.css";
+
+.q-btn {
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.notify-user__nav button {
+  width: 35px;
+  height: 35px;
+}
+
+.notify-user__nav button img {
+  width: 100%;
+}
+
+#q-search {
+  margin: 200px 0px 30px 140px;
+}
+
+.q-search__nav li {
+  display: inline-block;
+  padding: 0 1.5rem;
+}
+
+.q-search__nav li a {
+  color: #116466;
+}
+
+.q-search__nav li img {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.q-search__nav input[type="search"] {
+  display: none;
+}
+
+.cards .q-card {
+  border: 1px solid #116466;
+}
+
+/* Cards main content */
+.q-card .q-card__primary {
+  width: 100%;
+  height: 230px;
+  border-bottom: 1px solid #116466;
+}
+
+.q-card .q-card__primary .content {
+  max-width: 100%;
+  position: relative;
+}
+
+.q-card__primary .content img {
+  width: 100%;
+  height: 230px;
+}
+
+.q-card__primary .content img:hover {
+  opacity: 0.975;
+}
+
+.q-card__primary .content .q-asked-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #ffffff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.q-card .q-card__sec {
+  padding: 5px 0;
+}
+
+.q-card .q-card__sec p {
+  margin: 0 10px;
+  padding: 0;
+  color: #116466;
+}
+
+.q-card .q-card__sec .meetup-title {
+  font-size: 1.4rem;
+}
+
+.q-card .q-card__sec .meetup-sched-date {
+  color: #333333;
+  padding: 0;
+}

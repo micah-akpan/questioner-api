@@ -1,5 +1,5 @@
 const pToggleBtns = document.querySelectorAll(".toggle-password-visibility");
-let passwordVisible = false;
+const passwordVisible = false;
 
 // adds toggle password functionality
 for (let i = 0; i < pToggleBtns.length; i++) {
@@ -18,6 +18,7 @@ for (let i = 0; i < pToggleBtns.length; i++) {
   }
 }
 
+
 const passwordValidationMsg = document.querySelector('.pwd-validation-error-msg');
 const mainPasswdField = document.querySelector('input[id=pwd]');
 const confirmPasswdField = document.querySelector('input[id=c-pwd]');
@@ -29,4 +30,8 @@ confirmPasswdField.oninput = function () {
   } else {
     passwordValidationMsg.textContent = '';
   }
+}
+
+const matchPasswords = (val1, value2) => {
+
 }
