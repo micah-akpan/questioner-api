@@ -1,24 +1,46 @@
+/* Base css stylesheet
+   Contains global styles, common to every page
+*/
+
 @import url("https://fonts.googleapis.com/css?family=Roboto");
 
-html {
-  font: 14px/1.5 Roboto, Helvetica, sans-serif;
+*,
+*::after *::before {
   box-sizing: border-box;
+}
+
+html {
+  font: 15px/1.5 Roboto, Helvetica, sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
+  margin: 0 auto;
+  line-height: 1.5;
+  color: #333333;
 }
 
-body .container {
+.container {
   width: 80%;
   margin: auto;
 }
 
+/* Global */
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 header {
-  min-height: 100px;
+  min-height: 80px;
   background-color: #116466;
-  /* box-shadow: 2px 2px 5px grey; */
+  box-shadow: 2px 2px 5px #555555;
   position: fixed;
   top: 0;
   left: 0;
@@ -31,12 +53,8 @@ header #q-branding {
   color: #ffffff;
 }
 
-header #q-branding a {
-  text-decoration: none;
-}
-
 header #q-branding a:link {
-  color: white;
+  color: #ffffff;
 }
 
 header #q-branding a:hover {
@@ -44,41 +62,34 @@ header #q-branding a:hover {
 }
 
 header #q-branding a:visited {
-  color: white;
+  color: #ffffff;
 }
 
 header #q-branding h1 {
   padding: 0;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
+/* Main Navbar styling */
 header nav {
-  float: right;
-  margin-top: 40px;
+  margin-top: 28px;
 }
 
-header nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+header nav li {
+  display: inline-block;
+  margin-left: 2px;
 }
 
 header nav span {
   color: #ffffff;
 }
 
-header nav li {
-  display: inline-block;
-}
-
 header nav a {
   display: inline-block;
-  margin-left: 2px;
-  text-decoration: none;
   text-transform: uppercase;
   color: #ffffff;
   transition: color 0.2s;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 header nav a:link {
@@ -89,161 +100,29 @@ header nav a:hover {
   color: #ffcb9a;
 }
 
-.clear-float {
+/* Left Nav */
+.q-left-nav {
+  float: left;
+  margin-left: 10px;
+  border-left: 1px solid #aaaaaa;
+  padding: 0 10px;
+}
+
+.q-left-nav a {
+  text-transform: capitalize;
+  margin-top: 5px;
+}
+
+/* Right Nav */
+.q-right-nav {
+  float: right;
+}
+
+.clear {
   clear: both;
 }
 
-#q-form {
-  width: 600px;
-  min-width: 500px;
-  margin: 200px auto 200px auto;
-  border: 1px solid #116466;
-  border-radius: 3px;
-}
-
-#q-form .social-media__links--option-rule {
-  width: 100%;
-  border-top: 1px solid #116466;
-  margin-top: 30px;
-  text-align: center;
-}
-
-#q-form .social-media__links--signup-option {
-  display: block;
-  margin: -10px auto 0 auto;
-  text-align: center;
-  font-weight: 600;
-  background-color: #f4f4f4;
-  line-height: 1rem;
-  width: 60px;
-  color: #07504c;
-}
-
-#q-form h3 {
-  text-align: center;
-  font-size: 2rem;
-  color: #116466;
-}
-
-#q-form abbr[title="required"] {
-  color: #f55;
-}
-
-#q-form .q-form__input-name {
-  width: calc(90% / 2);
-  display: inline-block;
-  /* margin: 0 10px; */
-}
-
-#q-form .q-form__input {
-  margin: 10px 0;
-}
-
-#q-form .q-form__input-name:nth-child(2) {
-  margin: 0 15px;
-}
-
-#q-form input {
-  width: 90%;
-  padding: 1rem;
-  outline: none;
-  border: 1px solid #116466;
-}
-
-#q-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-#q-form #forgot-pwd {
-  float: right;
-  margin: 5px;
-}
-
-#q-form .q-form__btn {
-  display: block;
-  margin: 50px auto 0 auto;
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  background-color: #116466;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#q-form button:hover {
-  background-color: #07504c;
-}
-
-#q-form .social-media__links--signup-option::before {
-}
-
-#q-form .social-media__links--signup-option::after {
-}
-
-#q-form .social-media__links {
-  margin: 20px auto 50px;
-  transition: background-color 0.3s;
-}
-
-#q-form .social-media__links ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#q-form .social-media__links li {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-#q-form .social-media__links a {
-  display: inline-block;
-  width: 100%;
-  color: #ffffff;
-  background-color: grey;
-  padding: 0.8rem;
-  text-decoration: none;
-}
-
-#q-form .social-media__links .facebook {
-  background-color: #3b5998;
-  transition: background-color 0.3s;
-}
-
-#q-form .social-media__links .facebook:hover {
-  background-color: #2e4474;
-}
-
-#q-form .social-media__links .google {
-  background-color: #db4a39;
-}
-
-#q-form .social-media__links .google:hover {
-  background-color: #cb4a39;
-}
-
-
-#q-form .password-input {
-  position: relative;
-}
-
-#q-form .toggle-password-visibility {
-  position: absolute;
-  top: 27px;
-  right: 18px;
-  border: 1px solid #116466;
-  background-color: #116466;
-  color: #fff;
-  padding: 1rem;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 0.7rem;
-  width: auto;
-  cursor: pointer;
-}
+/* Footer */
 
 footer {
   /* position: fixed;
@@ -252,23 +131,14 @@ footer {
   width: 100%;
   padding: 10px 24px;
   background: #ffffff;
-}
-
-footer .footer-content {
   margin: 0 auto;
   text-align: center;
 }
 
 footer .copyright {
-  width: 15%;
+  width: 25%;
   margin-bottom: -70px;
   color: #116466;
-}
-
-footer .footer-sec__links {
-  margin: 50px auto;
-  text-align: center;
-  flex: 1 1 auto;
 }
 
 footer .footer-main-content {
@@ -277,17 +147,21 @@ footer .footer-main-content {
   margin: 0 auto;
 }
 
-footer .footer-sec__links ul {
+.footer-main-content .footer-sec__links {
+  margin: 50px auto;
+}
+
+.footer-main-content .footer-sec__links ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-footer .footer-sec__links li {
-  display: inline;
+.footer-main-content .footer-sec__links li {
+  display: inline-block;
 }
 
-footer .footer-sec__links a,
+.footer-main-content .footer-sec__links a,
 .footer-sec__social-media a {
   display: inline-block;
   padding: 0 1rem;
@@ -299,27 +173,22 @@ footer .footer-sec__links a:hover {
   text-decoration: underline;
 }
 
-footer .footer-sec__social-media ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Social media footer links */
+
+footer .follow-directive {
+  color: #07504c;
 }
 
-footer .footer-sec__social-media img {
-  margin-left: 0px;
-  width: 30px;
-  height: 30px;
-}
-
-footer .footer-sec__social-media li {
+.footer-main-content .footer-sec__social-media li {
   display: inline-block;
 }
 
-footer .footer-sec__social-media a {
+.footer-main-content .footer-sec__social-media a {
   padding: 0.3rem;
 }
 
-footer .follow-directive {
-  /* text-align: left; */
-  color: #07504c;
+.footer-main-content .footer-sec__social-media img {
+  margin-left: 0px;
+  width: 25px;
+  height: 25px;
 }

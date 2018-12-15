@@ -1,19 +1,4 @@
-nav.q-left-nav {
-    float: left;
-    margin-left: 10px;
-    border-left: 1px solid grey;
-    padding: 0 10px;
-}
-
-nav.q-left-nav a {
-    text-transform: capitalize;
-    margin-top: 5px;
-}
-
-nav.q-right-nav {
-    margin-top: 30px;
-}
-
+@import url("../css/base.css");
 
 nav.q-right-nav .sign-in {
     border: 1px solid #ffcb9a;
@@ -127,4 +112,13 @@ section {
   width: 25%;
   display: block;
   margin: 0 auto 20px;
+}
+
+
+#q-showcase .q-showcase-content h2 {
+    text-align: center;
+}
+
+#q-cards h3, .q-how-question-works h3 {
+    text-align: center;
 }
