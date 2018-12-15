@@ -49,7 +49,7 @@
   box-sizing: content-box;
   color: #333333;
   width: 0;
-  transition: width .5s;
+  transition: width 0.5s;
 }
 
 .q-search__nav .active {
@@ -113,4 +113,33 @@
 .q-card .q-card__sec .meetup-sched-date {
   color: #333333;
   padding: 0;
+}
+
+/* User Profile dropdown */
+.q-right-nav .q-user-profile__dropdown-trigger {
+  /* position: relative; */
+}
+
+.q-right-nav .q-user-profile__dropdown-menu {
+  position: absolute;
+  display: none;
+  color: white;
+  width: 200px;
+  background: #116466;
+  margin-left: -170px;
+  /* left: 0; */
+}
+
+.q-right-nav .q-user-profile__dropdown-menu li {
+  display: block;
+  border-bottom: 1px solid #aaaaaa;
+}
+
+.q-right-nav .q-user-profile__dropdown-menu a {
+  color: white;
+  text-transform: capitalize;
+}
+
+.q-right-nav .q-user-profile__dropdown-menu a:hover {
+  color: #ffcb9a;
 }
