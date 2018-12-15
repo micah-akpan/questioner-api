@@ -1,0 +1,145 @@
+/* Form */
+#q-form {
+  width: 600px;
+  min-width: 500px;
+  margin: 200px auto 200px auto;
+  border: 1px solid #116466;
+  border-radius: 3px;
+}
+
+#q-form .social-media__links--option-rule {
+  width: 100%;
+  border-top: 1px solid #116466;
+  margin-top: 30px;
+  text-align: center;
+}
+
+#q-form .social-media__links--signup-option {
+  display: block;
+  margin: -10px auto 0 auto;
+  text-align: center;
+  font-weight: 600;
+  background-color: #f4f4f4;
+  line-height: 1rem;
+  width: 60px;
+  color: #07504c;
+}
+
+#q-form h3 {
+  text-align: center;
+  font-size: 2rem;
+  color: #116466;
+}
+
+#q-form abbr[title="required"] {
+  color: #f55;
+}
+
+#q-form .q-form__input-name {
+  width: calc(90% / 2);
+  display: inline-block;
+  /* margin: 0 10px; */
+}
+
+#q-form .q-form__input {
+  margin: 10px 0;
+}
+
+#q-form .q-form__input-name:nth-child(2) {
+  margin: 0 15px;
+}
+
+#q-form input {
+  width: 90%;
+  padding: 1rem;
+  outline: none;
+  border: 1px solid #116466;
+}
+
+#q-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+#q-form #forgot-pwd {
+  float: right;
+  margin: 5px;
+}
+
+#q-form .q-form__btn {
+  display: block;
+  margin: 50px auto 0 auto;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: #116466;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#q-form button:hover {
+  background-color: #07504c;
+}
+
+#q-form .social-media__links {
+  margin: 20px auto 50px;
+  transition: background-color 0.3s;
+}
+
+#q-form .social-media__links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#q-form .social-media__links li {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#q-form .social-media__links a {
+  display: inline-block;
+  width: 100%;
+  color: #ffffff;
+  background-color: grey;
+  padding: 0.8rem;
+  text-decoration: none;
+}
+
+#q-form .social-media__links .facebook {
+  background-color: #3b5998;
+  transition: background-color 0.3s;
+}
+
+#q-form .social-media__links .facebook:hover {
+  background-color: #2e4474;
+}
+
+#q-form .social-media__links .google {
+  background-color: #db4a39;
+}
+
+#q-form .social-media__links .google:hover {
+  background-color: #cb4a39;
+}
+
+#q-form .password-input {
+  position: relative;
+}
+
+#q-form .toggle-password-visibility {
+  position: absolute;
+  top: 27px;
+  right: 18px;
+  border: 1px solid #116466;
+  background-color: #116466;
+  color: #fff;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.7rem;
+  width: auto;
+  cursor: pointer;
+}

@@ -1,13 +1,7 @@
 @import url("../css/base.css");
 @import url("../css/form.css");
 
-.welcome-back-msg {
-  text-align: center;
-  font-size: 1.5rem;
-  color: #116466;
-}
-
-.q-nav__login {
+.q-nav__signup {
   float: right;
   margin-top: 30px;
 }

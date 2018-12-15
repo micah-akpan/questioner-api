@@ -6,20 +6,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/signup.css">
+  <link rel="stylesheet" href="../css/sign-up.css">
 </head>
 
 <body>
   <header>
     <div class="container">
       <div id="q-branding">
-        <a href="#!">
+        <a href="../index.html">
           <h1 class="q-logo">Questioner</h1>
         </a>
       </div>
 
-      <nav>
+      <nav class="q-nav__signup">
         <ul>
           <span>Are you a member?
             <li><a href="./sign-in.html">Login</a></li>
@@ -33,7 +32,7 @@
 
   <section id="q-form">
     <div class="container">
-      <h3>Create an Account</h3>
+      <h3>Get started with free account</h3>
 
       <form>
         <div class="q-form__input">
@@ -78,7 +77,9 @@
         <button type="button" class="q-form__btn btn">Sign Up</button>
       </form>
 
-      <p class="social-media__links--signup-option">OR</p>
+      <div class="social-media__links--option-rule">
+        <span class="social-media__links--signup-option">OR</span>
+      </div>
 
       <div class="social-media__links">
         <ul>
@@ -109,13 +110,21 @@
         </section>
 
         <section class="footer-sec__social-media">
-          <p class="follow-directive">Follow us on:</p>
+          <p class="follow-directive">Follow us on</p>
           <ul>
-            <!-- Use svg icons here -->
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Hangout</a></li>
-            <li><a href="#">Medium</a></li>
-            <li><a href="#">Instagram</a></li>
+            <li>
+              <a href="#!" title="facebook">
+                <img src="../assets/icons/facebook.svg" alt="facebook logo">
+              </a></li>
+            <li><a href="#!" title="twitter">
+                <img src="../assets/icons/twitter.svg" alt="twitter logo">
+              </a></li>
+            <li><a href="#!" title="medium">
+                <img src="../assets/icons/medium.svg" alt="medium logo">
+              </a></li>
+            <li><a href="#!" title="instagram">
+                <img src="../assets/icons/instagram.svg" alt="instagram logo">
+              </a></li>
           </ul>
         </section>
       </div>
