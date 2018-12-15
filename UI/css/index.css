@@ -1,3 +1,51 @@
+nav.q-left-nav {
+    float: left;
+    margin-left: 10px;
+    border-left: 1px solid grey;
+    padding: 0 10px;
+}
+
+nav.q-left-nav a {
+    text-transform: capitalize;
+    margin-top: 5px;
+}
+
+nav.q-right-nav {
+    margin-top: 30px;
+}
+
+
+nav.q-right-nav .sign-in {
+    border: 1px solid #ffcb9a;
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+nav.q-right-nav .sign-in:hover {
+    background-color: #ffcb9a;
+    color: #116466;
+}
+
+nav.q-right-nav .sign-in a:hover {
+    color: #116466;
+}
+
+nav.q-right-nav .sign-up {
+    border: none;
+    background: #ffcb9a;
+    padding: 0.5rem;
+    color: #116466;
+    border-radius: 5px;
+    text-align: center;
+}
+
+nav.q-right-nav .sign-up a {
+    color: #116466;
+}
+
+
 section {
   margin-bottom: 50px;
 }
@@ -21,6 +69,7 @@ section {
 #q-showcase h2,
 #q-showcase button {
     color: #ffffff;
+    outline: none;
 }
 
 #q-showcase button {
@@ -35,6 +84,10 @@ section {
 
 #q-showcase button:hover {
     background: #07504c;
+}
+
+#q-showcase button:active {
+    background: #116466;
 }
 
 #q-showcase button {

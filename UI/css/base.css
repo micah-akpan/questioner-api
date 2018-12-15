@@ -68,7 +68,7 @@ header nav span {
 }
 
 header nav li {
-  display: inline;
+  display: inline-block;
 }
 
 header nav a {
@@ -96,7 +96,7 @@ header nav a:hover {
 #q-form {
   width: 600px;
   min-width: 500px;
-  margin: 100px auto 200px auto;
+  margin: 200px auto 200px auto;
   border: 1px solid #116466;
   border-radius: 3px;
 }
