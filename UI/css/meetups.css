@@ -123,23 +123,28 @@
 .q-right-nav .q-user-profile__dropdown-menu {
   position: absolute;
   display: none;
-  color: white;
+  color: #ffffff;
   width: 200px;
   background: #116466;
   margin-left: -170px;
-  /* left: 0; */
 }
 
 .q-right-nav .q-user-profile__dropdown-menu li {
   display: block;
   border-bottom: 1px solid #aaaaaa;
+  width: 200px;
 }
 
 .q-right-nav .q-user-profile__dropdown-menu a {
-  color: white;
+  color: #ffffff;
   text-transform: capitalize;
 }
 
 .q-right-nav .q-user-profile__dropdown-menu a:hover {
   color: #ffcb9a;
+}
+
+
+.q-right-nav .dropdown-trigger-btn {
+  cursor: pointer;
 }
