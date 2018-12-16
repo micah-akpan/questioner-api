@@ -1,3 +1,7 @@
+h3 {
+  text-align: left;
+}
+
 #q-meetups-preview {
   margin-top: 100px;
 }
@@ -5,6 +9,12 @@
 #q-meetups-preview .q-meetups-preview__block {
   display: flex;
   width: 100%;
+  align-items: flex-start;
+  /* justify-content: flex-start; */
+}
+
+#q-meetups-preview .q-meetups-preview__block > div {
+  padding: 10px;
 }
 
 @media (max-width: 768px) {
@@ -13,11 +23,129 @@
   }
 }
 
-
 #q-meetups-preview .q-meetups-preview__block .image-preview {
-  flex: 1 1 auto;
+  flex: 2 1 70%;
+}
+
+.q-meetups-preview__block .image-preview {
+  position: relative;
+}
+
+.q-meetups-preview__block .image-preview::after {
+  content: ">";
+  z-index: 500;
+  color: #cccccc;
+  font-weight: bold;
+  font-size: 100px;
+  position: absolute;
+  top: 145px;
+  right: 60px;
+  cursor: pointer;
 }
 
 #q-meetups-preview .q-meetups-preview__block .meetup-details {
+  flex: 1 1 25%;
+}
+
+/* Question cards */
+.q-question-cards {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.q-question-cards .question-card {
+  width: 90%;
+  /* border: #cccccc solid 1px; */
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 10px;
+  /* flex: 1 1 auto; */
+  margin-bottom: 20px;
+}
+
+.q-question-cards .question-card p {
+  font-weight: 400;
+  /* text-align: center; */
+  /* letter-spacing: .1rem; */
+}
+
+.q-question-cards .question-card .question-card__img {
+}
+
+.q-question-cards .question-card img {
+  width: 50px;
+  height: 50px;
+}
+
+.q-question-cards .question-card span {
+  float: right;
+  font-weight: 600;
+}
+
+.q-question-cards .question-text {
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.question-text_block {
+  display: flex;
+}
+
+.question-block {
+  border: 1px solid #cccccc;
+  background: white;
+}
+
+.question-block .comment-box {
+  margin: 10px auto;
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ffffff;
+  background: #eeeeee;
+}
+
+.comment-box .question-card__img {
+  display: flex;
+}
+
+.comment-box .question-card__img img {
+  margin-right: 10px;
+}
+
+.question-block .comment-box form {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: flex-end;
+}
+
+.comment-box form input {
+  padding: 0.5rem;
   flex: 1 1 auto;
+}
+
+.comment-box form button {
+  padding: 0.5rem;
+  margin-left: 10px;
+}
+
+.question-card .question-upvote__desktop {
+}
+
+.question-card .question-upvote__desktop button {
+  background: none;
+  border: none;
+  margin-left: 0;
+  cursor: pointer;
+}
+
+.question-card .question-upvote__desktop button:last-child {
+  position: relative;
+  top: 0px;
 }
