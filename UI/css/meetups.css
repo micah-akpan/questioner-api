@@ -18,6 +18,7 @@
   width: 100%;
 }
 
+/* Search Bar for meetups */
 #q-search {
   margin: 200px 0px 30px 140px;
 }
@@ -116,34 +117,36 @@
 }
 
 /* User Profile dropdown */
-.q-right-nav .q-user-profile__dropdown-trigger {
+nav.no-flex {
+  width: 100%;
   /* position: relative; */
 }
 
-.q-right-nav .q-user-profile__dropdown-menu {
-  position: absolute;
+.q-user-profile__dropdown-menu {
   display: none;
+  position: absolute;
   color: #ffffff;
   width: 200px;
-  background: #116466;
-  margin-left: -170px;
+  background: #488485;
+  top: 70px;
+  right: 200px;
+  z-index: 100000;
 }
 
-.q-right-nav .q-user-profile__dropdown-menu li {
+.q-user-profile__dropdown-menu li {
   display: block;
   border-bottom: 1px solid #aaaaaa;
-  width: 200px;
+  padding: 0.7rem;
 }
 
-.q-right-nav .q-user-profile__dropdown-menu a {
+.q-user-profile__dropdown-menu a {
   color: #ffffff;
   text-transform: capitalize;
 }
 
-.q-right-nav .q-user-profile__dropdown-menu a:hover {
+.q-user-profile__dropdown-menu a:hover {
   color: #ffcb9a;
 }
-
 
 .q-right-nav .dropdown-trigger-btn {
   cursor: pointer;

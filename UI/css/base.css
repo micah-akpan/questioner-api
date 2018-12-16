@@ -63,8 +63,15 @@ header {
   z-index: 1000;
 }
 
+/* Main Navbar styling */
+
+header .header-content {
+  display: flex;
+}
+
+/* Header Branding & Logo */
 header #q-branding {
-  float: left;
+  /* float: left; */
   color: #ffffff;
 }
 
@@ -85,9 +92,10 @@ header #q-branding h1 {
   margin-top: 20px;
 }
 
-/* Main Navbar styling */
 header nav {
   margin-top: 28px;
+  position: relative;
+  /* width: 100%; */
 }
 
 header nav li {
@@ -117,7 +125,9 @@ header nav a:hover {
 
 /* Left Nav */
 .q-left-nav {
-  float: left;
+  /* float: left; */
+  /* width: 100%; */
+  flex: 1 1 100%;
   margin-left: 10px;
   border-left: 1px solid #aaaaaa;
   padding: 0 10px;
@@ -130,7 +140,14 @@ header nav a:hover {
 
 /* Right Nav */
 .q-right-nav {
-  float: right;
+  width: 100%;
+}
+
+.q-right-nav > ul {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 10px;
 }
 
 .clear {

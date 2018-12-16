@@ -13,45 +13,47 @@
 <body>
   <header>
     <div class="container">
-      <div id="q-branding">
-        <a href="#!">
-          <h1 class="q-logo">Questioner</h1>
-        </a>
+      <div class="header-content">
+        <div id="q-branding">
+          <a href="#!">
+            <h1 class="q-logo">Questioner</h1>
+          </a>
+        </div>
+
+        <nav class="q-left-nav">
+          <ul>
+            <li><a href="#">Ask Question</a></li>
+          </ul>
+        </nav>
+
+        <nav class="q-right-nav notify-user__nav no-flex">
+          <ul>
+            <li>
+              <button class="q-btn" title="Notifications">
+                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
+              </button>
+            </li>
+            <li class="q-user-profile__dropdown-trigger">
+              <button class="q-btn dropdown-trigger-btn" title="Profile">
+                <img src="../assets/icons/avatar1.svg" alt="your profile">
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
-
-      <nav class="q-left-nav">
-        <ul>
-          <li><a href="#">Ask Question</a></li>
-        </ul>
-      </nav>
-
-      <nav class="q-right-nav notify-user__nav">
-        <ul>
-          <li>
-            <button class="q-btn" title="Notifications">
-              <img src="../assets/icons/notifications-button.svg" alt="your notifications">
-            </button>
-          </li>
-          <li class="q-user-profile__dropdown-trigger">
-            <button class="q-btn dropdown-trigger-btn" title="Profile">
-              <img src="../assets/icons/avatar1.svg" alt="your profile">
-            </button>
-
-            <div class="q-user-profile__dropdown-menu">
-              <ul>
-                <li><a href="#">Account settings</a></li>
-                <li><a href="#">Ask a question</a></li>
-                <li><a href="#">Start a meetup</a></li>
-                <li><a href="#">Logout</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </nav>
     </div>
   </header>
 
-  <!-- <div class="clear"></div> -->
+  <section>
+    <div class="q-user-profile__dropdown-menu">
+      <ul>
+        <li><a href="#">Account settings</a></li>
+        <li><a href="#">Ask a question</a></li>
+        <li><a href="#">Start a meetup</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </div>
+  </section>
 
   <section id="q-search">
     <div class="container">
