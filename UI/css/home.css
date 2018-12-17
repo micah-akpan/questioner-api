@@ -1,17 +1,5 @@
 @import url("../css/main.css");
 
-@media(max-width: 768px) {
-
-  .cards {
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .cards .q-card {
-    margin-bottom: 20px;
-  }
-}
-
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
@@ -44,10 +32,6 @@
   background: transparent;
   border: 1px solid #ffcb9a;
   color: #ffcb9a;
-}
-
-section {
-  margin-bottom: 30px;
 }
 
 #q-showcase {
@@ -90,20 +74,42 @@ section {
 }
 
 /* General styling for cards */
+
 .cards {
-  display: flex;
   margin: 20px auto;
-  justify-content: space-between;
   width: 100%;
 }
 
 .cards .q-card {
-  flex: 1 1 auto;
   margin-right: 20px;
   height: 300px;
+  max-height: 300px;
   border: 1px solid #596377;
   border-radius: 3px;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    display: block;
+  }
+
+  .cards .q-card {
+    width: 100%;
+    display: block;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .cards {
+    display: flex;
+  }
+
+  .cards .q-card {
+    flex: 1 1 calc(100% / 3 - 20px);
+  }
 }
 
 .cards .q-card:hover {
@@ -140,6 +146,12 @@ section {
 .get-started-btn {
   text-align: center;
   width: 30%;
+}
+
+@media(max-width: 768px) {
+  .get-started-btn {
+    width: 90%;
+  }
 }
 
 .q-cards__more {

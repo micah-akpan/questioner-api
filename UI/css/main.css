@@ -29,6 +29,12 @@ body {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+  }
+}
+
 .align-center {
   text-align: center;
 }
@@ -190,6 +196,12 @@ header .q-logo::after {
   flex: 1 1 100%;
 }
 
+@media (max-width: 768px) {
+  .q-right-nav {
+    display: none;
+  }
+}
+
 .q-left-nav a {
   text-transform: capitalize;
   margin-top: 5px;
@@ -208,11 +220,10 @@ header .q-logo::after {
 }
 
 /* Footer */
-/* Use Flex */
 footer {
-  position: fixed;
+  /* position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: 0; */
   width: 100%;
   padding: 10px 24px;
   background: #fff;
@@ -220,46 +231,65 @@ footer {
   font-size: 0.8em;
 }
 
-footer .copyright {
-  width: 25%;
-  margin-bottom: -70px;
-  color: #116466;
+footer > * {
+  padding: 0;
+  margin: 0;
 }
 
-footer .footer-main-content {
+footer ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+footer .footer-content {
   display: flex;
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
 }
 
-.footer-main-content .footer-sec__links {
-  margin: 50px auto;
+footer .copyright {
+  margin: 0;
+  padding: 0;
+  color: #777;
+  flex: 1 0 25%;
+  text-align: left;
 }
 
-.footer-main-content .footer-sec__links li,
-.footer-sec__social-media li {
-  display: inline-block;
+@media (max-width: 768px) {
+  footer .footer-content {
+    display: block;
+  }
+
+  footer .copyright {
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }
 
-.footer-main-content .footer-sec__links a,
-.footer-sec__social-media a {
-  display: inline-block;
+footer .footer-sec__links {
+  flex: 1 1 50%;
+}
+
+footer .footer-sec__links li {
   padding: 0 1rem;
-  text-decoration: none;
-  color: #116466;
+}
+
+footer .footer-sec__links a {
+  color: #777;
 }
 
 footer .footer-sec__links a:hover {
-  text-decoration: underline;
+  color: #555;
 }
 
-/* Social media footer links */
-.footer-main-content .footer-sec__social-media a {
-  padding: 0.3rem;
+footer .footer-sec__social-media {
+  margin: 0;
+  color: #777;
+  flex: 1 1 25%;
 }
 
-.footer-main-content .footer-sec__social-media img {
-  margin-left: 0px;
+footer .footer-sec__social-media li {
   width: 25px;
   height: 25px;
+  margin-right: 10px;
 }
