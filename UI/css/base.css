@@ -123,14 +123,20 @@ header nav a:hover {
   color: #ffcb9a;
 }
 
+/* App Logo */
+header .q-logo {
+
+}
+
+header .q-logo::after {
+  content: "|";
+  padding: 0 20px;
+  color: #07504c;
+}
+
 /* Left Nav */
 .q-left-nav {
-  /* float: left; */
-  /* width: 100%; */
   flex: 1 1 100%;
-  margin-left: 10px;
-  border-left: 1px solid #aaaaaa;
-  padding: 0 10px;
 }
 
 .q-left-nav a {
