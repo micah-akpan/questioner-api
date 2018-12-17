@@ -1,5 +1,17 @@
 @import url("../css/main.css");
 
+@media(max-width: 768px) {
+
+  .cards {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cards .q-card {
+    margin-bottom: 20px;
+  }
+}
+
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
@@ -82,10 +94,12 @@ section {
   display: flex;
   margin: 20px auto;
   justify-content: space-between;
+  width: 100%;
 }
 
 .cards .q-card {
-  width: calc(100% / 3 - 20px);
+  flex: 1 1 auto;
+  margin-right: 20px;
   height: 300px;
   border: 1px solid #596377;
   border-radius: 3px;
