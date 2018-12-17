@@ -151,3 +151,28 @@ nav.no-flex {
 .q-right-nav .dropdown-trigger-btn {
   cursor: pointer;
 }
+
+
+#q-meetups-preview .share-media-links span {
+  display: inline-block;
+  padding: 0;
+  margin: 10px 0;
+}
+
+#q-meetups-preview .share-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+#q-meetups-preview .share-media-links span img {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+
+#q-meetups-preview .meetup-location-map__preview {
+  height: 300px;
+  width: 100%;
+}
