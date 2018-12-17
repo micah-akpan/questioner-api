@@ -1,8 +1,15 @@
 const modalCloseBtn = document.getElementById('close-modal-btn');
 const modal = document.getElementById('modal');
+const questionModalTriggerBtn = document.querySelector('.ask-group-btn');
 
 function hideModal(modal) {
+  modal.classList.remove('open-modal');
   modal.classList.add('close-modal');
+}
+
+function showModal(modal) {
+  modal.classList.remove('close-modal');
+  modal.classList.add('open-modal');
 }
 
 document.onkeydown = function (e) {
@@ -12,7 +19,9 @@ document.onkeydown = function (e) {
 }
 
 modalCloseBtn.onclick = function (e) {
-  if (!modal.classList.contains('close-modal')) {
-    modal.classList.add('close-modal');
-  }
+  hideModal(modal);
+}
+
+questionModalTriggerBtn.onclick = function (e) {
+  showModal(modal);
 }

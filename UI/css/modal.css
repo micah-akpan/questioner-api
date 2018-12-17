@@ -102,3 +102,7 @@
 .close-modal {
   display: none;
 }
+
+.open-modal {
+  display: block;
+}
