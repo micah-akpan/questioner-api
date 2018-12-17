@@ -1,0 +1,47 @@
+.modal {
+  display: none;
+}
+
+.modal .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  overflow: auto;
+  text-align: center;
+  padding: 4px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.modal .modal-dialog {
+  position: relative;
+  outline: 0;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: auto;
+  cursor: default;
+  border-radius: 4px;
+}
+
+.modal .modal-dialog::after {
+  vertical-align: middle;
+  display: inline-block;
+  height: 100%;
+  margin-left: -0.05em;
+  content: "Hello";
+}
