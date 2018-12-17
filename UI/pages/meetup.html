@@ -137,7 +137,7 @@
 
                     <form>
                       <textarea></textarea>
-                      <button>Comment</button> 
+                      <button>Comment</button>
                     </form>
                   </div>
                 </div>
@@ -270,25 +270,39 @@
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-dialog">
-          <h1>Hello world!</h1>
+          <div class="modal-content-card">
+            <button class="close-modal-btn" id="close-modal-btn">close</button>
+            <h3 class="modal-content-title question-text">Elitr invidunt ea diam stet erat erat sit amet et, lorem sit
+              lorem elitr duo elitr, sit et sit sed.</h3>
+            <form>
+              <div>
+                <label for="user-comment"></label>
+                <textarea placeholder="Add your comment"></textarea>
+                <span class="user-comment-word-count"></span>
+              </div>
+              <div class="post-comment-btn-box">
+                <button class="post-comment-btn">Post</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
 
-    <section id="top-questions">
-      <div class="container">
-        <h3>Top Questions Asked in Meetup X</h3>
-      </div>
-    </section>
+  <section id="top-questions">
+    <div class="container">
+      <h3>Top Questions Asked in Meetup X</h3>
+    </div>
+  </section>
 
-    <section>
-      <div class="container">
-        <h3>Get answers to your questions</h3>
-        <button>Ask a question</button>
-      </div>
-    </section>
+  <section>
+    <div class="container">
+      <h3>Get answers to your questions</h3>
+      <button>Ask a question</button>
+    </div>
+  </section>
 
   <footer>
     <div class="container">
@@ -324,6 +338,7 @@
       </div>
     </div>
   </footer>
+  <script src="../js/modal.js"></script>
 </body>
 
 </html>
