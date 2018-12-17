@@ -65,10 +65,16 @@ section .heading-sec__primary {
   background-color: #116466;
   color: #ffffff;
   padding: 10px;
+  outline: none;
+  border: none;
 }
 
 .q-flex {
   display: flex;
+}
+
+.q-flex-item {
+  flex: 1 1 auto;
 }
 
 .white {
@@ -83,12 +89,24 @@ section .heading-sec__primary {
   background-color: #fff;
 }
 
-.fg-light-forest-green {
+.fg-dark-forest-green {
   color: #07504c;
 }
 
-.bg-light-forest-green {
+.bg-dark-forest-green {
   background-color: #07504c;
+}
+
+.fg-light-forest-green {
+  color: #116466;
+}
+
+.bg-light-forest-green {
+  color: #116466;
+}
+
+.p-cursor {
+  cursor: pointer;
 }
 
 /* App Main Header */
