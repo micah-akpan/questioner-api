@@ -10,6 +10,7 @@
   <meta name="author" content="Micah Akpan">
   <link rel="stylesheet" href="../css/meetups.css">
   <link rel="stylesheet" href="../css/meetup.css">
+  <link rel="stylesheet" href="../css/modal.css">
 </head>
 
 <body>
@@ -104,6 +105,10 @@
         </div>
 
         <div class="meetup-details">
+          <section class="post-question" id="post-question">
+            <h3>Have a question?</h3>
+            <button class="btn ask-group-btn">Ask the group</button>
+          </section>
           <h3>Questions asked in this meetup</h3>
 
           <div class="q-question-cards">
@@ -135,8 +140,8 @@
                     <img src="../assets/icons/man.svg" alt="">
 
                     <form>
-                      <input type="text" placeholder="Add your comment" />
-                      <button>comment</button>
+                      <textarea></textarea>
+                      <button>Comment</button>
                     </form>
                   </div>
                 </div>
@@ -173,8 +178,10 @@
                     <img src="../assets/icons/man.svg" alt="">
 
                     <form>
-                      <input type="text" placeholder="Add your comment" />
-                      <button>comment</button>
+                      <form>
+                        <textarea></textarea>
+                        <button>Comment</button>
+                      </form>
                     </form>
                   </div>
                 </div>
@@ -210,8 +217,10 @@
                     <img src="../assets/icons/man.svg" alt="">
 
                     <form>
-                      <input type="text" placeholder="Add your comment" />
-                      <button>comment</button>
+                      <form>
+                        <textarea></textarea>
+                        <button>Comment</button>
+                      </form>
                     </form>
                   </div>
                 </div>
@@ -246,8 +255,10 @@
                     <img src="../assets/icons/man.svg" alt="">
 
                     <form>
-                      <input type="text" placeholder="Add your comment" />
-                      <button>comment</button>
+                      <form>
+                        <textarea></textarea>
+                        <button>Comment</button>
+                      </form>
                     </form>
                   </div>
                 </div>
@@ -256,7 +267,7 @@
           </div>
 
           <div class="q-questions__pagination">
-
+            <button class="paginate-btn">see 2 more</button>
           </div>
         </div>
       </div>
@@ -265,25 +276,43 @@
     </div>
   </section>
 
-  <div class="container">
-
-
-    <section id="top-questions">
-      <div class="container">
-        <h3>Top Questions Asked in Meetup X</h3>
-        <div class="question-card mini">question 1</div>
-        <div class="question-card mini">question 2</div>
-        <div class="question-card mini">question 3</div>
+  <section id="modal" class="modal">
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-dialog">
+          <div class="modal-content-card">
+            <button class="close-modal-btn" id="close-modal-btn">close</button>
+            <h3 class="modal-content-title question-text">Elitr invidunt ea diam stet erat erat sit amet et, lorem sit
+              lorem elitr duo elitr, sit et sit sed.</h3>
+            <form>
+              <div>
+                <label for="user-comment"></label>
+                <textarea placeholder="Add your comment"></textarea>
+                <span class="user-comment-word-count"></span>
+              </div>
+              <div class="post-comment-btn-box">
+                <button class="post-comment-btn">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <div class="container">
-        <h3>Get answers to your questions</h3>
-        <button>Ask a question</button>
-      </div>
-    </section>
-  </div>
+
+  <section id="top-questions">
+    <div class="container">
+      <h3>Top Questions Asked in Meetup X</h3>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h3>Get answers to your questions</h3>
+      <button>Ask a question</button>
+    </div>
+  </section>
 
   <footer>
     <div class="container">
@@ -319,6 +348,7 @@
       </div>
     </div>
   </footer>
+  <script src="../js/modal.js"></script>
 </body>
 
 </html>
