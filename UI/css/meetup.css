@@ -42,9 +42,7 @@ h3 {
   text-transform: capitalize;
 }
 
-
 #q-meetups-preview {
-  
 }
 
 #q-meetups-preview .q-meetups-preview__block {
@@ -137,12 +135,11 @@ h3 {
   padding: 10px;
 }
 
-
 .question-icons .question-icons__left {
-  
 }
 
-.question-icons .question-icons__left img, .question-icons .question-icons__right img  {
+.question-icons .question-icons__left img,
+.question-icons .question-icons__right img {
   width: 30px;
   height: 30px;
   margin-right: 20px;
@@ -150,7 +147,6 @@ h3 {
 }
 
 .question-icons .question-icons__right {
- 
 }
 
 .question-block {
@@ -160,7 +156,7 @@ h3 {
 
 .question-block .comment-box {
   margin: 10px auto;
-  width: 80%;
+  width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ffffff;
@@ -182,14 +178,16 @@ h3 {
   align-content: flex-end;
 }
 
-.comment-box form input {
+.comment-box form textarea {
   padding: 0.5rem;
-  flex: 1 1 auto;
+  flex: 2 1 auto;
+  max-height: 40px;
   outline: 0;
+  resize: none;
 }
 
 .comment-box form button {
-  padding: 0.5rem;
+  height: 45px;
   margin-left: 10px;
   flex: 0;
   background-color: #116466;
@@ -203,3 +201,7 @@ h3 {
   background: #116460;
 }
 
+#top-questions h3 {
+  text-align: left;
+  margin: 0;
+}
