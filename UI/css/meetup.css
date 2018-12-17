@@ -2,6 +2,14 @@ h3 {
   text-align: left;
 }
 
+.btn {
+  min-width: 0;
+  line-height: 1;
+  padding: 1rem;
+  border: none;
+  outline: none;
+}
+
 #q-meetup-details__main {
   margin-top: 200px;
   width: 100%;
@@ -204,4 +212,34 @@ h3 {
 #top-questions h3 {
   text-align: left;
   margin: 0;
+}
+
+.q-questions__pagination .paginate-btn {
+  padding: 1rem;
+  display: block;
+  margin: 0 auto;
+  border: solid 2px #116460;
+  text-transform: uppercase;
+  background: transparent;
+  color: #333333;
+}
+
+.q-questions__pagination .paginate-btn:hover {
+  background-color: #ffcb9a;
+  cursor: pointer;
+}
+
+.q-questions__pagination.paginate-btn:active {
+  background-color: #fdc086;
+}
+
+.meetup-details .post-question .ask-group-btn {
+  background: #116466;
+  color: #ffffff;
+  font-weight: 400;
+  width: 30%;
+}
+
+.meetup-details .post-question .ask-group-btn:hover {
+  background: #024f50;
 }
