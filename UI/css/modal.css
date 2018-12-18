@@ -99,6 +99,16 @@
   cursor: pointer;
 }
 
+.post-comment-btn {
+  background-color: #116466;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  padding: 0.8em;
+  width: 20%;
+  cursor: pointer;
+}
+
 .close-modal {
   display: none;
 }

@@ -1,3 +1,5 @@
+@import url("../css/form.css");
+
 h3 {
   text-align: left;
 }
@@ -111,12 +113,9 @@ h3 {
   /* letter-spacing: .1rem; */
 }
 
-.q-question-cards .question-card .question-card__img {
-}
-
 .q-question-cards .question-card img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 
 .q-question-cards .question-card span {
@@ -140,7 +139,7 @@ h3 {
   display: flex;
   width: 95%;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 0 10px 10px;
 }
 
 .question-icons .question-icons__left {
@@ -154,7 +153,8 @@ h3 {
   cursor: pointer;
 }
 
-.question-icons .question-icons__right {
+.question-icons .question-icons__right > img:last-child {
+  margin-right: 0;
 }
 
 .question-block {
@@ -172,14 +172,20 @@ h3 {
 
 .comment-box .question-card__img {
   display: flex;
+  /* align-items: flex-end; */
+  justify-content: flex-end;
+}
+
+.comment-box .question-card__img-block {
+  flex: 0 1 auto;
 }
 
 .comment-box .question-card__img img {
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 .question-block .comment-box form {
-  width: 80%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,10 +194,11 @@ h3 {
 
 .comment-box form textarea {
   padding: 0.5rem;
-  flex: 2 1 auto;
+  flex: 1 1 auto;
   max-height: 40px;
   outline: 0;
   resize: none;
+  /* width: 100%; */
 }
 
 .comment-box form button {
@@ -242,4 +249,41 @@ h3 {
 
 .meetup-details .post-question .ask-group-btn:hover {
   background: #024f50;
+}
+
+.question-label {
+  text-align: left;
+}
+
+.modal .user-profile-avatar {
+  float: left;
+  width: 50px;
+  height: 50px;
+  display: block;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 1px solid #116466;
+  padding: 10px;
+}
+
+.modal .user-profile-text {
+  width: 90%;
+  text-align: left;
+}
+
+.modal .clear {
+  clear: both;
+  margin-bottom: 10px;
+}
+
+.q-btn__disabled {
+
+}
+
+.q-btn__active {
+
+}
+
+.btn-large__30 {
+  /* width: 30% !important; */
 }

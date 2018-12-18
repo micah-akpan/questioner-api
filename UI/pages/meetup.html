@@ -118,8 +118,8 @@
                     <p>Ea amet et accusam duo et gubergren et stet et. Accusam nonumy duo no
                       gubergren diam lorem et ea. Et aliquyam justo eos aliquyam magna vero stet. Ut sanctus dolor
                     </p>
-                    <span>asked by X</span>
-                    <span>time and date</span>
+                    <span class="asked-by">asked by X</span>
+                    <span class="asked-when"></span>
                   </div>
 
                   <div class="question-icons">
@@ -136,12 +136,7 @@
 
                 <div class="comment-box">
                   <div class="question-card__img">
-                    <img src="../assets/icons/man.svg" alt="">
-
-                    <form>
-                      <textarea></textarea>
-                      <button>Comment</button>
-                    </form>
+                    <button class="q-form__button btn-large__30">Add a Comment</button>
                   </div>
                 </div>
               </div>
@@ -157,8 +152,8 @@
                     <p>Ea amet et accusam duo et gubergren et stet et. Accusam nonumy duo no
                       gubergren diam lorem et ea. Et aliquyam justo eos aliquyam magna vero stet. Ut sanctus dolor
                     </p>
-                    <span>asked by X</span>
-                    <span>time and date</span>
+                    <span class="asked-by">asked by X</span>
+                    <span class="asked-when"></span>
                   </div>
 
                   <div class="question-icons">
@@ -175,14 +170,7 @@
 
                 <div class="comment-box">
                   <div class="question-card__img">
-                    <img src="../assets/icons/man.svg" alt="">
-
-                    <form>
-                      <form>
-                        <textarea></textarea>
-                        <button>Comment</button>
-                      </form>
-                    </form>
+                    <button class="q-form__button btn-large__30">Add a Comment</button>
                   </div>
                 </div>
               </div>
@@ -197,8 +185,8 @@
                     <p>Ea amet et accusam duo et gubergren et stet et. Accusam nonumy duo no
                       gubergren diam lorem et ea. Et aliquyam justo eos aliquyam magna vero stet. Ut sanctus dolor
                     </p>
-                    <span>asked by X</span>
-                    <span>time and date</span>
+                    <span ckass="asked-by">asked by X</span>
+                    <span class="asked-when"></span>
                   </div>
 
                   <div class="question-icons">
@@ -215,14 +203,7 @@
 
                 <div class="comment-box">
                   <div class="question-card__img">
-                    <img src="../assets/icons/man.svg" alt="">
-
-                    <form>
-                      <form>
-                        <textarea></textarea>
-                        <button>Comment</button>
-                      </form>
-                    </form>
+                    <button class="q-form__button btn-large__30">Add a Comment</button>
                   </div>
                 </div>
               </div>
@@ -236,8 +217,8 @@
                     <p>Ea amet et accusam duo et gubergren et stet et. Accusam nonumy duo no
                       gubergren diam lorem et ea. Et aliquyam justo eos aliquyam magna vero stet. Ut sanctus dolor
                     </p>
-                    <span>asked by X</span>
-                    <span>time and date</span>
+                    <span class="asked-by">asked by X</span>
+                    <span class="asked-when"></span>
                   </div>
 
                   <div class="question-icons">
@@ -254,14 +235,7 @@
 
                 <div class="comment-box">
                   <div class="question-card__img">
-                    <img src="../assets/icons/man.svg" alt="">
-
-                    <form>
-                      <form>
-                        <textarea></textarea>
-                        <button>Comment</button>
-                      </form>
-                    </form>
+                    <button class="btn-large__30 q-form__button">Add a Comment</button>
                   </div>
                 </div>
               </div>
@@ -278,7 +252,7 @@
     </div>
   </section>
 
-  <section id="modal" class="modal">
+  <section id="comments-modal" class="modal comment-modal">
     <div class="modal-overlay">
       <div class="modal-content">
         <div class="modal-dialog">
@@ -294,6 +268,48 @@
               </div>
               <div class="post-comment-btn-box">
                 <button class="post-comment-btn">Post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions-modal" class="modal">
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-dialog">
+          <div class="modal-content-card">
+            <button class="close-modal-btn" id="close-modal-btn">close</button>
+            <div>
+              <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-profile-avatar" />
+              <p class="modal-content-title question-text user-profile-text">Elitr invidunt ea diam stet erat erat sit
+                amet et, lorem
+                sit
+                lorem elitr duo elitr, sit et sit sed.
+              </p>
+            </div>
+
+            <div class="clear"></div>
+            <form>
+              <div class="q-form__group">
+                <label for="user-question-desc" class="q-form__label question-label">Your Question</label>
+                <textarea placeholder="" id="user-question-desc"></textarea>
+                <span class="user-question-word-count"></span>
+              </div>
+
+              <div class="q-form__group">
+                <label for="user-question-label" class="q-form__label question-label">
+                  Add tags for this question (max 5)
+                </label>
+                <input type="text" class="q-form__input" id="user-question-label">
+
+                <div class="q-labels"></div>
+              </div>
+
+              <div class="post-btn-box post-question-btn-box q-form__group">
+                <button class="post-comment-btn q-btn">Post</button>
               </div>
             </form>
           </div>

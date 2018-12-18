@@ -1,7 +1,10 @@
 window.onload = (e) => {
   const d = document;
   const modalCloseBtn = d.getElementById('close-modal-btn');
-  const modal = d.getElementById('modal');
+
+  // comments modal
+  const cModal = d.getElementById('comments-modal');
+  const qModal = d.getElementById('questions-modal');
   const modalOverlay = d.querySelector('.modal-overlay');
 
   const questionModalTriggerBtn = d.querySelector('.ask-group-btn');
@@ -18,20 +21,20 @@ window.onload = (e) => {
 
   d.onkeydown = (e) => {
     if (e.key === 'Escape') {
-      hideModal(modal);
+      hideModal(cModal);
     }
   }
 
   modalCloseBtn.onclick = (e) => {
-    hideModal(modal);
+    hideModal(cModal);
   }
 
   questionModalTriggerBtn.onclick = (e) => {
-    showModal(modal);
+    showModal(qModal);
   }
 
   modalOverlay.onclick = (e) => {
-    hideModal(modal);
+    hideModal(cModal);
   }
 }
 

@@ -125,6 +125,10 @@ section .heading-sec__primary {
   font-size: 0.5em;
 }
 
+.btn-large__40 {
+  width: 40%;
+}
+
 /* App Main Header */
 header {
   position: fixed;
