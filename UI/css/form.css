@@ -1,3 +1,5 @@
+/* General form stylesheet */
+
 /* Form */
 #q-form {
   width: 600px;
@@ -238,4 +240,8 @@
 
 .q-flat-square__button {
   border-radius: 0;
+}
+
+form abbr[title="required"] {
+  color: #f44;
 }
