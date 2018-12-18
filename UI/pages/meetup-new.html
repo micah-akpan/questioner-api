@@ -2,41 +2,78 @@
 <html lang="en">
 
 <head>
-  <title>Start a new meetup | Questioner</title>
+  <title>Meetup | Questioner</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <meta name="author" content="Micah Akpan">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/home.css">
   <link rel="stylesheet" href="../css/meetups.css">
-  <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/meetup.css">
+  <link rel="stylesheet" href="../css/modal.css">
   <link rel="stylesheet" href="../css/meetup-new.css">
+  <link rel="stylesheet" href="../css/form.css">
+  <link rel="stylesheet" href="../css/meetup-new-2.css">
 </head>
 
 <body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div id="q-branding">
+          <a href="../index.html">
+            <h1 class="q-logo q-logo-w-border">Questioner</h1>
+          </a>
+        </div>
 
-  <section id="q-meetup-intro-board">
+        <nav class="q-left-nav">
+          <ul>
+            <li><a href="#!">Ask Question</a></li>
+          </ul>
+        </nav>
 
-    <div class="board_main">
-      <div class="intro-message">
-        <h1 class="q-logo">Questioner</h1>
-        <h3>Magna est et kasd justo voluptua consetetur sanctus</h3>
+        <nav class="q-right-nav notify-user__nav">
+          <ul>
+            <li>
+              <button class="q-btn" title="Notifications">
+                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
+              </button>
+            </li>
+            <li>
+              <button class="q-btn" title="Profile">
+                <img src="../assets/icons/avatar1.svg" alt="your profile">
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <div class="meetup-form">
-        <div class="container">
+    </div>
+  </header>
+
+  <section id="q-new-meetup">
+    <div class="container">
+      <div class="wrapper">
+        <div class="new-feature-content">
+          <div class="feature-content__primary">
+            <h3>Start a new meetup to bring people with common interests together</h3>
+          </div>
+        </div>
+
+        <div class="new-main-content">
           <h3>Create a meetup</h3>
           <form class="q-form">
             <div class="q-form__group">
-              <label for="name" class="q-form__label">Meetup Title</label>
+              <label for="name" class="q-form__label">Meetup Title
+                <abbr title="required">*</abbr>
+              </label>
               <input type="text" name="meetup-name" placeholder="Give your meetup a short descriptive title" id="name"
                 class="q-form__input" />
             </div>
 
             <div class="q-form__group">
-              <label for="location" class="q-form__label">Location</label>
-              <input type="text" name="meetup-location" placeholder="Where will your meetup be?" id="location"
-                class="q-form__input" />
+              <label for="location" class="q-form__label">Location
+                <abbr title="required">*</abbr>
+              </label>
+              <input type="text" name="meetup-location" placeholder="Where will your meetup be?" id="location" class="q-form__input" />
               <span class="user-current-location"></span>
             </div>
 
@@ -48,56 +85,53 @@
                   <label for="meetup-image" class="q-form__label">Upload an image</label>
                 </div>
               </div>
+              <div class="image-upload-btns">
+                <button class="q-btn img-upload__btn">Upload</button>
+                <button class="q-btn img-upload-cancel__btn">Cancel</button>
+              </div>
               <span class=""></span>
             </div>
 
 
             <div class="q-form__group">
-              <label for="description" class="q-form__label">Description</label>
+              <label for="description" class="q-form__label">Description
+                <abbr title="required">*</abbr>
+              </label>
               <textarea placeholder="What will your meetup be about?" name="description" class="q-form__textarea"></textarea>
               <span class="word-count"></span>
             </div>
 
             <div class="q-form__group">
-              <button class="q-form__button">Continue</button>
+              <button class="q-btn q-form__button">Continue</button>
             </div>
-          </form>
         </div>
-
       </div>
-
-      <!-- <div class="nav"></div> -->
     </div>
   </section>
 
-  <div class="container">
+  <section>
+    <div class="container">
 
-    <section id="">
+    </div>
+  </section>
 
-    </section>
+  <section id="top-questions">
+    <div class="container">
 
-    <section>
-      <div class="container">
+    </div>
+  </section>
 
-      </div>
-    </section>
+  <section>
+    <div class="container">
 
-
-    <section>
-      <div class="container">
-
-      </div>
-    </section>
-
-    <section>
-
-    </section>
-  </div>
+    </div>
+  </section>
 
   <footer>
     <div class="container">
-      <p class="copyright">&copy; Questioner 2018</p>
-      <div class="footer-main-content">
+      <div class="footer-content">
+        <p class="copyright">&copy; Questioner 2018</p>
+
         <section class="footer-sec__links">
           <ul>
             <li><a href="#!">Terms of service</a></li>
@@ -108,7 +142,6 @@
         </section>
 
         <section class="footer-sec__social-media">
-          <p class="follow-directive">Follow us on</p>
           <ul>
             <li>
               <a href="#!" title="facebook">
@@ -128,6 +161,8 @@
       </div>
     </div>
   </footer>
+  <script src="../js/modal.js"></script>
+  <script src="../js/preview.js"></script>
 </body>
 
 </html>

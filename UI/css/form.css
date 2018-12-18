@@ -1,3 +1,5 @@
+/* General form stylesheet */
+
 /* Form */
 #q-form {
   width: 600px;
@@ -5,6 +7,13 @@
   margin: 200px auto 200px auto;
   border: 1px solid #116466;
   border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  #q-form {
+    width: 90%;
+    min-width: 0;
+  }
 }
 
 #q-form .social-media__links--option-rule {
@@ -38,19 +47,23 @@
 #q-form .q-form__input-name {
   width: calc(90% / 2);
   display: inline-block;
-  /* margin: 0 10px; */
+}
+
+#q-form .q-form__input-name:nth-child(1) {
+  margin-right: 2%;
+  width: 48%;
+}
+
+#q-form .q-form__input-name:nth-child(2) {
+  width: 48%;
 }
 
 #q-form .q-form__input {
   margin: 10px 0;
 }
 
-#q-form .q-form__input-name:nth-child(2) {
-  margin: 0 15px;
-}
-
 #q-form input {
-  width: 90%;
+  width: 100%;
   padding: 1rem;
   outline: none;
   border: 1px solid #116466;
@@ -132,7 +145,7 @@
 #q-form .toggle-password-visibility {
   position: absolute;
   top: 27px;
-  right: 18px;
+  right: 0;
   border: 1px solid #116466;
   background-color: #116466;
   color: #fff;
@@ -142,4 +155,93 @@
   font-size: 0.7rem;
   width: auto;
   cursor: pointer;
+  border-radius: 0 3px 3px 0;
+}
+
+
+.q-form__input {
+  border: #d4d9e2 1px solid;
+  border-radius: 3px;
+  padding: 15px;
+  color: #596377;
+  outline: none;
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.q-form__label,
+.q-form__input,
+.q-form__textarea,
+.q-form__image-upload {
+  margin-bottom: 10px;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+.q-form__textarea {
+  width: 100%;
+  resize: vertical;
+  border: #d4d9e2 1px solid;
+  min-height: 200px;
+  max-height: 300px;
+  font-family: Roboto, Helvetica, sans-serif;
+  padding: 1rem;
+}
+
+.q-form__button,
+.q-form__label {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.q-form__label {
+  display: block;
+  font-weight: 600;
+  color: #434c5e;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.q-form__button {
+  border: none;
+  outline: 0;
+  margin: 20px auto;
+  display: block;
+  background: #116466;
+  border-radius: 100px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 60px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  transition: box-shadow 0.2s ease, border 0.2s ease,
+    -webkit-box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.q-form__button:hover {
+  box-shadow: 2px 2px 4px #d4d9e2;
+}
+
+.q-form__image-upload {
+  width: 100%;
+}
+
+.q-form__group {
+  margin-bottom: 10px;
+}
+
+/* Button forms */
+.q-large__button {
+  width: 100%;
+}
+
+.q-flat-square__button {
+  border-radius: 0;
+}
+
+form abbr[title="required"] {
+  color: #f44;
 }

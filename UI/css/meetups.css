@@ -1,6 +1,6 @@
 /* Stylings for meetups list page */
 
-@import "../css/base.css";
+@import "../css/main.css";
 @import "../css/home.css";
 
 .q-btn {
@@ -21,6 +21,12 @@
 /* Search Bar for meetups */
 #q-search {
   margin: 200px 0px 30px 140px;
+}
+
+@media(max-width: 768px) {
+  #q-search {
+    margin-left: 0;
+  }
 }
 
 .q-search__nav li {
@@ -50,17 +56,18 @@
   box-sizing: content-box;
   color: #333333;
   width: 0;
-  transition: width 0.5s;
+  transition: width .5s;
 }
 
-.q-search__nav .active {
-  /* border-bottom: #ffcb9a solid 1px; */
+.show {
+  width: 300px !important;
+  display: inline-block !important;
 }
 
-/* toggle display of search bar */
-.q-search__nav .show {
-  display: inline-block;
-  width: 300px;
+@media(max-width: 768px) {
+  .show {
+    width: 200px !important;
+  }
 }
 
 .cards .q-card {
@@ -119,7 +126,6 @@
 /* User Profile dropdown */
 nav.no-flex {
   width: 100%;
-  /* position: relative; */
 }
 
 .q-user-profile__dropdown-menu {

@@ -13,20 +13,20 @@
 <body>
   <header>
     <div class="container">
-      <div class="header-content">
-        <div id="q-branding">
+      <div class="q-flex header-content">
+        <div id="q-branding" class="white">
           <a href="#!">
-            <h1 class="q-logo">Questioner</h1>
+            <h1 class="q-logo q-logo-w-border">Questioner</h1>
           </a>
         </div>
 
-        <nav class="q-left-nav">
+        <nav class="q-left-nav" role="navigation">
           <ul>
-          <li><a href="./pages/meetups.html">Discover meetups</a></li>
+            <li><a href="./pages/meetups.html">Discover meetups</a></li>
           </ul>
         </nav>
 
-        <nav class="q-right-nav">
+        <nav class="q-right-nav" role="navigation">
           <ul>
             <li><a href="./pages/sign-in.html" role="button" class="sign-in">Login</a></li>
             <li><a href="./pages/sign-up.html" role="button" class="sign-up">Sign Up</a></li>
@@ -39,8 +39,8 @@
   <section id="q-showcase">
     <div class="container">
       <div class="q-showcase-content">
-        <h2>Crowdsource the most relevant meetup questions using Questioner</h2>
-        <button>Get Started for free</button>
+        <h2 class="fg-white">Crowdsource the most relevant meetup questions using Questioner</h2>
+        <button class="fg-white q-btn text__large">Get Started for free</button>
       </div>
     </div>
   </section>
@@ -52,15 +52,15 @@
         <h3 class="heading-sec__primary">See meetups near you</h3>
 
         <div class="cards">
-          <div class="q-card"></div>
-          <div class="q-card"></div>
-          <div class="q-card"></div>
+          <div class="q-card q-card-3"></div>
+          <div class="q-card q-card-3"></div>
+          <div class="q-card q-card-3"></div>
         </div>
 
         <div class="cards">
-          <div class="q-card"></div>
-          <div class="q-card"></div>
-          <div class="q-card"></div>
+          <div class="q-card q-card-3"></div>
+          <div class="q-card q-card-3"></div>
+          <div class="q-card q-card-3"></div>
         </div>
 
         <button class="q-cards__more q-btn">See More</button>
@@ -71,20 +71,20 @@
       <div class="container">
         <h3 class="heading-sec__primary">What you can do with Questioner</h3>
 
-        <div class="cards">
-          <div class="q-card q-card__no-border">
+        <div class="cards q-flex">
+          <div class="q-card q-card-3 q-card__no-border">
             <img src="assets/icons/loupe.svg" alt="lorem ipsum" />
             Magna magna ea lorem sea sadipscing. Diam gubergren eos sed gubergren vero et takimata, gubergren et ea
             amet
             dolore diam,.
           </div>
-          <div class="q-card q-card__no-border">
+          <div class="q-card q-card-3 q-card__no-border">
             <img src="assets/icons/loupe.svg" alt="lorem ipsum" />
             Magna magna ea lorem sea sadipscing. Diam gubergren eos sed gubergren vero et takimata, gubergren et ea
             amet
             dolore diam,.
           </div>
-          <div class="q-card q-card__no-border">
+          <div class="q-card q-card-3 q-card__no-border">
             <img src="assets/icons/loupe.svg" alt="lorem ipsum" />
             Magna magna ea lorem sea sadipscing. Diam gubergren eos sed gubergren vero et takimata, gubergren et ea
             amet
@@ -132,8 +132,8 @@
 
   <footer>
     <div class="container">
-      <p class="copyright">&copy; Questioner 2018</p>
-      <div class="footer-main-content">
+      <div class="footer-content">
+        <p class="copyright">&copy; Questioner 2018</p>
         <section class="footer-sec__links">
           <ul>
             <li><a href="#!">Terms of service</a></li>
@@ -144,7 +144,6 @@
         </section>
 
         <section class="footer-sec__social-media">
-          <p class="follow-directive">Follow us on</p>
           <ul>
             <li>
               <a href="#!" title="facebook">

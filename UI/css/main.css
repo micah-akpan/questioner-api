@@ -1,0 +1,312 @@
+/* Base css stylesheet
+   Contains global styles, common to every page
+*/
+
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html {
+  font: 15px/1.5 Roboto, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  margin: 0 auto;
+  color: #555555;
+  overflow: auto;
+  background-color: #fff;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+  }
+}
+
+.align-center {
+  text-align: center;
+}
+
+/* Global */
+h3 {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+section .heading-sec__primary {
+  font-size: 2.5em;
+}
+
+.q-btn {
+  background-color: #116466;
+  color: #ffffff;
+  padding: 10px;
+  outline: none;
+  border: none;
+}
+
+.q-flex {
+  display: flex;
+}
+
+.q-flex-item {
+  flex: 1 1 auto;
+}
+
+.white {
+  color: #fff;
+}
+
+.fg-white {
+  color: #fff;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.fg-dark-forest-green {
+  color: #07504c;
+}
+
+.bg-dark-forest-green {
+  background-color: #07504c;
+}
+
+.fg-light-forest-green {
+  color: #116466;
+}
+
+.bg-light-forest-green {
+  color: #116466;
+}
+
+.p-cursor {
+  cursor: pointer;
+}
+
+.text__large {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.text__small {
+  font-size: 0.5em;
+}
+
+/* App Main Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 80px;
+  background-color: #116466;
+  box-shadow: 2px 2px 5px #777;
+  z-index: 1000;
+}
+
+/* Main Navbar styling */
+header .header-content {
+  /* Remove */
+  display: flex;
+}
+
+header #q-branding a:link {
+  color: #ffffff;
+}
+
+header #q-branding a:hover {
+  color: #ffcb9a;
+}
+
+header #q-branding a:visited {
+  color: #ffffff;
+}
+
+header #q-branding .q-logo {
+  padding: 0;
+  margin-top: 20px;
+}
+
+header nav {
+  margin-top: 28px;
+  position: relative;
+}
+
+header nav li {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 600;
+}
+
+header nav span {
+  color: #fff;
+}
+
+header nav a {
+  display: inline-block;
+  text-transform: uppercase;
+  color: #fff;
+  transition: color 0.2s;
+  font-weight: 600;
+}
+
+header nav a:link {
+  color: #fff;
+}
+
+header nav a:hover {
+  color: #ffcb9a;
+}
+
+/* App Logo */
+header .q-logo {
+}
+
+header .q-logo-w-border::after {
+  content: "|";
+  padding: 0 20px;
+  color: #07504c;
+}
+
+/* Left Nav */
+.q-left-nav {
+  flex: 1 1 100%;
+}
+
+@media (max-width: 768px) {
+  .q-right-nav {
+    display: none;
+  }
+}
+
+.q-left-nav a {
+  text-transform: capitalize;
+  margin-top: 5px;
+}
+
+/* Right Nav */
+.q-right-nav {
+  width: 100%;
+}
+
+.q-right-nav > ul {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 24px;
+  background: #fff;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.sticky-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+footer > * {
+  padding: 0;
+  margin: 0;
+}
+
+footer ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+footer .footer-content {
+  display: flex;
+  width: 100%;
+}
+
+footer .copyright {
+  margin: 0;
+  padding: 0;
+  color: #777;
+  flex: 1 0 25%;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  footer .footer-content {
+    display: block;
+  }
+
+  footer .copyright {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}
+
+footer .footer-sec__links {
+  flex: 1 1 50%;
+}
+
+footer .footer-sec__links li {
+  padding: 0 1rem;
+}
+
+footer .footer-sec__links a {
+  color: #777;
+}
+
+footer .footer-sec__links a:hover {
+  color: #555;
+}
+
+footer .footer-sec__social-media {
+  margin: 0;
+  color: #777;
+  flex: 1 1 25%;
+}
+
+footer .footer-sec__social-media li {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}

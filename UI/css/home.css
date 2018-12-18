@@ -1,8 +1,4 @@
-@import url("../css/base.css");
-
-.get-started-btn:active {
-  background-color: #ffcb9a;
-}
+@import url("../css/main.css");
 
 .q-right-nav a {
   padding: 0.5rem;
@@ -11,7 +7,7 @@
 
 .q-right-nav .sign-in,
 .q-right-nav .sign-up {
-  transition: border 0.2s linear;
+  transition: border 0.2s ease;
 }
 
 .q-right-nav .sign-in {
@@ -38,14 +34,10 @@
   color: #ffcb9a;
 }
 
-section {
-  margin-bottom: 40px;
-}
-
 #q-showcase {
   width: 100%;
   height: 400px;
-  min-height: 350px;
+  max-height: 450px;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("../assets/img/showcase2.jpg") center/cover no-repeat;
   margin-top: 70px;
@@ -59,22 +51,24 @@ section {
   text-align: center;
 }
 
-#q-showcase h2,
 #q-showcase button {
-  color: #ffffff;
-  outline: none;
-}
-
-#q-showcase button {
-  background-color: #116466;
-  border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 30px;
-  width: 20%;
-  cursor: pointer;
-  transition: background-color 0.3s;
   display: block;
   margin: 10px auto;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  width: 30%;
+  min-width: 200px;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s, width 0.3s;
+  -moz-transition: background-color 0.3s, width 0.3s;
+  -o-transition: background-color 0.3s, width 0.3s;
+  transition: background-color 0.3s, width 0.3s;
+}
+
+@media(max-width: 768px) {
+  #q-showcase button {
+    width: 90%;
+  }
 }
 
 #q-showcase button:hover {
@@ -85,22 +79,48 @@ section {
   background: #116466;
 }
 
+/* General styling for cards */
+
 .cards {
-  display: flex;
   margin: 20px auto;
+  width: 100%;
 }
 
 .cards .q-card {
-  width: calc(100% / 3 - 10px);
+  margin-right: 20px;
   height: 300px;
-  border: 1px solid #333333;
-  margin: 0 10px;
-  border-radius: 5px;
+  max-height: 300px;
+  border: 1px solid #596377;
+  border-radius: 3px;
   cursor: pointer;
+  transition: box-shadow .3s ease;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    display: block;
+  }
+
+  .cards .q-card {
+    width: 100%;
+    display: block;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .cards {
+    display: flex;
+  }
+
+  .cards .q-card {
+    flex: 1 1 calc(100% / 3 - 20px);
+  }
 }
 
 .cards .q-card:hover {
-  box-shadow: 1px 2px 2px #cccccc;
+  box-shadow: 1px 2px 2px #d4d9e2;
 }
 
 .cards .q-card__no-border {
@@ -111,10 +131,6 @@ section {
   width: 20%;
   display: block;
   margin: 0 auto 20px auto;
-}
-
-#q-showcase .q-showcase-content h2 {
-  text-align: center;
 }
 
 #q-cards h3,
@@ -139,11 +155,17 @@ section {
   width: 30%;
 }
 
+@media(max-width: 768px) {
+  .get-started-btn {
+    width: 90%;
+  }
+}
+
 .q-cards__more {
   border: 1px solid #116466;
   color: #116466;
   padding: 0.7rem;
-  transform: background-color .3s;
+  transform: background-color 0.3s;
 }
 
 .q-cards__more:hover {
@@ -152,4 +174,8 @@ section {
 
 .get-started-btn:hover {
   background-color: #f7b77c;
+}
+
+.get-started-btn:active {
+  background-color: #ffcb9a;
 }
