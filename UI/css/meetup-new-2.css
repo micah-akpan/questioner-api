@@ -1,0 +1,52 @@
+/* Stylesheet for new meetup page(using flex) */
+
+#q-new-meetup .wrapper {
+  margin-top: 150px;
+  width: 100%;
+  background: #fff;
+  height: 300px;
+  display: flex;
+  height: 100%;
+}
+
+#q-new-meetup .wrapper > div {
+  border: 1px solid #cccccc;
+  height: 100vh;
+}
+
+#q-new-meetup .wrapper .new-feature-content {
+  flex: 0 0 35%;
+}
+
+@media(max-width: 768px) {
+  #q-new-meetup .wrapper {
+    flex-direction: column;
+  }
+
+  #q-new-meetup .wrapper .new-feature-content {
+    display: none;
+  }
+}
+
+
+.new-feature-content .feature-content__primary {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#q-new-meetup .wrapper .new-main-content {
+  flex: 2 1 auto;
+  padding: 20px;
+}
+
+#q-new-meetup .wrapper .new-main-content h3 {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.q-form__group {
+  
+}

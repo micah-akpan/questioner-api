@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="../css/meetups.css">
   <link rel="stylesheet" href="../css/meetup.css">
   <link rel="stylesheet" href="../css/modal.css">
+  <link rel="stylesheet" href="../css/meetup-new.css">
+  <link rel="stylesheet" href="../css/meetup-new-2.css">
 </head>
 
 <body>
@@ -46,8 +48,53 @@
     </div>
   </header>
 
-  <section id="q-meetup-details__main">
+  <section id="q-new-meetup">
     <div class="container">
+      <div class="wrapper">
+        <div class="new-feature-content">
+          <div class="feature-content__primary">
+            <h3>Start a new meetup to bring people together</h3>
+          </div>
+        </div>
+
+        <div class="new-main-content">
+          <h3>Create a meetup</h3>
+          <form class="q-form">
+            <div class="q-form__group">
+              <label for="name" class="q-form__label">Meetup Title</label>
+              <input type="text" name="meetup-name" placeholder="Give your meetup a short descriptive title" id="name"
+                class="q-form__input" />
+            </div>
+
+            <div class="q-form__group">
+              <label for="location" class="q-form__label">Location</label>
+              <input type="text" name="meetup-location" placeholder="Where will your meetup be?" id="location" class="q-form__input" />
+              <span class="user-current-location"></span>
+            </div>
+
+            <div class="q-form__group">
+              <label class="q-form__label">Upload an image for your meetup</label>
+              <div class="outer-upload__block">
+                <input type="file" name="meetup-image" accept="image/*" class="q-form__image-upload" id="meetup-image" />
+                <div class="inner-upload__block">
+                  <label for="meetup-image" class="q-form__label">Upload an image</label>
+                </div>
+              </div>
+              <span class=""></span>
+            </div>
+
+
+            <div class="q-form__group">
+              <label for="description" class="q-form__label">Description</label>
+              <textarea placeholder="What will your meetup be about?" name="description" class="q-form__textarea"></textarea>
+              <span class="word-count"></span>
+            </div>
+
+            <div class="q-form__group">
+              <button class="q-form__button">Continue</button>
+            </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -59,13 +106,13 @@
 
   <section id="top-questions">
     <div class="container">
-      
+
     </div>
   </section>
 
   <section>
     <div class="container">
-      
+
     </div>
   </section>
 

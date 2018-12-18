@@ -48,18 +48,18 @@
   font-size: 2rem;
 }
 
-.board_main .meetup-form .q-form__input {
+.q-form__input {
   border: #d4d9e2 1px solid;
   border-radius: 3px;
   padding: 15px;
   color: #596377;
   outline: none;
-  width: 90%;
+  width: 100%;
   display: block;
   margin-bottom: 8px;
 }
 
-.board_main .meetup-form .q-form__label {
+.q-form__label {
   display: block;
   font-weight: 600;
   color: #434c5e;
@@ -77,17 +77,17 @@
 }
 
 .q-form__textarea {
-  width: 90%;
+  width: 100%;
   resize: vertical;
   border: #d4d9e2 1px solid;
   min-height: 200px;
-  max-height: 400px;
+  max-height: 300px;
   font-family: Roboto, Helvetica, sans-serif;
   padding: 1rem;
 }
 
 .q-form__button,
-.q.q-form__label {
+.q-form__label {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -119,9 +119,13 @@
 }
 
 .outer-upload__block {
-  width: 90%;
+  width: 100%;
   border: 1px solid #d4d9e2;
   background: #fff;
+}
+
+.q-form__image-upload {
+  width: 100%;
 }
 
 .outer-upload__block .q-form__image-upload {
@@ -129,7 +133,8 @@
 }
 
 .outer-upload__block .inner-upload__block {
-  width: 90%;
+  width: 95%;
+  border-radius: 5px;
   border: 1px dashed #596377;
   height: 200px;
   background-color: #fff;
