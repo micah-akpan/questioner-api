@@ -10,9 +10,7 @@ btnTrigger.onclick = function () {
 }
 
 searchIcon.onclick = () => {
-  // TODO: Remove inline styling
-  searchBar.style.width = '300px';
-  searchBar.style.display = 'inline-block';
+  searchBar.classList.add('show');
 }
 
 // close search bar
@@ -22,12 +20,7 @@ document.addEventListener('keydown', (e) => {
 
 function hideSearchBar(keyPressed) {
   if (keyPressed === 'Escape') {
-    if (searchBar.style.display === 'inline-block' || dropDownMenu.style.display === 'block') {
-      searchBar.style.display = 'none';
-      dropDownMenu.style.display = 'none';
-    } else {
-      return;
-    }
+    searchBar.classList.remove('show')
   }
 }
 

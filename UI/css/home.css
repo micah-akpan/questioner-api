@@ -87,6 +87,7 @@
   border: 1px solid #596377;
   border-radius: 3px;
   cursor: pointer;
+  transition: box-shadow .3s ease;
 }
 
 @media (max-width: 768px) {
