@@ -1,13 +1,20 @@
 window.onload = (e) => {
   const d = document;
-  const modalCloseBtn = d.getElementById('close-modal-btn');
+  const modalOverlay = d.querySelector('.modal-overlay');
 
   // comments modal
   const cModal = d.getElementById('comments-modal');
-  const qModal = d.getElementById('questions-modal');
-  const modalOverlay = d.querySelector('.modal-overlay');
+  const cModalOverlay = d.getElementById('c-modal-overlay');
+  const cCloseBtn = d.getElementById('close-modal-btn-comment');
+  const cDialog = d.getElementById('c-modal-dialog');
+  const cModalTriggerBtn = d.querySelector('.question-card__img > button');
 
-  const questionModalTriggerBtn = d.querySelector('.ask-group-btn');
+  // Questions modal
+  const qModal = d.getElementById('questions-modal');
+  const qModalOverlay = d.getElementById('q-modal-overlay');
+  const qDialog = d.getElementById('q-modal-dialog');
+  const qCloseBtn = d.querySelector('#close-modal-btn-question');
+  const qModalTriggerBtn = d.querySelector('.ask-group-btn');
 
   function hideModal(modal) {
     modal.classList.remove('open-modal');
@@ -19,22 +26,43 @@ window.onload = (e) => {
     modal.classList.add('open-modal');
   }
 
+  cDialog.onclick = (e) => {
+    e.stopPropagation();
+  }
+
+  qDialog.onclick = (e) => {
+    e.stopPropagation();
+  }
+
   d.onkeydown = (e) => {
     if (e.key === 'Escape') {
       hideModal(cModal);
+      hideModal(qModal);
     }
   }
 
-  modalCloseBtn.onclick = (e) => {
+  cCloseBtn.onclick = (e) => {
     hideModal(cModal);
   }
 
-  questionModalTriggerBtn.onclick = (e) => {
+  qCloseBtn.onclick = (e) => {
+    hideModal(qModal);
+  }
+
+  cModalTriggerBtn.onclick = (e) => {
+    showModal(cModal);
+  }
+
+  qModalTriggerBtn.onclick = (e) => {
     showModal(qModal);
   }
 
-  modalOverlay.onclick = (e) => {
+  cModalOverlay.onclick = (e) => {
     hideModal(cModal);
+  }
+
+  qModalOverlay.onclick = (e) => {
+    hideModal(qModal);
   }
 }
 
