@@ -1,27 +1,37 @@
-const modalCloseBtn = document.getElementById('close-modal-btn');
-const modal = document.getElementById('modal');
-const questionModalTriggerBtn = document.querySelector('.ask-group-btn');
+window.onload = (e) => {
+  const d = document;
+  const modalCloseBtn = d.getElementById('close-modal-btn');
+  const modal = d.getElementById('modal');
+  const modalOverlay = d.querySelector('.modal-overlay');
 
-function hideModal(modal) {
-  modal.classList.remove('open-modal');
-  modal.classList.add('close-modal');
-}
+  const questionModalTriggerBtn = d.querySelector('.ask-group-btn');
 
-function showModal(modal) {
-  modal.classList.remove('close-modal');
-  modal.classList.add('open-modal');
-}
+  function hideModal(modal) {
+    modal.classList.remove('open-modal');
+    modal.classList.add('close-modal');
+  }
 
-document.onkeydown = function (e) {
-  if (e.key === 'Escape') {
+  function showModal(modal) {
+    modal.classList.remove('close-modal');
+    modal.classList.add('open-modal');
+  }
+
+  d.onkeydown = (e) => {
+    if (e.key === 'Escape') {
+      hideModal(modal);
+    }
+  }
+
+  modalCloseBtn.onclick = (e) => {
+    hideModal(modal);
+  }
+
+  questionModalTriggerBtn.onclick = (e) => {
+    showModal(modal);
+  }
+
+  modalOverlay.onclick = (e) => {
     hideModal(modal);
   }
 }
 
-modalCloseBtn.onclick = function (e) {
-  hideModal(modal);
-}
-
-questionModalTriggerBtn.onclick = function (e) {
-  showModal(modal);
-}
