@@ -44,7 +44,6 @@
 
 #q-form .q-form__input-name {
   width: calc(90% / 2);
-  /* width: 90%; */
   display: inline-block;
 }
 
@@ -154,6 +153,19 @@
   font-size: 0.7rem;
   width: auto;
   cursor: pointer;
+  border-radius: 0 3px 3px 0;
+}
+
+
+.q-form__input {
+  border: #d4d9e2 1px solid;
+  border-radius: 3px;
+  padding: 15px;
+  color: #596377;
+  outline: none;
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .q-form__label,
@@ -165,11 +177,11 @@
 }
 
 .q-form__textarea {
-  width: 90%;
+  width: 100%;
   resize: vertical;
   border: #d4d9e2 1px solid;
   min-height: 200px;
-  max-height: 400px;
+  max-height: 300px;
   font-family: Roboto, Helvetica, sans-serif;
   padding: 1rem;
 }
@@ -178,6 +190,15 @@
 .q-form__label {
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.q-form__label {
+  display: block;
+  font-weight: 600;
+  color: #434c5e;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 
 .q-form__button {
@@ -202,33 +223,19 @@
   box-shadow: 2px 2px 4px #d4d9e2;
 }
 
+.q-form__image-upload {
+  width: 100%;
+}
+
 .q-form__group {
   margin-bottom: 10px;
 }
 
-.outer-upload__block {
-  width: 90%;
-  border: 1px solid #d4d9e2;
-  background: #fff;
-}
-
-.outer-upload__block .q-form__image-upload {
-  display: none;
-}
-
-.outer-upload__block .inner-upload__block {
-  width: 90%;
-  border: 1px dashed #596377;
-  height: 200px;
-  background-color: #fff;
-  margin: 20px auto;
-  text-align: center;
-  cursor: pointer;
-}
-
-.inner-upload__block .q-form__label {
-  margin-top: 85px;
+/* Button forms */
+.q-large__button {
   width: 100%;
-  height: 100%;
-  cursor: pointer;
+}
+
+.q-flat-square__button {
+  border-radius: 0;
 }

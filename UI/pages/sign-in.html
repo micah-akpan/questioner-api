@@ -36,19 +36,19 @@
       <h3>Log in to your account</h3>
 
       <form role="form">
-        <div class="q-form__input">
-          <label for="mail">Email</label>
-          <input type="email" placeholder="dennisritchie@email.com" id="mail" name="email" required>
+        <div class="q-form__group">
+          <label for="userEmail" class="q-form__label">Email</label>
+          <input type="email" placeholder="dennisritchie@email.com" id="userEmail" name="email" class="q-form__input" required>
         </div>
 
-        <div class="q-form__input password-input">
-          <label for="pwd">Password</label>
-          <input type="password" placeholder="************" id="pwd" name="password" required>
+        <div class="q-form__group password-input">
+          <label for="pwd" class="q-form__label">Password</label>
+          <input type="password" placeholder="************" id="pwd" name="password" class="q-form__input" required>
           <button class="toggle-password-visibility" type="button">show</button>
           <span id="forgot-pwd"><a href="#">Forgot password?</a></span>
         </div>
 
-        <button type="button" class="q-form__btn btn">Login</button>
+        <button type="button" class="q-form__button q-large__button">Login</button>
       </form>
 
       <div class="social-media__links--option-rule">

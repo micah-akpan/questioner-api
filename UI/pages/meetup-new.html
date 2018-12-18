@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../css/meetup.css">
   <link rel="stylesheet" href="../css/modal.css">
   <link rel="stylesheet" href="../css/meetup-new.css">
+  <link rel="stylesheet" href="../css/form.css">
   <link rel="stylesheet" href="../css/meetup-new-2.css">
 </head>
 
@@ -61,13 +62,17 @@
           <h3>Create a meetup</h3>
           <form class="q-form">
             <div class="q-form__group">
-              <label for="name" class="q-form__label">Meetup Title</label>
+              <label for="name" class="q-form__label">Meetup Title
+                <abbr title="required">*</abbr>
+              </label>
               <input type="text" name="meetup-name" placeholder="Give your meetup a short descriptive title" id="name"
                 class="q-form__input" />
             </div>
 
             <div class="q-form__group">
-              <label for="location" class="q-form__label">Location</label>
+              <label for="location" class="q-form__label">Location
+                <abbr title="required">*</abbr>
+              </label>
               <input type="text" name="meetup-location" placeholder="Where will your meetup be?" id="location" class="q-form__input" />
               <span class="user-current-location"></span>
             </div>
@@ -85,13 +90,15 @@
 
 
             <div class="q-form__group">
-              <label for="description" class="q-form__label">Description</label>
+              <label for="description" class="q-form__label">Description
+                <abbr title="required">*</abbr>
+              </label>
               <textarea placeholder="What will your meetup be about?" name="description" class="q-form__textarea"></textarea>
               <span class="word-count"></span>
             </div>
 
             <div class="q-form__group">
-              <button class="q-form__button">Continue</button>
+              <button class="q-btn q-form__button">Continue</button>
             </div>
         </div>
       </div>
