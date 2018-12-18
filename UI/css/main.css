@@ -221,14 +221,21 @@ header .q-logo-w-border::after {
 
 /* Footer */
 footer {
-  /* position: fixed;
+  position: fixed;
   left: 0;
-  bottom: 0; */
+  bottom: 0;
   width: 100%;
   padding: 10px 24px;
   background: #fff;
   text-align: center;
   font-size: 0.8em;
+}
+
+.sticky-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 footer > * {
