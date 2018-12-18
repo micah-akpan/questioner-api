@@ -77,7 +77,7 @@
   border: 1px solid #cccccc;
 }
 
-.modal-dialog .modal-content-card .post-comment-btn-box {
+.modal-content-card .post-comment-btn-box, .modal-content-card .post-question-btn-box {
   width: 100%;
   text-align: right;
 }

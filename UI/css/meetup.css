@@ -245,6 +245,7 @@ h3 {
   color: #ffffff;
   font-weight: 400;
   width: 30%;
+  cursor: pointer;
 }
 
 .meetup-details .post-question .ask-group-btn:hover {
