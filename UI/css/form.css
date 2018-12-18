@@ -7,6 +7,13 @@
   border-radius: 3px;
 }
 
+@media(max-width: 768px) {
+  #q-form {
+    width: 90%;
+    min-width: 0;
+  }
+}
+
 #q-form .social-media__links--option-rule {
   width: 100%;
   border-top: 1px solid #116466;
@@ -37,20 +44,25 @@
 
 #q-form .q-form__input-name {
   width: calc(90% / 2);
+  /* width: 90%; */
   display: inline-block;
-  /* margin: 0 10px; */
+}
+
+#q-form .q-form__input-name:nth-child(1) {
+  margin-right: 2%;
+  width: 48%;
+}
+
+#q-form .q-form__input-name:nth-child(2) {
+  width: 48%;
 }
 
 #q-form .q-form__input {
   margin: 10px 0;
 }
 
-#q-form .q-form__input-name:nth-child(2) {
-  margin: 0 15px;
-}
-
 #q-form input {
-  width: 90%;
+  width: 100%;
   padding: 1rem;
   outline: none;
   border: 1px solid #116466;
@@ -132,7 +144,7 @@
 #q-form .toggle-password-visibility {
   position: absolute;
   top: 27px;
-  right: 18px;
+  right: 0;
   border: 1px solid #116466;
   background-color: #116466;
   color: #fff;

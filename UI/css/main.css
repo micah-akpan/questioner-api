@@ -185,7 +185,7 @@ header nav a:hover {
 header .q-logo {
 }
 
-header .q-logo::after {
+header .q-logo-w-border::after {
   content: "|";
   padding: 0 20px;
   color: #07504c;
