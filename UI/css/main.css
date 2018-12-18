@@ -115,6 +115,16 @@ section .heading-sec__primary {
   cursor: pointer;
 }
 
+.text__large {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.text__small {
+  font-size: 0.5em;
+}
+
 /* App Main Header */
 header {
   position: fixed;
