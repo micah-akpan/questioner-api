@@ -233,6 +233,95 @@ header .q-logo-w-border::after {
   right: 10px;
 }
 
+/* Mobile side nav */
+#mobile-nav-sidebar__wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  display: none;
+  z-index: 8888;
+  padding: 1em;
+  cursor: pointer;
+}
+
+/* Sidebar Nav Menu */
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  display: none;
+  transition: display 0.2s;
+  width: 100%;
+  color: black;
+  z-index: 99999;
+}
+
+#mobile-nav-menu__wrapper .nav-menu-show {
+  display: block;
+}
+
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper nav {
+  width: 100%;
+}
+
+/* Sidebar Nav Menu Item */
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li {
+  display: block;
+  width: 100%;
+  text-transform: uppercase;
+  border-bottom: 1px solid #596377;
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.sidebar-menu__wrapper .q-sidenav__menu a {
+  color: #07504c;
+}
+
+/* Close Nav Sidebar */
+.close-menu-icon__wrapper {
+  cursor: pointer;
+  margin: 0 auto;
+  width: 100%;
+  text-align: right;
+  border-bottom: 1px solid #596377;
+  padding: 1em;
+}
+
+.close-menu-icon__wrapper button {
+  width: 50px;
+  height: 50px;
+  padding: 1em;
+  background: transparent;
+  cursor: pointer;
+}
+
+.close-menu-icon__wrapper button img {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  #mobile-nav-sidebar__wrapper {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  #mobile-nav-menu__wrapper .sidebar-menu__wrapper {
+    display: none;
+  }
+}
+
+#mobile-nav-sidebar__wrapper img {
+  width: 100%;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
 /* Footer */
 footer {
   position: fixed;
