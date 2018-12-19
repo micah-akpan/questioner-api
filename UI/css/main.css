@@ -287,7 +287,7 @@ header .q-logo-w-border::after {
   position: fixed;
   top: 0;
   right: 0;
-  background: #fff;
+  background: #116466;
   display: none;
   transition: display 0.2s;
   width: 100%;
@@ -309,9 +309,13 @@ header .q-logo-w-border::after {
   display: block;
   width: 100%;
   text-transform: uppercase;
-  border-bottom: 1px solid #596377;
+  border-bottom: 1px solid #cccccc;
   padding: 20px 10px;
   text-align: center;
+}
+
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li:last-child {
+  border-bottom: 0;
 }
 
 #mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li:first-of-type {
@@ -319,7 +323,7 @@ header .q-logo-w-border::after {
 }
 
 .sidebar-menu__wrapper .q-sidenav__menu a {
-  color: #07504c;
+  color: #fff;
 }
 
 @media (min-width: 768px) {
