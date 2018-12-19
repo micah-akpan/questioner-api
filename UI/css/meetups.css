@@ -2,12 +2,13 @@
 
 @import "../css/main.css";
 @import "../css/home.css";
+@import "../css/modal.css";
 
-.q-btn {
+/* .q-btn {
   border: none;
   background: none;
   outline: none;
-}
+} */
 
 /* Search Bar for meetups */
 #q-search {
@@ -85,6 +86,7 @@
   right: -5px;
 }
 
+/* Dropdown  */
 .q-card__primary-options .dropdown-menu {
   position: absolute;
   top: 140px;
@@ -113,6 +115,44 @@
   display: block;
 }
 
+.delete-modal-content h3 {
+  text-align: left;
+}
+
+/* TODO: Make this global */
+.active {
+  display: block;
+}
+
+.delete-btn {
+  background-color: #e44;
+  color: #fff;
+}
+
+.delete-btn > img {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+}
+
+.delete-btn > span {
+  vertical-align: middle;
+}
+
+
+.delete-btn::before {
+  /* content: "";
+  width: 16px;
+  height: 16px;
+  background-image: url("../assets/icons/delete-grey.svg");
+  background-size: 16px 16px;
+  background-position: center; */
+}
+
+.delete-btn:hover {
+  background-color: #d44;
+}
+
 .q-card__primary .q-card__primary-options img {
   width: 100%;
   height: 100%;
@@ -122,10 +162,6 @@
 .q-card__primary .content img {
   width: 100%;
   height: 230px;
-}
-
-.q-card__primary .content img:hover {
-  /* opacity: 0.975; */
 }
 
 .q-card__primary .content .q-asked-count {

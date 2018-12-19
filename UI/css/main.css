@@ -71,8 +71,7 @@ section .heading-sec__primary {
   background-color: #116466;
   color: #ffffff;
   padding: 10px;
-  outline: none;
-  border: none;
+  cursor: pointer;
 }
 
 .q-flex {
@@ -127,6 +126,10 @@ section .heading-sec__primary {
 
 .btn-large__40 {
   width: 40%;
+}
+
+.btn__rounded {
+  border-radius: 3px;
 }
 
 /* App Main Header */
