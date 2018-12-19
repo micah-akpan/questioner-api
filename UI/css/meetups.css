@@ -9,15 +9,6 @@
   outline: none;
 }
 
-.notify-user__nav button {
-  width: 35px;
-  height: 35px;
-}
-
-.notify-user__nav button img {
-  width: 100%;
-}
-
 /* Search Bar for meetups */
 #q-search {
   margin: 200px 0px 30px 140px;
