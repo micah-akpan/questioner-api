@@ -66,13 +66,14 @@ h3 {
   margin-top: 40px;
 }
 
-
 /* User Feeds */
 #user-feeds-top {
   display: flex;
   width: 100%;
   margin-top: 20px;
 }
+
+
 
 #user-feeds-top > div {
 }
@@ -82,6 +83,26 @@ h3 {
   margin: 0 20px;
   width: 10%;
   min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .user-stats__wrapper .stats {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #user-feeds-top .user-feeds {
+    width: 5%;
+    min-width: 150px;
+  }
+
+  .user-stats__wrapper .stats .stat-value {
+    font-size: 1.8rem;
+  }
+
+  .user-stats__wrapper .stats .stat-desc {
+    font-size: 1rem;
+  }
 }
 
 #user-feeds-top .user-feeds h3 {

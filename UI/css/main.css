@@ -241,22 +241,50 @@ header .q-logo-w-border::after {
   width: 100%;
 }
 
-/* Mobile side nav */
+/* Mobile Menu */
+
+/* Custom Menu Trigger Button */
 #mobile-nav-sidebar__wrapper {
   position: fixed;
-  top: 0;
+  top: 10px;
   right: 0;
-  width: 80px;
-  height: 80px;
   display: none;
-  z-index: 8888;
+  z-index: 999999;
   padding: 1em;
   cursor: pointer;
 }
 
-/* Sidebar Nav Menu */
+@media (max-width: 768px) {
+  #mobile-nav-sidebar__wrapper {
+    display: block;
+  }
+}
+
+#mobile-nav-sidebar__wrapper > div {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+  transition: all 0.4s;
+}
+
+.change .menu-bar1 {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+  transform: rotate(-45deg) translate(-9px, 6px);
+}
+
+.change .menu-bar2 {
+  opacity: 0;
+}
+
+.change .menu-bar3 {
+  -webkit-transform: rotate(45deg) translate(-8px, -8px);
+  transform: rotate(45deg) translate(-8px -8px);
+}
+
+/* Mobile Nav Menu */
 #mobile-nav-menu__wrapper .sidebar-menu__wrapper {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   background: #fff;
@@ -275,7 +303,8 @@ header .q-logo-w-border::after {
   width: 100%;
 }
 
-/* Sidebar Nav Menu Item */
+/* Mobile Nav Menu Item */
+
 #mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li {
   display: block;
   width: 100%;
@@ -285,49 +314,18 @@ header .q-logo-w-border::after {
   text-align: center;
 }
 
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li:first-of-type {
+  padding-top: 80px;
+}
+
 .sidebar-menu__wrapper .q-sidenav__menu a {
   color: #07504c;
-}
-
-/* Close Nav Sidebar */
-.close-menu-icon__wrapper {
-  cursor: pointer;
-  margin: 0 auto;
-  width: 100%;
-  text-align: right;
-  border-bottom: 1px solid #596377;
-  padding: 1em;
-}
-
-.close-menu-icon__wrapper button {
-  width: 50px;
-  height: 50px;
-  padding: 1em;
-  background: transparent;
-  cursor: pointer;
-}
-
-.close-menu-icon__wrapper button img {
-  width: 100%;
-  height: 100%;
-}
-
-@media (max-width: 768px) {
-  #mobile-nav-sidebar__wrapper {
-    display: block;
-  }
 }
 
 @media (min-width: 768px) {
   #mobile-nav-menu__wrapper .sidebar-menu__wrapper {
     display: none;
   }
-}
-
-#mobile-nav-sidebar__wrapper img {
-  width: 100%;
-  vertical-align: middle;
-  cursor: pointer;
 }
 
 /* Footer */
