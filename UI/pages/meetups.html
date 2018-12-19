@@ -92,11 +92,17 @@
             <div class="q-card__primary">
               <div class="content">
                 <div class="q-card__primary-options">
-                  <img src="../assets/icons/more.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                  <img src="../assets/icons/more-grey.svg" alt="3 dot ellipsis image to toggle drop down menu">
                   <div class="dropdown-menu">
                     <ul>
-                      <li class="edit-option">edit</li>
-                      <li class="delete-option">delete</li>
+                      <li class="edit-option">
+                        <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                        <span>edit</span>
+                      </li>
+                      <li class="delete-option">
+                        <img src="../assets/icons/delete-red.svg">
+                        <span>delete</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -114,6 +120,21 @@
           <div class="q-card">
             <div class="q-card__primary">
               <div class="content">
+                <div class="q-card__primary-options">
+                  <img src="../assets/icons/more-grey.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                  <div class="dropdown-menu">
+                    <ul>
+                      <li class="edit-option">
+                        <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                        <span>edit</span>
+                      </li>
+                      <li class="delete-option">
+                        <img src="../assets/icons/delete-red.svg">
+                        <span>delete</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <img src="../assets/img/tech-startup1.webp" alt="">
 
                 <span class="q-asked-count" title="Total questions asked in this meetup">20</span>
@@ -128,6 +149,21 @@
           <div class="q-card">
             <div class="q-card__primary">
               <div class="content">
+                <div class="q-card__primary-options">
+                  <img src="../assets/icons/more-grey.svg" alt="3 dot ellipsis image to toggle drop down menu">
+                  <div class="dropdown-menu">
+                    <ul>
+                      <li class="edit-option">
+                        <img src="../assets/icons/pencil-edit-button.svg" alt="a dark green pencil">
+                        <span>edit</span>
+                      </li>
+                      <li class="delete-option">
+                        <img src="../assets/icons/delete-red.svg">
+                        <span>delete</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <img src="../assets/img/startup-meetup2.jpg" alt="">
 
                 <span class="q-asked-count" title="Total questions asked in this meetup">20</span>
@@ -184,7 +220,7 @@
         <div class="modal-content">
           <div class="modal-dialog">
             <div class="modal-content-card">
-              <button class="close-modal-btn" id="close-modal-btn-comment">
+              <button class="close-modal-btn" id="close-modal-btn">
                 <img src="../assets/icons/cross.svg" alt="close modal" />
               </button>
               <div class="delete-modal-content">
@@ -193,11 +229,14 @@
                   You can't get back this meetup once you delete it
                 </p>
 
-                <button class="cancel-btn q-btn btn__rounded">Cancel</button>
-                <button class="delete-btn q-btn btn__rounded">
-                  <img src="../assets/icons/delete-grey.svg" alt="delete icon">
-                  <span>Delete</span>
-                </button>
+                <div class="button__wrapper">
+                  <button class="cancel-btn q-btn btn__rounded">Cancel</button>
+                  <button class="delete-btn q-btn btn__rounded">
+                    <img src="../assets/icons/delete-grey.svg" alt="delete icon">
+                    <span>Delete</span>
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>
