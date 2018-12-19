@@ -31,6 +31,7 @@ const meetupDropdownMenu = d.querySelector('.q-card__primary-options .dropdown-m
 const delBtn = d.querySelector('.dropdown-menu .delete-option');
 const editBtn = d.querySelector('.dropdown-menu .edit-option');
 const modal = d.querySelector('.modal');
+const closeModalBtn = d.querySelector('.close-modal-btn');
 
 
 meetupDropdownTrigger.onclick = (e) => {
@@ -39,5 +40,15 @@ meetupDropdownTrigger.onclick = (e) => {
 
 delBtn.onclick = (e) => {
   // pop open delete modal
-  modal.classList.add('active');
+  modal.classList.toggle('active');
+}
+
+closeModalBtn.onclick = (e) => {
+  modal.classList.toggle('active');
+}
+
+document.onkeydown = (e) => {
+  if (e.key === 'Escape') {
+    modal.classList.toggle('active');
+  }
 }
