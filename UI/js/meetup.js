@@ -24,5 +24,18 @@ function hideSearchBar(keyPressed) {
   }
 }
 
-document.addEventListener('click', (e) => {
-})
+const d = document;
+
+const meetupDropdownTrigger = d.querySelector('.q-card__primary-options');
+const meetupDropdownMenu = d.querySelector('.q-card__primary-options .dropdown-menu');
+const delBtn = d.querySelector('.dropdown-menu .delete-option');
+const editBtn = d.querySelector('.dropdown-menu .edit-option');
+
+
+meetupDropdownTrigger.onclick = (e) => {
+  meetupDropdownMenu.classList.toggle('active');
+}
+
+delBtn.onclick = (e) => {
+  // pop open delete modal
+}
