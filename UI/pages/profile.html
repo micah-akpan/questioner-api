@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Bob | Questioner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
+  <meta name="author" content="Micah Akpan">
+  <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div id="q-branding">
+          <a href="../index.html">
+            <h1 class="q-logo q-logo-w-border">Questioner</h1>
+          </a>
+        </div>
+
+        <nav class="q-left-nav">
+          <ul>
+            <li><a href="#">Meetups</a></li>
+          </ul>
+        </nav>
+
+        <nav class="q-right-nav notify-user__nav no-flex">
+          <ul>
+            <li>
+              <button class="q-btn" title="Notifications">
+                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
+              </button>
+            </li>
+            <li class="q-user-profile__dropdown-trigger">
+              <button class="q-btn dropdown-trigger-btn" title="Profile">
+                <img src="../assets/icons/avatar1.svg" alt="your profile">
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section id="user-profile">
+    <div class="user-profile__avatar"></div>
+    <div class="user-profile__description">
+      <h3 class="user-profile__name"></h3>
+      <p class="user-profile__bio"></p>
+      <a href="#">Add a description about yourself</a>
+    </div>
+
+  </section>
+
+  <div class="container">
+
+    <section id="user-feeds-statistics">
+
+      <section class="user-feeds__block">
+        <!-- Feeds for meetups user is scheduled to attend -->
+        <h3>Feeds</h3>
+        <ul>
+          <li>Meetup 1</li>
+          <li>Meetup 2</li>
+          <li>Meetup 3</li>
+          <li>Meetup 4</li>
+          <li>Meetup 5</li>
+        </ul>
+
+      </section>
+
+      <section class="user-stats-feeds__wrapper">
+        <div class="user-stats__wrapper">
+          <div class="user-statistics__total-questions"></div>
+          <div class="user-statistics__total-comments"></div>
+          <div class="user-statistics__total-comments"></div>
+        </div>
+        
+        <div class="user-feeds__wrapper">
+          <div class="cards">
+            <!-- A list of question cards -->
+            <div class="q-card"></div>
+            <div class="q-card"></div>
+            <div class="q-card"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+
+    <section>
+
+    </section>
+
+    <section>
+
+    </section>
+  </div>
+
+  <div id="mobile-nav-sidebar__wrapper">
+    <button class="q-btn mobile-nav-sidebar__btn" aria-label="Menu" aria-expanded="false">
+      <img src="assets/icons/menu-button.svg" alt="mobile nav sidebar icon">
+    </button>
+  </div>
+
+  <section id="mobile-nav-menu__wrapper">
+    <div class="sidebar-menu__wrapper">
+      <div class="close-menu-icon__wrapper">
+        <button class="q-btn mobile-nav-sidebar__btn" id="mobile-nav-sidebar__close-btn">
+          <img src="assets/icons/cross.svg" alt="close mobile menu" />
+        </button>
+      </div>
+      <nav class="q-sidenav__menu" id="q-sidenav__menu">
+        <ul>
+          <li class="q-sidenav__menu-item"><a href="#!">Login</a></li>
+          <li class="q-sidenav__menu-item"><a href="#!">Sign Up</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+  <script src="js/sidenav.js"></script>
+</body>
+
+</html>
