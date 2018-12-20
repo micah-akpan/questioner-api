@@ -2,7 +2,8 @@
    Contains global styles, common to every page
 */
 
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+/* @import url('https://fonts.googleapis.com/css?family=Aleo|Roboto'); */
+@import url("https://fonts.googleapis.com/css?family=Aleo|Marck+Script|Roboto");
 
 *,
 *::after,
@@ -18,9 +19,9 @@ body {
   margin: 0;
   padding: 0;
   margin: 0 auto;
-  color: #555555;
+  color: #555;
   overflow: auto;
-  background-color: #fff;
+  background-color: #fafafa;
 }
 
 .container {
@@ -32,6 +33,7 @@ body {
 /* Global */
 h3 {
   text-align: center;
+  font-family: "Aleo", serif;
 }
 
 a {
@@ -167,6 +169,7 @@ header #q-branding a:visited {
 header #q-branding .q-logo {
   padding: 0;
   margin-top: 20px;
+  font-family: 'Marck Script', cursive;
 }
 
 header nav {
@@ -208,6 +211,7 @@ header .q-logo-w-border::after {
   content: "|";
   padding: 0 20px;
   color: #07504c;
+  font-family: Roboto, sans-serif;
 }
 
 /* Left Nav */
@@ -230,6 +234,10 @@ header .q-logo-w-border::after {
   position: absolute;
   top: 0;
   right: 10px;
+}
+
+.q-right-nav > ul > span {
+  margin-right: 5px;
 }
 
 .notify-user__nav button {
@@ -325,7 +333,6 @@ header .q-logo-w-border::after {
 .sidebar-menu__wrapper .q-sidenav__menu a {
   color: #fff;
 }
-
 
 /* Footer */
 footer {
@@ -431,13 +438,11 @@ footer .footer-sec__social-media li {
   }
 }
 
-
 .align-center {
   text-align: center;
 }
 
 .social-media__links {
-
 }
 
 .social-media__links li a {
