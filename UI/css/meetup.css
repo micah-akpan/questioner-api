@@ -176,10 +176,6 @@ h3 {
   flex: 0 1 auto;
 }
 
-.comment-box .question-card__img img {
-  /* margin-right: 10px; */
-}
-
 .question-block .comment-box form {
   width: 100%;
   display: flex;
@@ -194,7 +190,6 @@ h3 {
   max-height: 40px;
   outline: 0;
   resize: none;
-  /* width: 100%; */
 }
 
 .comment-box form button {
@@ -222,15 +217,15 @@ h3 {
   display: flex;
   width: 80%;
   flex-wrap: wrap;
-  justify-content: space-between;
   margin: 20px 0;
 }
 
 #meetup-image-upload .meetup-photos__wrapper img {
   width: 100px;
   height: 100px;
-  /* padding: 10px; */
+  margin-right: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 #meetup-image-upload form {
