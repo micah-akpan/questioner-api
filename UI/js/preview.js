@@ -5,10 +5,6 @@ window.onload = (e) => {
   const imgBlock = d.querySelector('.outer-upload__block');
   const imgUploadBtns = d.querySelector('.image-upload-btns');
 
-  imgUploadTrigger.onclick = (e) => {
-    // imgUpload.click();
-  }
-
   imgUpload.onchange = (e) => {
     const file = URL.createObjectURL(e.target.files[0]);
     const uploadedImg = d.createElement('img');

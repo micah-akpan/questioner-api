@@ -1,67 +1,66 @@
+(() => {
+  const d = document;
 
-const d = document;
-const modalOverlay = d.querySelector('.modal-overlay');
+  // comments modal
+  const commentModal = d.getElementById('comments-modal');
+  const commentModalOverlay = d.getElementById('c-modal-overlay');
+  const commentCloseBtn = d.getElementById('close-modal-btn-comment');
+  const commentModalDialog = d.getElementById('c-modal-dialog');
+  const commentModalTriggerBtn = d.querySelector('.question-card__img > button');
 
-// comments modal
-const cModal = d.getElementById('comments-modal');
-const cModalOverlay = d.getElementById('c-modal-overlay');
-const cCloseBtn = d.getElementById('close-modal-btn-comment');
-const cDialog = d.getElementById('c-modal-dialog');
-const cModalTriggerBtn = d.querySelector('.question-card__img > button');
+  // Questions modal
+  const questionModal = d.getElementById('questions-modal');
+  const questionModalOverlay = d.getElementById('q-modal-overlay');
+  const questionModalDialog = d.getElementById('q-modal-dialog');
+  const questionModalCloseBtn = d.querySelector('#close-modal-btn-question');
+  const questionModalTriggerBtn = d.querySelector('.ask-group-btn');
 
-// Questions modal
-const qModal = d.getElementById('questions-modal');
-const qModalOverlay = d.getElementById('q-modal-overlay');
-const qDialog = d.getElementById('q-modal-dialog');
-const qCloseBtn = d.querySelector('#close-modal-btn-question');
-const qModalTriggerBtn = d.querySelector('.ask-group-btn');
-
-
-function hideModal(modal) {
-  modal.classList.remove('open-modal');
-  modal.classList.add('close-modal');
-}
-
-function showModal(modal) {
-  modal.classList.remove('close-modal');
-  modal.classList.add('open-modal');
-}
-
-cDialog.onclick = (e) => {
-  e.stopPropagation();
-}
-
-qDialog.onclick = (e) => {
-  e.stopPropagation();
-}
-
-d.onkeydown = (e) => {
-  if (e.key === 'Escape') {
-    hideModal(cModal);
-    hideModal(qModal);
+  function hideModal(modal) {
+    modal.classList.remove('enabled');
+    modal.classList.add('disabled');
   }
-}
 
-cCloseBtn.onclick = (e) => {
-  hideModal(cModal);
-}
+  function showModal(modal) {
+    modal.classList.remove('disabled');
+    modal.classList.add('enabled');
+  }
 
-qCloseBtn.onclick = (e) => {
-  hideModal(qModal);
-}
+  commentModalDialog.onclick = (e) => {
+    e.stopPropagation();
+  }
 
-cModalTriggerBtn.onclick = (e) => {
-  showModal(cModal);
-}
+  questionModalDialog.onclick = (e) => {
+    e.stopPropagation();
+  }
 
-qModalTriggerBtn.onclick = (e) => {
-  showModal(qModal);
-}
+  d.onkeydown = (e) => {
+    if (e.key === 'Escape') {
+      hideModal(commentModal);
+      hideModal(questionModal);
+    }
+  }
 
-cModalOverlay.onclick = (e) => {
-  hideModal(cModal);
-}
+  commentCloseBtn.onclick = (e) => {
+    hideModal(commentModal);
+  }
 
-qModalOverlay.onclick = (e) => {
-  hideModal(qModal);
-}
+  questionModalCloseBtn.onclick = (e) => {
+    hideModal(questionModal);
+  }
+
+  commentModalTriggerBtn.onclick = (e) => {
+    showModal(commentModal);
+  }
+
+  questionModalTriggerBtn.onclick = (e) => {
+    showModal(questionModal);
+  }
+
+  commentModalOverlay.onclick = (e) => {
+    hideModal(commentModal);
+  }
+
+  questionModalOverlay.onclick = (e) => {
+    hideModal(questionModal);
+  }
+})();

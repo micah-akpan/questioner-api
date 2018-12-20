@@ -80,7 +80,7 @@
   right: -5px;
 }
 
-/* Dropdown  */
+/* Meetup Card DropDown Options */
 .q-card__primary-options .dropdown-menu {
   position: absolute;
   top: 140px;
@@ -93,7 +93,7 @@
 
 .q-card__primary-options .dropdown-menu li {
   text-transform: capitalize;
-  padding: 0 7px;
+  padding: 7px;
   font-size: 1em;
 }
 
@@ -216,6 +216,7 @@ nav.no-flex {
   top: 70px;
   right: 200px;
   z-index: 100000;
+  box-shadow: 2px 2px 2px #555;
 }
 
 .q-user-profile__dropdown-menu li {

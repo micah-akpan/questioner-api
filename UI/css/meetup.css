@@ -320,6 +320,11 @@ h3 {
 }
 
 
+.question-comment-count {
+  text-align: center;
+  display: block;
+}
+
 @media (max-width: 768px) {
   #q-meetups-preview .q-meetups-preview__block {
     flex-direction: column;

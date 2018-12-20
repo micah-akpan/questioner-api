@@ -4,3 +4,27 @@
 .q-nav__signup {
   margin-top: 30px;
 }
+
+.sign-in__link {
+  display: none;
+  text-align: center;
+}
+
+.sign-in__link a {
+  color: #116466;
+}
+
+.sign-in__link a:hover {
+  color: #07504c;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  header .header-content {
+    justify-content: center;
+  }
+
+  .sign-in__link {
+    display: block;
+  }
+}
