@@ -6,7 +6,7 @@
 
 /* Search Bar for meetups */
 #q-search {
-  margin: 200px 0px 30px 140px;
+  margin: 200px 0px 30px;
 }
 
 @media(max-width: 768px) {
