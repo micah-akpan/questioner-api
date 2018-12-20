@@ -4,17 +4,11 @@
 #q-form {
   width: 600px;
   min-width: 500px;
-  margin: 200px auto 200px auto;
+  margin: 200px auto;
   border: 1px solid #116466;
   border-radius: 3px;
 }
 
-@media (max-width: 768px) {
-  #q-form {
-    width: 90%;
-    min-width: 0;
-  }
-}
 
 #q-form .social-media__links--option-rule {
   width: 100%;
@@ -158,7 +152,6 @@
   border-radius: 0 3px 3px 0;
 }
 
-
 .q-form__input {
   border: #d4d9e2 1px solid;
   border-radius: 3px;
@@ -244,4 +237,11 @@
 
 form abbr[title="required"] {
   color: #f44;
+}
+
+@media (max-width: 768px) {
+  #q-form {
+    width: 90%;
+    min-width: 0;
+  }
 }
