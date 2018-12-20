@@ -212,9 +212,33 @@ h3 {
   background: #116460;
 }
 
-#top-questions h3 {
+/* Upload Meetup Image */
+#meetup-image-upload h3 {
   text-align: left;
   margin: 0;
+}
+
+#meetup-image-upload .meetup-photos__wrapper {
+  display: flex;
+  width: 80%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+#meetup-image-upload .meetup-photos__wrapper img {
+  width: 100px;
+  height: 100px;
+  /* padding: 10px; */
+  margin-bottom: 10px;
+}
+
+#meetup-image-upload form {
+  margin-top: 40px;
+}
+
+#meetup-image-upload form input {
+  display: none;
 }
 
 .q-questions__pagination .paginate-btn {
