@@ -1,0 +1,51 @@
+@import "../css/main.css";
+@import "../css/form.css";
+
+/* Profile Nav */
+
+#nav__profile {
+  margin-top: 200px;
+  width: 100%;
+}
+
+#nav__profile ul {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+#nav__profile ul > li {
+  width: 200px;
+  flex: 0 1 200px;
+}
+
+/* User profile view and settings */
+#user-profile {
+  width: 100%;
+}
+
+/* User stats */
+#user-profile .user-profile__stats {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+
+#user-profile .user-profile__stats > div {
+  flex: 1 1 auto;
+}
+
+/* User profile */
+#user-profile .user-profile__wrapper {
+  display: flex;
+}
+
+.user-profile__wrapper .user-profile__avatar-wrapper {
+  flex: 1 0 auto;
+}
+
+.user-profile__wrapper .user-profile__main-content__wrapper {
+  flex: 2 1 auto;
+}
