@@ -1,4 +1,4 @@
-const d = document;
+// TODO: Refactor all scripts
 
 const mPhotosWrapper = d.querySelector('.meetup-photos__wrapper');
 const uploadBtn = d.querySelector('label[role="button"]');
