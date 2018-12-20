@@ -68,6 +68,10 @@ section {
   cursor: pointer;
 }
 
+.q-btn:hover {
+  background-color: #07504c;
+}
+
 .q-flex {
   display: flex;
 }

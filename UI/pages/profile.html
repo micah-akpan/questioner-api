@@ -45,21 +45,22 @@
     </div>
   </header>
 
-  <section id="nav__profile">
-    <div class="container">
+  <div class="container">
+    <section id="nav__profile">
+    
       <nav>
         <ul>
           <li><a href="#!">Profile</a></li>
-          <li><a href="#!">Feeds</a></li>
+          <li><a href="./feeds.html">Feeds</a></li>
           <li><a href="#!">Stats</a></li>
           <li><a href="#!">@Support</a></li>
         </ul>
       </nav>
-    </div>
-  </section>
 
-  <section id="user-profile">
-    <div class="container">
+    </section>
+
+    <section id="user-profile">
+      
       <div class="user-profile__stats">
         <div class="user-statistics__total-questions">
           <p class="stat-value">80</p>
@@ -74,85 +75,91 @@
           <p class="stat-desc">Total Meetups</p>
         </div>
       </div>
-    </div>
-    <div class="user-profile__wrapper-container">
-      <div class="container">
+ 
+      <div class="user-profile__wrapper-container">
 
         <div class="user-profile__wrapper">
           <div class="user-profile__avatar-wrapper">
             <img src="../assets/icons/avatar1.svg" alt="Bob">
-            <p class="username"></p>
-            <p class="short-bio"></p>
+            <div class="profile-text__wrapper">
+              <p class="username">Bob</p>
+              <p class="user-bio">Labore justo eos sit erat kasd vero magna voluptua et. Et eos ea et eirmod diam justo
+                lorem gubergren rebum,.</p>
+            </div>
+
           </div>
 
           <!-- User Personal Data -->
           <div class="user-profile__main-content__wrapper">
-            <div class="personal-data-account__wrapper">
-              <h3>Personal Data</h3>
-              <form class="q-form">
-                <div>
-                  <label class="q-form__label" for="fullName">Full Name</label>
-                  <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
-                </div>
+            <div class="user-profile-account__wrapper">
+              <div class="personal-data-account__wrapper">
+                <h3>Personal Data</h3>
+                <form class="q-form">
+                  <div>
+                    <label class="q-form__label" for="fullName">Full Name</label>
+                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
+                  </div>
 
-                <div>
-                  <label class="q-form__label" for="location">Location</label>
-                  <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
-                </div>
+                  <div>
+                    <label class="q-form__label" for="location">Location</label>
+                    <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
+                  </div>
 
-                <div>
-                  <label class="q-form__label" for="birthDate">Birthday</label>
-                  <input type="date" id="birthDate" class="q-form__input">
-                </div>
+                  <div>
+                    <label class="q-form__label" for="birthDate">Birthday</label>
+                    <input type="date" id="birthDate" class="q-form__input">
+                  </div>
 
-                <div>
-                  <label class="q-form__label" for="userBio">Bio</label>
-                  <textarea class="q-form__textarea" id="userBio"></textarea>
+                  <div>
+                    <label class="q-form__label" for="userBio">Bio</label>
+                    <textarea class="q-form__textarea" id="userBio"></textarea>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Account Settings -->
+              <div class="personal-data-account__wrapper">
+                <h3>Account Data</h3>
+                <form class="q-form">
+                  <div>
+                    <label class="q-form__label" for="userEmail">Email</label>
+                    <input type="text" id="userEmail" class="q-form__input" placeholder="Bob">
+                  </div>
+
+                  <div>
+                    <label class="q-form__label" for="newPassword">New Password</label>
+                    <input type="text" id="newPassword" class="q-form__input" placeholder="">
+                  </div>
+
+                  <div>
+                    <label class="q-form__label" for="birthDate">Birthday</label>
+                    <input type="date" id="birthDate" class="q-form__input">
+                  </div>
+                </form>
+              </div>
+
+              <div id="notif">
+                <div class="notif__wrapper">
+                  <h3>Notifications</h3>
+                  <button class="notif__toggle q-btn">Toggle Notif</button>
                 </div>
-              </form>
+              </div>
+
+              <div id="misc">
+                <h3>Account</h3>
+                <div class="misc-btns__wrapper">
+                  <button class="q-btn deactivate-btn">Deactivate Account</button>
+                  <button class="q-btn">Save Changes</button>
+                </div>
+              </div>
             </div>
+
           </div>
 
-          <!-- Account Settings -->
-          <div class="user-profile__main-content__wrapper">
-            <div class="personal-data-account__wrapper">
-              <h3>Account Data</h3>
-              <form class="q-form">
-                <div>
-                  <label class="q-form__label" for="userEmail">Email</label>
-                  <input type="text" id="userEmail" class="q-form__input" placeholder="Bob">
-                </div>
-
-                <div>
-                  <label class="q-form__label" for="newPassword">New Password</label>
-                  <input type="text" id="newPassword" class="q-form__input" placeholder="">
-                </div>
-
-                <div>
-                  <label class="q-form__label" for="birthDate">Birthday</label>
-                  <input type="date" id="birthDate" class="q-form__input">
-                </div>
-              </form>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section id="notif">
-    <div class="notif__wrapper">
-      <p>I wish to receive newsletters, promotions and news from Freepik Company</p>
-      <button class="notif__toggle">Toggle Notif</button>
-    </div>
-  </section>
-
-  <section id="misc">
-    <div class="misc-btns__wrapper">
-      <button>Deactivate Account</button>
-      <button>Save Changes</button>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- Mobile Nav -->
 
