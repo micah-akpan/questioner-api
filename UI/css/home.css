@@ -1,5 +1,16 @@
 @import url("../css/main.css");
 
+.heading-sec__primary {
+  font-size: 1.8em;
+}
+
+#questioner-what .questioner-what__text {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 700;
+  padding: 1em;
+}
+
 .q-right-nav a {
   padding: 0.5rem;
   border-radius: 5px;
