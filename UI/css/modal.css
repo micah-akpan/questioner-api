@@ -117,10 +117,10 @@
   cursor: pointer;
 }
 
-.close-modal {
-  display: none;
+.enabled {
+  display: block;
 }
 
-.open-modal {
-  display: block;
+.disabled {
+  display: none;
 }

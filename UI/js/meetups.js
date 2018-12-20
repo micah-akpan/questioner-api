@@ -5,7 +5,7 @@ const btnTrigger = document.querySelector('.dropdown-trigger-btn');
 const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
 
 // Toggle display of dropdown menu
-btnTrigger.onclick = function () {
+btnTrigger.onclick = () => {
   dropDownMenu.style.display === 'none' ? dropDownMenu.style.display = 'block' : dropDownMenu.style.display = 'none';
 }
 
