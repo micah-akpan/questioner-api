@@ -1,54 +1,43 @@
-const searchIcon = document.getElementById('search-icon');
-const searchBar = document.getElementById('search-bar');
+// TODO: Refactor all scripts
 
-const btnTrigger = document.querySelector('.dropdown-trigger-btn');
-const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
+const mPhotosWrapper = d.querySelector('.meetup-photos__wrapper');
+const uploadBtn = d.querySelector('label[role="button"]');
+const fileInput = d.querySelector('input[type="file"]');
 
-// Toggle display of dropdown menu
-btnTrigger.onclick = function () {
-  dropDownMenu.style.display === 'none' ? dropDownMenu.style.display = 'block' : dropDownMenu.style.display = 'none';
+fileInput.onchange = (e) => {
+  const image = new Image();
+  const imageUrl = URL.createObjectURL(e.target.files[0]);
+  image.setAttribute('src', imageUrl);
+
+  mPhotosWrapper.appendChild(image);
 }
 
-searchIcon.onclick = () => {
-  searchBar.classList.add('show');
-}
+// Tags
+const addTagBtn = d.querySelector('.btn__tag');
+const tagField = d.querySelector('input[id="tag"]');
+const addTagsContainer = d.querySelector('.meetup-tags-added');
 
-// close search bar
-document.addEventListener('keydown', (e) => {
-  hideSearchBar(e.key);
-})
+let tags = null;
 
-function hideSearchBar(keyPressed) {
-  if (keyPressed === 'Escape') {
-    searchBar.classList.remove('show')
+addTagBtn.onclick = (e) => {
+  // allowed separators for tags are commas and hashes (#)
+  tags = tagField.value.split(",");
+  if (tags.length === 1 && tags[0].includes('#')) {
+    tags = tags[0].split('#');
+  } else {
+    // user probably entered a single value
+    tags = tags;
   }
-}
 
-const d = document;
-
-const meetupDropdownTrigger = d.querySelector('.q-card__primary-options');
-const meetupDropdownMenu = d.querySelector('.q-card__primary-options .dropdown-menu');
-const delBtn = d.querySelector('.dropdown-menu .delete-option');
-const editBtn = d.querySelector('.dropdown-menu .edit-option');
-const modal = d.querySelector('.modal');
-const closeModalBtn = d.querySelector('.close-modal-btn');
-
-
-meetupDropdownTrigger.onclick = (e) => {
-  meetupDropdownMenu.classList.toggle('active');
-}
-
-delBtn.onclick = (e) => {
-  // pop open delete modal
-  modal.classList.toggle('active');
-}
-
-closeModalBtn.onclick = (e) => {
-  modal.classList.toggle('active');
-}
-
-document.onkeydown = (e) => {
-  if (e.key === 'Escape') {
-    modal.classList.toggle('active');
-  }
+  addTagsContainer.innerHTML = "";
+  tags.forEach((tag, i) => {
+    if (tag !== '') {
+      const span = d.createElement('span');
+      
+      // to support deleting the tags later
+      span.id = i;
+      span.textContent = `#${tag}`;
+      addTagsContainer.appendChild(span);
+    }
+  })
 }
