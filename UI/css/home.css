@@ -51,14 +51,14 @@
   text-align: center;
 }
 
-#q-showcase button {
+#q-showcase a[role="button"] {
   display: block;
   margin: 10px auto;
   padding: 1rem 2.5rem;
   border-radius: 30px;
   width: 30%;
   min-width: 200px;
-  cursor: pointer;
+  text-align: center;
   -webkit-transition: background-color 0.3s, width 0.3s;
   -moz-transition: background-color 0.3s, width 0.3s;
   -o-transition: background-color 0.3s, width 0.3s;
@@ -66,16 +66,16 @@
 }
 
 @media (max-width: 768px) {
-  #q-showcase button {
+  #q-showcase a {
     width: 90%;
   }
 }
 
-#q-showcase button:hover {
+#q-showcase a:hover {
   background: #07504c;
 }
 
-#q-showcase button:active {
+#q-showcase a:active {
   background: #116466;
 }
 
@@ -94,6 +94,80 @@
   border-radius: 3px;
   cursor: pointer;
   transition: box-shadow 0.3s ease;
+}
+
+.cards .q-card__no-border {
+  border: none;
+}
+
+/* Cards main content */
+.q-card .q-card__primary {
+  width: 100%;
+  height: 200px;
+  border-bottom: 1px solid #116466;
+}
+
+.q-card .q-card__primary .content {
+  max-width: 100%;
+  position: relative;
+}
+
+.q-card__primary .content img {
+  width: 100%;
+  height: 200px;
+}
+
+.q-card__primary .content .meetup-details {
+  width: 100%;
+  display: flex;
+}
+
+.q-card__primary .meetup-details .meetup-details__sec {
+  text-align: center;
+  width: 20%;
+}
+
+.q-card__primary .meetup-details__sec .date__sec_month {
+  color: #116466;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.q-card__primary .meetup-details__sec .date__sec_date {
+  color: #596377;
+}
+
+.q-card__primary .meetup-details .meetup-details__primary {
+  width: 80%;
+  margin-left: 20px;
+}
+
+.q-card__primary .content .meetup-details span {
+  display: block;
+}
+
+.q-card__primary .content .meetup-details h3 {
+  margin: 0;
+  margin-top: 5px;
+  text-align: left !important;
+}
+
+.q-card__primary .content .q-asked-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #ffffff;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.q-card .q-card__sec .meetup-title {
+  font-size: 1.4rem;
+}
+
+.q-card .q-card__sec .meetup-sched-date {
+  color: #333333;
+  padding: 0;
 }
 
 @media (max-width: 768px) {

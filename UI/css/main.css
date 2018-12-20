@@ -67,12 +67,12 @@ section .heading-sec__primary {
   font-size: 2.5em;
 }
 
+
 .q-btn {
   background-color: #116466;
   color: #ffffff;
   padding: 10px;
-  outline: none;
-  border: none;
+  cursor: pointer;
 }
 
 .q-flex {
@@ -127,6 +127,10 @@ section .heading-sec__primary {
 
 .btn-large__40 {
   width: 40%;
+}
+
+.btn__rounded {
+  border-radius: 3px;
 }
 
 /* App Main Header */
@@ -213,6 +217,10 @@ header .q-logo-w-border::after {
   .q-right-nav {
     display: none;
   }
+
+  section .heading-sec__primary {
+    font-size: 2em;
+  }
 }
 
 .q-left-nav a {
@@ -287,7 +295,7 @@ header .q-logo-w-border::after {
   position: fixed;
   top: 0;
   right: 0;
-  background: #fff;
+  background: #116466;
   display: none;
   transition: display 0.2s;
   width: 100%;
@@ -309,9 +317,13 @@ header .q-logo-w-border::after {
   display: block;
   width: 100%;
   text-transform: uppercase;
-  border-bottom: 1px solid #596377;
+  border-bottom: 1px solid #cccccc;
   padding: 20px 10px;
   text-align: center;
+}
+
+#mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li:last-child {
+  border-bottom: 0;
 }
 
 #mobile-nav-menu__wrapper .sidebar-menu__wrapper .q-sidenav__menu li:first-of-type {
@@ -319,7 +331,7 @@ header .q-logo-w-border::after {
 }
 
 .sidebar-menu__wrapper .q-sidenav__menu a {
-  color: #07504c;
+  color: #fff;
 }
 
 @media (min-width: 768px) {

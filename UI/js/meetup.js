@@ -24,5 +24,31 @@ function hideSearchBar(keyPressed) {
   }
 }
 
-document.addEventListener('click', (e) => {
-})
+const d = document;
+
+const meetupDropdownTrigger = d.querySelector('.q-card__primary-options');
+const meetupDropdownMenu = d.querySelector('.q-card__primary-options .dropdown-menu');
+const delBtn = d.querySelector('.dropdown-menu .delete-option');
+const editBtn = d.querySelector('.dropdown-menu .edit-option');
+const modal = d.querySelector('.modal');
+const closeModalBtn = d.querySelector('.close-modal-btn');
+
+
+meetupDropdownTrigger.onclick = (e) => {
+  meetupDropdownMenu.classList.toggle('active');
+}
+
+delBtn.onclick = (e) => {
+  // pop open delete modal
+  modal.classList.toggle('active');
+}
+
+closeModalBtn.onclick = (e) => {
+  modal.classList.toggle('active');
+}
+
+document.onkeydown = (e) => {
+  if (e.key === 'Escape') {
+    modal.classList.toggle('active');
+  }
+}
