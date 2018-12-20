@@ -51,14 +51,14 @@
   text-align: center;
 }
 
-#q-showcase button {
+#q-showcase a[role="button"] {
   display: block;
   margin: 10px auto;
   padding: 1rem 2.5rem;
   border-radius: 30px;
   width: 30%;
   min-width: 200px;
-  cursor: pointer;
+  text-align: center;
   -webkit-transition: background-color 0.3s, width 0.3s;
   -moz-transition: background-color 0.3s, width 0.3s;
   -o-transition: background-color 0.3s, width 0.3s;
@@ -66,16 +66,16 @@
 }
 
 @media (max-width: 768px) {
-  #q-showcase button {
+  #q-showcase a {
     width: 90%;
   }
 }
 
-#q-showcase button:hover {
+#q-showcase a:hover {
   background: #07504c;
 }
 
-#q-showcase button:active {
+#q-showcase a:active {
   background: #116466;
 }
 
