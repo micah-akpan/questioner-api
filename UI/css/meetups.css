@@ -4,12 +4,6 @@
 @import "../css/home.css";
 @import "../css/modal.css";
 
-/* .q-btn {
-  border: none;
-  background: none;
-  outline: none;
-} */
-
 /* Search Bar for meetups */
 #q-search {
   margin: 200px 0px 30px 140px;
