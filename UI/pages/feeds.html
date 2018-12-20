@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Bob | Questioner</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
+  <meta name="author" content="Micah Akpan">
+  <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div id="q-branding">
+          <a href="../index.html">
+            <h1 class="q-logo q-logo-w-border">Questioner</h1>
+          </a>
+        </div>
+
+        <nav class="q-left-nav">
+          <ul>
+            <li><a href="#">Meetups</a></li>
+            <li><a href="#">Ask a Question</a></li>
+          </ul>
+        </nav>
+
+        <nav class="q-right-nav notify-user__nav no-flex">
+          <ul>
+            <li>
+              <button class="q-btn" title="Notifications">
+                <img src="../assets/icons/notifications-button.svg" alt="your notifications">
+              </button>
+            </li>
+            <li class="q-user-profile__dropdown-trigger">
+              <button class="q-btn dropdown-trigger-btn" title="Profile">
+                <img src="../assets/icons/avatar1.svg" alt="your profile">
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section id="user-profile">
+    <div class="container">
+      <div class="user-profile__wrapper">
+        <div class="user-profile__avatar">
+          <img src="../assets/icons/man.svg" alt="Bob">
+        </div>
+        <div class="user-profile__description">
+          <h3 class="user-profile__name">Bob</h3>
+          <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea diam sea
+            sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+            sadipscing sed. Clita stet et nonumy amet.</p>
+          <a href="#">Add a description about yourself</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="user-feeds-statistics">
+    <div class="container">
+      <div class="user-stats__wrapper">
+        <div class="stats">
+          <div class="user-statistics__total-questions">
+            <p class="stat-value">80</p>
+            <p class="stat-desc">Total Questions asked</p>
+          </div>
+          <div class="user-statistics__total-comments">
+            <p class="stat-value">100</p>
+            <p class="stat-desc">Total Comments</p>
+          </div>
+          <div class="user-statistics__total-meetups-sched">
+            <p class="stat-value">80</p>
+            <p class="stat-desc">Total Meetups</p>
+          </div>
+        </div>
+
+      </div>
+
+      <section id="user-feeds-top">
+        <div class="user-feeds">
+          <!-- Feeds for meetups user is scheduled to attend -->
+          <h3>Feeds</h3>
+          <ul>
+            <li>Meetup 1</li>
+            <li>Meetup 2</li>
+            <li>Meetup 3</li>
+            <li>Meetup 4</li>
+            <li>Meetup 5</li>
+          </ul>
+
+        </div>
+
+        <div class="user-feeds__wrapper">
+          <h3>Meetup 1 Feed</h3>
+          <div class="cards">
+            <!-- A list of question cards -->
+            <div class="question-card">
+              <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+              <div class="user-profile__wrapper user-profile__wrapper-small">
+                <div class="user-profile__avatar">
+                  <img src="../assets/icons/man.svg" alt="Bob">
+                </div>
+                <div class="user-profile__description">
+                  <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                    diam sea
+                    sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                    sadipscing sed. Clita stet et nonumy amet.</p>
+                  <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                </div>
+
+              </div>
+
+              <div class="questions-actions__wrapper">
+                <div class="left-actions__wrapper">
+                  <button id="upvote__btn" title="Upvote question">
+                    <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                  </button>
+                  <button id="downvote__btn" title="Downvote question">
+                    <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                  </button>
+                </div>
+
+                <div class="right-actions__wrapper">
+                  <button id="comment__btn" title="share">
+                    <img src="../assets/icons/share.svg" alt="share question">
+                  </button>
+                  <button id="fav__btn" title="like">
+                    <img src="../assets/icons/like.svg" alt="like question">
+                  </button>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="question-card">
+              <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+              <div class="user-profile__wrapper user-profile__wrapper-small">
+                <div class="user-profile__avatar">
+                  <img src="../assets/icons/man.svg" alt="Bob">
+                </div>
+                <div class="user-profile__description">
+                  <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                    diam sea
+                    sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                    sadipscing sed. Clita stet et nonumy amet.</p>
+                  <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                </div>
+
+              </div>
+
+              <div class="questions-actions__wrapper">
+                <div class="left-actions__wrapper">
+                  <button id="upvote__btn" title="Upvote question">
+                    <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                  </button>
+                  <button id="downvote__btn" title="Downvote question">
+                    <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                  </button>
+                </div>
+
+                <div class="right-actions__wrapper">
+                  <button id="comment__btn" title="share">
+                    <img src="../assets/icons/share.svg" alt="share question">
+                  </button>
+                  <button id="fav__btn" title="like">
+                    <img src="../assets/icons/like.svg" alt="like question">
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="question-card">
+              <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+              <div class="user-profile__wrapper user-profile__wrapper-small">
+                <div class="user-profile__avatar">
+                  <img src="../assets/icons/man.svg" alt="Bob">
+                </div>
+                <div class="user-profile__description">
+                  <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                    diam sea
+                    sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                    sadipscing sed. Clita stet et nonumy amet.</p>
+                  <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                </div>
+
+              </div>
+
+              <div class="questions-actions__wrapper">
+                <div class="left-actions__wrapper">
+                  <button id="upvote__btn" title="Upvote question">
+                    <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                  </button>
+                  <button id="downvote__btn" title="Downvote question">
+                    <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                  </button>
+                </div>
+
+                <div class="right-actions__wrapper">
+                  <button id="comment__btn" title="share">
+                    <img src="../assets/icons/share.svg" alt="share question">
+                  </button>
+                  <button id="fav__btn" title="like">
+                    <img src="../assets/icons/like.svg" alt="like question">
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="q-btn see-more__btn">See X More</button>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- Mobile Nav -->
+
+  <!-- Mobile Nav Trigger Menu Icon -->
+  <div id="mobile-nav-sidebar__wrapper">
+    <div class="menu-bar1"></div>
+    <div class="menu-bar2"></div>
+    <div class="menu-bar3"></div>
+  </div>
+
+  <!-- Mobile Nav Menu -->
+  <section id="mobile-nav-menu__wrapper">
+    <div class="sidebar-menu__wrapper">
+      <nav class="q-sidenav__menu" id="q-sidenav__menu">
+        <ul>
+          <li><a href="#!"></a></li>
+          <li class="q-sidenav__menu-item">
+            <a href="./pages/sign-in.html">
+              Notifications
+            </a>
+          </li>
+
+          <li class="q-sidenav__menu-item">
+            <a href="./pages/sign-up.html">
+              Ask a Question
+            </a>
+          </li>
+          <li class="q-sidenav__menu-item">
+            <a href="./pages/sign-up.html">
+              Profile
+            </a>
+          </li>
+
+          <li class="q-sidenav__menu-item">
+            <a href="./pages/sign-up.html">
+              Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+
+  <script src="../js/mobile-nav.js"></script>
+</body>
+
+</html>
