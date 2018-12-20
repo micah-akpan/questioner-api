@@ -1,30 +1,10 @@
-const searchIcon = document.getElementById('search-icon');
-const searchBar = document.getElementById('search-bar');
-
-const btnTrigger = document.querySelector('.dropdown-trigger-btn');
-const dropDownMenu = document.querySelector('.q-user-profile__dropdown-menu');
-
-// Toggle display of dropdown menu
-btnTrigger.onclick = () => {
-  dropDownMenu.style.display === 'none' ? dropDownMenu.style.display = 'block' : dropDownMenu.style.display = 'none';
-}
-
-searchIcon.onclick = () => {
-  searchBar.classList.add('show');
-}
-
-// close search bar
-document.addEventListener('keydown', (e) => {
-  hideSearchBar(e.key);
-})
-
-function hideSearchBar(keyPressed) {
-  if (keyPressed === 'Escape') {
-    searchBar.classList.remove('show')
-  }
-}
-
 const d = document;
+
+const searchIcon = d.getElementById('search-icon');
+const searchBar = d.getElementById('search-bar');
+
+const btnTrigger = d.querySelector('.dropdown-trigger-btn');
+const dropDownMenu = d.querySelector('.q-user-profile__dropdown-menu');
 
 const meetupDropdownTrigger = d.querySelector('.q-card__primary-options');
 const meetupDropdownMenu = d.querySelector('.q-card__primary-options .dropdown-menu');
@@ -33,6 +13,32 @@ const editBtn = d.querySelector('.dropdown-menu .edit-option');
 const modal = d.querySelector('.modal');
 const closeModalBtn = d.querySelector('.close-modal-btn');
 
+// Toggle display of dropdown menu
+btnTrigger.onclick = () => {
+  dropDownMenu.classList.toggle('show');
+}
+
+searchIcon.onclick = () => {
+  searchBar.classList.add('show');
+}
+
+// close search bar
+d.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    hideNode(searchBar, 'show');
+    hideNode(modal, 'active');
+  }
+})
+
+function hideNode(node, className) {
+  node.classList.remove(className);
+}
+
+function showNode(node, keyPressed) {
+  if (keyPressed === 'Escape') {
+    node.classList.add('show');
+  }
+}
 
 meetupDropdownTrigger.onclick = (e) => {
   meetupDropdownMenu.classList.toggle('active');
@@ -45,10 +51,4 @@ delBtn.onclick = (e) => {
 
 closeModalBtn.onclick = (e) => {
   modal.classList.toggle('active');
-}
-
-document.onkeydown = (e) => {
-  if (e.key === 'Escape') {
-    modal.classList.toggle('active');
-  }
 }

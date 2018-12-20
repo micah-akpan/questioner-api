@@ -130,6 +130,11 @@ section {
   border-radius: 3px;
 }
 
+.btn__centered {
+  display: block;
+  margin: 0 auto;
+}
+
 /* App Main Header */
 header {
   position: fixed;
@@ -320,6 +325,7 @@ header .q-logo-w-border::after {
 .sidebar-menu__wrapper .q-sidenav__menu a {
   color: #fff;
 }
+
 
 /* Footer */
 footer {
