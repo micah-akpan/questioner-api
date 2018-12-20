@@ -104,9 +104,12 @@
               </a>
             </p>
 
+
             <section id="meetup-image-upload">
               <h3>Meetup Photos</h3>
               <hr>
+
+              <!-- Meetup Images Thumbnail -->
               <div class="meetup-photos__wrapper">
                 <a href="../assets/img/showcase2.jpg">
                   <img src="../assets/img/showcase2.jpg" alt="">
@@ -133,7 +136,21 @@
 
             <section>
               <div class="meetup-tags" id="meetup-tags">
+                <h3>Meetup Tags</h3>
+                <hr>
 
+                <h3 class="added-tags__text">Added Tags</h3>
+                <div class="meetup-tags-added"></div>
+
+                <div class="meetup-tags__box">
+                  <label for="tag" class="q-form__label">Add Tags</label>
+                  <input type="text" class="q-input__small" id="tag">
+                  <span>Add tags, you can start them with # or separate them with commas</span>
+                </div>
+
+                <button class="q-btn btn__tag">
+                  Add Tags
+                </button>
               </div>
             </section>
           </section>
@@ -141,8 +158,8 @@
 
         <div class="meetup-details">
           <section class="post-question" id="post-question">
-            <h3>Have a question?</h3>
-            <button class="btn ask-group-btn">Ask the group</button>
+            <h3>Do you have a question?</h3>
+            <button class="q-btn ask-group-btn">Ask the group</button>
           </section>
           <h3>Questions asked in this meetup</h3>
 
@@ -361,7 +378,23 @@
     </div>
   </section>
 
-  <!-- Meetup Tag UI -->
+  <!-- Meetup Floating Btns UI -->
+  <div id="meetup-floating-icons">
+
+    <!-- Only for admin users -->
+    <button class="q-btn" title="Tag Meetup">
+      <img src="../assets/icons/tags.svg" alt="Double Tag Icon placed over each other">
+    </button>
+
+    <button class="q-btn" title="Favorite Meetup">
+      <!-- All Users -->
+      <img src="../assets/icons/like.svg" alt="A red heart icon">
+    </button>
+
+    <button class="q-btn" title="Ask Question">
+      <img src="../assets/icons/question.svg" alt="The question mark in a circle">
+    </button>
+  </div>
 
   <!-- Mobile Nav -->
 
