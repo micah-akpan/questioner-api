@@ -1,12 +1,16 @@
 /* Stylesheet for new meetup page(using flex) - (main) */
 
+#q-new-meetup {
+  margin-bottom: 200px;
+}
+
 #q-new-meetup .wrapper {
   margin-top: 150px;
   width: 100%;
   background: #fff;
-  height: 300px;
   display: flex;
   height: 100%;
+  padding: 0 0 60px 0;
 }
 
 #q-new-meetup .wrapper > div {
@@ -21,17 +25,6 @@
 #q-new-meetup .wrapper .new-feature-content {
   flex: 0 0 35%;
 }
-
-@media(max-width: 768px) {
-  #q-new-meetup .wrapper {
-    flex-direction: column;
-  }
-
-  #q-new-meetup .wrapper .new-feature-content {
-    display: none;
-  }
-}
-
 
 .new-feature-content .feature-content__primary {
   display: flex;
@@ -51,7 +44,6 @@
   font-size: 2rem;
 }
 
-
 .upload-image-preview {
   width: 100%;
   height: 100%;
@@ -62,7 +54,7 @@
   margin-bottom: 60px;
   height: 0;
   display: none;
-  transition: height .3s;
+  transition: height 0.3s;
 }
 
 .image-upload-btns > button {
@@ -79,4 +71,18 @@
 .image-upload-btns-show {
   height: auto;
   display: block;
+}
+
+@media (max-width: 768px) {
+  #q-new-meetup .wrapper {
+    flex-direction: column;
+  }
+
+  #q-new-meetup .wrapper .new-feature-content {
+    display: none;
+  }
+
+  header .header-content {
+    justify-content: center;
+  }
 }

@@ -170,7 +170,7 @@ header #q-branding a:visited {
 header #q-branding .q-logo {
   padding: 0;
   margin-top: 20px;
-  font-family: 'Marck Script', cursive;
+  font-family: "Marck Script", cursive;
 }
 
 header nav {
@@ -342,7 +342,7 @@ footer {
   bottom: 0;
   width: 100%;
   padding: 10px 24px;
-  background: #fff;
+  background: #fafafa;
   text-align: center;
   font-size: 0.8em;
 }
@@ -406,6 +406,26 @@ footer .footer-sec__social-media li {
   margin-right: 10px;
 }
 
+.align-center {
+  text-align: center;
+}
+
+.social-media__links li a {
+  width: 100%;
+  display: flex !important;
+}
+
+.social-media__links li img {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.social-media__links li span {
+  display: block;
+  flex: 2 0 auto;
+}
+
 @media (max-width: 768px) {
   .container {
     width: 90%;
@@ -413,6 +433,14 @@ footer .footer-sec__social-media li {
 
   .q-right-nav {
     display: none;
+  }
+
+  .q-left-nav {
+    display: none;
+  }
+
+  header .q-logo-w-border::after {
+    content: "";
   }
 
   #get-started .get-started-msg {
@@ -437,27 +465,4 @@ footer .footer-sec__social-media li {
   #mobile-nav-menu__wrapper .sidebar-menu__wrapper {
     display: none;
   }
-}
-
-.align-center {
-  text-align: center;
-}
-
-.social-media__links {
-}
-
-.social-media__links li a {
-  width: 100%;
-  display: flex !important;
-}
-
-.social-media__links li img {
-  display: block;
-  width: 30px;
-  height: 30px;
-}
-
-.social-media__links li span {
-  display: block;
-  flex: 2 0 auto;
 }
