@@ -9,51 +9,8 @@
   margin: 200px 0px 30px;
 }
 
-@media(max-width: 768px) {
-  #q-search {
-    margin-left: 0;
-  }
-}
-
-.q-search__nav li {
-  display: inline-block;
-  padding: 1rem 0;
-}
-
-.q-search__nav li a {
-  padding: 1rem;
-  color: #116466;
-}
-
-.q-search__nav li img {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
-
-.q-search__nav input[type="search"] {
-  background: transparent;
-  margin-left: -15px;
-  display: none;
-  border: none;
-  border-bottom: 1px solid #cccccc;
-  outline: none;
-  padding: 1rem 0;
-  box-sizing: content-box;
-  color: #333333;
-  width: 0;
-  transition: width .5s;
-}
-
-.show {
-  width: 300px !important;
-  display: inline-block !important;
-}
-
-@media(max-width: 768px) {
-  .show {
-    width: 200px !important;
-  }
+#q-cards {
+  margin-bottom: 200px;
 }
 
 .cards .q-card {
@@ -76,7 +33,7 @@
   position: absolute;
   width: 40px;
   height: 20px;
-  top: -80px; 
+  top: -80px;
   right: -5px;
 }
 
@@ -110,7 +67,6 @@
 .q-card__primary-options .dropdown-menu li span {
   vertical-align: middle;
 }
-
 
 .q-card__primary-options .dropdown-menu .delete-option {
   color: #e44;
@@ -148,7 +104,6 @@
 .delete-btn > span {
   vertical-align: middle;
 }
-
 
 .delete-btn::before {
   /* content: "";
@@ -238,7 +193,6 @@ nav.no-flex {
   cursor: pointer;
 }
 
-
 #q-meetups-preview .share-media-links span {
   display: inline-block;
   padding: 0;
@@ -257,8 +211,54 @@ nav.no-flex {
   margin-right: 10px;
 }
 
-
 #q-meetups-preview .meetup-location-map__preview {
   height: 300px;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  #q-search {
+    margin-left: 0;
+  }
+}
+
+.q-search__nav li {
+  display: inline-block;
+  padding: 1rem 0;
+}
+
+.q-search__nav li a {
+  padding: 1rem;
+  color: #116466;
+}
+
+.q-search__nav li img {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.q-search__nav input[type="search"] {
+  background: transparent;
+  margin-left: -15px;
+  display: none;
+  border: none;
+  border-bottom: 1px solid #cccccc;
+  outline: none;
+  padding: 1rem 0;
+  box-sizing: content-box;
+  color: #333333;
+  width: 0;
+  transition: width 0.5s;
+}
+
+.show {
+  width: 300px !important;
+  display: inline-block !important;
+}
+
+@media (max-width: 768px) {
+  .show {
+    width: 200px !important;
+  }
 }
