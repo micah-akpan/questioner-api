@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <meta name="author" content="Micah Akpan">
-  <link rel="stylesheet" href="../css/user-profile.css">
+  <link rel="stylesheet" href="../css/profile.css">
 </head>
 
 <body>
@@ -50,27 +50,27 @@
       <ul>
         <li class="active">
           <a href="#!" class="link-image">
-            <img src="../assets/icons/user1.svg" alt="">
+            <img src="../assets/icons/user1.svg" alt="A Dark green half body portrait in a green-bordered circle">
           </a>
 
           <a href="#!" class="link-text">Profile</a>
         </li>
         <li>
           <a href="./feeds.html" class="link-image">
-            <img src="../assets/icons/feed.svg" alt="">
+            <img src="../assets/icons/feed.svg" alt="three white curved lines in a green circle">
           </a>
           <a href="./feeds.html" class="link-text">Feeds</a>
         </li>
         <li>
           <a href="#!" class="link-image">
-            <img src="../assets/icons/pie-chart.svg" alt="">
+            <img src="../assets/icons/pie-chart.svg" alt="A pie chart shared into three sectors">
           </a>
 
           <a href="#!" class="link-text">Stats</a>
         </li>
         <li>
           <a href="#!" class="link-image">
-            <img src="../assets/icons/customer.svg" alt="">
+            <img src="../assets/icons/customer.svg" alt="A green user icon carried by a green hand">
           </a>
           <a href="#!" class="link-text">@Support</a>
         </li>
@@ -100,13 +100,17 @@
 
         <div class="user-profile__wrapper">
           <div class="user-profile__avatar-wrapper">
-            <img src="../assets/icons/avatar1.svg" alt="Bob">
-            <div class="profile-text__wrapper">
-              <p class="username">Bob</p>
-              <p class="user-bio">Labore justo eos sit erat kasd vero magna voluptua et. Et eos ea et eirmod diam justo
-                lorem gubergren rebum,.</p>
+            <div class="user-profile__image-text">
+              <img src="../assets/icons/avatar1.svg" alt="Bob" class="user-image">
+              <div class="profile-text__wrapper">
+                <p class="username">Bob</p>
+                <p class="user-bio">Labore justo eos sit erat kasd vero magna voluptua et. Et eos ea et eirmod diam
+                  justo lorem gubergren rebum,
+                  .</p>
+              </div>
             </div>
 
+            <button class="q-btn change-image__btn">Change Image</button>
           </div>
 
           <!-- User Personal Data -->
@@ -156,8 +160,10 @@
               <div id="notif">
                 <div class="notif__wrapper">
                   <h3>Notifications</h3>
-                  <!-- Will replace this with a real toggle button -->
-                  <button class="notif__toggle q-btn">Toggle Notif</button>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
                 </div>
               </div>
 
@@ -217,6 +223,7 @@
 
 
   <script src="../js/mobile-nav.js"></script>
+  <script src="../js/profile.js"></script>
 </body>
 
 </html>
