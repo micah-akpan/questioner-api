@@ -16,13 +16,18 @@ html {
 }
 
 body {
-  margin: 0;
-  padding: 0;
   margin: 0 auto;
+  padding: 0;
   color: #555;
   overflow: auto;
   background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
 }
+
+
 
 .container {
   width: 80%;
@@ -337,9 +342,6 @@ header .q-logo-w-border::after {
 
 /* Footer */
 footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
   padding: 10px 24px;
   background: #fafafa;
