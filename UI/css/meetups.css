@@ -56,6 +56,10 @@
   }
 }
 
+#q-cards {
+  margin-bottom: 200px;
+}
+
 .cards .q-card {
   border: 1px solid #116466;
 }
