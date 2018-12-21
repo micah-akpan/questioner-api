@@ -9,7 +9,6 @@
   border-radius: 3px;
 }
 
-
 #q-form .social-media__links--option-rule {
   width: 100%;
   border-top: 1px solid #116466;
@@ -243,5 +242,18 @@ form abbr[title="required"] {
   #q-form {
     width: 90%;
     min-width: 0;
+  }
+
+  #q-form .q-form__input-name {
+    width: 100%;
+    display: block;
+  }
+
+  #q-form .q-form__input-name:nth-child(1) {
+    width: 100%;
+  }
+
+  #q-form .q-form__input-name:nth-child(2) {
+    width: 100%;
   }
 }
