@@ -44,10 +44,9 @@
 
 #q-form .q-form__input-name:nth-child(1) {
   margin-right: 2%;
-  width: 48%;
 }
 
-#q-form .q-form__input-name:nth-child(2) {
+#q-form .q-form__input-name {
   width: 48%;
 }
 
@@ -249,11 +248,7 @@ form abbr[title="required"] {
     display: block;
   }
 
-  #q-form .q-form__input-name:nth-child(1) {
-    width: 100%;
-  }
-
-  #q-form .q-form__input-name:nth-child(2) {
+  #q-form .q-form__input-name {
     width: 100%;
   }
 }
