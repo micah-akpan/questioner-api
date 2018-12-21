@@ -208,12 +208,13 @@
   font-weight: 600;
   color: #fff;
   transition: box-shadow 0.2s ease, border 0.2s ease,
-    -webkit-box-shadow 0.2s ease;
+    -webkit-box-shadow 0.2s ease, background-color 0.2s;
   cursor: pointer;
 }
 
 .q-form__button:hover {
   box-shadow: 2px 2px 4px #d4d9e2;
+  background-color: #07504c;
 }
 
 .q-form__image-upload {
