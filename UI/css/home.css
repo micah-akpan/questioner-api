@@ -76,11 +76,11 @@
   transition: background-color 0.3s, width 0.3s;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   #q-showcase a[role="button"] {
     width: 90%;
   }
-}
+} */
 
 #q-showcase a:hover {
   background: #07504c;
@@ -217,12 +217,6 @@
   width: 30%;
 }
 
-@media (max-width: 768px) {
-  .get-started-btn {
-    width: 90%;
-  }
-}
-
 .q-cards__more {
   border: 1px solid #116466;
   color: #116466;
@@ -253,6 +247,14 @@
     display: block;
     margin-right: 0;
     margin-bottom: 20px;
+  }
+
+  .get-started-btn {
+    width: 90%;
+  }
+
+  #q-showcase a[role="button"] {
+    width: 90%;
   }
 }
 
