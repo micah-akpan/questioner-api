@@ -1,0 +1,3 @@
+function uploadImage(container, img) {
+  
+}

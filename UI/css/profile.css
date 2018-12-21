@@ -89,13 +89,23 @@
 
 .user-profile__wrapper .user-profile__avatar-wrapper {
   flex: 1 0 auto;
-  width: 150px;
-  border-radius: 5px;
+  width: 250px;
   text-align: center;
-  height: 400px;
-  padding: 10px 20px;
   margin-right: 20px;
+}
+
+.user-profile__wrapper .user-profile__avatar-wrapper .user-profile__image-text {
   border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+}
+
+.user-profile__wrapper .user-profile__avatar-wrapper .change-image__btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 15px 10px;
+  font-size: 1em;
 }
 
 .user-profile__wrapper .user-profile__avatar-wrapper img {
@@ -107,7 +117,21 @@
   cursor: pointer;
 }
 
-.user-profile__avatar-wrapper .profile-text__wrapper {
+/* User Photo Edit */
+.user-profile__wrapper .user-profile__avatar-wrapper .edit-user-image {
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 0;
+}
+
+.user-profile__wrapper
+  .user-profile__avatar-wrapper
+  .edit-user-image
+  input[type="file"] {
+  opacity: 0;
+  width: 0;
+    height: 0;
 }
 
 .user-profile__wrapper .user-profile__main-content__wrapper {
