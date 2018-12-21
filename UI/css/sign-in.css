@@ -12,11 +12,11 @@
   text-align: center;
 }
 
-.sign-up__link a {
+.sign-up__link a, #forgot-pwd a {
   color: #116466;
 }
 
-.sign-up__link a:hover {
+.sign-up__link a:hover, #forgot-pwd a:hover {
   color: #07504c;
   text-decoration: underline;
 }
