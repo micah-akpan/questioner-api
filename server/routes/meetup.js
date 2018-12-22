@@ -1,15 +1,23 @@
 import { Router } from 'express';
 
 const router = Router();
-const meetups = [];
+const meetups = [
+  {
+    id: 1,
+    topic: 'Meetup 1',
+    createdOn: new Date(),
+    location: 'Meetup location 1',
+    happeningOn: new Date(),
+    images: ['image1.jpeg', 'image2.jpg'],
+    Tags: ['']
+  }
+];
 
 router.post('/meetups', (req, res) => {
   const {
     location, images, topic, happeningOn, Tags
   } = req.body;
-  const lastMeetupId = meetups[meetups.length - 1]
-    ? meetups[meetups.length - 1].id
-    : 0;
+  const lastMeetupId = meetups[meetups.length - 1].id;
 
   if (!topic || !location || !happeningOn) {
     return res.status(400).send({
