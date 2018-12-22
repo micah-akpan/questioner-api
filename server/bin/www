@@ -1,0 +1,12 @@
+const http = require('http');
+const { app } = require('../app');
+
+const server = http.createServer(app);
+const PORT = parseInt(process.env.PORT || 9999, 10);
+
+app.set('port', PORT);
+
+server.listen(PORT, () => {
+  console.log(`Server listening to connections on http://localhost:${PORT}`);
+});
+
