@@ -19,10 +19,6 @@
   text-decoration: underline;
 }
 
-#q-form .toggle-password-visibility {
-  padding: 0.8em;
-}
-
 @media (max-width: 768px) {
   header .header-content {
     justify-content: center;
