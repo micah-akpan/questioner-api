@@ -14,7 +14,7 @@ describe('Meetups API', () => {
           .send({
             topic: 'Meetup 1',
             location: 'Meetup Location',
-            happeningOn: new Date()
+            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
           })
           .end((err, res) => {
             if (err) throw err;
@@ -38,7 +38,9 @@ describe('Meetups API', () => {
             if (err) throw err;
             res.body.status.should.equal(400);
             res.body.should.have.property('error');
-            res.body.error.should.equal('The topic, location and happeningOn fields are required fields');
+            res.body.error.should.equal(
+              'The topic, location and happeningOn fields are required fields'
+            );
             done();
           });
       });
@@ -55,7 +57,29 @@ describe('Meetups API', () => {
             if (err) throw err;
             res.body.status.should.equal(400);
             res.body.should.have.property('error');
-            res.body.error.should.equal('The topic, location and happeningOn fields are required fields');
+            res.body.error.should.equal(
+              'The topic, location and happeningOn fields are required fields'
+            );
+            done();
+          });
+      });
+
+      it('should not create a meetup if date provided is past', (done) => {
+        agent
+          .post('/api/v1/meetups')
+          .expect(422)
+          .send({
+            topic: 'Awesome Meetup',
+            location: 'Meetup Location',
+            happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
+          })
+          .end((err, res) => {
+            if (err) throw err;
+            res.body.status.should.equal(422);
+            res.body.should.have.property('error');
+            res.body.error.should.equal(
+              'Meetup Date provided is in the past, provide a future date'
+            );
             done();
           });
       });
