@@ -105,15 +105,6 @@
   vertical-align: middle;
 }
 
-.delete-btn::before {
-  /* content: "";
-  width: 16px;
-  height: 16px;
-  background-image: url("../assets/icons/delete-grey.svg");
-  background-size: 16px 16px;
-  background-position: center; */
-}
-
 .delete-btn:hover {
   background-color: #d44;
 }
@@ -121,7 +112,7 @@
 .q-card__primary .q-card__primary-options img {
   width: 100%;
   height: 100%;
-  z-index: 999999999999999;
+  z-index: 999999;
 }
 
 .q-card__primary .content img {
@@ -216,12 +207,6 @@ nav.no-flex {
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  #q-search {
-    margin-left: 0;
-  }
-}
-
 .q-search__nav li {
   display: inline-block;
   padding: 1rem 0;
@@ -236,6 +221,10 @@ nav.no-flex {
   width: 25px;
   height: 25px;
   vertical-align: middle;
+}
+
+.q-search__nav li img:focus {
+  
 }
 
 .q-search__nav input[type="search"] {
@@ -260,5 +249,9 @@ nav.no-flex {
 @media (max-width: 768px) {
   .show {
     width: 200px !important;
+  }
+
+  #q-search {
+    margin-left: 0;
   }
 }
