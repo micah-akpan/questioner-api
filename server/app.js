@@ -17,7 +17,7 @@ app.get('*', (req, res) => {
   res.send({
     message: 'Welcome to the Questioner API'
   });
-})
+});
 
 // catch 404 error and forward to
 // error handler
@@ -35,7 +35,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.send({
       message: err.message,
-      error: err,
+      error: err
     });
   });
 }
