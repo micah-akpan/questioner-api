@@ -61,6 +61,10 @@
   border: 1px solid #116466;
 }
 
+/* #q-form input:focus {
+  border: 2px solid #116466;
+} */
+
 #q-form label {
   display: block;
   margin-bottom: 5px;
@@ -144,8 +148,6 @@
   padding: 1rem;
   text-transform: uppercase;
   font-weight: bold;
-  font-size: 0.7rem;
-  width: auto;
   cursor: pointer;
   border-radius: 0 3px 3px 0;
 }
@@ -153,7 +155,7 @@
 .q-form__input {
   border: #d4d9e2 1px solid;
   border-radius: 3px;
-  padding: 15px;
+  padding: 1rem;
   color: #596377;
   outline: none;
   width: 100%;
@@ -167,6 +169,10 @@
 .q-form__image-upload {
   margin-bottom: 10px;
   font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+#q-form .q-form__input:focus, #q-form .q-form__textarea:focus {
+  border: 2px solid #116466;
 }
 
 .q-form__textarea {
