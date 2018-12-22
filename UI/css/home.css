@@ -266,12 +266,15 @@
   }
 
   .cards .q-card {
-    /* flex: 1 1 calc(100% / 3 - 20px); */
     margin-bottom: 20px;
+  }
+
+  #q-showcase h2 {
+    margin: calc(300px / 2) auto 0 auto;
   }
 }
 
-/* Small Laptop and Desktop Viewport */
+/* Laptop and Desktop Viewport */
 @media (min-width: 992px) {
   .cards {
     display: flex;
