@@ -8,7 +8,9 @@
   "scripts": {
     "dev:start": "nodemon --require @babel/register ./server/bin/www",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js --ext .json ./server",
-    "lint:staged": "lint-staged"
+    "lint:staged": "lint-staged",
+    "test": "nyc --reporter=text mocha --require @babel/register --recursive ./server/test --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "husky": {
     "hooks": {
@@ -30,6 +32,7 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -38,6 +41,7 @@
     "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9",
+    "nyc": "^13.1.0",
     "prettier": "^1.15.3",
     "supertest": "^3.3.0"
   },
