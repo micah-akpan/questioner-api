@@ -6,7 +6,9 @@
   "author": "Micah Akpan <mickey4sure2k7@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev:start": "nodemon --require @babel/register ./server/bin/www"
+    "dev:start": "nodemon --require @babel/register ./server/bin/www",
+    "lint": "eslint --fix --ignore-path .gitignore --ext .js --ext .json ./server",
+    "lint:staged": "lint-staged"
   },
   "husky": {
     "hooks": {
@@ -14,9 +16,13 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
+    "*.js": [
+      "npm run lint",
+      "git add --force"
+    ],
+    "*.json": [
       "prettier --write",
-      "git add"
+      "git add --force"
     ]
   },
   "devDependencies": {
@@ -26,6 +32,7 @@
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.0.0",
     "husky": "^1.2.1",
     "lint-staged": "^8.1.0",
     "nodemon": "^1.18.9",
