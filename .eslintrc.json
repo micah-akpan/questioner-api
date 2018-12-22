@@ -34,8 +34,9 @@
           "ClassDeclaration": true
         }
       }
-    ]
+    ],
+    "prettier/prettier": "error"
   },
 
-  "plugins": ["jsx-a11y"]
+  "plugins": ["prettier"]
 }
