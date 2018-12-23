@@ -68,7 +68,7 @@ describe('Meetups API', () => {
       it('should not create a meetup if date is invalid', (done) => {
         agent
           .post('/api/v1/meetups')
-          .expect(400)
+          .expect(422)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location',
@@ -76,7 +76,7 @@ describe('Meetups API', () => {
           })
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(400);
+            res.body.status.should.equal(422);
             res.body.should.have.property('error');
             res.body.error.should.equal('You provided an invalid meetup date');
             done();

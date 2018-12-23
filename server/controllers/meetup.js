@@ -29,10 +29,19 @@ export default {
     const lastMeetupId = meetups[meetups.length - 1].id;
 
     if (!topic || !location || !happeningOn) {
-      return res.status(400).send({
-        status: 400,
-        error: 'The topic, location and happeningOn fields are required fields'
-      });
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'The topic, location and happeningOn fields are required fields'
+        });
+    }
+
+    if (Number.isNaN(new Date(happeningOn).getTime())) {
+      return res.status(422)
+        .send({
+          status: 422,
+          error: 'You provided an invalid meetup date'
+        });
     }
 
     if (new Date(happeningOn).getTime() < new Date().getTime()) {
