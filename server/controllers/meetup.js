@@ -29,10 +29,19 @@ export default {
     const lastMeetupId = meetups[meetups.length - 1].id;
 
     if (!topic || !location || !happeningOn) {
-      return res.status(400).send({
-        status: 400,
-        error: 'The topic, location and happeningOn fields are required fields'
-      });
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'The topic, location and happeningOn fields are required fields'
+        });
+    }
+
+    if (Number.isNaN(new Date(happeningOn).getTime())) {
+      return res.status(422)
+        .send({
+          status: 422,
+          error: 'You provided an invalid meetup date'
+        });
     }
 
     if (new Date(happeningOn).getTime() < new Date().getTime()) {
@@ -54,8 +63,7 @@ export default {
 
     meetups.push(newMeetup);
 
-    const mRecord = omitProps(newMeetup, ['createdOn', 'images']);
-
+    const mRecord = omitProps(newMeetup, ['createdOn', 'images', 'id']);
 
     return res.status(201).send({
       status: 201,
@@ -104,5 +112,29 @@ export default {
         status: 200,
         data: []
       });
+  },
+
+  getUpcomingMeetups(req, res) {
+    const now = new Date().getTime();
+
+    const upComingMeetups = meetups.filter(
+      meetup => new Date(meetup.happeningOn).getTime() >= now
+    );
+
+    if (!upComingMeetups.length) {
+      res.status(404).send({
+        status: 404,
+        error: 'There are no upcoming meetups'
+      });
+    } else {
+      const mRecords = upComingMeetups.map(
+        meetup => omitProps(meetup, ['createdOn', 'images'])
+      );
+
+      res.status(200).send({
+        status: 200,
+        data: mRecords
+      });
+    }
   }
 };

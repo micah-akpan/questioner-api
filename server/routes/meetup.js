@@ -8,6 +8,8 @@ router
   .post(meetupController.createNewMeetup)
   .get(meetupController.getAllMeetups);
 
+router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
+
 router
   .route('/meetups/:id')
   .get(meetupController.getSingleMeetup)
