@@ -1,3 +1,5 @@
+import { omitProps } from '../utils';
+
 const meetups = [
   {
     id: 1,
@@ -6,7 +8,7 @@ const meetups = [
     location: 'Meetup location 1',
     happeningOn: new Date(),
     images: ['image1.jpeg', 'image2.jpg'],
-    Tags: ['']
+    tags: ['']
   }
 ];
 
@@ -21,7 +23,7 @@ export default {
 
   createNewMeetup(req, res) {
     const {
-      location, images, topic, happeningOn, Tags
+      location, images, topic, happeningOn, tags
     } = req.body;
 
     const lastMeetupId = meetups[meetups.length - 1].id;
@@ -47,12 +49,40 @@ export default {
       images,
       topic,
       happeningOn,
-      Tags
+      tags
     };
+
+    meetups.push(newMeetup);
+
+    const mRecord = omitProps(newMeetup, ['createdOn', 'images']);
+
 
     return res.status(201).send({
       status: 201,
-      data: [...meetups, newMeetup]
+      data: [mRecord]
     });
-  }
+  },
+
+  getSingleMeetup(req, res) {
+    const meetupRecord = meetups.filter(
+      meetup => String(meetup.id) === req.params.id
+    )[0];
+
+    let mRecord;
+
+    if (meetupRecord) {
+      mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
+    } else {
+      return res.status(404)
+        .send({
+          status: 404,
+          error: `The requested meetup with the id: ${req.params.id} does not exist`
+        });
+    }
+    return res.status(200)
+      .send({
+        status: 200,
+        data: [mRecord],
+      });
+  },
 };
