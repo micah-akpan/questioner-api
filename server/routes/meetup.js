@@ -8,11 +8,11 @@ router
   .post(meetupController.createNewMeetup)
   .get(meetupController.getAllMeetups);
 
+router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
+
 router
   .route('/meetups/:id')
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
-
-router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
 
 export default router;
