@@ -87,7 +87,7 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const mRecords = meetups.filter(meetup => String(meetup.id) === req.param.id);
+    const mRecords = meetups.filter(meetup => String(meetup.id) === req.params.id);
 
     if (mRecords.length === 0) {
       return res.status(404).send({
@@ -102,7 +102,7 @@ export default {
     return res.status(200)
       .send({
         status: 200,
-        error: `Meetup${req.params.id} was deleted successfully`
+        data: []
       });
   }
 };

@@ -1,5 +1,5 @@
 import 'chai/register-should';
-import { omitProps } from '../utils';
+import { omitProps } from '../../utils';
 
 describe('Utils', () => {
   describe('#omitProps', () => {
