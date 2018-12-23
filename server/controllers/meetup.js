@@ -1,6 +1,6 @@
 import { omitProps } from '../utils';
 
-const meetups = [
+let meetups = [
   {
     id: 1,
     topic: 'Meetup 1',
@@ -85,4 +85,24 @@ export default {
         data: [mRecord],
       });
   },
+
+  deleteMeetup(req, res) {
+    const mRecords = meetups.filter(meetup => String(meetup.id) === req.param.id);
+
+    if (mRecords.length === 0) {
+      return res.status(404).send({
+        status: 404,
+        error: `The requested meetup with the id:${req.params.id} cannot be deleted because it does not exist`
+      });
+    }
+
+    const newMeetupRecords = meetups.filter(meetup => String(meetup.id) !== req.params.id);
+    meetups = newMeetupRecords;
+
+    return res.status(200)
+      .send({
+        status: 200,
+        error: `Meetup${req.params.id} was deleted successfully`
+      });
+  }
 };

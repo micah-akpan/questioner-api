@@ -1,6 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
-import { app } from '../../app';
+import { app } from '../app';
 
 const agent = request(app);
 
@@ -127,6 +127,33 @@ describe('Meetups API', () => {
           if (err) return done(err);
           res.body.status.should.equal(404);
           res.body.error.should.equal('The requested meetup with the id: 9999999 does not exist');
+          done();
+        });
+    });
+  });
+
+
+  describe('DELETE /api/v1/meetups/:id', () => {
+    it('should delete a single meetup', (done) => {
+      agent
+        .delete('/api/v1/meetups/2')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
+    });
+
+    it('should return a 404 error for a non-existing meetup', (done) => {
+      agent
+        .delete('/api/v1/meetups/9999999')
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          res.body.should.have.property('error');
           done();
         });
     });
