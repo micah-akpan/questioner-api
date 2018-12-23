@@ -1,3 +1,5 @@
+import { omitProps } from '../utils';
+
 const meetups = [
   {
     id: 1,
@@ -21,7 +23,7 @@ export default {
 
   createNewMeetup(req, res) {
     const {
-      location, images, topic, happeningOn, Tags
+      location, images, topic, happeningOn, tags
     } = req.body;
 
     const lastMeetupId = meetups[meetups.length - 1].id;
@@ -47,12 +49,29 @@ export default {
       images,
       topic,
       happeningOn,
-      Tags
+      tags
     };
+
+
+    meetups.push(newMeetup);
 
     return res.status(201).send({
       status: 201,
-      data: [...meetups, newMeetup]
+      data: [newMeetup]
     });
-  }
+  },
+
+  getSingleMeetup(req, res) {
+    const meetupRecord = meetups.filter(
+      meetup => String(meetup.id) === req.params['meetup-id']
+    )[0];
+
+    const mRecord = omitProps(meetupRecord, ['createdAt', 'images']);
+
+    res.status(200)
+      .send({
+        status: 200,
+        data: [mRecord],
+      });
+  },
 };

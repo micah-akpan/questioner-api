@@ -101,4 +101,19 @@ describe('Meetups API', () => {
         });
     });
   });
+
+
+  describe.skip('GET /api/v1/meetups/:meetup-id', () => {
+    it('should return a single meetups', (done) => {
+      agent
+        .get('/api/v1/meetups/1')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
+    });
+  });
 });
