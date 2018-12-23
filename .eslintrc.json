@@ -34,7 +34,8 @@
           "ClassDeclaration": true
         }
       }
-    ]
+    ],
+    "no-unused-expressions": 0
   },
 
   "plugins": ["prettier"]

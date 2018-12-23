@@ -8,7 +8,7 @@ const meetups = [
     location: 'Meetup location 1',
     happeningOn: new Date(),
     images: ['image1.jpeg', 'image2.jpg'],
-    Tags: ['']
+    tags: ['']
   }
 ];
 
@@ -52,12 +52,14 @@ export default {
       tags
     };
 
-
     meetups.push(newMeetup);
+
+    const mRecord = omitProps(newMeetup, ['createdOn', 'images']);
+
 
     return res.status(201).send({
       status: 201,
-      data: [newMeetup]
+      data: [mRecord]
     });
   },
 
@@ -71,9 +73,13 @@ export default {
     if (meetupRecord) {
       mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
     } else {
-      mRecord = {};
+      return res.status(404)
+        .send({
+          status: 404,
+          error: `The requested meetup with the id: ${req.params.id} does not exist`
+        });
     }
-    res.status(200)
+    return res.status(200)
       .send({
         status: 200,
         data: [mRecord],

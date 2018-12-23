@@ -7,7 +7,7 @@ const agent = request(app);
 describe('Meetups API', () => {
   describe('POST /api/v1/meetups', () => {
     describe('handle valid data', () => {
-      it('should create meetups', (done) => {
+      it('should create a meetup', (done) => {
         agent
           .post('/api/v1/meetups')
           .expect(201)
@@ -104,7 +104,7 @@ describe('Meetups API', () => {
 
 
   describe('GET /api/v1/meetups/:id', () => {
-    it('should return a single meetups', (done) => {
+    it('should return a single meetup', (done) => {
       agent
         .get('/api/v1/meetups/1')
         .expect(200)
@@ -115,6 +115,18 @@ describe('Meetups API', () => {
           res.body.data[0].should.have.property('id');
           res.body.data[0].should.have.property('topic');
           res.body.data[0].should.not.have.property('createdOn');
+          done();
+        });
+    });
+
+    it('should return a 404 error for a non-existing meetup', (done) => {
+      agent
+        .get('/api/v1/meetups/9999999')
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          res.body.error.should.equal('The requested meetup with the id: 9999999 does not exist');
           done();
         });
     });
