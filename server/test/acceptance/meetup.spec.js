@@ -17,9 +17,10 @@ describe('Meetups API', () => {
             happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
           })
           .end((err, res) => {
-            if (err) throw err;
+            if (err) return done(err);
             res.body.data.should.be.an('array');
             res.body.status.should.equal(201);
+
             done();
           });
       });
@@ -35,7 +36,7 @@ describe('Meetups API', () => {
             happeningOn: new Date()
           })
           .end((err, res) => {
-            if (err) throw err;
+            if (err) return done(err);
             res.body.status.should.equal(400);
             res.body.should.have.property('error');
             res.body.error.should.equal(
@@ -54,7 +55,7 @@ describe('Meetups API', () => {
             location: 'Meetup Location'
           })
           .end((err, res) => {
-            if (err) throw err;
+            if (err) return done(err);
             res.body.status.should.equal(400);
             res.body.should.have.property('error');
             res.body.error.should.equal(
@@ -74,7 +75,7 @@ describe('Meetups API', () => {
             happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
           })
           .end((err, res) => {
-            if (err) throw err;
+            if (err) return done(err);
             res.body.status.should.equal(422);
             res.body.should.have.property('error');
             res.body.error.should.equal(
@@ -83,6 +84,21 @@ describe('Meetups API', () => {
             done();
           });
       });
+    });
+  });
+
+
+  describe('GET /api/v1/meetups', () => {
+    it('should return a list of meetups', (done) => {
+      agent
+        .get('/api/v1/meetups')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
     });
   });
 });
