@@ -65,6 +65,24 @@ describe('Meetups API', () => {
           });
       });
 
+      it('should not create a meetup if date is invalid', (done) => {
+        agent
+          .post('/api/v1/meetups')
+          .expect(400)
+          .send({
+            topic: 'Awesome Meetup',
+            location: 'Meetup Location',
+            happeningOn: 'Some Invalid date'
+          })
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(400);
+            res.body.should.have.property('error');
+            res.body.error.should.equal('You provided an invalid meetup date');
+            done();
+          });
+      });
+
       it('should not create a meetup if date provided is past', (done) => {
         agent
           .post('/api/v1/meetups')
