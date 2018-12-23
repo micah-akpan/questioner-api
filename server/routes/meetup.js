@@ -13,4 +13,6 @@ router
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
 
+router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
+
 export default router;

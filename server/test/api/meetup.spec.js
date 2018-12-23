@@ -158,4 +158,12 @@ describe('Meetups API', () => {
         });
     });
   });
+
+  describe('GET /api/v1/meetups/upcoming', () => {
+    it('should return a list of upcoming meetups', (done) => {
+      agent
+        .get('/api/v1/meetups/upcoming')
+        .expect(200, done);
+    });
+  });
 });

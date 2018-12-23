@@ -104,5 +104,26 @@ export default {
         status: 200,
         data: []
       });
+  },
+
+  getUpcomingMeetups(req, res) {
+    const upComingMeetups = meetups.filter(
+      meetup => meetup.happeningOn.getTime() >= new Date().getTime()
+    );
+
+    if (!upComingMeetups.length) {
+      res.status(404).send({
+        status: 404,
+        error: 'There are no upcoming meetups'
+      });
+    } else {
+      const mRecords = upComingMeetups.map(
+        meetup => omitProps(meetup, ['createdOn', 'images'])
+      );
+      res.status(200).send({
+        status: 200,
+        data: mRecords
+      });
+    }
   }
 };
