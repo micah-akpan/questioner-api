@@ -54,8 +54,7 @@ export default {
 
     meetups.push(newMeetup);
 
-    const mRecord = omitProps(newMeetup, ['createdOn', 'images']);
-
+    const mRecord = omitProps(newMeetup, ['createdOn', 'images', 'id']);
 
     return res.status(201).send({
       status: 201,
@@ -107,8 +106,10 @@ export default {
   },
 
   getUpcomingMeetups(req, res) {
+    const now = new Date().getTime();
+
     const upComingMeetups = meetups.filter(
-      meetup => meetup.happeningOn.getTime() >= new Date().getTime()
+      meetup => new Date(meetup.happeningOn).getTime() >= now
     );
 
     if (!upComingMeetups.length) {
@@ -120,6 +121,7 @@ export default {
       const mRecords = upComingMeetups.map(
         meetup => omitProps(meetup, ['createdOn', 'images'])
       );
+
       res.status(200).send({
         status: 200,
         data: mRecords
