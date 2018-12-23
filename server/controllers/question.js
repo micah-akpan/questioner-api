@@ -1,5 +1,17 @@
+import { omitProps } from '../utils';
 
-const questions = [];
+
+const questions = [
+  {
+    id: 1,
+    title: 'question 1',
+    createdOn: new Date(),
+    createdBy: 1,
+    meetup: 1,
+    body: 'question body',
+    votes: 0
+  }
+];
 
 export default {
   createQuestion(req, res) {
@@ -15,8 +27,10 @@ export default {
       const userId = 1;
       const meetupId = 1;
 
+      const lastId = questions[questions.length - 1].id;
+
       questions.push({
-        id: 1,
+        id: lastId + 1,
         createdOn: new Date(),
         createdBy: userId,
         meetup: meetupId,
@@ -35,6 +49,33 @@ export default {
             body
           }]
         });
+    }
+  },
+
+  upvoteQuestion(req, res) {
+    let question = questions.filter(q => String(q.id) === req.params.id)[0];
+
+    if (!question) {
+      res.status(404).send({
+        status: 404,
+        error: `The question with the id: ${req.params.id} does not exist`
+      });
+    } else {
+      question.votes += 1;
+      questions.forEach((q) => {
+        if (String(q.id) === question.id) {
+          q = question;
+        }
+      });
+
+      question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+      res.status(200).send({
+        status: 200,
+        data: [{
+          question
+        }]
+      });
     }
   }
 };
