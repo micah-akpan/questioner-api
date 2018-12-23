@@ -62,6 +62,7 @@ export default {
   },
 
   getSingleMeetup(req, res) {
+    console.log('hello.....got here');
     const meetupRecord = meetups.filter(
       meetup => String(meetup.id) === req.params['meetup-id']
     )[0];
