@@ -103,16 +103,18 @@ describe('Meetups API', () => {
   });
 
 
-  describe('GET /api/v1/meetups/:meetup-id', () => {
-    it.only('should return a single meetups', (done) => {
+  describe('GET /api/v1/meetups/:id', () => {
+    it('should return a single meetups', (done) => {
       agent
         .get('/api/v1/meetups/1')
         .expect(200)
         .end((err, res) => {
-          console.log(res.body);
           if (err) return done(err);
-          // res.body.status.should.equal(200);
-          // res.body.data.should.be.an('array');
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data[0].should.have.property('id');
+          res.body.data[0].should.have.property('topic');
+          res.body.data[0].should.not.have.property('createdOn');
           done();
         });
     });

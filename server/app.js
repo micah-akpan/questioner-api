@@ -2,6 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
 import meetupAPI from './routes/meetup';
+import indexAPI from './routes';
 
 export const app = express();
 
@@ -14,13 +15,8 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use('/api/v1/', meetupAPI);
-
-app.get('/', (req, res) => {
-  res.send({
-    message: 'Welcome to the Questioner API'
-  });
-});
+app.use('/', indexAPI);
+app.use('/api/v1', meetupAPI);
 
 // catch 404 error and forward to
 // error handler

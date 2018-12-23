@@ -62,13 +62,17 @@ export default {
   },
 
   getSingleMeetup(req, res) {
-    console.log('hello.....got here');
     const meetupRecord = meetups.filter(
-      meetup => String(meetup.id) === req.params['meetup-id']
+      meetup => String(meetup.id) === req.params.id
     )[0];
 
-    const mRecord = omitProps(meetupRecord, ['createdAt', 'images']);
+    let mRecord;
 
+    if (meetupRecord) {
+      mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
+    } else {
+      mRecord = {};
+    }
     res.status(200)
       .send({
         status: 200,
