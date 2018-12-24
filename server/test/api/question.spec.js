@@ -28,7 +28,7 @@ describe('Questions API', () => {
     });
 
     describe('handle invalid data', () => {
-      it('should not return an error for missing data', (done) => {
+      it('should return an error for missing data', (done) => {
         agent
           .post('/api/v1/questions')
           .send({
@@ -60,6 +60,31 @@ describe('Questions API', () => {
     });
 
     it('should not upvote a non-existent question', (done) => {
+      agent
+        .patch('/api/v1/questions/999999999/upvote')
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          done();
+        });
+    });
+  });
+
+  describe('PATCH /api/v1/questions/<question-id>/downvote', () => {
+    it('should downvote a question', (done) => {
+      agent
+        .patch('/api/v1/questions/1/downvote')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
+    });
+
+    it('should not downvote a non-existent question', (done) => {
       agent
         .patch('/api/v1/questions/999999999/upvote')
         .expect(404)
