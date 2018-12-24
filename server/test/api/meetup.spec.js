@@ -2,6 +2,8 @@ import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
 
+// import { rsvps } from '../../controllers/meetup';
+
 const agent = request(app);
 
 describe('Meetups API', () => {
@@ -144,7 +146,7 @@ describe('Meetups API', () => {
         .end((err, res) => {
           if (err) return done(err);
           res.body.status.should.equal(404);
-          res.body.error.should.equal('The requested meetup with the id: 9999999 does not exist');
+          res.body.error.should.equal('The requested meetup does not exist');
           done();
         });
     });
@@ -182,6 +184,31 @@ describe('Meetups API', () => {
       agent
         .get('/api/v1/meetups/upcoming')
         .expect(200, done);
+    });
+  });
+
+  describe('POST /api/v1/meetups/<meetup-id>/rsvps', () => {
+    it('should rsvp a user', (done) => {
+      agent
+        .post('/api/v1/meetups/2/rsvps')
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(201);
+          res.body.data[0].should.have.property('topic');
+          done();
+        });
+    });
+
+    it('should not rsvp a user on a non-existent meetup', (done) => {
+      agent
+        .post('/api/v1/meetups/999999999999999/rsvps')
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          done();
+        });
     });
   });
 });
