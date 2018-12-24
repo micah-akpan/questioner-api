@@ -1,7 +1,7 @@
-import meetupData from '../data/meetup';
+import meetupRaw from '../data/meetup';
 import { omitProps } from '../utils';
 
-let meetups = JSON.parse(meetupData);
+let meetups = JSON.parse(meetupRaw);
 
 export const rsvps = [{
   id: 1,
