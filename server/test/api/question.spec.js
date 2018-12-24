@@ -86,7 +86,7 @@ describe('Questions API', () => {
 
     it('should not downvote a non-existent question', (done) => {
       agent
-        .patch('/api/v1/questions/999999999/upvote')
+        .patch('/api/v1/questions/999999999/downvote')
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
