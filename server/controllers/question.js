@@ -63,7 +63,7 @@ export default {
     } else {
       question.votes += 1;
       questions.forEach((q) => {
-        if (String(q.id) === question.id) {
+        if (q.id === question.id) {
           q = question;
         }
       });
@@ -72,10 +72,32 @@ export default {
 
       res.status(200).send({
         status: 200,
-        data: [{
+        data: [
           question
-        }]
+        ]
       });
+    }
+  },
+
+  downvoteQuestion(req, res) {
+    let question = questions.filter(q => String(q.id) === req.params.id)[0];
+
+    if (!question) {
+      res.status(404)
+        .send({
+          status: 404,
+          error: `The question with the id: ${req.params.id} does not exist`
+        });
+    } else {
+      question.votes = question.votes > 0 ? question.votes - 1 : 0;
+
+      question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [question]
+        });
     }
   }
 };
