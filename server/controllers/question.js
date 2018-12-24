@@ -1,17 +1,7 @@
+import questionRaw from '../data/question';
 import { omitProps } from '../utils';
 
-
-const questions = [
-  {
-    id: 1,
-    title: 'question 1',
-    createdOn: new Date(),
-    createdBy: 1,
-    meetup: 1,
-    body: 'question body',
-    votes: 0
-  }
-];
+const questions = JSON.parse(questionRaw);
 
 export default {
   createQuestion(req, res) {

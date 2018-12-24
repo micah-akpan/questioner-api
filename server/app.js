@@ -3,6 +3,7 @@ import logger from 'morgan';
 import helmet from 'helmet';
 import meetupAPI from './routes/meetup';
 import questionAPI from './routes/question';
+import rsvpAPI from './routes/rsvp';
 import indexAPI from './routes';
 
 export const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/', indexAPI);
 app.use('/api/v1', meetupAPI);
 app.use('/api/v1', questionAPI);
+app.use('/api/v1', rsvpAPI);
 
 // catch 404 error and forward to
 // error handler

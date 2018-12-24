@@ -1,16 +1,7 @@
+import meetupRaw from '../data/meetup';
 import { omitProps } from '../utils';
 
-let meetups = [
-  {
-    id: 1,
-    topic: 'Meetup 1',
-    createdOn: new Date(),
-    location: 'Meetup location 1',
-    happeningOn: new Date(),
-    images: ['image1.jpeg', 'image2.jpg'],
-    tags: ['']
-  }
-];
+let meetups = JSON.parse(meetupRaw);
 
 export const rsvps = [{
   id: 1,
