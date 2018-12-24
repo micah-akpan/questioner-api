@@ -1,6 +1,5 @@
 import { omitProps } from '../utils';
 
-
 const questions = [
   {
     id: 1,
