@@ -15,4 +15,7 @@ router
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
 
+
+router.post('/meetups/:id/rsvps', meetupController.rsvpMeetup);
+
 export default router;
