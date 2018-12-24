@@ -2,7 +2,8 @@
 
 /* eslint-disable */
 class MeetupRecord {
-  constructor(topic, location, happeningOn) {
+  constructor(id, topic, location, happeningOn) {
+    this.id = id;
     this.topic = topic;
     this.location = location;
     this.happeningOn = happeningOn;
@@ -11,6 +12,10 @@ class MeetupRecord {
     this.images = [];
     this.tags = []
   }
+
+  static generateMeetupId() {
+
+  }
 }
 
 
@@ -18,14 +23,21 @@ class MeetupRecord {
 class Meetup {
   constructor() {
     this.meetups = [];
+
+    this.create = this.create.bind(this);
   }
 
   create(meetupData) {
 
-    const { topic, location, happeningOn } = meetupData;
-    const meetup = new MeetupRecord(topic, location, happeningOn);
+    const lastMeetupId = this.meetups[this.meetups.length - 1];
+    const currentMeetupId = lastMeetupId + 1;
 
+    const { topic, location, happeningOn } = meetupData;
+
+    const meetup = new MeetupRecord(currentMeetupId, topic, location, happeningOn);
     this.meetups.push(meetup);
+
+    return meetup;
   }
 
   destroy(id) {
@@ -36,6 +48,18 @@ class Meetup {
   update(id, data) {
 
   }
+
+  findAll() {
+    return this.meetups;
+  }
+
+  clean() {
+    this.meetups = [];
+  }
+
+  getAllMeetups() {
+    return this.meetups;
+  }
 }
 
-export default Meetup;
+export default new Meetup();

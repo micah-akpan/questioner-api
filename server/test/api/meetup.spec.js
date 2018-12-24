@@ -1,13 +1,20 @@
 import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
-
-// import { rsvps } from '../../controllers/meetup';
+import Meetup from '../../models/meetup/meetup';
 
 const agent = request(app);
 
 describe('Meetups API', () => {
   describe('POST /api/v1/meetups', () => {
+    before('', () => {
+      // Meetup.clean();
+    });
+
+    beforeEach('Clean Table', () => {
+      Meetup.clean();
+    });
+
     describe('handle valid data', () => {
       it('should create a meetup', (done) => {
         agent
@@ -22,9 +29,33 @@ describe('Meetups API', () => {
             if (err) return done(err);
             res.body.data.should.be.an('array');
             res.body.status.should.equal(201);
-
+            res.body.data[0].topic.should.equal('Meetup 1');
+            Meetup.meetups.length.should.equal(1);
             done();
           });
+      });
+
+      it('should create a meetup', (done) => {
+        agent
+          .post('/api/v1/meetups')
+          .expect(201)
+          .send({
+            topic: 'Meetup 2',
+            location: 'Meetup Location',
+            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+          })
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.data.should.be.an('array');
+            res.body.data[0].topic.should.equal('Meetup 2');
+            res.body.status.should.equal(201);
+            Meetup.meetups.length.should.equal(1);
+            done();
+          });
+      });
+
+      after(() => {
+
       });
     });
 
@@ -108,7 +139,28 @@ describe('Meetups API', () => {
   });
 
 
-  describe('GET /api/v1/meetups', () => {
+  describe.only('GET /api/v1/meetups', () => {
+    before(() => {
+      const meetupData = [{
+        topic: 'Meetup x1',
+        location: 'Meetup location x',
+        happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
+      },
+      {
+        topic: 'Meetup x2',
+        location: 'Meetup location x',
+        happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
+      }];
+
+      for (let i = 0; i < meetupData.length; i += 1) {
+        const meetup = meetupData[i];
+        Meetup.create({
+          topic: meetup.topic,
+          location: meetup.location,
+          happeningOn: meetup.happeningOn
+        });
+      }
+    });
     it('should return a list of meetups', (done) => {
       agent
         .get('/api/v1/meetups')
@@ -117,13 +169,21 @@ describe('Meetups API', () => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.data.should.be.an('array');
+          res.body.data.length.should.equal(2);
           done();
         });
+    });
+
+    after(() => {
+      Meetup.clean();
     });
   });
 
 
   describe('GET /api/v1/meetups/:id', () => {
+    beforeEach(() => {
+      Meetup.clean();
+    });
     it('should return a single meetup', (done) => {
       agent
         .get('/api/v1/meetups/1')

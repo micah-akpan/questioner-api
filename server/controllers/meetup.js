@@ -1,16 +1,5 @@
+import Meetup from '../models/meetup/meetup';
 import { omitProps } from '../utils';
-
-let meetups = [
-  {
-    id: 1,
-    topic: 'Meetup 1',
-    createdOn: new Date(),
-    location: 'Meetup location 1',
-    happeningOn: new Date(),
-    images: ['image1.jpeg', 'image2.jpg'],
-    tags: ['']
-  }
-];
 
 export const rsvps = [{
   id: 1,
@@ -22,18 +11,17 @@ export const rsvps = [{
 export default {
 
   getAllMeetups(req, res) {
+    const meetups = Meetup.findAll();
     return res.status(200).send({
       status: 200,
-      data: meetups
+      data: meetups.slice()
     });
   },
 
   createNewMeetup(req, res) {
     const {
-      location, images, topic, happeningOn, tags
+      location, topic, happeningOn,
     } = req.body;
-
-    const lastMeetupId = meetups[meetups.length - 1].id;
 
     if (!topic || !location || !happeningOn) {
       return res.status(400)
@@ -58,17 +46,11 @@ export default {
       });
     }
 
-    const newMeetup = {
-      id: lastMeetupId + 1,
-      createdOn: new Date(),
-      location,
-      images,
+    const newMeetup = Meetup.create({
       topic,
-      happeningOn,
-      tags
-    };
-
-    meetups.push(newMeetup);
+      location,
+      happeningOn
+    });
 
     const mRecord = omitProps(newMeetup, ['createdOn', 'images', 'id']);
 
@@ -79,7 +61,7 @@ export default {
   },
 
   getSingleMeetup(req, res) {
-    const meetupRecord = meetups.filter(
+    const meetupRecord = Meetup.meetups.filter(
       meetup => String(meetup.id) === req.params.id
     )[0];
 
@@ -101,6 +83,7 @@ export default {
       });
   },
 
+  /* eslint-disable */
   deleteMeetup(req, res) {
     const mRecords = meetups.filter(meetup => String(meetup.id) === req.params.id);
 
