@@ -11,7 +11,10 @@ export const app = express();
 app.set('json spaces', 2);
 
 /* Middlewares */
-app.use(logger('dev'));
+if (app.get('env') === 'development') {
+  app.use(logger('dev'));
+}
+
 app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
