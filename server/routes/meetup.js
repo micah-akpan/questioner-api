@@ -3,6 +3,8 @@ import meetupController from '../controllers/meetup';
 
 const router = express.Router();
 
+router.get('/meetups/search', meetupController.searchMeetups);
+
 router
   .route('/meetups')
   .post(meetupController.createNewMeetup)
@@ -15,7 +17,5 @@ router
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
 
-
-// router.post('/meetups/:id/rsvps', meetupController.rsvpMeetup);
 
 export default router;

@@ -12,7 +12,7 @@ gulp.task('mocha', () => {
     .on('error', log.error);
 });
 
-gulp.task('watch-mocha', () => {
+gulp.task('watch-mocha', ['mocha'], () => {
   gulp.watch(['./server/test/**'], ['mocha']);
 });
 

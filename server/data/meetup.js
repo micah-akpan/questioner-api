@@ -7,8 +7,7 @@ const meetups = JSON.stringify([
     happeningOn: new Date(),
     images: ['image1.png', 'image2.jpg'
     ],
-    tags: [''
-    ]
+    tags: ['tech', 'javascript', 'tree shaking', 'webpack']
   },
   {
     id: 2,
@@ -18,8 +17,7 @@ const meetups = JSON.stringify([
     happeningOn: new Date(),
     images: ['image1.png', 'image2.jpg'
     ],
-    tags: [''
-    ]
+    tags: ['food festival', 'food', 'everything food', 'just food']
   },
   {
     id: 3,
@@ -29,8 +27,7 @@ const meetups = JSON.stringify([
     happeningOn: new Date(),
     images: ['image1.png', 'image2.jpg'
     ],
-    tags: [''
-    ]
+    tags: ['crypto', 'ico', 'money', 'tokens', 'bitcoin']
   }
 ]);
 

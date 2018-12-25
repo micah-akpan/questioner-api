@@ -43,13 +43,13 @@ export default {
     }
 
     const newMeetup = {
+      topic,
+      location,
+      happeningOn,
       id: lastMeetupId + 1,
       createdOn: new Date(),
-      location,
-      images,
-      topic,
-      happeningOn,
-      tags
+      images: images || [],
+      tags: tags || []
     };
 
     meetups.push(newMeetup);
@@ -128,4 +128,34 @@ export default {
       });
     }
   },
+
+  searchMeetups(req, res) {
+    const searchValue = req.query.searchTerm.toLowerCase();
+
+    // every match is by a lowercase version of the search term value
+    // search by topic
+    const meetupsByTopic = meetups.filter(meetup => meetup.topic.toLowerCase().match(searchValue));
+
+    // search by location
+    const meetupsByLocation = meetups.filter(
+      meetup => meetup.location.toLowerCase().match(searchValue)
+    );
+
+    // search by tag
+    const meetupsByTags = meetups.filter(meetup => meetup.tags.includes(searchValue));
+
+    const allMeetups = [...meetupsByTopic, ...meetupsByLocation, ...meetupsByTags];
+
+    if (allMeetups.length) {
+      res.status(200).send({
+        status: 200,
+        data: allMeetups
+      });
+    } else {
+      res.status(404).send({
+        status: 404,
+        error: `No meetups match with this search: ${searchValue}`
+      });
+    }
+  }
 };
