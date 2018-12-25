@@ -146,10 +146,18 @@ export default {
 
     const allMeetups = [...meetupsByTopic, ...meetupsByLocation, ...meetupsByTags];
 
+    // remove duplicates
+    const hash = {};
+    allMeetups.forEach((meetup) => {
+      hash[meetup.id] = meetup;
+    });
+
+    const filteredMeetups = Object.values(hash);
+
     if (allMeetups.length) {
       res.status(200).send({
         status: 200,
-        data: allMeetups
+        data: filteredMeetups
       });
     } else {
       res.status(404).send({

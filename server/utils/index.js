@@ -22,3 +22,13 @@ export const omitProps = (obj, propsToOmit) => {
 export default {
   omitProps
 };
+
+/**
+ * @func getFutureDate
+ * @param {Number} nDays
+ * @return {Date} A future date
+ */
+export const getFutureDate = (nDays = 1) => {
+  const todayInMs = new Date().getTime();
+  return new Date(todayInMs + 24 * nDays * 60 * 60 * 1000);
+};
