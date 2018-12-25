@@ -1,3 +1,4 @@
+const { exec } = require('child_process');
 const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 const log = require('gulplog');
@@ -12,8 +13,16 @@ gulp.task('mocha', () => {
     .on('error', log.error);
 });
 
+gulp.task('coverage', (cb) => {
+  exec('npm run coverage', (err, stdout, stderr) => {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
+});
+
 gulp.task('watch-mocha', ['mocha'], () => {
   gulp.watch(['./server/test/**'], ['mocha']);
 });
 
-gulp.task('default', ['watch-mocha']);
+gulp.task('default', ['task', 'watch-mocha']);

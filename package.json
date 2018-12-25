@@ -39,6 +39,7 @@
     "eslint-plugin-prettier": "^3.0.0",
     "gulp": "3.9.1",
     "gulp-mocha": "^6.0.0",
+    "gulp-shell": "^0.6.5",
     "gulplog": "^1.0.0",
     "husky": "^1.2.1",
     "lint-staged": "^8.1.0",
