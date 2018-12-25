@@ -1,1 +1,1 @@
-web: node --require @babel/register ./server/bin/www
+web: yarn start
