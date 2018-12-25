@@ -25,4 +25,4 @@ gulp.task('watch-mocha', ['mocha'], () => {
   gulp.watch(['./server/test/**'], ['mocha']);
 });
 
-gulp.task('default', ['task', 'watch-mocha']);
+gulp.task('default', ['watch-mocha']);
