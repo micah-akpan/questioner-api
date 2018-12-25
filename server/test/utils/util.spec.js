@@ -20,7 +20,7 @@ describe('Utils', () => {
     });
 
     it('should return a future date', () => {
-      today.should.be.lessThan(getFutureDate().getTime(4));
+      today.should.be.lessThan(getFutureDate(4).getTime());
     });
 
     after(() => {
