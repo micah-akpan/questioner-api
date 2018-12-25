@@ -28,4 +28,7 @@ export default {
  * @param {Number} nDays
  * @return {Date} A future date
  */
-export const getFutureDate = (nDays = 1) => new Date(24 * nDays * 60 * 60 * 1000);
+export const getFutureDate = (nDays = 1) => {
+  const todayInMs = new Date().getTime();
+  return new Date(todayInMs + 24 * nDays * 60 * 60 * 1000);
+};
