@@ -6,14 +6,11 @@ import { getFutureDate } from '../../utils';
 describe('Meetups API', () => {
   describe('Get all meetups', () => {
     it('should fetch meetups', () => {
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
       const req = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.getAllMeetups(req, res);
 
@@ -33,13 +30,11 @@ describe('Meetups API', () => {
         const req = {
           body: {}
         };
-        const res = {
-          status() { },
-          send() { }
-        };
+        const res = {};
 
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
+
         meetupController.createNewMeetup(req, res);
 
         res.status.firstCall.args[0].should.equal(400);
@@ -53,13 +48,10 @@ describe('Meetups API', () => {
             topic: 'Sample Meetup',
           }
         };
-        const res = {
-          status() { },
-          send() { }
-        };
+        const res = {};
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
 
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
         meetupController.createNewMeetup(req, res);
 
         res.status.firstCall.args[0].should.equal(400);
@@ -75,13 +67,11 @@ describe('Meetups API', () => {
             happeningOn: 'Tomorrow' // wrong data type
           }
         };
-        const res = {
-          status() { },
-          send() { }
-        };
+        const res = {};
 
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
+
         meetupController.createNewMeetup(req, res);
 
         res.status.firstCall.args[0].should.equal(422);
@@ -99,13 +89,10 @@ describe('Meetups API', () => {
             happeningOn: yesterday
           }
         };
-        const res = {
-          status() { },
-          send() { }
-        };
+        const res = {};
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
 
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
         meetupController.createNewMeetup(req, res);
 
         res.status.firstCall.args[0].should.equal(422);
@@ -123,13 +110,11 @@ describe('Meetups API', () => {
             happeningOn: getFutureDate(10)
           }
         };
-        const res = {
-          status() { },
-          send() { }
-        };
+        const res = {};
 
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
+
         meetupController.createNewMeetup(req, res);
 
         res.status.firstCall.args[0].should.equal(201);
@@ -147,13 +132,10 @@ describe('Meetups API', () => {
           id: '2'
         }
       };
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.getSingleMeetup(req, res);
 
@@ -169,13 +151,10 @@ describe('Meetups API', () => {
           id: '9999999'
         }
       };
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.getSingleMeetup(req, res);
 
@@ -187,13 +166,10 @@ describe('Meetups API', () => {
   describe('Get upcoming meetups', () => {
     it('should return all upcoming meetups', () => {
       const req = {};
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.getUpcomingMeetups(req, res);
       res.status.firstCall.args[0].should.equal(200);
@@ -209,13 +185,10 @@ describe('Meetups API', () => {
         }
       };
 
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.deleteMeetup(req, res);
 
@@ -231,13 +204,10 @@ describe('Meetups API', () => {
         }
       };
 
-      const res = {
-        status() { },
-        send() { }
-      };
+      const res = {};
 
-      res.status = sinon.stub(res, 'status').returns(res);
-      res.send = sinon.stub(res, 'send').returns(res);
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
 
       meetupController.deleteMeetup(req, res);
 
@@ -256,13 +226,10 @@ describe('Meetups API', () => {
             }
           };
 
-          const res = {
-            status() { },
-            send() { }
-          };
+          const res = {};
 
-          res.status = sinon.stub(res, 'status').returns(res);
-          res.send = sinon.stub(res, 'send').returns(res);
+          res.status = sinon.fake.returns(res);
+          res.send = sinon.fake.returns(res);
 
           meetupController.searchMeetups(req, res);
           res.status.firstCall.args[0].should.equal(200);
@@ -278,13 +245,10 @@ describe('Meetups API', () => {
               }
             };
 
-            const res = {
-              status() { },
-              send() { }
-            };
+            const res = {};
 
-            res.status = sinon.stub(res, 'status').returns(res);
-            res.send = sinon.stub(res, 'send').returns(res);
+            res.status = sinon.fake.returns(res);
+            res.send = sinon.fake.returns(res);
 
             meetupController.searchMeetups(req, res);
             res.status.firstCall.args[0].should.equal(200);
@@ -301,13 +265,10 @@ describe('Meetups API', () => {
               }
             };
 
-            const res = {
-              status() { },
-              send() { }
-            };
+            const res = {};
 
-            res.status = sinon.stub(res, 'status').returns(res);
-            res.send = sinon.stub(res, 'send').returns(res);
+            res.status = sinon.fake.returns(res);
+            res.send = sinon.fake.returns(res);
 
             meetupController.searchMeetups(req, res);
             res.status.firstCall.args[0].should.equal(200);
@@ -319,25 +280,20 @@ describe('Meetups API', () => {
 
       describe('handle no match search', () => {
         it('should return an error for a no-match search', () => {
-          it('can search for meetups by tags', () => {
-            const req = {
-              query: {
-                searchTerm: 'no match'
-              }
-            };
+          const req = {
+            query: {
+              searchTerm: 'no tag'
+            }
+          };
 
-            const res = {
-              status() { },
-              send() { }
-            };
+          const res = {};
 
-            res.status = sinon.stub(res, 'status').returns(res);
-            res.send = sinon.stub(res, 'send').returns(res);
+          res.status = sinon.fake.returns(res);
+          res.send = sinon.fake.returns(res);
 
-            meetupController.searchMeetups(req, res);
-            res.status.firstCall.args[0].should.equal(404);
-            res.send.firstCall.args[0].should.have.property('error');
-          });
+          meetupController.searchMeetups(req, res);
+          res.status.firstCall.args[0].should.equal(404);
+          res.send.firstCall.args[0].should.have.property('error');
         });
       });
     });
