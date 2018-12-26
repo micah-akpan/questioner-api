@@ -129,7 +129,6 @@ export default {
   },
 
   searchMeetups(req, res) {
-    console.log(req.query.searchTerm);
     const searchValue = req.query.searchTerm.toLowerCase();
 
     // every match is by a lowercase version of the search term value
