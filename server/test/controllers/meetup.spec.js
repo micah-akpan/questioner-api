@@ -1,6 +1,7 @@
 import 'chai/register-should';
 import sinon from 'sinon';
 import meetupController from '../../controllers/meetup';
+import { getFutureDate } from '../../utils';
 
 describe('Meetups API', () => {
   describe('Get all meetups', () => {
@@ -33,8 +34,8 @@ describe('Meetups API', () => {
           body: {}
         };
         const res = {
-          status() {},
-          send() {}
+          status() { },
+          send() { }
         };
 
         res.status = sinon.stub(res, 'status').returns(res);
@@ -53,8 +54,8 @@ describe('Meetups API', () => {
           }
         };
         const res = {
-          status() {},
-          send() {}
+          status() { },
+          send() { }
         };
 
         res.status = sinon.stub(res, 'status').returns(res);
@@ -75,8 +76,8 @@ describe('Meetups API', () => {
           }
         };
         const res = {
-          status() {},
-          send() {}
+          status() { },
+          send() { }
         };
 
         res.status = sinon.stub(res, 'status').returns(res);
@@ -85,7 +86,54 @@ describe('Meetups API', () => {
 
         res.status.firstCall.args[0].should.equal(422);
         res.send.firstCall.args[0].should.have.property('error');
-        res.send.firstCall.args[0].error.should.deep.equal('You provided an invalid meetup date ');
+        res.send.firstCall.args[0].error.should.equal('You provided an invalid meetup date');
+      });
+
+      it('should not create meetup with a past date', () => {
+        const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
+        const req = {
+          body: {
+            topic: 'Sample Meetup',
+            location: 'Sample Location',
+            happeningOn: yesterday
+          }
+        };
+        const res = {
+          status() { },
+          send() { }
+        };
+
+        res.status = sinon.stub(res, 'status').returns(res);
+        res.send = sinon.stub(res, 'send').returns(res);
+        meetupController.createNewMeetup(req, res);
+
+        res.status.firstCall.args[0].should.equal(422);
+        res.send.firstCall.args[0].should.have.property('error');
+        res.send.firstCall.args[0].error.should.deep.equal('Meetup Date provided is in the past, provide a future date');
+      });
+    });
+
+    describe('handle valid user input', () => {
+      it('should create a new meetup', () => {
+        const req = {
+          body: {
+            topic: 'Sample Meetup',
+            location: 'Sample Location',
+            happeningOn: getFutureDate(10)
+          }
+        };
+        const res = {
+          status() { },
+          send() { }
+        };
+
+        res.status = sinon.stub(res, 'status').returns(res);
+        res.send = sinon.stub(res, 'send').returns(res);
+        meetupController.createNewMeetup(req, res);
+
+        res.status.firstCall.args[0].should.equal(201);
+        res.send.firstCall.args[0].data.should.be.an('array');
       });
     });
   });
