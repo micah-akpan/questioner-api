@@ -81,8 +81,6 @@ export default {
     } else {
       question.votes = question.votes > 0 ? question.votes - 1 : 0;
 
-      console.log(question.votes);
-
       question = omitProps(question, ['id', 'createdOn', 'createdBy']);
 
       res.status(200)

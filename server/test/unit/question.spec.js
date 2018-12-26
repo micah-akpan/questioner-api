@@ -103,7 +103,7 @@ describe('Question API', () => {
   });
 
   describe('Downvote Question /questions/:id/downvote', () => {
-    it('can downvote a question', () => {
+    it('should downvote a question', () => {
       const req = {
         params: {
           id: '1'
@@ -119,7 +119,7 @@ describe('Question API', () => {
       res.send.firstCall.args[0].should.have.property('data');
     });
 
-    it('can downvote a question', () => {
+    it('should downvote a question', () => {
       const req = {
         params: {
           id: '1'
@@ -133,6 +133,22 @@ describe('Question API', () => {
       questionController.downvoteQuestion(req, res);
       res.status.firstCall.args[0].should.equal(200);
       res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error for a non-existing question', () => {
+      const req = {
+        params: {
+          id: '9999999'
+        }
+      };
+
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.downvoteQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
     });
   });
 });
