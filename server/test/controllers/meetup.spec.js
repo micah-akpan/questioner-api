@@ -183,4 +183,163 @@ describe('Meetups API', () => {
       res.send.firstCall.args[0].should.have.property('error');
     });
   });
+
+  describe('Get upcoming meetups', () => {
+    it('should return all upcoming meetups', () => {
+      const req = {};
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      res.status = sinon.stub(res, 'status').returns(res);
+      res.send = sinon.stub(res, 'send').returns(res);
+
+      meetupController.getUpcomingMeetups(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].data.should.be.an('array');
+    });
+  });
+
+  describe('Delete meetups', () => {
+    it('should delete a meetup', () => {
+      const req = {
+        params: {
+          id: '3'
+        }
+      };
+
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      res.status = sinon.stub(res, 'status').returns(res);
+      res.send = sinon.stub(res, 'send').returns(res);
+
+      meetupController.deleteMeetup(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].data.should.be.an('array');
+      res.send.firstCall.args[0].data.length.should.equal(0);
+    });
+
+    it('should return an error for a non-existent meetup', () => {
+      const req = {
+        params: {
+          id: '999999'
+        }
+      };
+
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      res.status = sinon.stub(res, 'status').returns(res);
+      res.send = sinon.stub(res, 'send').returns(res);
+
+      meetupController.deleteMeetup(req, res);
+
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Search Meetups', () => {
+    describe('handle valid match', () => {
+      describe('Search by topic', () => {
+        it('can search for meetups by topic', () => {
+          const req = {
+            query: {
+              searchTerm: 'Meetup 2'
+            }
+          };
+
+          const res = {
+            status() { },
+            send() { }
+          };
+
+          res.status = sinon.stub(res, 'status').returns(res);
+          res.send = sinon.stub(res, 'send').returns(res);
+
+          meetupController.searchMeetups(req, res);
+          res.status.firstCall.args[0].should.equal(200);
+          res.send.firstCall.args[0].should.have.property('data');
+          res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
+        });
+
+        describe('Search by Location', () => {
+          it('can search for meetups by location', () => {
+            const req = {
+              query: {
+                searchTerm: 'Meetup Location 2'
+              }
+            };
+
+            const res = {
+              status() { },
+              send() { }
+            };
+
+            res.status = sinon.stub(res, 'status').returns(res);
+            res.send = sinon.stub(res, 'send').returns(res);
+
+            meetupController.searchMeetups(req, res);
+            res.status.firstCall.args[0].should.equal(200);
+            res.send.firstCall.args[0].should.have.property('data');
+            res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
+          });
+        });
+
+        describe('Search by Tag', () => {
+          it('can search for meetups by tags', () => {
+            const req = {
+              query: {
+                searchTerm: 'food festival'
+              }
+            };
+
+            const res = {
+              status() { },
+              send() { }
+            };
+
+            res.status = sinon.stub(res, 'status').returns(res);
+            res.send = sinon.stub(res, 'send').returns(res);
+
+            meetupController.searchMeetups(req, res);
+            res.status.firstCall.args[0].should.equal(200);
+            res.send.firstCall.args[0].should.have.property('data');
+            res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
+          });
+        });
+      });
+
+      describe('handle no match search', () => {
+        it('should return an error for a no-match search', () => {
+          it('can search for meetups by tags', () => {
+            const req = {
+              query: {
+                searchTerm: 'no match'
+              }
+            };
+
+            const res = {
+              status() { },
+              send() { }
+            };
+
+            res.status = sinon.stub(res, 'status').returns(res);
+            res.send = sinon.stub(res, 'send').returns(res);
+
+            meetupController.searchMeetups(req, res);
+            res.status.firstCall.args[0].should.equal(404);
+            res.send.firstCall.args[0].should.have.property('error');
+          });
+        });
+      });
+    });
+  });
 });
