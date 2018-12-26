@@ -4,7 +4,7 @@ const mocha = require('gulp-mocha');
 const log = require('gulplog');
 
 gulp.task('mocha', () => {
-  gulp.src(['./server/test/**'], { read: false })
+  gulp.src(['./server/test/**/**'], { read: false })
     .pipe(mocha({
       reporter: 'list',
       exit: true,
