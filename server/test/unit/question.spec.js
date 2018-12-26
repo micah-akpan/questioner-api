@@ -12,13 +12,9 @@ describe('Question API', () => {
             body: 'Sample question body'
           }
         };
-        const res = {
-          status() { },
-          send() { }
-        };
-
-        res.status = sinon.stub(res, 'status').returns(res);
-        res.send = sinon.stub(res, 'send').returns(res);
+        const res = {};
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
 
         questionController.createQuestion(req, res);
         res.status.firstCall.args[0].should.equal(201);
@@ -26,27 +22,117 @@ describe('Question API', () => {
         res.send.firstCall.args[0].data[0].should.have.property('title');
       });
     });
+
+    describe('handle invalid data', () => {
+      it('should not create a question if required fields are missing', () => {
+        const req = {
+          body: {
+            body: 'question body'
+          }
+        };
+
+        const res = {};
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
+
+        questionController.createQuestion(req, res);
+        res.status.firstCall.args[0].should.equal(400);
+        res.send.firstCall.args[0].should.deep.equal(
+          {
+            status: 400,
+            error: 'The title and body field is required'
+          }
+        );
+      });
+
+      it('should not create a question if required fields are missing', () => {
+        const req = {
+          body: {
+            title: 'question title'
+          }
+        };
+
+        const res = {};
+        res.status = sinon.fake.returns(res);
+        res.send = sinon.fake.returns(res);
+
+        questionController.createQuestion(req, res);
+        res.status.firstCall.args[0].should.equal(400);
+        res.send.firstCall.args[0].should.deep.equal(
+          {
+            status: 400,
+            error: 'The title and body field is required'
+          }
+        );
+      });
+    });
   });
 
-  describe('handle invalid data', () => {
-    it('should not create a question if required fields are missing', () => {
+  describe('Upvote Question /questions/:id/upvote', () => {
+    it('should upvote a question', () => {
       const req = {
-        body: {
-          body: 'question body'
+        params: {
+          id: '1'
         }
       };
 
-      const res = {
-        // status() {},
-        // send() {}
-      };
-
-
+      const res = {};
       res.status = sinon.fake.returns(res);
       res.send = sinon.fake.returns(res);
 
-      questionController.createQuestion(req, res);
-      res.status.firstCall.args[0].should.equal(400);
+      questionController.upvoteQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error for a non-existing question', () => {
+      const req = {
+        params: {
+          id: '9999999'
+        }
+      };
+
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.upvoteQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Downvote Question /questions/:id/downvote', () => {
+    it('can downvote a question', () => {
+      const req = {
+        params: {
+          id: '1'
+        }
+      };
+
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.downvoteQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('can downvote a question', () => {
+      const req = {
+        params: {
+          id: '1'
+        }
+      };
+
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.downvoteQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
     });
   });
 });
