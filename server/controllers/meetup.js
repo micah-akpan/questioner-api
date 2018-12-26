@@ -67,22 +67,21 @@ export default {
       meetup => String(meetup.id) === req.params.id
     )[0];
 
-    let mRecord;
-
     if (meetupRecord) {
-      mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
+      const mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [mRecord],
+        });
     } else {
-      return res.status(404)
+      res.status(404)
         .send({
           status: 404,
           error: 'The requested meetup does not exist'
         });
     }
-    return res.status(200)
-      .send({
-        status: 200,
-        data: [mRecord],
-      });
   },
 
   deleteMeetup(req, res) {

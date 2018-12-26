@@ -134,7 +134,53 @@ describe('Meetups API', () => {
 
         res.status.firstCall.args[0].should.equal(201);
         res.send.firstCall.args[0].data.should.be.an('array');
+        res.send.firstCall.args[0].data[0].should.have.property('topic');
+        res.send.firstCall.args[0].data[0].topic.should.equal('Sample Meetup');
       });
+    });
+  });
+
+  describe('Get a single meetup', () => {
+    it('should retrieve a single meetup', () => {
+      const req = {
+        params: {
+          id: '2'
+        }
+      };
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      res.status = sinon.stub(res, 'status').returns(res);
+      res.send = sinon.stub(res, 'send').returns(res);
+
+      meetupController.getSingleMeetup(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.should.be.an('array');
+      res.send.firstCall.args[0].data.length.should.equal(1);
+    });
+
+    it('should return an error for a non-existent meetup', () => {
+      const req = {
+        params: {
+          id: '9999999'
+        }
+      };
+      const res = {
+        status() { },
+        send() { }
+      };
+
+      res.status = sinon.stub(res, 'status').returns(res);
+      res.send = sinon.stub(res, 'send').returns(res);
+
+      meetupController.getSingleMeetup(req, res);
+
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
     });
   });
 });
