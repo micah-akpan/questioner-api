@@ -5,18 +5,16 @@ const questions = JSON.parse(questionRaw);
 
 export default {
   createQuestion(req, res) {
-    const { title, body } = req.body;
-    if (!title || !body) {
+    const {
+      title, body, meetupId, userId
+    } = req.body;
+    if (!title || !body || !meetupId || !userId) {
       res.status(400)
         .send({
           status: 400,
-          error: 'The title and body field is required'
+          error: 'The title, body, meetupId and userId fields are required fields'
         });
     } else {
-      // Random primary key values
-      const userId = 1;
-      const meetupId = 1;
-
       const lastId = questions[questions.length - 1].id;
 
       questions.push({

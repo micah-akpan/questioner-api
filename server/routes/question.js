@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import questionController from '../controllers/question';
+import schemaValidator from '../middlewares/schemaValidator';
 
 const router = Router();
 
-router.post('/questions', questionController.createQuestion);
+const validateRequest = schemaValidator(true);
+
+router.post('/questions', validateRequest, questionController.createQuestion);
 
 router.patch('/questions/:id/upvote', questionController.upvoteQuestion);
 
