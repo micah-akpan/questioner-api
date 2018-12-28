@@ -8,36 +8,29 @@ export default {
     const {
       title, body, meetupId, userId
     } = req.body;
-    if (!title || !body || !meetupId || !userId) {
-      res.status(400)
-        .send({
-          status: 400,
-          error: 'The title, body, meetupId and userId fields are required fields'
-        });
-    } else {
-      const lastId = questions[questions.length - 1].id;
 
-      questions.push({
-        id: lastId + 1,
-        createdOn: new Date(),
-        createdBy: userId,
-        meetup: meetupId,
-        title,
-        body,
-        votes: 0
+    const lastId = questions[questions.length - 1].id;
+
+    questions.push({
+      id: lastId + 1,
+      createdOn: new Date(),
+      createdBy: userId,
+      meetup: meetupId,
+      title,
+      body,
+      votes: 0
+    });
+
+    res.status(201)
+      .send({
+        status: 201,
+        data: [{
+          user: userId,
+          meetup: meetupId,
+          title,
+          body
+        }]
       });
-
-      res.status(201)
-        .send({
-          status: 201,
-          data: [{
-            user: userId,
-            meetup: meetupId,
-            title,
-            body
-          }]
-        });
-    }
   },
 
   upvoteQuestion(req, res) {
