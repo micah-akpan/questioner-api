@@ -1,9 +1,9 @@
 import Joi from 'joi';
-import _ from 'lodash';
 import Schemas from '../data/schemas';
+import { isBoolean, hasProp, getProp } from '../utils';
 
 export default (useJoiError = false) => {
-  const _useJoiError = _.isBoolean(useJoiError) && useJoiError;
+  const _useJoiError = isBoolean(useJoiError) && useJoiError;
 
   const _validationOptions = {
     abortEarly: false,
@@ -17,8 +17,8 @@ export default (useJoiError = false) => {
 
     const _supportedMethods = ['post', 'patch'];
 
-    if (_.includes(_supportedMethods, method) && _.has(Schemas, path)) {
-      const _schema = _.get(Schemas, path);
+    if (_supportedMethods.includes(method) && hasProp(Schemas, path)) {
+      const _schema = getProp(Schemas, path);
 
       if (_schema) {
         return Joi.validate(req.body, _schema, _validationOptions, (err, data) => {
@@ -27,7 +27,7 @@ export default (useJoiError = false) => {
               status: 422,
               error: {
                 original: err._object,
-                details: _.map(err.details, ({ message, type }) => ({
+                details: err.details.map(({ message, type }) => ({
                   message: message.replace(/['"]/g, ''),
                   type
                 }))
@@ -37,6 +37,7 @@ export default (useJoiError = false) => {
             const details = err.details.map(({ message }) => ({
               message: message.replace(/['"]/g, ''),
             }));
+
 
             let errorMsg = ' ';
 

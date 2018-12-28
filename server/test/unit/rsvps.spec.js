@@ -12,7 +12,8 @@ describe('RSVP Meetup API', () => {
           },
 
           body: {
-            response: 'yes'
+            response: 'yes',
+            userId: 1
           }
         };
 
