@@ -1,8 +1,8 @@
 const Joi = require('joi');
 
 const rsvpDataSchema = Joi.object().keys({
-  title: Joi.string().strict().required(),
-  body: Joi.string().required()
+  userId: Joi.number().integer().required(),
+  response: Joi.string().strict().required(),
 });
 
 export default rsvpDataSchema;

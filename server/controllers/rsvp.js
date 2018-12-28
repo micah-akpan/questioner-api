@@ -16,14 +16,14 @@ export default {
           error: 'The meetup you are requesting does not exist'
         });
     } else {
-      const { response } = req.body;
+      const { response, userId } = req.body;
 
       const lastRsvpId = rsvps[rsvps.length - 1].id;
 
       const newRsvp = {
         id: lastRsvpId + 1,
         meetup: mRecord.id,
-        user: 1, // dynamically generated
+        user: userId,
         status: response
       };
 
