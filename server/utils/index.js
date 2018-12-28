@@ -19,10 +19,6 @@ export const omitProps = (obj, propsToOmit) => {
   return newObject;
 };
 
-export default {
-  omitProps
-};
-
 /**
  * @func getFutureDate
  * @param {Number} nDays
@@ -31,4 +27,35 @@ export default {
 export const getFutureDate = (nDays = 1) => {
   const todayInMs = new Date().getTime();
   return new Date(todayInMs + 24 * nDays * 60 * 60 * 1000);
+};
+
+/**
+ * @func isBoolean
+ * @param {*} value
+ * @return {Boolean} Returns true if value is a primitive or reference boolean
+ */
+export const isBoolean = value => typeof value === 'boolean' || value instanceof Boolean;
+
+/**
+ * @func hasProp
+ * @param {*} object
+ * @param {String} prop
+ * @return {Boolean} Returns true if 'object' has a property 'prop', false otherwise
+ */
+export const hasProp = (object, prop) => Object.prototype.hasOwnProperty.call(object, prop);
+
+/**
+ * @func getProp
+ * @param {*} object
+ * @param {String} prop
+ * @return {*} The value of object[prop]
+ */
+export const getProp = (object, prop) => object[prop];
+
+export default {
+  omitProps,
+  getFutureDate,
+  isBoolean,
+  hasProp,
+  getProp
 };

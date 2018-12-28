@@ -12,7 +12,9 @@ describe.skip('Questions API', () => {
           .post('/api/v1/questions')
           .send({
             title: 'question 1',
-            body: 'question body'
+            body: 'question body',
+            meetupId: 2,
+            userId: 4
           })
           .expect(201)
           .end((err, res) => {
@@ -34,10 +36,10 @@ describe.skip('Questions API', () => {
           .send({
             title: 'question 1'
           })
-          .expect(400)
+          .expect(422)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(400);
+            res.body.status.should.equal(422);
             res.body.should.have.property('error');
             res.body.error.should.be.a('string');
             done();

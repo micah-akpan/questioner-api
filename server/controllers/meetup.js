@@ -19,6 +19,11 @@ export default {
 
     const lastMeetupId = meetups[meetups.length - 1].id;
 
+    /* These validations aren't necessary
+       as a schema validation middleware
+       has been added
+       only kept for reference
+    */
     if (!topic || !location || !happeningOn) {
       return res.status(400)
         .send({
