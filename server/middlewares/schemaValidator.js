@@ -12,13 +12,13 @@ export default (useJoiError = false) => {
   };
 
   return (req, res, next) => {
-    const route = req.route.path;
+    const { path } = req.route;
     const method = req.method.toLowerCase();
 
     const _supportedMethods = ['post', 'patch'];
 
-    if (_.includes(_supportedMethods, method) && _.has(Schemas, route)) {
-      const _schema = _.get(Schemas, route);
+    if (_.includes(_supportedMethods, method) && _.has(Schemas, path)) {
+      const _schema = _.get(Schemas, path);
 
       if (_schema) {
         return Joi.validate(req.body, _schema, _validationOptions, (err, data) => {

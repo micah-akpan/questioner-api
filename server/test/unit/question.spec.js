@@ -27,7 +27,7 @@ describe('Question API', () => {
     });
 
     describe('handle invalid data', () => {
-      it('should not create a question if required fields are missing', () => {
+      it.skip('should not create a question if required fields are missing', () => {
         const req = {
           body: {
             body: 'question body',
@@ -55,7 +55,7 @@ describe('Question API', () => {
         next.called.should.be.false;
       });
 
-      it('should not create a question if required fields are missing', () => {
+      it.skip('should not create a question if required fields are missing', () => {
         const req = {
           body: {
             title: 'question title'
