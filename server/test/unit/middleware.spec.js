@@ -86,7 +86,7 @@ describe('Middlewares', () => {
         res.status.firstCall.args[0].should.equal(422);
         res.send.firstCall.args[0].should.have.property('error');
 
-        next.calledOnce.should.be.true;
+        next.calledOnce.should.be.false;
       });
     });
   });
