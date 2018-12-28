@@ -4,7 +4,7 @@ import schemaValidator from '../middlewares/schemaValidator';
 
 const router = Router();
 
-const validateRequest = schemaValidator(true);
+const validateRequest = schemaValidator();
 
 router.post('/questions', validateRequest, questionController.createQuestion);
 

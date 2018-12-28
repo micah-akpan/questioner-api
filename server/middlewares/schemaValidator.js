@@ -18,14 +18,13 @@ export default (useJoiError = false) => {
     const _supportedMethods = ['post', 'patch'];
 
     if (_.includes(_supportedMethods, method) && _.has(Schemas, route)) {
-      // schema for the current route
       const _schema = _.get(Schemas, route);
 
       if (_schema) {
         return Joi.validate(req.body, _schema, _validationOptions, (err, data) => {
           if (err) {
             const JoiError = {
-              status: 'failed',
+              status: 422,
               error: {
                 original: err._object,
                 details: _.map(err.details, ({ message, type }) => ({
@@ -35,10 +34,20 @@ export default (useJoiError = false) => {
               }
             };
 
-            // Custom Error
+            const details = err.details.map(({ message }) => ({
+              message: message.replace(/['"]/g, ''),
+            }));
+
+            let errorMsg = ' ';
+
+            details.forEach((detail) => {
+              errorMsg += detail.message;
+              errorMsg += ', ';
+            });
+
             const CustomError = {
-              status: 'failed',
-              error: 'Invalid request data. Please review request and try again.'
+              status: 422,
+              error: `Invalid request data: ${errorMsg} please review request and try again.`
             };
             res.status(422).json(_useJoiError ? JoiError : CustomError);
           } else {
