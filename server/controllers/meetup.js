@@ -125,10 +125,8 @@ export default {
   },
 
   getUpcomingMeetups(req, res) {
-    const now = new Date().getTime();
-
     const upComingMeetups = meetups.filter(
-      meetup => new Date(meetup.happeningOn).getTime() >= now
+      meetup => new Date(meetup.happeningOn).getTime() >= Date.now()
     );
 
     if (!upComingMeetups.length) {
@@ -137,13 +135,17 @@ export default {
         error: 'There are no upcoming meetups'
       });
     } else {
-      const mRecords = upComingMeetups.map(
-        meetup => omitProps(meetup, ['createdOn', 'images'])
-      );
+      const meetupRecords = upComingMeetups
+        .map(meetup => omitProps(meetup, ['createdOn', 'images']))
+        .map((meetup) => {
+          meetup.title = meetup.topic;
+          delete meetup.topic;
+          return meetup;
+        });
 
       res.status(200).send({
         status: 200,
-        data: mRecords
+        data: meetupRecords
       });
     }
   },

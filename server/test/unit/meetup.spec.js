@@ -170,7 +170,6 @@ describe('Meetups API', () => {
 
       res.status = sinon.fake.returns(res);
       res.send = sinon.fake.returns(res);
-
       meetupController.getUpcomingMeetups(req, res);
       res.status.firstCall.args[0].should.equal(200);
       res.send.firstCall.args[0].data.should.be.an('array');
