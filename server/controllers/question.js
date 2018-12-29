@@ -80,5 +80,12 @@ export default {
           data: [question]
         });
     }
+  },
+
+  getAllQuestions(req, res) {
+    return res.status(200).send({
+      status: 200,
+      data: questions
+    });
   }
 };

@@ -109,4 +109,18 @@ describe('Question API', () => {
       res.send.firstCall.args[0].should.have.property('error');
     });
   });
+
+  describe('Fetch all questions /questions', () => {
+    it('should return all questions', () => {
+      const req = {};
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.getAllQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.should.be.an('array');
+    });
+  });
 });

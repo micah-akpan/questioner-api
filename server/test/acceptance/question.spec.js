@@ -97,4 +97,18 @@ describe.skip('Questions API', () => {
         });
     });
   });
+
+  describe('GET /questions', () => {
+    it('should return all questions', (done) => {
+      agent
+        .get('/api/v1/questions')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+  });
 });
