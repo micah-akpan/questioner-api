@@ -7,9 +7,21 @@ const meetups = JSON.parse(meetupRaw);
 export default {
 
   getAllMeetups(req, res) {
+    const meetupRecords = meetups
+      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+      .map((meetup) => {
+        meetup.title = meetup.topic;
+        return meetup;
+      })
+      .map((meetup) => {
+        delete meetup.topic;
+        return meetup;
+      });
+
+
     return res.status(200).send({
       status: 200,
-      data: meetups
+      data: meetupRecords
     });
   },
 
@@ -113,10 +125,8 @@ export default {
   },
 
   getUpcomingMeetups(req, res) {
-    const now = new Date().getTime();
-
     const upComingMeetups = meetups.filter(
-      meetup => new Date(meetup.happeningOn).getTime() >= now
+      meetup => new Date(meetup.happeningOn).getTime() >= Date.now()
     );
 
     if (!upComingMeetups.length) {
@@ -125,13 +135,17 @@ export default {
         error: 'There are no upcoming meetups'
       });
     } else {
-      const mRecords = upComingMeetups.map(
-        meetup => omitProps(meetup, ['createdOn', 'images'])
-      );
+      const meetupRecords = upComingMeetups
+        .map(meetup => omitProps(meetup, ['createdOn', 'images']))
+        .map((meetup) => {
+          meetup.title = meetup.topic;
+          delete meetup.topic;
+          return meetup;
+        });
 
       res.status(200).send({
         status: 200,
-        data: mRecords
+        data: meetupRecords
       });
     }
   },
@@ -214,6 +228,38 @@ export default {
         .send({
           status: 404,
           error: 'The question cannot be deleted because it doesn\'t exist'
+        });
+    }
+  },
+
+  updateMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    const { title, body } = req.body;
+
+    if (questionRecord) {
+      questionRecord.title = title || questionRecord.title;
+
+      questionRecord.body = body || questionRecord.body;
+
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+
+      questions[questionIdx] = questionRecord;
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The meetup you requested does not exist'
         });
     }
   }

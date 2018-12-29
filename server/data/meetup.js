@@ -1,3 +1,5 @@
+import { getFutureDate } from '../utils';
+
 const meetups = JSON.stringify([
   {
     id: 1,
@@ -14,7 +16,7 @@ const meetups = JSON.stringify([
     topic: 'Meetup 2',
     createdOn: new Date(),
     location: 'Meetup location 2',
-    happeningOn: new Date(),
+    happeningOn: getFutureDate(3),
     images: ['image1.png', 'image2.jpg'
     ],
     tags: ['food festival', 'food', 'everything food', 'just food']
