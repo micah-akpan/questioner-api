@@ -7,9 +7,21 @@ const meetups = JSON.parse(meetupRaw);
 export default {
 
   getAllMeetups(req, res) {
+    const meetupRecords = meetups
+      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+      .map((meetup) => {
+        meetup.title = meetup.topic;
+        return meetup;
+      })
+      .map((meetup) => {
+        delete meetup.topic;
+        return meetup;
+      });
+
+
     return res.status(200).send({
       status: 200,
-      data: meetups
+      data: meetupRecords
     });
   },
 
