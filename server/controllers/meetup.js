@@ -91,20 +91,25 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const mRecords = meetups.filter(meetup => String(meetup.id) === req.params.id);
+    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
 
-    if (mRecords.length === 0) {
-      return res.status(404).send({
-        status: 404,
-        error: 'The requested meetup with the cannot be deleted because it does not exist'
-      });
+    if (meetupRecord) {
+      const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
+
+      meetups.splice(meetupRecordIdx, 1);
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested meetup with the cannot be deleted because it does not exist'
+        });
     }
-
-    return res.status(200)
-      .send({
-        status: 200,
-        data: []
-      });
   },
 
   getUpcomingMeetups(req, res) {
