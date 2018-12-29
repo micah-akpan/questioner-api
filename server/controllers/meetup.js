@@ -195,8 +195,10 @@ export default {
     );
 
     if (questionRecord.length) {
-      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+      const questionIdx = getIndex(questions, 'id', questionRecord[0].id);
       questions.splice(questionIdx, 1);
+
+
       res.status(200)
         .send({
           status: 200,
