@@ -52,10 +52,31 @@ export const hasProp = (object, prop) => Object.prototype.hasOwnProperty.call(ob
  */
 export const getProp = (object, prop) => object[prop];
 
+/**
+ * @func getIndex
+ * @param {Array} array
+ * @param {String} prop
+ * @param {*} value
+ * @return {Number} Returns the index of an object in the array
+ */
+export const getIndex = (array, prop, value) => {
+  let idx = -1;
+
+  for (let i = 0; i < array.length; i += 1) {
+    const obj = array[i];
+    if (obj[prop] === value) {
+      idx = i;
+    }
+  }
+
+  return idx;
+};
+
 export default {
   omitProps,
   getFutureDate,
   isBoolean,
   hasProp,
-  getProp
+  getProp,
+  getIndex
 };

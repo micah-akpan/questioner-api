@@ -1,8 +1,8 @@
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
-import { omitProps } from '../utils';
+import { omitProps, getIndex } from '../utils';
 
-let meetups = JSON.parse(meetupRaw);
+const meetups = JSON.parse(meetupRaw);
 
 export default {
 
@@ -100,9 +100,6 @@ export default {
       });
     }
 
-    const newMeetupRecords = meetups.filter(meetup => String(meetup.id) !== req.params.id);
-    meetups = newMeetupRecords;
-
     return res.status(200)
       .send({
         status: 200,
@@ -186,6 +183,30 @@ export default {
         .send({
           status: 404,
           error: 'There are no questions for this meetup'
+        });
+    }
+  },
+
+  deleteMeetupQuestion(req, res) {
+    const questionRecord = questions.filter(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    if (questionRecord.length) {
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+      questions.splice(questionIdx, 1);
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The question cannot be deleted because it doesn\'t exist'
         });
     }
   }

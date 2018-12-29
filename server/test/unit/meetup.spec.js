@@ -334,4 +334,27 @@ describe('Meetups API', () => {
       res.send.firstCall.args[0].should.have.property('error');
     });
   });
+
+  describe('Delete question in a meetup', () => {
+    const req = {
+      params: {
+        meetupId: '2',
+        questionId: '2'
+      },
+
+      body: {
+        userId: '1'
+      }
+    };
+
+    const res = {};
+
+    res.send = sinon.fake.returns(res);
+    res.status = sinon.fake.returns(res);
+
+    meetupController.deleteMeetupQuestion(req, res);
+    res.status.firstCall.args[0].should.equal(200);
+    res.send.firstCall.args[0].should.have.property('data');
+    res.send.firstCall.args[0].data.length.should.equal(0);
+  });
 });

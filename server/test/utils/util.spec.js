@@ -1,6 +1,11 @@
 import 'chai/register-should';
 import {
-  omitProps, getFutureDate, isBoolean, hasProp, getProp
+  omitProps,
+  getFutureDate,
+  isBoolean,
+  hasProp,
+  getProp,
+  getIndex
 } from '../../utils';
 
 describe('Utils', () => {
@@ -84,6 +89,32 @@ describe('Utils', () => {
         a: 1,
         b: 2
       }, 'a').should.equal(1);
+    });
+  });
+
+  describe('getIndex()', () => {
+    it('should return the index of an object in an array', () => {
+      const arr = [
+        { a: 1 }, { a: 3 }, { a: 2 }
+      ];
+
+      getIndex(arr, 'a', 3).should.equal(1);
+    });
+
+    it('should return the index of an object in an array', () => {
+      const arr = [
+        { a: 1 }, { a: 3 }, { a: 2 }
+      ];
+
+      getIndex(arr, 'a', 1).should.equal(0);
+    });
+
+    it('should return -1 if no object can be found', () => {
+      const arr = [
+        { a: 1 }, { a: 3 }, { a: 2 }
+      ];
+
+      getIndex(arr, 'a', 4).should.equal(-1);
     });
   });
 });

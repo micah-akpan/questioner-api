@@ -299,5 +299,34 @@ describe.skip('Meetups API', () => {
           });
       });
     });
+
+    describe('Delete questions of a specific meetup', () => {
+      it('should delete a question asked in a meetup', (done) => {
+        agent
+          .delete('/api/v1/meetups/2/questions/2')
+          .send({ userId: '1' })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.should.have.property('data');
+            res.body.data.should.be.an('array');
+            done();
+          });
+      });
+
+      it('should return an error for a question that doesn\'t exist', (done) => {
+        agent
+          .delete('/api/v1/meetups/2/questions/2')
+          .send({ userId: '1' })
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
+    });
   });
 });
