@@ -6,7 +6,10 @@ const router = Router();
 
 const validateRequest = schemaValidator();
 
-router.post('/questions', validateRequest, questionController.createQuestion);
+router.route('/questions')
+// for Admin ONLY
+  .get(questionController.getAllQuestions)
+  .post(validateRequest, questionController.createQuestion);
 
 router.patch('/questions/:id/upvote', questionController.upvoteQuestion);
 

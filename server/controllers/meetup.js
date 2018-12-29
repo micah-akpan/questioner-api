@@ -1,4 +1,5 @@
 import meetupRaw from '../data/meetup';
+import { questions } from './question';
 import { omitProps } from '../utils';
 
 let meetups = JSON.parse(meetupRaw);
@@ -168,6 +169,24 @@ export default {
         status: 404,
         error: `No meetups match with this search: ${searchValue}`
       });
+    }
+  },
+
+  getQuestions(req, res) {
+    const meetupQuestions = questions.filter(question => String(question.meetup) === req.params.id);
+
+    if (meetupQuestions.length) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: meetupQuestions
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'There are no questions for this meetup'
+        });
     }
   }
 };

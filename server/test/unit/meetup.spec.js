@@ -298,4 +298,40 @@ describe('Meetups API', () => {
       });
     });
   });
+
+  describe('Fetch all questions of a specific meetup', () => {
+    it('should a list of questions', () => {
+      const req = {
+        params: {
+          id: '2'
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error for no questions', () => {
+      const req = {
+        params: {
+          id: '999999'
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
 });
