@@ -358,5 +358,27 @@ describe('Meetups API', () => {
       res.send.firstCall.args[0].should.have.property('data');
       res.send.firstCall.args[0].data.length.should.equal(0);
     });
+
+    it('should return an error for a non-existing question', () => {
+      const req = {
+        params: {
+          meetupId: '2',
+          questionId: '999999'
+        },
+
+        body: {
+          userId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.deleteMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
   });
 });

@@ -188,14 +188,14 @@ export default {
   },
 
   deleteMeetupQuestion(req, res) {
-    const questionRecord = questions.filter(
+    const questionRecord = questions.find(
       question => String(question.createdBy) === req.body.userId
         && String(question.meetup) === req.params.meetupId
         && String(question.id) === req.params.questionId
     );
 
-    if (questionRecord.length) {
-      const questionIdx = getIndex(questions, 'id', questionRecord[0].id);
+    if (questionRecord) {
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
       questions.splice(questionIdx, 1);
 
 
