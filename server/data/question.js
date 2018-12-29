@@ -16,7 +16,7 @@ const questions = JSON.stringify([
     title: 'question 2',
     createdOn: new Date(),
     createdBy: 1,
-    meetup: 1,
+    meetup: 2,
     body: 'question body',
     votes: 0
   },
@@ -26,7 +26,7 @@ const questions = JSON.stringify([
     title: 'question 3',
     createdOn: new Date(),
     createdBy: 1,
-    meetup: 1,
+    meetup: 3,
     body: 'question body',
     votes: 0
   },

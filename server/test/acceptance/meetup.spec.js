@@ -272,5 +272,32 @@ describe.skip('Meetups API', () => {
           });
       });
     });
+
+    describe('Fetch all questions of a specific meetup', () => {
+      it('should return all questions asked in a meetup', (done) => {
+        agent
+          .get('/api/v1/meetups/1/questions')
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.should.have.property('data');
+            res.body.data.should.be.an('array');
+            done();
+          });
+      });
+
+      it('should return an error for no questions', (done) => {
+        agent
+          .get('/api/v1/meetups/1/questions')
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
+    });
   });
 });

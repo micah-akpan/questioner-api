@@ -11,8 +11,6 @@ router.route('/questions')
   .get(questionController.getAllQuestions)
   .post(validateRequest, questionController.createQuestion);
 
-router.post('/questions', validateRequest, questionController.createQuestion);
-
 router.patch('/questions/:id/upvote', questionController.upvoteQuestion);
 
 router.patch('/questions/:id/downvote', questionController.downvoteQuestion);

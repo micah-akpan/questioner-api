@@ -1,7 +1,7 @@
 import questionRaw from '../data/question';
 import { omitProps } from '../utils';
 
-const questions = JSON.parse(questionRaw);
+export const questions = JSON.parse(questionRaw);
 
 export default {
   createQuestion(req, res) {
@@ -83,9 +83,10 @@ export default {
   },
 
   getAllQuestions(req, res) {
+    // for Admin ONLY
     return res.status(200).send({
       status: 200,
       data: questions
     });
-  }
+  },
 };
