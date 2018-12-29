@@ -1,8 +1,8 @@
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
-import { omitProps } from '../utils';
+import { omitProps, getIndex } from '../utils';
 
-let meetups = JSON.parse(meetupRaw);
+const meetups = JSON.parse(meetupRaw);
 
 export default {
 
@@ -91,23 +91,25 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const mRecords = meetups.filter(meetup => String(meetup.id) === req.params.id);
+    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
 
-    if (mRecords.length === 0) {
-      return res.status(404).send({
-        status: 404,
-        error: 'The requested meetup with the cannot be deleted because it does not exist'
-      });
+    if (meetupRecord) {
+      const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
+
+      meetups.splice(meetupRecordIdx, 1);
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested meetup with the cannot be deleted because it does not exist'
+        });
     }
-
-    const newMeetupRecords = meetups.filter(meetup => String(meetup.id) !== req.params.id);
-    meetups = newMeetupRecords;
-
-    return res.status(200)
-      .send({
-        status: 200,
-        data: []
-      });
   },
 
   getUpcomingMeetups(req, res) {
@@ -186,6 +188,32 @@ export default {
         .send({
           status: 404,
           error: 'There are no questions for this meetup'
+        });
+    }
+  },
+
+  deleteMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    if (questionRecord) {
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+      questions.splice(questionIdx, 1);
+
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The question cannot be deleted because it doesn\'t exist'
         });
     }
   }
