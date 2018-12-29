@@ -230,5 +230,37 @@ export default {
           error: 'The question cannot be deleted because it doesn\'t exist'
         });
     }
+  },
+
+  updateMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    const { title, body } = req.body;
+
+    if (questionRecord) {
+      questionRecord.title = title || questionRecord.title;
+
+      questionRecord.body = body || questionRecord.body;
+
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+
+      questions[questionIdx] = questionRecord;
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The meetup you requested does not exist'
+        });
+    }
   }
 };

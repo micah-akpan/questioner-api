@@ -22,6 +22,9 @@ router
 
 router.get('/meetups/:id/questions', meetupController.getQuestions);
 
-router.delete('/meetups/:meetupId/questions/:questionId');
+router
+  .route('/meetups/:meetupId/questions/:questionId')
+  .patch(meetupController.updateMeetupQuestion)
+  .delete(meetupController.deleteMeetupQuestion);
 
 export default router;
