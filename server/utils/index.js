@@ -80,7 +80,9 @@ export const getIndex = (array, prop, value) => {
  * @param {*} options Option 'castPropValue' if true, will cast prop's value to a string
  * @return {Array} Subset that meets the criteria
  */
-export const getSubset = (array, prop, criteria, options) => {
+export const getSubset = (array, prop, criteria, options = {
+  castPropValue: true
+}) => {
   if (options.castPropValue) {
     return array.filter(obj => String(obj[prop]) === criteria);
   }
@@ -94,5 +96,6 @@ export default {
   isBoolean,
   hasProp,
   getProp,
-  getIndex
+  getIndex,
+  getSubset
 };
