@@ -265,13 +265,10 @@ export default {
   },
 
   getSingleMeetupQuestion(req, res) {
-    console.log(questions);
     const questionRecord = questions.find(
       question => String(question.meetup) === req.params.meetupId
         && String(question.id) === req.params.questionId
     );
-
-    console.log(req.params);
 
     if (questionRecord) {
       res.status(200)
