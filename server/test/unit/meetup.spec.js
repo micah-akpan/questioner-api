@@ -338,8 +338,8 @@ describe('Meetups API', () => {
     it('should delete a question asked in a meetup', () => {
       const req = {
         params: {
-          meetupId: '2',
-          questionId: '2'
+          meetupId: '4',
+          questionId: '4'
         },
 
         body: {
@@ -423,6 +423,47 @@ describe('Meetups API', () => {
       res.status = sinon.fake.returns(res);
 
       meetupController.updateMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+
+  describe('Fetch a specific meetup question', () => {
+    it('should return a meetup question record', () => {
+      const req = {
+        params: {
+          meetupId: '3',
+          questionId: '3'
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getSingleMeetupQuestion(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return a meetup question record', () => {
+      const req = {
+        params: {
+          meetupId: '3',
+          questionId: '9999999'
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getSingleMeetupQuestion(req, res);
+
       res.status.firstCall.args[0].should.equal(404);
       res.send.firstCall.args[0].should.have.property('error');
     });
