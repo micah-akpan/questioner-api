@@ -82,7 +82,7 @@ export default {
 
   getSingleMeetup(req, res) {
     const meetupRecord = meetups.filter(
-      meetup => String(meetup.id) === req.params.id
+      meetup => String(meetup.id) === req.params.meetupId
     )[0];
 
     if (meetupRecord) {
@@ -103,7 +103,7 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
+    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
 
     if (meetupRecord) {
       const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
@@ -189,7 +189,9 @@ export default {
   },
 
   getQuestions(req, res) {
-    const meetupQuestions = questions.filter(question => String(question.meetup) === req.params.id);
+    const meetupQuestions = questions.filter(
+      question => String(question.meetup) === req.params.meetupId
+    );
 
     if (meetupQuestions.length) {
       res.status(200)
@@ -262,5 +264,5 @@ export default {
           error: 'The meetup you requested does not exist'
         });
     }
-  }
+  },
 };

@@ -129,7 +129,7 @@ describe('Meetups API', () => {
     it('should retrieve a single meetup', () => {
       const req = {
         params: {
-          id: '2'
+          meetupId: '2'
         }
       };
       const res = {};
@@ -180,7 +180,7 @@ describe('Meetups API', () => {
     it('should delete a meetup', () => {
       const req = {
         params: {
-          id: '3'
+          meetupId: '3'
         }
       };
 
@@ -299,10 +299,10 @@ describe('Meetups API', () => {
   });
 
   describe('Fetch all questions of a specific meetup', () => {
-    it('should a list of questions', () => {
+    it('should return a list of questions', () => {
       const req = {
         params: {
-          id: '2'
+          meetupId: '2'
         }
       };
 
