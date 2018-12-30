@@ -358,6 +358,18 @@ describe('Meetups API', () => {
             done();
           });
       });
+
+      it('should return an error if there are no rsvps for a meetup', (done) => {
+        agent
+          .get('/api/v1/meetups/999999/rsvps')
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
     });
   });
 });

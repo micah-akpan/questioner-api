@@ -468,4 +468,42 @@ describe('Meetups API', () => {
       res.send.firstCall.args[0].should.have.property('error');
     });
   });
+
+  describe('Fetch all RSVPs of a meetup', () => {
+    it('should return all RSVPs of a meetup', () => {
+      const req = {
+        params: {
+          meetupId: '1',
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getAllRsvps(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error if there are no RSVPs for a meetup', () => {
+      const req = {
+        params: {
+          meetupId: '9999999',
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getAllRsvps(req, res);
+
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
 });
