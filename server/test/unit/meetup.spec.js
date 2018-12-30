@@ -170,7 +170,6 @@ describe('Meetups API', () => {
 
       res.status = sinon.fake.returns(res);
       res.send = sinon.fake.returns(res);
-
       meetupController.getUpcomingMeetups(req, res);
       res.status.firstCall.args[0].should.equal(200);
       res.send.firstCall.args[0].data.should.be.an('array');
@@ -296,6 +295,136 @@ describe('Meetups API', () => {
           res.send.firstCall.args[0].should.have.property('error');
         });
       });
+    });
+  });
+
+  describe('Fetch all questions of a specific meetup', () => {
+    it('should a list of questions', () => {
+      const req = {
+        params: {
+          id: '2'
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error for no questions', () => {
+      const req = {
+        params: {
+          id: '999999'
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Delete question in a meetup', () => {
+    it('should delete a question asked in a meetup', () => {
+      const req = {
+        params: {
+          meetupId: '2',
+          questionId: '2'
+        },
+
+        body: {
+          userId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.deleteMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.length.should.equal(0);
+    });
+
+    it('should return an error for a non-existing question', () => {
+      const req = {
+        params: {
+          meetupId: '2',
+          questionId: '999999'
+        },
+
+        body: {
+          userId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.deleteMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Update Questions asked in a meetup', () => {
+    it('should update a meetup question', () => {
+      const req = {
+        params: {
+          meetupId: '1',
+          questionId: '1'
+        },
+
+        body: {
+          userId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.updateMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.length.should.equal(1);
+    });
+
+    it('should update a meetup question', () => {
+      const req = {
+        params: {
+          meetupId: '2',
+          questionId: '999999'
+        },
+
+        body: {
+          userId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.updateMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
     });
   });
 });

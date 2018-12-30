@@ -9,7 +9,9 @@ describe('Question API', () => {
         const req = {
           body: {
             title: 'Sample question',
-            body: 'Sample question body'
+            body: 'Sample question body',
+            meetupId: 1,
+            userId: 1
           }
         };
         const res = {};
@@ -20,50 +22,6 @@ describe('Question API', () => {
         res.status.firstCall.args[0].should.equal(201);
         res.send.firstCall.args[0].should.have.property('data');
         res.send.firstCall.args[0].data[0].should.have.property('title');
-      });
-    });
-
-    describe('handle invalid data', () => {
-      it('should not create a question if required fields are missing', () => {
-        const req = {
-          body: {
-            body: 'question body'
-          }
-        };
-
-        const res = {};
-        res.status = sinon.fake.returns(res);
-        res.send = sinon.fake.returns(res);
-
-        questionController.createQuestion(req, res);
-        res.status.firstCall.args[0].should.equal(400);
-        res.send.firstCall.args[0].should.deep.equal(
-          {
-            status: 400,
-            error: 'The title and body field is required'
-          }
-        );
-      });
-
-      it('should not create a question if required fields are missing', () => {
-        const req = {
-          body: {
-            title: 'question title'
-          }
-        };
-
-        const res = {};
-        res.status = sinon.fake.returns(res);
-        res.send = sinon.fake.returns(res);
-
-        questionController.createQuestion(req, res);
-        res.status.firstCall.args[0].should.equal(400);
-        res.send.firstCall.args[0].should.deep.equal(
-          {
-            status: 400,
-            error: 'The title and body field is required'
-          }
-        );
       });
     });
   });
@@ -149,6 +107,20 @@ describe('Question API', () => {
       questionController.downvoteQuestion(req, res);
       res.status.firstCall.args[0].should.equal(404);
       res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Fetch all questions /questions', () => {
+    it('should return all questions', () => {
+      const req = {};
+      const res = {};
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      questionController.getAllQuestions(req, res);
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.should.be.an('array');
     });
   });
 });

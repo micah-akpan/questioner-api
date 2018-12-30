@@ -1,14 +1,27 @@
 import meetupRaw from '../data/meetup';
-import { omitProps } from '../utils';
+import { questions } from './question';
+import { omitProps, getIndex } from '../utils';
 
-let meetups = JSON.parse(meetupRaw);
+const meetups = JSON.parse(meetupRaw);
 
 export default {
 
   getAllMeetups(req, res) {
+    const meetupRecords = meetups
+      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+      .map((meetup) => {
+        meetup.title = meetup.topic;
+        return meetup;
+      })
+      .map((meetup) => {
+        delete meetup.topic;
+        return meetup;
+      });
+
+
     return res.status(200).send({
       status: 200,
-      data: meetups
+      data: meetupRecords
     });
   },
 
@@ -19,6 +32,11 @@ export default {
 
     const lastMeetupId = meetups[meetups.length - 1].id;
 
+    /* These validations aren't necessary
+       as a schema validation middleware
+       has been added
+       only kept for reference
+    */
     if (!topic || !location || !happeningOn) {
       return res.status(400)
         .send({
@@ -85,30 +103,30 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const mRecords = meetups.filter(meetup => String(meetup.id) === req.params.id);
+    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
 
-    if (mRecords.length === 0) {
-      return res.status(404).send({
-        status: 404,
-        error: 'The requested meetup with the cannot be deleted because it does not exist'
-      });
+    if (meetupRecord) {
+      const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
+
+      meetups.splice(meetupRecordIdx, 1);
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested meetup with the cannot be deleted because it does not exist'
+        });
     }
-
-    const newMeetupRecords = meetups.filter(meetup => String(meetup.id) !== req.params.id);
-    meetups = newMeetupRecords;
-
-    return res.status(200)
-      .send({
-        status: 200,
-        data: []
-      });
   },
 
   getUpcomingMeetups(req, res) {
-    const now = new Date().getTime();
-
     const upComingMeetups = meetups.filter(
-      meetup => new Date(meetup.happeningOn).getTime() >= now
+      meetup => new Date(meetup.happeningOn).getTime() >= Date.now()
     );
 
     if (!upComingMeetups.length) {
@@ -117,13 +135,17 @@ export default {
         error: 'There are no upcoming meetups'
       });
     } else {
-      const mRecords = upComingMeetups.map(
-        meetup => omitProps(meetup, ['createdOn', 'images'])
-      );
+      const meetupRecords = upComingMeetups
+        .map(meetup => omitProps(meetup, ['createdOn', 'images']))
+        .map((meetup) => {
+          meetup.title = meetup.topic;
+          delete meetup.topic;
+          return meetup;
+        });
 
       res.status(200).send({
         status: 200,
-        data: mRecords
+        data: meetupRecords
       });
     }
   },
@@ -163,6 +185,82 @@ export default {
         status: 404,
         error: `No meetups match with this search: ${searchValue}`
       });
+    }
+  },
+
+  getQuestions(req, res) {
+    const meetupQuestions = questions.filter(question => String(question.meetup) === req.params.id);
+
+    if (meetupQuestions.length) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: meetupQuestions
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'There are no questions for this meetup'
+        });
+    }
+  },
+
+  deleteMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    if (questionRecord) {
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+      questions.splice(questionIdx, 1);
+
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: []
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The question cannot be deleted because it doesn\'t exist'
+        });
+    }
+  },
+
+  updateMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    const { title, body } = req.body;
+
+    if (questionRecord) {
+      questionRecord.title = title || questionRecord.title;
+
+      questionRecord.body = body || questionRecord.body;
+
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+
+      questions[questionIdx] = questionRecord;
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The meetup you requested does not exist'
+        });
     }
   }
 };
