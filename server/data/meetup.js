@@ -30,6 +30,26 @@ const meetups = JSON.stringify([
     images: ['image1.png', 'image2.jpg'
     ],
     tags: ['crypto', 'ico', 'money', 'tokens', 'bitcoin']
+  },
+
+  {
+    id: 4,
+    topic: 'Meetup 4',
+    createdOn: new Date(),
+    location: 'Meetup location 4',
+    happeningOn: getFutureDate(2),
+    images: [],
+    tags: []
+  },
+
+  {
+    id: 5,
+    topic: 'Meetup 5',
+    createdOn: new Date(),
+    location: 'Meetup location 5',
+    happeningOn: getFutureDate(2),
+    images: [],
+    tags: []
   }
 ]);
 

@@ -26,6 +26,7 @@ router.get('/meetups/:meetupId/rsvps', meetupController.getAllRsvps);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')
+  .get(meetupController.getSingleMeetupQuestion)
   .patch(meetupController.updateMeetupQuestion)
   .delete(meetupController.deleteMeetupQuestion);
 

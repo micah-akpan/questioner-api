@@ -30,6 +30,16 @@ const questions = JSON.stringify([
     body: 'question body',
     votes: 0
   },
+
+  {
+    id: 4,
+    title: 'question 3',
+    createdOn: new Date(),
+    createdBy: 1,
+    meetup: 4,
+    body: 'question body',
+    votes: 0
+  },
 ]);
 
 export default questions;

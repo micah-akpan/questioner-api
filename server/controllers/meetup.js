@@ -265,4 +265,25 @@ export default {
         });
     }
   },
+
+  getSingleMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    if (questionRecord) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested question cannot be found'
+        });
+    }
+  },
 };
