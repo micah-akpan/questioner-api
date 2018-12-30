@@ -345,5 +345,31 @@ describe('Meetups API', () => {
           done();
         });
     });
+
+    describe('Fetch all RSVPs of a meetup, GET /meetups/<meetup-id>/rsvps', () => {
+      it('should return all RSVPs of a meetup', (done) => {
+        agent
+          .get('/api/v1/meetups/1/rsvps')
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.should.have.property('data');
+            done();
+          });
+      });
+
+      it('should return an error if there are no RSVPs for a meetup', (done) => {
+        agent
+          .get('/api/v1/meetups/999999/rsvps')
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
+    });
   });
 });

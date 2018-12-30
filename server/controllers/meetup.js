@@ -1,5 +1,6 @@
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
+import { rsvps } from './rsvp';
 import { omitProps, getIndex } from '../utils';
 
 const meetups = JSON.parse(meetupRaw);
@@ -82,7 +83,7 @@ export default {
 
   getSingleMeetup(req, res) {
     const meetupRecord = meetups.filter(
-      meetup => String(meetup.id) === req.params.id
+      meetup => String(meetup.id) === req.params.meetupId
     )[0];
 
     if (meetupRecord) {
@@ -103,7 +104,7 @@ export default {
   },
 
   deleteMeetup(req, res) {
-    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
+    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
 
     if (meetupRecord) {
       const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
@@ -189,7 +190,9 @@ export default {
   },
 
   getQuestions(req, res) {
-    const meetupQuestions = questions.filter(question => String(question.meetup) === req.params.id);
+    const meetupQuestions = questions.filter(
+      question => String(question.meetup) === req.params.meetupId
+    );
 
     if (meetupQuestions.length) {
       res.status(200)
@@ -281,6 +284,24 @@ export default {
         .send({
           status: 404,
           error: 'The requested question cannot be found'
+        });
+    }
+  },
+
+  getAllRsvps(req, res) {
+    const rsvpRecords = rsvps.filter(rsvp => String(rsvp.meetup) === req.params.meetupId);
+
+    if (rsvpRecords.length) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: rsvpRecords
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested meetup has no rsvps at the moment'
         });
     }
   }

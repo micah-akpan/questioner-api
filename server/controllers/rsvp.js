@@ -3,7 +3,7 @@ import rsvpRaw from '../data/rsvp';
 import { omitProps } from '../utils';
 
 const meetups = JSON.parse(meetupRaw);
-const rsvps = JSON.parse(rsvpRaw);
+export const rsvps = JSON.parse(rsvpRaw);
 
 export default {
   makeRsvp(req, res) {
