@@ -338,8 +338,8 @@ describe('Meetups API', () => {
     it('should delete a question asked in a meetup', () => {
       const req = {
         params: {
-          meetupId: '2',
-          questionId: '2'
+          meetupId: '4',
+          questionId: '4'
         },
 
         body: {

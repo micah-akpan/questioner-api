@@ -4,7 +4,7 @@ import { app } from '../../app';
 
 const agent = request(app);
 
-describe.skip('Questions API', () => {
+describe('Questions API', () => {
   describe('POST /api/v1/questions', () => {
     describe('handle valid data', () => {
       it('should create a question', (done) => {
