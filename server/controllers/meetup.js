@@ -1,5 +1,6 @@
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
+import { rsvps } from './rsvp';
 import { omitProps, getIndex } from '../utils';
 
 const meetups = JSON.parse(meetupRaw);
@@ -286,4 +287,22 @@ export default {
         });
     }
   },
+
+  getAllRsvps(req, res) {
+    const rsvpRecords = rsvps.filter(rsvp => String(rsvp.meetup) === req.params.meetupId);
+
+    if (rsvpRecords.length) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: rsvpRecords
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested meetup has no rsvps at the moment'
+        });
+    }
+  }
 };
