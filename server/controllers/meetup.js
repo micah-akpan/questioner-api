@@ -1,7 +1,7 @@
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
 import { rsvps } from './rsvp';
-import { omitProps, getIndex, getSubset } from '../utils';
+import { omitProps, getIndex } from '../utils';
 
 const meetups = JSON.parse(meetupRaw);
 
@@ -190,7 +190,9 @@ export default {
   },
 
   getQuestions(req, res) {
-    const meetupQuestions = getSubset(questions, 'meetup', req.params.meetupId);
+    const meetupQuestions = questions.filter(
+      question => String(question.meetup) === req.params.meetupId
+    );
 
     if (meetupQuestions.length) {
       res.status(200)
@@ -287,7 +289,7 @@ export default {
   },
 
   getAllRsvps(req, res) {
-    const rsvpRecords = getSubset(rsvps, 'meetup', req.params.meetupId);
+    const rsvpRecords = rsvps.filter(rsvp => String(rsvp.meetup) === req.params.meetupId);
 
     if (rsvpRecords.length) {
       res.status(200)
