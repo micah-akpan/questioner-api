@@ -347,7 +347,7 @@ describe('Meetups API', () => {
     });
 
     describe('Fetch all RSVPs of a meetup, GET /meetups/<meetup-id>/rsvps', () => {
-      it('should return all rsvps of a meetup', (done) => {
+      it('should return all RSVPs of a meetup', (done) => {
         agent
           .get('/api/v1/meetups/1/rsvps')
           .expect(200)
@@ -359,7 +359,7 @@ describe('Meetups API', () => {
           });
       });
 
-      it('should return an error if there are no rsvps for a meetup', (done) => {
+      it('should return an error if there are no RSVPs for a meetup', (done) => {
         agent
           .get('/api/v1/meetups/999999/rsvps')
           .expect(404)

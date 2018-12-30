@@ -5,7 +5,8 @@ import {
   isBoolean,
   hasProp,
   getProp,
-  getIndex
+  getIndex,
+  getSubset
 } from '../../utils';
 
 describe('Utils', () => {
@@ -115,6 +116,28 @@ describe('Utils', () => {
       ];
 
       getIndex(arr, 'a', 4).should.equal(-1);
+    });
+  });
+
+  describe('getSubset()', () => {
+    it('should return a subset of the values in the array', () => {
+      const arr = [
+        { a: 1 }, { a: 3 }, { a: 2 }
+      ];
+
+      getSubset(arr, 'a', 1, {
+        castPropValue: false
+      }).length.should.equal(1);
+    });
+
+    it('should return a subset of the values in the array', () => {
+      const arr = [
+        { a: 1 }, { a: 3 }, { a: 2 }
+      ];
+
+      getSubset(arr, 'a', '1', {
+        castPropValue: true
+      }).length.should.equal(1);
     });
   });
 });

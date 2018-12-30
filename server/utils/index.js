@@ -72,6 +72,22 @@ export const getIndex = (array, prop, value) => {
   return idx;
 };
 
+/**
+ * @func getSubset
+ * @param {Array} array
+ * @param {String} prop
+ * @param {*} criteria
+ * @param {*} options Option 'castPropValue' if true, will cast prop's value to a string
+ * @return {Array} Subset that meets the criteria
+ */
+export const getSubset = (array, prop, criteria, options) => {
+  if (options.castPropValue) {
+    return array.filter(obj => String(obj[prop]) === criteria);
+  }
+
+  return array.filter(obj => obj[prop] === criteria);
+};
+
 export default {
   omitProps,
   getFutureDate,
