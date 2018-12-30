@@ -24,6 +24,7 @@ router.get('/meetups/:id/questions', meetupController.getQuestions);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')
+  .get(meetupController.getSingleMeetupQuestion)
   .patch(meetupController.updateMeetupQuestion)
   .delete(meetupController.deleteMeetupQuestion);
 

@@ -319,4 +319,31 @@ describe('Meetups API', () => {
         });
     });
   });
+
+  describe('Fetch a meetup question GET /meetups/<meetup-id>/questions/<question-id>', () => {
+    it('should return a meetup question record', (done) => {
+      agent
+        .get('/api/v1/meetups/3/questions/3')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          res.body.data.length.should.equal(1);
+          done();
+        });
+    });
+
+    it('should return an error for a non-existing meetup question', (done) => {
+      agent
+        .get('/api/v1/meetups/3/questions/9999999')
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+  });
 });
