@@ -50,6 +50,7 @@ export default (useJoiError = false) => {
               status: 422,
               error: `Invalid request data: ${errorMsg} please review request and try again.`
             };
+
             res.status(422).send(_useJoiError ? JoiError : CustomError);
           } else {
             req.body = data;
