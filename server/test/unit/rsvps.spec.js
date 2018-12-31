@@ -72,6 +72,29 @@ describe('RSVP Meetup API', () => {
       res.send.firstCall.args[0].data[0].response.should.equal('yes');
     });
 
+    it('should update an existing RSVP', () => {
+      const req = {
+        body: {
+          response: ''
+        },
+
+        params: {
+          meetupId: '1',
+          rsvpId: '1'
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      rsvpController.updateRsvp(req, res);
+      res.status.calledOnce.should.be.true;
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].data[0].response.should.equal('yes');
+    });
+
     it('should return an error for a non-existing RSVP', () => {
       const req = {
         body: {
