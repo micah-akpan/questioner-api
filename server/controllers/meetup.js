@@ -14,11 +14,9 @@ export default {
       // get meetups using the data as criteria
 
       const byTopic = Search.search(meetups, req.query);
-
       const byLocation = Search.search(meetups, req.query, {
         by: 'location'
       });
-
       const byTag = Search.search(
         meetups, req.query, {
           by: 'tags'
@@ -51,9 +49,6 @@ export default {
         .map(meetup => omitProps(meetup, ['images', 'createdOn']))
         .map((meetup) => {
           meetup.title = meetup.topic;
-          return meetup;
-        })
-        .map((meetup) => {
           delete meetup.topic;
           return meetup;
         });
@@ -74,8 +69,7 @@ export default {
 
     /* These validations aren't necessary
        as a schema validation middleware
-       has been added
-       only kept for reference
+       has been added only kept for reference
     */
     if (!topic || !location || !happeningOn) {
       return res.status(400)
