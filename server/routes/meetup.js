@@ -16,14 +16,17 @@ router
 router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
 
 router
-  .route('/meetups/:id')
+  .route('/meetups/:meetupId')
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
 
-router.get('/meetups/:id/questions', meetupController.getQuestions);
+router.get('/meetups/:meetupId/questions', meetupController.getQuestions);
+
+router.get('/meetups/:meetupId/rsvps', meetupController.getAllRsvps);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')
+  .get(meetupController.getSingleMeetupQuestion)
   .patch(meetupController.updateMeetupQuestion)
   .delete(meetupController.deleteMeetupQuestion);
 

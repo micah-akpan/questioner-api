@@ -129,7 +129,7 @@ describe('Meetups API', () => {
     it('should retrieve a single meetup', () => {
       const req = {
         params: {
-          id: '2'
+          meetupId: '2'
         }
       };
       const res = {};
@@ -180,7 +180,7 @@ describe('Meetups API', () => {
     it('should delete a meetup', () => {
       const req = {
         params: {
-          id: '3'
+          meetupId: '3'
         }
       };
 
@@ -299,10 +299,10 @@ describe('Meetups API', () => {
   });
 
   describe('Fetch all questions of a specific meetup', () => {
-    it('should a list of questions', () => {
+    it('should return a list of questions', () => {
       const req = {
         params: {
-          id: '2'
+          meetupId: '2'
         }
       };
 
@@ -338,8 +338,8 @@ describe('Meetups API', () => {
     it('should delete a question asked in a meetup', () => {
       const req = {
         params: {
-          meetupId: '2',
-          questionId: '2'
+          meetupId: '4',
+          questionId: '4'
         },
 
         body: {
@@ -423,6 +423,85 @@ describe('Meetups API', () => {
       res.status = sinon.fake.returns(res);
 
       meetupController.updateMeetupQuestion(req, res);
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+
+  describe('Fetch a specific meetup question', () => {
+    it('should return a meetup question record', () => {
+      const req = {
+        params: {
+          meetupId: '3',
+          questionId: '3'
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getSingleMeetupQuestion(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return a meetup question record', () => {
+      const req = {
+        params: {
+          meetupId: '3',
+          questionId: '9999999'
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getSingleMeetupQuestion(req, res);
+
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
+    });
+  });
+
+  describe('Fetch all RSVPs of a meetup', () => {
+    it('should return all RSVPs of a meetup', () => {
+      const req = {
+        params: {
+          meetupId: '1',
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getAllRsvps(req, res);
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+    });
+
+    it('should return an error if there are no RSVPs for a meetup', () => {
+      const req = {
+        params: {
+          meetupId: '9999999',
+        },
+      };
+
+      const res = {};
+
+      res.send = sinon.fake.returns(res);
+      res.status = sinon.fake.returns(res);
+
+      meetupController.getAllRsvps(req, res);
+
       res.status.firstCall.args[0].should.equal(404);
       res.send.firstCall.args[0].should.have.property('error');
     });

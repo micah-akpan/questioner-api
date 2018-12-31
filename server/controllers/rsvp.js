@@ -1,13 +1,13 @@
 import meetupRaw from '../data/meetup';
 import rsvpRaw from '../data/rsvp';
-import { omitProps } from '../utils';
+import { omitProps, getIndex } from '../utils';
 
 const meetups = JSON.parse(meetupRaw);
-const rsvps = JSON.parse(rsvpRaw);
+export const rsvps = JSON.parse(rsvpRaw);
 
 export default {
   makeRsvp(req, res) {
-    const mRecord = meetups.find(meetup => String(meetup.id) === req.params.id);
+    const mRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
 
     if (!mRecord) {
       res.status(404)
@@ -37,6 +37,31 @@ export default {
         .send({
           status: 201,
           data: [rsvpRecord]
+        });
+    }
+  },
+
+  updateRsvp(req, res) {
+    const rsvpRecord = rsvps.find(rsvp => String(rsvp.meetup) === req.params.meetupId
+    && String(rsvp.id) === req.params.rsvpId);
+
+    if (rsvpRecord) {
+      rsvpRecord.response = req.body.response || rsvpRecord.response;
+
+      const rsvpRecordIdx = getIndex(rsvps, 'id', rsvpRecord.id);
+
+      rsvps[rsvpRecordIdx] = rsvpRecord;
+
+      res.status(200)
+        .send({
+          status: 200,
+          data: [rsvpRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: `The requested rsvp for meetup ${req.params.meetupId} does not exist`
         });
     }
   }
