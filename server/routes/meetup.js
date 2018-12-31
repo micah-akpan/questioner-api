@@ -6,8 +6,6 @@ const router = express.Router();
 
 const validateRequest = schemaValidator(true);
 
-// router.get('/meetups/search', meetupController.searchMeetups);
-
 router
   .route('/meetups')
   .post(validateRequest, meetupController.createNewMeetup)

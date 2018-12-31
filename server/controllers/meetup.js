@@ -190,46 +190,6 @@ export default {
     }
   },
 
-  searchMeetups(reqQuery) {
-    const searchValue = reqQuery.searchTerm.toLowerCase();
-
-    // every match is by a lowercase version of the search term value
-    // search by topic
-    const meetupsByTopic = meetups.filter(meetup => meetup.topic.toLowerCase().match(searchValue));
-
-    // search by location
-    const meetupsByLocation = meetups.filter(
-      meetup => meetup.location.toLowerCase().match(searchValue)
-    );
-
-    // search by tag
-    const meetupsByTags = meetups.filter(meetup => meetup.tags.includes(searchValue));
-
-    const allMeetups = [...meetupsByTopic, ...meetupsByLocation, ...meetupsByTags];
-
-    // remove duplicates
-    const noDups = {};
-    allMeetups.forEach((meetup) => {
-      noDups[meetup.id] = meetup;
-    });
-
-    const filteredMeetups = Object.values(noDups);
-
-    return [allMeetups, filteredMeetups];
-
-    // if (allMeetups.length) {
-    //   res.status(200).send({
-    //     status: 200,
-    //     data: filteredMeetups
-    //   });
-    // } else {
-    //   res.status(404).send({
-    //     status: 404,
-    //     error: `No meetups match with this search: ${searchValue}`
-    //   });
-    // }
-  },
-
   getQuestions(req, res) {
     const meetupQuestions = questions.filter(
       question => String(question.meetup) === req.params.meetupId
