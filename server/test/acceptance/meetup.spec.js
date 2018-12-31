@@ -108,6 +108,32 @@ describe.skip('Meetups API', () => {
           done();
         });
     });
+
+    it('should return a list of matched meetups', (done) => {
+      agent
+        .get('/api/v1/meetups?searchTerm=Meetup 1')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data.length.should.be.greaterThan(0);
+          done();
+        });
+    });
+
+    it('should return a list of matched meetups', (done) => {
+      agent
+        .get('/api/v1/meetups?searchTerm=food festival')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data.length.should.be.greaterThan(0);
+          done();
+        });
+    });
   });
 
 
@@ -172,95 +198,6 @@ describe.skip('Meetups API', () => {
       agent
         .get('/api/v1/meetups/upcoming')
         .expect(200, done);
-    });
-  });
-
-  describe('GET /api/v1/meetups/search', () => {
-    describe('Search by Topic', () => {
-      it('should return a list of meetups that meets the search criteria', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'meetup 1' })
-          .expect(200)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(200);
-            res.body.data.should.be.an('array');
-            res.body.data.length.should.be.greaterThan(0);
-            done();
-          });
-      });
-
-      it('should return an error for a no match search', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'blah blah blah' })
-          .expect(404)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(404);
-            res.body.error.should.be.a('string');
-            done();
-          });
-      });
-    });
-
-    describe('Search by Location', () => {
-      it('should return a list of meetups that meets the search criteria', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'Meetup location 3' })
-          .expect(200)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(200);
-            res.body.data.should.be.an('array');
-            res.body.data.length.should.be.greaterThan(0);
-            done();
-          });
-      });
-
-      it('should return an error for a no match search', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'some place in paris' })
-          .expect(404)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(404);
-            res.body.error.should.be.a('string');
-            done();
-          });
-      });
-    });
-
-    describe('Search by Tag', () => {
-      it('should return a list of meetups that meets the search criteria', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'food festival' })
-          .expect(200)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(200);
-            res.body.data.should.be.an('array');
-            res.body.data.length.should.be.greaterThan(0);
-            done();
-          });
-      });
-
-      it('should return an error for a no match search', (done) => {
-        agent
-          .get('/api/v1/meetups/search')
-          .query({ searchTerm: 'no tag' })
-          .expect(404)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(404);
-            res.body.error.should.be.a('string');
-            done();
-          });
-      });
     });
   });
 

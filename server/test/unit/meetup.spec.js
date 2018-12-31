@@ -5,9 +5,13 @@ import { getFutureDate } from '../../utils';
 
 describe('Meetups API', () => {
   describe('Get all meetups', () => {
-    it('should fetch meetups', () => {
+    it('should fetch all meetups', () => {
       const res = {};
-      const req = {};
+      const req = {
+        query: {
+
+        }
+      };
 
       res.status = sinon.fake.returns(res);
       res.send = sinon.fake.returns(res);
@@ -21,6 +25,47 @@ describe('Meetups API', () => {
       res.send.firstCall.args[0].status.should.equal(200);
       res.send.firstCall.args[0].should.have.property('data');
       res.send.firstCall.args[0].data.should.be.an('array');
+    });
+
+    it('should fetch meetups based on a search criteria', () => {
+      const res = {};
+      const req = {
+        query: {
+          searchTerm: 'Meetup 2'
+        }
+      };
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getAllMeetups(req, res);
+
+      res.status.calledOnce.should.be.true;
+      res.send.calledOnce.should.be.true;
+
+      res.status.firstCall.args[0].should.equal(200);
+      res.send.firstCall.args[0].should.have.property('data');
+      res.send.firstCall.args[0].data.should.be.an('array');
+    });
+
+    it('should return a no-match error if no meetup match the search criteria', () => {
+      const res = {};
+      const req = {
+        query: {
+          searchTerm: 'Music Festival'
+        }
+      };
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      meetupController.getAllMeetups(req, res);
+
+      res.status.calledOnce.should.be.true;
+      res.send.calledOnce.should.be.true;
+
+      res.status.firstCall.args[0].should.equal(404);
+      res.send.firstCall.args[0].should.have.property('error');
     });
   });
 
@@ -212,89 +257,6 @@ describe('Meetups API', () => {
 
       res.status.firstCall.args[0].should.equal(404);
       res.send.firstCall.args[0].should.have.property('error');
-    });
-  });
-
-  describe('Search Meetups', () => {
-    describe('handle valid match', () => {
-      describe('Search by topic', () => {
-        it('can search for meetups by topic', () => {
-          const req = {
-            query: {
-              searchTerm: 'Meetup 2'
-            }
-          };
-
-          const res = {};
-
-          res.status = sinon.fake.returns(res);
-          res.send = sinon.fake.returns(res);
-
-          meetupController.searchMeetups(req, res);
-          res.status.firstCall.args[0].should.equal(200);
-          res.send.firstCall.args[0].should.have.property('data');
-          res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
-        });
-
-        describe('Search by Location', () => {
-          it('can search for meetups by location', () => {
-            const req = {
-              query: {
-                searchTerm: 'Meetup Location 2'
-              }
-            };
-
-            const res = {};
-
-            res.status = sinon.fake.returns(res);
-            res.send = sinon.fake.returns(res);
-
-            meetupController.searchMeetups(req, res);
-            res.status.firstCall.args[0].should.equal(200);
-            res.send.firstCall.args[0].should.have.property('data');
-            res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
-          });
-        });
-
-        describe('Search by Tag', () => {
-          it('can search for meetups by tags', () => {
-            const req = {
-              query: {
-                searchTerm: 'food festival'
-              }
-            };
-
-            const res = {};
-
-            res.status = sinon.fake.returns(res);
-            res.send = sinon.fake.returns(res);
-
-            meetupController.searchMeetups(req, res);
-            res.status.firstCall.args[0].should.equal(200);
-            res.send.firstCall.args[0].should.have.property('data');
-            res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
-          });
-        });
-      });
-
-      describe('handle no match search', () => {
-        it('should return an error for a no-match search', () => {
-          const req = {
-            query: {
-              searchTerm: 'no tag'
-            }
-          };
-
-          const res = {};
-
-          res.status = sinon.fake.returns(res);
-          res.send = sinon.fake.returns(res);
-
-          meetupController.searchMeetups(req, res);
-          res.status.firstCall.args[0].should.equal(404);
-          res.send.firstCall.args[0].should.have.property('error');
-        });
-      });
     });
   });
 
