@@ -152,7 +152,7 @@ describe('RSVP Meetup API', () => {
       res.status = sinon.fake.returns(res);
       res.send = sinon.fake.returns(res);
 
-      rsvpController.getRsvpS(req, res);
+      rsvpController.getRsvps(req, res);
       res.status.calledOnce.should.be.true;
       res.status.firstCall.args[0].should.equal(200);
       res.send.firstCall.args[0].should.have.property('data');

@@ -95,6 +95,7 @@ describe('RSVP API', () => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.should.have.property('data');
+          res.body.data.length.should.equal(1);
           done();
         });
     });
@@ -106,6 +107,7 @@ describe('RSVP API', () => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.should.have.property('data');
+          res.body.data.length.should.equal(1);
           done();
         });
     });
@@ -115,7 +117,7 @@ describe('RSVP API', () => {
         .get('/api/v1/meetups/1/rsvps/999999')
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(200);
+          res.body.status.should.equal(404);
           res.body.should.have.property('error');
           done();
         });
