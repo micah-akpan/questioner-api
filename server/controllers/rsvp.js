@@ -75,8 +75,8 @@ export default {
 
   getRsvp(req, res) {
     const rsvpRecord = rsvps.find(
-      rsvp => rsvp.meetup === req.params.meetupId * 1
-        && rsvp.id === req.params.rsvpId * 1
+      rsvp => String(rsvp.meetup) === req.params.meetupId
+        && String(rsvp.id) === req.params.rsvpId
     );
 
     if (rsvpRecord) {
