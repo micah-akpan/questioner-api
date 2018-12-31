@@ -85,4 +85,54 @@ describe('RSVP API', () => {
         });
     });
   });
+
+  describe('GET /meetups/<meetup-id>/rsvps/<rsvp-id>', () => {
+    it('should return a single meetup rsvp', (done) => {
+      agent
+        .get('/api/v1/meetups/1/rsvps/1')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+
+    it('should return a single meetup rsvp', (done) => {
+      agent
+        .get('/api/v1/meetups/1/rsvps/2')
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+
+    it('should return an error if meetup rsvp does not exist', (done) => {
+      agent
+        .get('/api/v1/meetups/1/rsvps/999999')
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+  });
+
+  describe('GET /meetups/<meetup-id>/rsvps/<rsvp-id>', () => {
+    it('should return all rsvps of a meetup', (done) => {
+      agent
+        .get('/api/v1/meetups/1/rsvps')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+  });
 });
