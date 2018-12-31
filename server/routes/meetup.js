@@ -6,7 +6,7 @@ const router = express.Router();
 
 const validateRequest = schemaValidator(true);
 
-router.get('/meetups/search', meetupController.searchMeetups);
+// router.get('/meetups/search', meetupController.searchMeetups);
 
 router
   .route('/meetups')

@@ -2,28 +2,67 @@ import meetupRaw from '../data/meetup';
 import { questions } from './question';
 import { rsvps } from './rsvp';
 import { omitProps, getIndex } from '../utils';
+import Search from './helpers/search';
 
 const meetups = JSON.parse(meetupRaw);
 
 export default {
 
   getAllMeetups(req, res) {
-    const meetupRecords = meetups
-      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
-      .map((meetup) => {
-        meetup.title = meetup.topic;
-        return meetup;
-      })
-      .map((meetup) => {
-        delete meetup.topic;
-        return meetup;
+    if (Object.keys(req.query).length) {
+      // we have data in the req.query object
+      // get meetups using the data as criteria
+
+      const byTopic = Search.search(meetups, req.query);
+
+      const byLocation = Search.search(meetups, req.query, {
+        by: 'location'
       });
 
+      const byTag = Search.search(
+        meetups, req.query, {
+          by: 'tags'
+        }
+      );
 
-    return res.status(200).send({
-      status: 200,
-      data: meetupRecords
-    });
+      const allMeetups = [...byTopic, ...byLocation, ...byTag];
+
+      // remove duplicates
+      const noDups = {};
+      allMeetups.forEach((meetup) => {
+        noDups[meetup.id] = meetup;
+      });
+
+      const filteredMeetups = Object.values(noDups);
+
+      if (allMeetups.length) {
+        res.status(200).send({
+          status: 200,
+          data: filteredMeetups
+        });
+      } else {
+        res.status(404).send({
+          status: 404,
+          error: `No meetups match with this search: ${req.query.searchTerm}`
+        });
+      }
+    } else {
+      const meetupRecords = meetups
+        .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+        .map((meetup) => {
+          meetup.title = meetup.topic;
+          return meetup;
+        })
+        .map((meetup) => {
+          delete meetup.topic;
+          return meetup;
+        });
+
+      return res.status(200).send({
+        status: 200,
+        data: meetupRecords
+      });
+    }
   },
 
   createNewMeetup(req, res) {
@@ -151,8 +190,8 @@ export default {
     }
   },
 
-  searchMeetups(req, res) {
-    const searchValue = req.query.searchTerm.toLowerCase();
+  searchMeetups(reqQuery) {
+    const searchValue = reqQuery.searchTerm.toLowerCase();
 
     // every match is by a lowercase version of the search term value
     // search by topic
@@ -169,24 +208,26 @@ export default {
     const allMeetups = [...meetupsByTopic, ...meetupsByLocation, ...meetupsByTags];
 
     // remove duplicates
-    const hash = {};
+    const noDups = {};
     allMeetups.forEach((meetup) => {
-      hash[meetup.id] = meetup;
+      noDups[meetup.id] = meetup;
     });
 
-    const filteredMeetups = Object.values(hash);
+    const filteredMeetups = Object.values(noDups);
 
-    if (allMeetups.length) {
-      res.status(200).send({
-        status: 200,
-        data: filteredMeetups
-      });
-    } else {
-      res.status(404).send({
-        status: 404,
-        error: `No meetups match with this search: ${searchValue}`
-      });
-    }
+    return [allMeetups, filteredMeetups];
+
+    // if (allMeetups.length) {
+    //   res.status(200).send({
+    //     status: 200,
+    //     data: filteredMeetups
+    //   });
+    // } else {
+    //   res.status(404).send({
+    //     status: 404,
+    //     error: `No meetups match with this search: ${searchValue}`
+    //   });
+    // }
   },
 
   getQuestions(req, res) {
