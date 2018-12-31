@@ -4,7 +4,7 @@ import { app } from '../../app';
 
 const agent = request(app);
 
-describe.only('RSVP API', () => {
+describe('RSVP API', () => {
   describe('POST /meetups/<meetup-id>/rsvps', () => {
     it('should rsvp a user', (done) => {
       agent
