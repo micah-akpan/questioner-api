@@ -47,4 +47,27 @@ describe('RSVP Meetup API', () => {
       });
     });
   });
+
+  describe('Update RSVP', () => {
+    it('should update a meetup', () => {
+      const req = {
+        body: {
+          response: 'yes'
+        },
+
+        params: {
+          meetupId: 1,
+          rsvpId: 1
+        }
+      };
+
+      const res = {};
+
+      res.status = sinon.fake.returns(res);
+      res.send = sinon.fake.returns(res);
+
+      rsvpController.updateRsvp(req, res);
+      res.status.calledOnce.should.be.true;
+    });
+  });
 });

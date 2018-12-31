@@ -5,5 +5,6 @@ import rsvpSchemaValidator from './rsvp';
 export default {
   '/meetups': meetupSchemaValidator,
   '/questions': questionSchemaValidator,
-  '/meetups/:id/rsvps': rsvpSchemaValidator
+  '/meetups/:meetupId/rsvps': rsvpSchemaValidator,
+  '/meetups/:meetupId/rsvps/:rsvpId': rsvpSchemaValidator
 };
