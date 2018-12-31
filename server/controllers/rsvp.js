@@ -43,7 +43,7 @@ export default {
 
   updateRsvp(req, res) {
     const rsvpRecord = rsvps.find(rsvp => String(rsvp.meetup) === req.params.meetupId
-    && String(rsvp.id) === req.params.rsvpId);
+      && String(rsvp.id) === req.params.rsvpId);
 
     if (rsvpRecord) {
       rsvpRecord.response = req.body.response || rsvpRecord.response;
@@ -62,6 +62,34 @@ export default {
         .send({
           status: 404,
           error: `The requested rsvp for meetup ${req.params.meetupId} does not exist`
+        });
+    }
+  },
+
+  getRsvps(req, res) {
+    return res.status(200).send({
+      status: 200,
+      data: rsvps
+    });
+  },
+
+  getRsvp(req, res) {
+    const rsvpRecord = rsvps.find(
+      rsvp => rsvp.meetup === req.params.meetupId * 1
+        && rsvp.id === req.params.rsvpId * 1
+    );
+
+    if (rsvpRecord) {
+      res.status(200)
+        .send({
+          status: 200,
+          data: [rsvpRecord]
+        });
+    } else {
+      res.status(404)
+        .send({
+          status: 404,
+          error: `The rsvp: ${req.params.rsvpId} for meetup: ${req.params.meetupId} does not exist`
         });
     }
   }
