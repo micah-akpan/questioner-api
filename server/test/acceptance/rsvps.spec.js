@@ -4,7 +4,7 @@ import { app } from '../../app';
 
 const agent = request(app);
 
-describe('RSVP API', () => {
+describe.skip('RSVP API', () => {
   describe('POST /meetups/<meetup-id>/rsvps', () => {
     it('should rsvp a user', (done) => {
       agent

@@ -4,7 +4,7 @@ import { app } from '../../app';
 
 const agent = request(app);
 
-describe('Meetups API', () => {
+describe.skip('Meetups API', () => {
   describe('POST /api/v1/meetups', () => {
     describe('handle valid data', () => {
       it('should create a meetup', (done) => {
@@ -141,7 +141,7 @@ describe('Meetups API', () => {
   });
 
 
-  describe.skip('DELETE /api/v1/meetups/:id', () => {
+  describe('DELETE /api/v1/meetups/:id', () => {
     it('should delete a single meetup', (done) => {
       agent
         .delete('/api/v1/meetups/1')
