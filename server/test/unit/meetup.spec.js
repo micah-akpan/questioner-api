@@ -46,6 +46,7 @@ describe('Meetups API', () => {
       res.status.firstCall.args[0].should.equal(200);
       res.send.firstCall.args[0].should.have.property('data');
       res.send.firstCall.args[0].data.should.be.an('array');
+      res.send.firstCall.args[0].data.length.should.be.greaterThan(0);
     });
 
     it('should return a no-match error if no meetup match the search criteria', () => {

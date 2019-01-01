@@ -9,20 +9,16 @@ describe('Search', () => {
         { topic: 'cryptoeconomics' }
       ];
 
-      Search.search(data, {
-        searchTerm: 'cryptoeconomics'
-      }).length.should.be.greaterThan(0);
+      Search.search(data, 'topic', 'planet mars').length.should.be.greaterThan(0);
     });
 
     it('should an empty list for no match', () => {
       const data = [
-        { topic: 'mars' },
-        { topic: 'cryptoeconomics' }
+        { title: 'mars' },
+        { title: 'cryptoeconomics' }
       ];
 
-      Search.search(data, {
-        searchTerm: 'blockchain'
-      }).length.should.equal(0);
+      Search.search(data, 'title', 'cyptoeconomics').length.should.equal(0);
     });
   });
 
@@ -33,11 +29,7 @@ describe('Search', () => {
         { topic: 'cryptoeconomics', tags: ['crypto'] }
       ];
 
-      Search.search(data, {
-        searchTerm: 'crypto'
-      }, {
-        by: 'tags'
-      }).length.should.be.greaterThan(0);
+      Search.search(data, 'tags', 'mars').length.should.be.greaterThan(0);
     });
   });
 });

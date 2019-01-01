@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import meetupRaw from '../data/meetup';
 import { questions } from './question';
 import { rsvps } from './rsvp';
@@ -11,27 +12,16 @@ export default {
   getAllMeetups(req, res) {
     if (Object.keys(req.query).length) {
       // we have data in the req.query object
-      // get meetups using the data as criteria
 
-      const byTopic = Search.search(meetups, req.query);
-      const byLocation = Search.search(meetups, req.query, {
-        by: 'location'
-      });
-      const byTag = Search.search(
-        meetups, req.query, {
-          by: 'tags'
-        }
-      );
+      const { searchTerm } = req.query;
+
+      const byTopic = Search.search(meetups, 'topic', searchTerm);
+      const byLocation = Search.search(meetups, 'location', searchTerm);
+      const byTag = Search.search(meetups, 'tags', searchTerm);
 
       const allMeetups = [...byTopic, ...byLocation, ...byTag];
 
-      // remove duplicates
-      const noDups = {};
-      allMeetups.forEach((meetup) => {
-        noDups[meetup.id] = meetup;
-      });
-
-      const filteredMeetups = Object.values(noDups);
+      const filteredMeetups = _.uniqBy(allMeetups, 'id');
 
       if (allMeetups.length) {
         res.status(200).send({
