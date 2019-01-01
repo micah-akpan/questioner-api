@@ -11,8 +11,6 @@ export default {
 
   getAllMeetups(req, res) {
     if (Object.keys(req.query).length) {
-      // we have data in the req.query object
-
       const { searchTerm } = req.query;
 
       const byTopic = search(meetups, 'topic', searchTerm);
