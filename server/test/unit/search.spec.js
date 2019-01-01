@@ -1,7 +1,7 @@
 import 'chai/register-should';
-import Search from '../../controllers/helpers/search';
+import { search } from '../../controllers/helpers/search';
 
-describe('Search', () => {
+describe('search()', () => {
   describe('Search by topic and other criteria', () => {
     it('should return a list of matched data', () => {
       const data = [
@@ -9,7 +9,7 @@ describe('Search', () => {
         { topic: 'cryptoeconomics' }
       ];
 
-      Search.search(data, 'topic', 'planet mars').length.should.be.greaterThan(0);
+      search(data, 'topic', 'planet mars').length.should.be.greaterThan(0);
     });
 
     it('should an empty list for no match', () => {
@@ -18,7 +18,16 @@ describe('Search', () => {
         { title: 'cryptoeconomics' }
       ];
 
-      Search.search(data, 'title', 'cyptoeconomics').length.should.equal(0);
+      search(data, 'title', 'cyptoeconomics').length.should.equal(0);
+    });
+
+    it('should throw an error for wrong search criteria type', () => {
+      const data = [
+        { title: 'mars' },
+        { title: 'cryptoeconomics' }
+      ];
+
+      (() => search(data, 1, 'cyptocryptoeconomics')).should.throw();
     });
   });
 
@@ -29,7 +38,7 @@ describe('Search', () => {
         { topic: 'cryptoeconomics', tags: ['crypto'] }
       ];
 
-      Search.search(data, 'tags', 'mars').length.should.be.greaterThan(0);
+      search(data, 'tags', 'mars').length.should.be.greaterThan(0);
     });
   });
 });

@@ -1,7 +1,7 @@
 import 'chai/register-should';
 import sinon from 'sinon';
-import meetupController from '../../controllers/meetup';
-import { getFutureDate } from '../../utils';
+import meetupController from '../../../controllers/meetup';
+import { getFutureDate } from '../../../utils';
 
 describe('Meetups API', () => {
   describe('Get all meetups', () => {

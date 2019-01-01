@@ -3,7 +3,7 @@ import meetupRaw from '../data/meetup';
 import { questions } from './question';
 import { rsvps } from './rsvp';
 import { omitProps, getIndex } from '../utils';
-import Search from './helpers/search';
+import { search } from './helpers/search';
 
 const meetups = JSON.parse(meetupRaw);
 
@@ -15,9 +15,9 @@ export default {
 
       const { searchTerm } = req.query;
 
-      const byTopic = Search.search(meetups, 'topic', searchTerm);
-      const byLocation = Search.search(meetups, 'location', searchTerm);
-      const byTag = Search.search(meetups, 'tags', searchTerm);
+      const byTopic = search(meetups, 'topic', searchTerm);
+      const byLocation = search(meetups, 'location', searchTerm);
+      const byTag = search(meetups, 'tags', searchTerm);
 
       const allMeetups = [...byTopic, ...byLocation, ...byTag];
 

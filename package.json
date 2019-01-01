@@ -8,9 +8,8 @@
   "scripts": {
     "dev:start": "nodemon --require @babel/register ./server/bin/www",
     "start": "node --require @babel/register ./server/bin/www",
-    "lint": "eslint --fix --ignore-path .gitignore --ext .js --ext .json ./server",
-    "lint:staged": "lint-staged",
-    "test": "nyc --reporter=text mocha --require @babel/register --recursive ./server/test --exit",
+    "lint": "eslint --fix --ignore-path .gitignore --ext .js ./server",
+    "test": "nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "husky": {
