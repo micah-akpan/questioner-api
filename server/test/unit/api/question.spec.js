@@ -1,6 +1,6 @@
 import 'chai/register-should';
 import sinon from 'sinon';
-import questionController from '../../controllers/question';
+import questionController from '../../../controllers/question';
 
 describe('Question API', () => {
   describe('Create Question: POST /questions', () => {

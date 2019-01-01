@@ -1,6 +1,6 @@
 import 'chai/register-should';
 import sinon from 'sinon';
-import rsvpController from '../../controllers/rsvp';
+import rsvpController from '../../../controllers/rsvp';
 
 describe('RSVP Meetup API', () => {
   describe('Make RSVP', () => {

@@ -6,7 +6,7 @@ import {
   hasProp,
   getProp,
   getIndex
-} from '../../utils';
+} from '../../../utils';
 
 describe('Utils', () => {
   describe('omitProps()', () => {

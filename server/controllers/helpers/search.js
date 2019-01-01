@@ -1,28 +1,43 @@
 /**
- * @class Search
- * @description Search related statics
+ * @module
+ * Helper code specific to app controllers
  */
-class Search {
-  /**
-   * @method search
-   * @param {Array} data
-   * @param {*} query object whose fields map to the criteria to be used for the search
-   * @param {*} options object with a special 'by' field with possible values
-   * title, topic, location and tags
-   * @return {Array} array of objects that match the criteria specified in 'query'
-   */
-  static search(data, query, options = {
-    by: 'topic'
-  }) {
-    const searchValue = query.searchTerm.toLowerCase();
-    if (options.by === 'tags') {
-      return data.filter(d => d[options.by].includes(searchValue));
-    }
 
-    return data.filter(
-      d => d[options.by].toLowerCase().match(searchValue)
+import _ from 'lodash';
+
+/**
+  * @method search
+  * @param {Array} data
+  * @param {String} searchBy
+  * @param {String} searchTerm
+  * @returns {Array} array of objects that match the criteria specified in 'query'
+*/
+export const search = (data, searchBy, searchTerm) => {
+  const criteriaType = typeof searchBy;
+  if (criteriaType !== 'string') {
+    throw new TypeError(
+      `Wrong argument type: ${criteriaType}. Search Criteria argument must be a string`
     );
   }
-}
+  const matches = [];
+  data.forEach((obj) => {
+    searchTerm.split(' ').forEach((str) => {
+      const regExp = new RegExp(str, 'ig');
+      if (Array.isArray(obj[searchBy])) {
+        if (obj[searchBy].includes(str)) {
+          matches.push(obj);
+        }
+      } else {
+        /* eslint no-lonely-if:0 */
+        if (regExp.test(obj[searchBy])) {
+          matches.push(obj);
+        }
+      }
+    });
+  });
+  return _.uniqBy(matches, 'id');
+};
 
-export default Search;
+export default {
+  search
+};
