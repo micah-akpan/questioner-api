@@ -2,7 +2,9 @@ language: node_js
 node_js:
   - "10"
 
-dist: trusty
+env:
+  global:
+    - CC_TEST_REPORTER_ID=CC_TEST_ID
 
 before_script:
   - yarn global add nyc
