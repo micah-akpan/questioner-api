@@ -1,6 +1,6 @@
 const sqlQuery = {
   text: `CREATE TABLE IF NOT EXISTS User (
-      id SERIAL NOT NULL PRIMARY KEY,
+      id SERIAL PRIMARY KEY,
       firstname text NOT NULL,
       lastname text NOT NULL,
       othername text,
