@@ -5,7 +5,7 @@ const sqlQuery = {
       body text NOT NULL,
       createdBy INTEGER NOT NULL,
       meetup INTEGER NOT NULL,
-      votes INTEGER DEFAULT 0,
+      votes INTEGER DEFAULT 0 CONSTRAINT positive_votes CHECK (votes >= 0),
       createdOn DATE DEFAULT NOW()
     )`
 };

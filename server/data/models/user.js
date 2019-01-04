@@ -5,9 +5,10 @@ const sqlQuery = {
       lastname text NOT NULL,
       othername text,
       email text NOT NULL,
+      password text NOT NULL,
       phoneNumber INTEGER NOT NULL,
       username text NOT NULL,
-      registered boolean DEFAULT FALSE,
+      registered DATE DEFAULT NOW(),
       isAdmin boolean DEFAULT FALSE
     )`
 };
