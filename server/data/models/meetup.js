@@ -6,8 +6,8 @@ const sqlQuery = {
       happeningOn DATE NOT NULL,
       CHECK (happeningOn >= NOW()),
       createdOn DATE DEFAULT NOW(),
-      images ARRAY,
-      tags ARRAY,
+      images text[],
+      tags text[],
       maxNumberOfAttendees INTEGER DEFAULT 50
     )`
 };
