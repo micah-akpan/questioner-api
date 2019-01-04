@@ -3,7 +3,8 @@ const sqlQuery = {
       id SERIAL NOT NULL PRIMARY KEY,
       topic text NOT NULL,
       location text NOT NULL,
-      happeningOn TIMESTAMP NOT NULL,
+      happeningOn DATE NOT NULL,
+      CHECK (happeningOn >= NOW()),
       createdOn DATE DEFAULT NOW(),
       images ARRAY,
       tags ARRAY
