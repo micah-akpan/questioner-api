@@ -104,6 +104,23 @@ describe.only('User API', () => {
         .expect(200, done);
     });
 
+    it('should not login an unregistered user', (done) => {
+      request(app)
+        .post('/api/v2/auth/login')
+        .send({
+          email: 'nonuser1@gmail.com',
+          password: 'testuser1234'
+        })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(422);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('Seems like you are not registered yet, Please sign up');
+          done();
+        });
+    });
+
     afterEach(async () => {
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });

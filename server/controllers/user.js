@@ -89,9 +89,9 @@ export default {
       }
     } catch (e) {
       // console.log(e.message);
-      res.status(400)
+      res.status(422)
         .send({
-          status: 400,
+          status: 422,
           error: e.message
         });
     }
