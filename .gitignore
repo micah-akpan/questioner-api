@@ -62,3 +62,6 @@ typings/
 
 # VS Code
 .vscode
+
+# project ideas
+.idea
