@@ -6,16 +6,11 @@ import { config } from 'dotenv';
 // import questionAPI from './routes/question';
 // import rsvpAPI from './routes/rsvp';
 import indexAPI from './routes';
-import dbQuery from './data/models';
+import dbQuery from './models';
 
 config();
 
 // This initializes all data tables
-// dbQuery.createTable(dbQuery.tableQueries.meetup);
-// dbQuery.createTable(dbQuery.tableQueries.user);
-// dbQuery.createTable(dbQuery.tableQueries.question);
-// dbQuery.createTable(dbQuery.tableQueries.rsvp);
-
 dbQuery.createTables();
 
 export const app = express();

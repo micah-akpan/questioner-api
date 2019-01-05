@@ -1,5 +1,6 @@
-import db from '../../db';
+import db from '../db';
 import createTableQueries from './helpers';
+import logger from '../helpers';
 
 const {
   createMeetupSQLQuery,
@@ -10,18 +11,17 @@ const {
 
 export default {
   async createTable(query) {
-    db.queryDb(query)
-      .then(() => {
-        console.log('Table has been created successfully');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
     try {
       await db.queryDb(query);
+      logger.log({
+        level: 'info',
+        message: 'Table created successfully'
+      });
     } catch (e) {
-      console.log(e);
+      logger.log({
+        level: 'error',
+        message: e.message
+      });
     }
   },
 
@@ -33,9 +33,16 @@ export default {
       await db.queryDb(createUserSQLQuery);
       await db.queryDb(createQuestionSQLQuery);
       await db.queryDb(createRsvpSQLQuery);
-      console.log('All tables has been created successfully');
+
+      logger.log({
+        level: 'info',
+        message: 'Tables created successfully'
+      });
     } catch (e) {
-      console.error(e);
+      logger.log({
+        level: 'error',
+        message: e.message
+      });
     }
   }
 };

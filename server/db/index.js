@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import dbConfig from '../data/config';
+import dbConfig from '../models/config';
 
 const connInfo = dbConfig[process.env.NODE_ENV || 'development'];
 
