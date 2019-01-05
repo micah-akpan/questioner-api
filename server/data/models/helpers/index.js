@@ -1,5 +1,6 @@
 /**
- *
+ * @module
+ * @description Helper code specific to models
  */
 
 import createMeetupSQLQuery from './meetup';
