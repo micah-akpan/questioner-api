@@ -45,7 +45,7 @@ describe.only('User API', () => {
     });
 
     describe('handle invalid data', () => {
-      before(async () => {
+      beforeEach(async () => {
         // create test user
         // TODO: Seed database prior to test
 

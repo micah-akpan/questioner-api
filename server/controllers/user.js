@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import winston from 'winston';
 import db from '../db';
 
 export default {
@@ -14,7 +13,6 @@ export default {
       values: [email]
     };
 
-    // check if user exist
     try {
       const result = await db.queryDb(getUserQuery);
       if (result.rows.length > 0) {
@@ -36,25 +34,18 @@ export default {
         });
 
         const newTableResult = await db.queryDb(createNewUserQuery);
-        if (result) {
-          res.status(201).send({
-            status: 201,
-            data: [{
-              token: userAuthToken,
-              user: newTableResult.rows[0]
-            }]
-          });
-        } else {
-          res.status(400).send({
-            status: 400,
-            error: ''
-          });
-        }
+        res.status(201).send({
+          status: 201,
+          data: [{
+            token: userAuthToken,
+            user: newTableResult.rows[0]
+          }]
+        });
       }
     } catch (e) {
-      winston.log({
-        level: 'info',
-        message: e.message
+      res.status(400).send({
+        status: 400,
+        error: e.toString()
       });
     }
   }
