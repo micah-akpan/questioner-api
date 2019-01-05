@@ -1,5 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
+import bcrypt from 'bcrypt';
 import { app } from '../../app';
 import db from '../../db';
 import createTableQueries from '../../models/helpers';
@@ -78,6 +79,37 @@ describe.only('User API', () => {
     });
   });
 
+  describe('POST /auth/login', () => {
+    beforeEach(async () => {
+      await db.queryDb(createTableQueries.createUserSQLQuery);
+
+      const hashedPassword = await bcrypt.hash('testuser1234', 10);
+
+      const query = {
+        text: `INSERT INTO Users (firstname, lastname, email, password)
+        VALUES ('testuser', 'testuser', 'testuser@gmail.com', $1)`,
+        values: [hashedPassword]
+      };
+
+      // test user
+      await db.queryDb(query);
+    });
+    it('should login a user', (done) => {
+      request(app)
+        .post('/api/v2/auth/login')
+        .send({
+          email: 'testuser@gmail.com',
+          password: 'testuser1234'
+        })
+        .expect(200, done);
+    });
+
+    afterEach(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Users' });
+    });
+  });
   after(async () => {
     // DROP tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });

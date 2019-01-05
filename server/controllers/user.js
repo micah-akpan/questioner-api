@@ -48,5 +48,52 @@ export default {
         error: e.toString()
       });
     }
+  },
+
+  async loginUser(req, res) {
+    const { email, password } = req.body;
+
+    try {
+      const userResult = await db.queryDb({
+        text: 'SELECT * FROM Users WHERE email=$1',
+        values: [email]
+      });
+
+      if (userResult.rows.length > 0) {
+        // user exist
+
+        const checkPwdQuery = {
+          text: 'SELECT password as encryptedPassword FROM Users WHERE email=$1',
+          values: [email]
+        };
+
+        const result = await db.queryDb(checkPwdQuery);
+        const { encryptedpassword } = result.rows[0];
+
+        const match = await bcrypt.compare(password, encryptedpassword);
+
+        if (match) {
+          res.status(200)
+            .send({
+              status: 200,
+              data: [{
+                token: jwt.sign({ email }, process.env.JWT_SECRET, {
+                  expiresIn: '24h'
+                }),
+                user: userResult.rows[0]
+              }]
+            });
+        }
+      } else {
+        throw new Error('Seems like you are not registered yet, Please sign up');
+      }
+    } catch (e) {
+      // console.log(e.message);
+      res.status(400)
+        .send({
+          status: 400,
+          error: e.message
+        });
+    }
   }
 };
