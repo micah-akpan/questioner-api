@@ -1,5 +1,5 @@
-const sqlQuery = {
-  text: `CREATE TABLE IF NOT EXISTS User (
+export default {
+  text: `CREATE TABLE IF NOT EXISTS Users (
       id SERIAL PRIMARY KEY,
       firstname text NOT NULL,
       lastname text NOT NULL,
@@ -11,8 +11,4 @@ const sqlQuery = {
       registered DATE DEFAULT NOW(),
       isAdmin boolean DEFAULT FALSE
     )`
-};
-
-export default {
-  sqlQuery
 };

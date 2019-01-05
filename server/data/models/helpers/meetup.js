@@ -1,4 +1,4 @@
-const sqlQuery = {
+export default {
   text: `CREATE TABLE IF NOT EXISTS Meetup (
       id SERIAL PRIMARY KEY,
       topic text NOT NULL,
@@ -10,9 +10,4 @@ const sqlQuery = {
       tags text[],
       maxNumberOfAttendees INTEGER DEFAULT 50
     )`
-};
-
-
-export default {
-  sqlQuery
 };

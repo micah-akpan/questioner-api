@@ -2,6 +2,9 @@
  * @module
  * @description different env database configuration
  */
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const {
   DB_USER,
