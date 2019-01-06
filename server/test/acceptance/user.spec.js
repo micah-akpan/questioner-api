@@ -7,7 +7,6 @@ import createTableQueries from '../../models/helpers';
 
 describe.only('User API', () => {
   before(async () => {
-    await db.queryDb({ text: 'CREATE DATABASE travis' });
     // DROP tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
