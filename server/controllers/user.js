@@ -19,7 +19,7 @@ export default {
         // user exist
         res.status(422).send({
           status: 422,
-          error: 'A user with this email already exists'
+          error: 'A user with this email already exist'
         });
       } else {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,6 +43,7 @@ export default {
         });
       }
     } catch (e) {
+      console.log(e);
       res.status(400).send({
         status: 400,
         error: e.toString()

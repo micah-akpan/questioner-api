@@ -37,6 +37,7 @@ describe.only('User API', () => {
           .expect(201)
           .end((err, res) => {
             if (err) return done(err);
+            console.log(res.body);
             res.body.status.should.equal(201);
             res.body.data.should.be.an('array');
             res.body.data[0].user.email.should.equal('testuser@gmail.com');
