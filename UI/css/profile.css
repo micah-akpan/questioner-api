@@ -56,6 +56,7 @@
 /* User profile view and settings */
 #user-profile {
   width: 100%;
+  margin-top: 20px !important;
 }
 
 #user-profile h3 {
@@ -150,6 +151,11 @@
   width: 100%;
   padding: 10px;
   /* justify-content: space-between; */
+}
+
+/* User feeds */
+.user-feeds__wrapper {
+  display: none;
 }
 
 
@@ -312,7 +318,8 @@ input {
     width: 100%;
 }
 
-  .user-profile__wrapper .user-profile__avatar-wrapper {
+  .user-profile__wrapper 
+  .user-profile__avatar-wrapper {
     display: none;
   }
 

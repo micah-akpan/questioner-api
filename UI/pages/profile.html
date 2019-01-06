@@ -8,6 +8,7 @@
   <meta name="description" content="Questioner crowdsources questions to help meetup organizers prioritise questions related to a meetup">
   <meta name="author" content="Micah Akpan">
   <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="../css/feeds.css">
 </head>
 
 <body>
@@ -56,10 +57,10 @@
           <a href="#!" class="link-text">Profile</a>
         </li>
         <li>
-          <a href="./feeds.html" class="link-image">
+          <a href="#!" class="link-image">
             <img src="../assets/icons/feed.svg" alt="three white curved lines in a green circle">
           </a>
-          <a href="./feeds.html" class="link-text">Feeds</a>
+          <a href="#!" class="link-text">Feeds</a>
         </li>
         <li>
           <a href="#!" class="link-image">
@@ -115,93 +116,216 @@
 
 
           <div class="user-profile__main-content__wrapper">
-              <div id="user-profile__main">
+            <div id="user-profile__main">
 
-                <!-- Personal Data -->
-                <div class="personal-data-account__wrapper">
-                  <h3>Personal Data</h3>
-                  <form class="q-form">
-                    <div>
-                      <label class="q-form__label" for="fullName">Full Name</label>
-                      <input type="text" id="fullName" class="q-form__input" placeholder="Bob Bob">
-                    </div>
+              <!-- Personal Data -->
+              <div class="personal-data-account__wrapper">
+                <h3>Personal Data</h3>
+                <form class="q-form">
+                  <div>
+                    <label class="q-form__label" for="fullName">Full Name</label>
+                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob Bob">
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="otherNames">Other Names</label>
-                      <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
-                    </div>
+                  <div>
+                    <label class="q-form__label" for="otherNames">Other Names</label>
+                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="location">Location</label>
-                      <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
-                    </div>
+                  <div>
+                    <label class="q-form__label" for="location">Location</label>
+                    <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="birthDate">Birthday</label>
-                      <input type="date" id="birthDate" class="q-form__input">
-                    </div>
+                  <div>
+                    <label class="q-form__label" for="birthDate">Birthday</label>
+                    <input type="date" id="birthDate" class="q-form__input">
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="phone-no">Phone Number</label>
-                      <div class="phone-number-input__wrapper">
-                        <select id="country-codes" class="country-codes">
-                          <option value="ng">+234</option>
-                          <option value="us">+1</option>
-                        </select>
-                        <input type="number" id="phone-no" class="q-form__input" placeholder="">
-                      </div>
+                  <div>
+                    <label class="q-form__label" for="phone-no">Phone Number</label>
+                    <div class="phone-number-input__wrapper">
+                      <select id="country-codes" class="country-codes">
+                        <option value="ng">+234</option>
+                        <option value="us">+1</option>
+                      </select>
+                      <input type="number" id="phone-no" class="q-form__input" placeholder="">
                     </div>
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="userBio">Bio</label>
-                      <textarea class="q-form__textarea" id="userBio"></textarea>
-                    </div>
-                  </form>
+                  <div>
+                    <label class="q-form__label" for="userBio">Bio</label>
+                    <textarea class="q-form__textarea" id="userBio"></textarea>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Account Settings -->
+              <div class="personal-data-account__wrapper account-settings">
+                <h3>Account Data</h3>
+                <form class="q-form">
+                  <div>
+                    <label class="q-form__label" for="userEmail">Email</label>
+                    <input type="email" id="userEmail" class="q-form__input" placeholder="Bob">
+                  </div>
+
+                  <div>
+                    <label class="q-form__label" for="userEmail">Username</label>
+                    <input type="text" id="username" class="q-form__input" placeholder="Bob1234">
+                  </div>
+
+                  <div>
+                    <label class="q-form__label" for="newPassword">New Password</label>
+                    <input type="text" id="newPassword" class="q-form__input" placeholder="">
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div id="notif">
+              <div class="notif__wrapper">
+                <h3>Notifications</h3>
+                <p>Questioner will send you periodic notifications by email or phone about meetups and any other
+                  <strong>necessary</strong> information</p>
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div id="misc">
+              <h3>Account</h3>
+              <div class="misc-btns__wrapper">
+                <button class="q-btn deactivate-btn">Deactivate Account</button>
+                <button class="q-btn">Save Changes</button>
+              </div>
+            </div>
+           
+
+          </div>
+
+          <!-- User-feeds -->
+          <div class="user-feeds__wrapper">
+            <h3>Meetup 1 Feed</h3>
+            <div class="cards">
+              <!-- A list of question cards -->
+              <div class="question-card">
+                <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                  justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+                <div class="user-profile__wrapper user-profile__wrapper-small">
+                  <div class="user-profile__avatar">
+                    <img src="../assets/icons/man.svg" alt="Bob">
+                  </div>
+                  <div class="user-profile__description">
+                    <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                      diam sea
+                      sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                      sadipscing sed. Clita stet et nonumy amet.</p>
+                    <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                  </div>
+
                 </div>
 
-                <!-- Account Settings -->
-                <div class="personal-data-account__wrapper account-settings">
-                  <h3>Account Data</h3>
-                  <form class="q-form">
-                    <div>
-                      <label class="q-form__label" for="userEmail">Email</label>
-                      <input type="email" id="userEmail" class="q-form__input" placeholder="Bob">
-                    </div>
+                <div class="questions-actions__wrapper">
+                  <div class="left-actions__wrapper">
+                    <button id="upvote__btn" title="Upvote question">
+                      <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                    </button>
+                    <button id="downvote__btn" title="Downvote question">
+                      <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                    </button>
+                  </div>
 
-                    <div>
-                      <label class="q-form__label" for="userEmail">Username</label>
-                      <input type="text" id="username" class="q-form__input" placeholder="Bob1234">
-                    </div>
+                  <div class="right-actions__wrapper">
+                    <button id="comment__btn" title="share">
+                      <img src="../assets/icons/share.svg" alt="share question">
+                    </button>
+                    <button id="fav__btn" title="like">
+                      <img src="../assets/icons/like.svg" alt="like question">
+                    </button>
+                  </div>
+                </div>
 
-                    <div>
-                      <label class="q-form__label" for="newPassword">New Password</label>
-                      <input type="text" id="newPassword" class="q-form__input" placeholder="">
-                    </div>
-                  </form>
+
+              </div>
+              <div class="question-card">
+                <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                  justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+                <div class="user-profile__wrapper user-profile__wrapper-small">
+                  <div class="user-profile__avatar">
+                    <img src="../assets/icons/man.svg" alt="Bob">
+                  </div>
+                  <div class="user-profile__description">
+                    <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                      diam sea
+                      sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                      sadipscing sed. Clita stet et nonumy amet.</p>
+                    <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                  </div>
+
+                </div>
+
+                <div class="questions-actions__wrapper">
+                  <div class="left-actions__wrapper">
+                    <button id="upvote__btn" title="Upvote question">
+                      <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                    </button>
+                    <button id="downvote__btn" title="Downvote question">
+                      <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                    </button>
+                  </div>
+
+                  <div class="right-actions__wrapper">
+                    <button id="comment__btn" title="share">
+                      <img src="../assets/icons/share.svg" alt="share question">
+                    </button>
+                    <button id="fav__btn" title="like">
+                      <img src="../assets/icons/like.svg" alt="like question">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="question-card">
+                <p>Stet vero diam no tempor diam. Dolores clita sanctus invidunt labore voluptua. Lorem nonumy labore
+                  justo labore, kasd lorem clita duo invidunt et at rebum, sit diam ipsum et ipsum.</p>
+                <div class="user-profile__wrapper user-profile__wrapper-small">
+                  <div class="user-profile__avatar">
+                    <img src="../assets/icons/man.svg" alt="Bob">
+                  </div>
+                  <div class="user-profile__description">
+                    <p class="user-profile__bio">Kasd sadipscing vero accusam kasd sit aliquyam voluptua tempor duo. Ea
+                      diam sea
+                      sadipscing sed. Clita stet et nonumy amet. Ea diam sea
+                      sadipscing sed. Clita stet et nonumy amet.</p>
+                    <p class="user-profile__extra">asked by Bob on <span class="date-asked">1st Jan 2018</span></p>
+                  </div>
+
+                </div>
+
+                <div class="questions-actions__wrapper">
+                  <div class="left-actions__wrapper">
+                    <button id="upvote__btn" title="Upvote question">
+                      <img src="../assets/icons/thumbs-up.svg" alt="upvote question">
+                    </button>
+                    <button id="downvote__btn" title="Downvote question">
+                      <img src="../assets/icons/thumb-down.svg" alt="Downvote question">
+                    </button>
+                  </div>
+
+                  <div class="right-actions__wrapper">
+                    <button id="comment__btn" title="share">
+                      <img src="../assets/icons/share.svg" alt="share question">
+                    </button>
+                    <button id="fav__btn" title="like">
+                      <img src="../assets/icons/like.svg" alt="like question">
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div id="notif">
-                <div class="notif__wrapper">
-                  <h3>Notifications</h3>
-                  <p>Questioner will send you periodic notifications by email or phone about meetups and any other
-                    <strong>necessary</strong> information</p>
-                  <label class="toggle-switch">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-
-              <div id="misc">
-                <h3>Account</h3>
-                <div class="misc-btns__wrapper">
-                  <button class="q-btn deactivate-btn">Deactivate Account</button>
-                  <button class="q-btn">Save Changes</button>
-                </div>
-              </div>
-            <!-- </div> -->
-
+              <button class="q-btn see-more__btn">See X More</button>
+            </div>
           </div>
 
         </div>
