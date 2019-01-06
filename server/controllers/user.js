@@ -61,7 +61,6 @@ export default {
 
       if (userResult.rows.length > 0) {
         // user exist
-
         const checkPwdQuery = {
           text: 'SELECT password as encryptedPassword FROM Users WHERE email=$1',
           values: [email]
@@ -83,12 +82,13 @@ export default {
                 user: userResult.rows[0]
               }]
             });
+        } else {
+          throw new Error('You entered an incorrect password, please check and try again');
         }
       } else {
-        throw new Error('Seems like you are not registered yet, Please sign up');
+        throw new Error('Incorrect email or password. Please check and try again');
       }
     } catch (e) {
-      // console.log(e.message);
       res.status(422)
         .send({
           status: 422,

@@ -83,7 +83,11 @@ describe.only('User API', () => {
     beforeEach(async () => {
       await db.queryDb(createTableQueries.createUserSQLQuery);
 
-      const hashedPassword = await bcrypt.hash('testuser1234', 10);
+      // const hashedPassword = await bcrypt.hash('testuser1234', 10);
+
+      const salt = await bcrypt.genSalt(10);
+
+      const hashedPassword = await bcrypt.hash('testuser1234', salt);
 
       const query = {
         text: `INSERT INTO Users (firstname, lastname, email, password)
@@ -116,7 +120,6 @@ describe.only('User API', () => {
           if (err) return done(err);
           res.body.status.should.equal(422);
           res.body.should.have.property('error');
-          res.body.error.should.equal('Seems like you are not registered yet, Please sign up');
           done();
         });
     });
