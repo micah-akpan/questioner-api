@@ -101,14 +101,16 @@
   width: 100%;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper .change-image__btn {
+.user-profile__wrapper 
+.user-profile__avatar-wrapper .change-image__btn {
   margin-top: 10px;
   width: 100%;
   padding: 15px 10px;
   font-size: 1em;
 }
 
-.user-profile__wrapper .user-profile__avatar-wrapper img {
+.user-profile__wrapper 
+.user-profile__avatar-wrapper img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -118,7 +120,9 @@
 }
 
 /* User Photo Edit */
-.user-profile__wrapper .user-profile__avatar-wrapper .edit-user-image {
+.user-profile__wrapper 
+.user-profile__avatar-wrapper 
+.edit-user-image {
   display: none;
   position: absolute;
   top: 20%;
@@ -134,17 +138,32 @@
     height: 0;
 }
 
+/** User profile section wrapper */
 .user-profile__wrapper .user-profile__main-content__wrapper {
   flex: 2 0 auto;
   border: 1px solid #ccc;
 }
 
-.user-profile-account__wrapper {
+#user-profile__main {
   display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px;
+  /* justify-content: space-between; */
 }
 
-.user-profile-account__wrapper h3 {
+
+#user-profile__main 
+.personal-data-account__wrapper {
+  width: calc(100% / 2 - 20px);
+  flex: 1 1 auto;
+}
+
+#user-profile__main 
+.personal-data-account__wrapper.account-settings {
+  margin-left: 20px;
+}
+
+#user-profile__main h3 {
   font-size: 1.8em;
 }
 
@@ -180,6 +199,7 @@
 #misc .deactivate-btn {
   color: #e44;
   background: #ccc;
+  font-weight: 600;
 }
 
 #misc .deactivate-btn:hover {
@@ -246,6 +266,35 @@ input:checked + .slider::before {
 
 .round::before {
   border-radius: 50%;
+}
+
+/* Phone Number input */
+.personal-data-account__wrapper 
+.phone-number-input__wrapper {
+  width: 100%;
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+
+.personal-data-account__wrapper 
+.phone-number-input__wrapper
+select {
+  flex: 0 0 15%;
+  height: 47px;
+  padding: 0.6rem;
+  background: #fff;
+  border:  #d4d9e2 1px solid;
+  border-radius: 3px 0 0 3px;
+  outline: none;
+}
+
+.personal-data-account__wrapper 
+.phone-number-input__wrapper
+input {
+  flex: 1 1 75%;
+  border-radius: 0 3px 3px 0 !important;
+  border-left: none;
 }
 
 @media (max-width: 768px) {

@@ -110,56 +110,83 @@
               </div>
             </div>
 
-            <button class="q-btn change-image__btn">Change Image</button>
+            <button class="q-btn change-image__btn">Upload new picture</button>
           </div>
 
-          <!-- User Personal Data -->
+
           <div class="user-profile__main-content__wrapper">
-            <div class="user-profile-account__wrapper">
-              <div class="personal-data-account__wrapper">
-                <h3>Personal Data</h3>
-                <form class="q-form">
-                  <div>
-                    <label class="q-form__label" for="fullName">Full Name</label>
-                    <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
-                  </div>
+            <!-- <div class="user-profile-account__wrapper"> -->
+              <div id="user-profile__main">
 
-                  <div>
-                    <label class="q-form__label" for="location">Location</label>
-                    <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
-                  </div>
+                <!-- Personal Data -->
+                <div class="personal-data-account__wrapper">
+                  <h3>Personal Data</h3>
+                  <form class="q-form">
+                    <div>
+                      <label class="q-form__label" for="fullName">Full Name</label>
+                      <input type="text" id="fullName" class="q-form__input" placeholder="Bob Bob">
+                    </div>
 
-                  <div>
-                    <label class="q-form__label" for="birthDate">Birthday</label>
-                    <input type="date" id="birthDate" class="q-form__input">
-                  </div>
+                    <div>
+                      <label class="q-form__label" for="otherNames">Other Names</label>
+                      <input type="text" id="fullName" class="q-form__input" placeholder="Bob">
+                    </div>
 
-                  <div>
-                    <label class="q-form__label" for="userBio">Bio</label>
-                    <textarea class="q-form__textarea" id="userBio"></textarea>
-                  </div>
-                </form>
-              </div>
+                    <div>
+                      <label class="q-form__label" for="location">Location</label>
+                      <input type="text" id="location" class="q-form__input" placeholder="Bob's Location">
+                    </div>
 
-              <!-- Account Settings -->
-              <div class="personal-data-account__wrapper">
-                <h3>Account Data</h3>
-                <form class="q-form">
-                  <div>
-                    <label class="q-form__label" for="userEmail">Email</label>
-                    <input type="text" id="userEmail" class="q-form__input" placeholder="Bob">
-                  </div>
+                    <div>
+                      <label class="q-form__label" for="birthDate">Birthday</label>
+                      <input type="date" id="birthDate" class="q-form__input">
+                    </div>
 
-                  <div>
-                    <label class="q-form__label" for="newPassword">New Password</label>
-                    <input type="text" id="newPassword" class="q-form__input" placeholder="">
-                  </div>
-                </form>
+                    <div>
+                      <label class="q-form__label" for="phone-no">Phone Number</label>
+                      <div class="phone-number-input__wrapper">
+                        <select id="country-codes" class="country-codes">
+                          <option value="ng">+234</option>
+                          <option value="us">+1</option>
+                        </select>
+                        <input type="number" id="phone-no" class="q-form__input" placeholder="">
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="q-form__label" for="userBio">Bio</label>
+                      <textarea class="q-form__textarea" id="userBio"></textarea>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="personal-data-account__wrapper account-settings">
+                  <h3>Account Data</h3>
+                  <form class="q-form">
+                    <div>
+                      <label class="q-form__label" for="userEmail">Email</label>
+                      <input type="email" id="userEmail" class="q-form__input" placeholder="Bob">
+                    </div>
+
+                    <div>
+                      <label class="q-form__label" for="userEmail">Username</label>
+                      <input type="text" id="username" class="q-form__input" placeholder="Bob1234">
+                    </div>
+
+                    <div>
+                      <label class="q-form__label" for="newPassword">New Password</label>
+                      <input type="text" id="newPassword" class="q-form__input" placeholder="">
+                    </div>
+                  </form>
+                </div>
               </div>
 
               <div id="notif">
                 <div class="notif__wrapper">
                   <h3>Notifications</h3>
+                  <p>Questioner will send you periodic notifications by email or phone about meetups and any other
+                    <strong>necessary</strong> information</p>
                   <label class="toggle-switch">
                     <input type="checkbox">
                     <span class="slider round"></span>
@@ -174,7 +201,7 @@
                   <button class="q-btn">Save Changes</button>
                 </div>
               </div>
-            </div>
+            <!-- </div> -->
 
           </div>
 
