@@ -37,7 +37,6 @@ describe.only('User API', () => {
           .expect(201)
           .end((err, res) => {
             if (err) return done(err);
-            console.log(res.body);
             res.body.status.should.equal(201);
             res.body.data.should.be.an('array');
             res.body.data[0].user.email.should.equal('testuser@gmail.com');
@@ -73,7 +72,7 @@ describe.only('User API', () => {
             if (err) return done(err);
             res.body.status.should.equal(422);
             res.body.should.have.property('error');
-            res.body.error.should.equal('A user with this email already exists');
+            res.body.error.should.equal('A user with this email already exist');
             done();
           });
       });
