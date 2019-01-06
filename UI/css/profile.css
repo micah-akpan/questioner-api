@@ -25,6 +25,7 @@
   flex: 1 1 auto;
   border-right: 2px solid #ccc;
   padding: 14px;
+  cursor: pointer;
 }
 
 #nav__profile ul > li:first-child {
@@ -298,9 +299,18 @@ input {
 }
 
 @media (max-width: 768px) {
-  .user-profile-account__wrapper {
+  #user-profile__main {
     flex-direction: column;
   }
+
+  .user-profile__main-content__wrapper {
+    width: 100%;
+  }
+
+  #user-profile__main 
+  .personal-data-account__wrapper {
+    width: 100%;
+}
 
   .user-profile__wrapper .user-profile__avatar-wrapper {
     display: none;
