@@ -21,6 +21,10 @@
   text-decoration: underline;
 }
 
+#q-form {
+  background-color: #fff;
+}
+
 @media (max-width: 768px) {
   header .header-content {
     justify-content: center;
