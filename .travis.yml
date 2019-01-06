@@ -18,7 +18,6 @@ before_script:
 
 script:
   - NODE_ENV=test nyc --reporter=lcov mocha --require @babel/register --recursive ./server/test --exit
-  - echo $EXIT_CODE
 
 after_script:
   - ./cc-test-reporter format-coverage -t lcov after-build --debug --exit-code $TRAVIS_TEST_RESULT
