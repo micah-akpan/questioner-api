@@ -103,16 +103,14 @@
   width: 100%;
 }
 
-.user-profile__wrapper 
-.user-profile__avatar-wrapper .change-image__btn {
+.user-profile__wrapper .user-profile__avatar-wrapper .change-image__btn {
   margin-top: 10px;
   width: 100%;
   padding: 15px 10px;
   font-size: 1em;
 }
 
-.user-profile__wrapper 
-.user-profile__avatar-wrapper img {
+.user-profile__wrapper .user-profile__avatar-wrapper img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -122,9 +120,7 @@
 }
 
 /* User Photo Edit */
-.user-profile__wrapper 
-.user-profile__avatar-wrapper 
-.edit-user-image {
+.user-profile__wrapper .user-profile__avatar-wrapper .edit-user-image {
   display: none;
   position: absolute;
   top: 20%;
@@ -137,7 +133,7 @@
   input[type="file"] {
   opacity: 0;
   width: 0;
-    height: 0;
+  height: 0;
 }
 
 /** User profile section wrapper */
@@ -158,15 +154,12 @@
   display: none;
 }
 
-
-#user-profile__main 
-.personal-data-account__wrapper {
+#user-profile__main .personal-data-account__wrapper {
   width: calc(100% / 2 - 20px);
   flex: 1 1 auto;
 }
 
-#user-profile__main 
-.personal-data-account__wrapper.account-settings {
+#user-profile__main .personal-data-account__wrapper.account-settings {
   margin-left: 20px;
 }
 
@@ -276,35 +269,63 @@ input:checked + .slider::before {
 }
 
 /* Phone Number input */
-.personal-data-account__wrapper 
-.phone-number-input__wrapper {
+.personal-data-account__wrapper .phone-number-input__wrapper {
   width: 100%;
   display: flex;
   /* align-items: center; */
   justify-content: space-between;
 }
 
-.personal-data-account__wrapper 
-.phone-number-input__wrapper
-select {
+.personal-data-account__wrapper .phone-number-input__wrapper select {
   flex: 0 0 15%;
   height: 47px;
   padding: 0.6rem;
   background: #fff;
-  border:  #d4d9e2 1px solid;
+  border: #d4d9e2 1px solid;
   border-radius: 3px 0 0 3px;
   outline: none;
 }
 
-.personal-data-account__wrapper 
-.phone-number-input__wrapper
-input {
+.personal-data-account__wrapper .phone-number-input__wrapper input {
   flex: 1 1 75%;
   border-radius: 0 3px 3px 0 !important;
   border-left: none;
 }
 
+.active-block {
+  display: block !important;
+}
+
+.n-active-block {
+  display: none !important;
+}
+
+.no-border {
+  border: none;
+}
+
+/* User Feeds Listings */
+.user-feeds {
+  display: none;
+  flex: 1 0 auto;
+  width: 250px;
+  margin-right: 20px;
+}
+
+.user-feeds li {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.user-feeds li.active {
+
+}
+
 @media (max-width: 768px) {
+
+  #user-profile .user-profile__wrapper {
+    flex-direction: column;
+  }
   #user-profile__main {
     flex-direction: column;
   }
@@ -313,10 +334,9 @@ input {
     width: 100%;
   }
 
-  #user-profile__main 
-  .personal-data-account__wrapper {
+  #user-profile__main .personal-data-account__wrapper {
     width: 100%;
-}
+  }
 
   .user-profile__wrapper 
   .user-profile__avatar-wrapper {
@@ -334,5 +354,9 @@ input {
 
   #user-profile .user-profile__stats {
     flex-direction: column;
+  }
+
+  .user-feeds {
+    display: none !important;
   }
 }
