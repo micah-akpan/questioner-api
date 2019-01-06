@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - "10"
+
+env:
+  global:
+    - CC_TEST_REPORTER_ID=CC_TEST_ID
+
+before_script:
+  - yarn global add nyc
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - nyc --reporter=lcov mocha --require @babel/register --recursive ./server/test --exit
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  
+after_success: npm run coverage
+
+notifications:
+  email: false
