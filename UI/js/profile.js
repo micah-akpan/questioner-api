@@ -1,3 +1,0 @@
-function uploadImage(container, img) {
-  
-}
