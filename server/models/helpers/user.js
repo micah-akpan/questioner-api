@@ -9,6 +9,7 @@ export default {
       phoneNumber BIGINT,
       username text,
       registered DATE DEFAULT NOW(),
-      isAdmin boolean DEFAULT FALSE
+      isAdmin boolean DEFAULT FALSE,
+      bio text
     )`
 };
