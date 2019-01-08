@@ -1,5 +1,5 @@
 export default {
-  text: `CREATE TABLE IF NOT EXISTS Users (
+  text: `CREATE TABLE IF NOT EXISTS "User" (
       id SERIAL PRIMARY KEY,
       firstname text NOT NULL,
       lastname text NOT NULL,

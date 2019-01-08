@@ -10,7 +10,7 @@ export default {
     } = req.body;
 
     const getUserQuery = {
-      text: 'SELECT * FROM Users WHERE email=$1',
+      text: 'SELECT * FROM "User" WHERE email=$1',
       values: [email]
     };
 
@@ -26,7 +26,7 @@ export default {
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const createNewUserQuery = {
-        text: `INSERT INTO Users(email,password,firstname,lastname)
+        text: `INSERT INTO "User" (email,password,firstname,lastname)
                          VALUES ($1, $2, $3, $4) RETURNING *`,
         values: [email, hashedPassword, firstname, lastname]
       };
@@ -56,14 +56,14 @@ export default {
 
     try {
       const userResult = await db.queryDb({
-        text: 'SELECT * FROM Users WHERE email=$1',
+        text: 'SELECT * FROM "User" WHERE email=$1',
         values: [email]
       });
 
       if (userResult.rows.length > 0) {
         // user exist
         const checkPwdQuery = {
-          text: 'SELECT password as encryptedPassword FROM Users WHERE email=$1',
+          text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
           values: [email]
         };
 
