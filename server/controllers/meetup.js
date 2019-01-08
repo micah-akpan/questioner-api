@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import db from '../db';
 import { omitProps, getIndex } from '../utils';
 import { search } from './helpers/search';
 
@@ -117,25 +118,39 @@ export default {
       });
   },
 
-  deleteMeetup(req, res) {
-    const meetupRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
+  async deleteMeetup(req, res) {
+    const { meetupId } = req.params;
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [meetupId]
+      });
 
-    if (meetupRecord) {
-      const meetupRecordIdx = getIndex(meetups, 'id', meetupRecord.id);
+      if (results.rows.length === 0) {
+        return res.status(404)
+          .send({
+            status: 404,
+            error: 'The meetup cannot be deleted because it doesn\'t exist.'
+          });
+      }
 
-      meetups.splice(meetupRecordIdx, 1);
+      await db.queryDb({
+        text: 'DELETE FROM Meetup WHERE id=$1',
+        values: [req.params.id]
+      });
 
       return res.status(200)
         .send({
           status: 200,
-          data: []
+          data: [`Meetup with the id: ${meetupId} has been deleted successfully`]
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request. Please check and try again'
         });
     }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The requested meetup with the cannot be deleted because it does not exist'
-      });
   },
 
   getUpcomingMeetups(req, res) {
@@ -182,29 +197,11 @@ export default {
       });
   },
 
-  deleteMeetupQuestion(req, res) {
-    const questionRecord = questions.find(
-      question => String(question.createdBy) === req.body.userId
-        && String(question.meetup) === req.params.meetupId
-        && String(question.id) === req.params.questionId
-    );
-
-    if (questionRecord) {
-      const questionIdx = getIndex(questions, 'id', questionRecord.id);
-      questions.splice(questionIdx, 1);
-
-
-      return res.status(200)
-        .send({
-          status: 200,
-          data: []
-        });
-    }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The question cannot be deleted because it doesn\'t exist'
-      });
+  async deleteMeetupQuestion(req, res) {
+    return res.status(500).send({
+      status: 500,
+      error: 'Meetup question cannot be deleted at this time'
+    });
   },
 
   updateMeetupQuestion(req, res) {
