@@ -107,19 +107,26 @@ export default {
         values: [questionId]
       });
 
-      const payload = {
-        question: questionId,
-        title: results.rows[0].title,
-        body: results.rows[0].body,
-        comment: commentText
-      };
+      if (results.rows.length > 0) {
+        const payload = {
+          question: questionId,
+          title: results.rows[0].title,
+          body: results.rows[0].body,
+          comment: commentText
+        };
 
-      await db.queryDb(addCommentsQuery);
+        await db.queryDb(addCommentsQuery);
 
-      return res.status(201)
+        return res.status(201)
+          .send({
+            status: 201,
+            data: [payload]
+          });
+      }
+      return res.status(404)
         .send({
-          status: 201,
-          data: [payload]
+          status: 404,
+          error: 'You cannot comment on this question because the question does not exist'
         });
     } catch (e) {
       return res.status(400)

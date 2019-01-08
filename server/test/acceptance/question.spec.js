@@ -147,22 +147,61 @@ describe('Questions API', () => {
 
       await db.queryDb(addNewQuestionQuery);
     });
-    it('should add a comment to a question', (done) => {
-      agent
-        .post('/api/v2/comments')
-        .send({
-          questionId: 1,
-          commentText: 'a comment'
-        })
-        .expect(201)
-        .end((err, res) => {
-          if (err) return done(err);
-          res.body.status.should.equal(201);
-          res.body.data.should.be.an('array');
-          res.body.data.length.should.equal(1);
-          res.body.data[0].question.should.equal(1);
-          done();
-        });
+
+    describe('handle valid data', () => {
+      it('should add a comment to a question', (done) => {
+        agent
+          .post('/api/v2/comments')
+          .send({
+            questionId: 1,
+            commentText: 'a comment'
+          })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(201);
+            res.body.data.should.be.an('array');
+            res.body.data.length.should.equal(1);
+            res.body.data[0].question.should.equal(1);
+            done();
+          });
+      });
+
+      it('should add a comment to a question', (done) => {
+        agent
+          .post('/api/v2/comments')
+          .send({
+            questionId: 1,
+            commentText: 'a new comment'
+          })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(201);
+            res.body.data.should.be.an('array');
+            res.body.data.length.should.equal(1);
+            res.body.data[0].question.should.equal(1);
+            done();
+          });
+      });
+    });
+
+    describe('handle invalid data', () => {
+      it('should not add a comment to a non-existing question', (done) => {
+        agent
+          .post('/api/v2/comments')
+          .send({
+            questionId: 9999999,
+            commentText: 'a new comment'
+          })
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
     });
 
     after('Teardown', async () => {
