@@ -17,4 +17,4 @@ const router = Router();
 
 router.post('/comments', questionController.addComments);
 
-// export default router;
+export default router;

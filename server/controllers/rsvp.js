@@ -1,7 +1,5 @@
 /* eslint-disable */
 import { omitProps, getIndex } from '../utils';
-const meetups = JSON.parse(meetupRaw);
-export const rsvps = JSON.parse(rsvpRaw);
 
 export default {
   makeRsvp(req, res) {

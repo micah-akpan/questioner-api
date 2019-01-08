@@ -1,5 +1,6 @@
 import { omitProps } from '../utils';
-
+import db from '../db';
+import createTableQueries from '../models/helpers';
 
 /* eslint-disable no-undef */
 export default {
@@ -89,12 +90,34 @@ export default {
     });
   },
 
-  addComments(req, res) {
-    return res.status(201).send({
-      status: 201,
-      data: [{
+  async addComments(req, res) {
+    const { questionId, commentText } = req.body;
 
-      }]
-    });
+    await db.queryDb(createTableQueries.createQuestionSQLQuery);
+
+    await db.queryDb(createTableQueries.createCommentSQLQuery);
+
+    const query1 = {
+      text: `INSERT INTO Comment (body, question)
+             VALUES ($1, $2)`,
+      values: [commentText, questionId]
+    };
+
+    try {
+      const newRecordResults = await db.queryDb(query1);
+
+      return res.status(201)
+        .send({
+          status: 201,
+          data: newRecordResults
+        });
+    } catch (e) {
+      console.log(e);
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please check and try again'
+        });
+    }
   }
 };

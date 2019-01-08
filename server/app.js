@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { config } from 'dotenv';
 import userAPI from './routes/user';
 import indexAPI from './routes';
+import questionAPI from './routes/question';
 import dbQuery from './models';
 
 config();
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/', indexAPI);
 app.use('/api/v2/', userAPI);
+app.use('/api/v2/', questionAPI);
 
 // catch 404 error and forward to
 // error handler
