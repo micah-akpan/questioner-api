@@ -5,35 +5,33 @@ import { app } from '../../app';
 import db from '../../db';
 import createTableQueries from '../../models/helpers';
 
-describe.skip('User API', () => {
-  before(async () => {
-    // DROP tables
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+describe.only('User API', () => {
+  const testUser = {
+    email: 'testuser@gmail.com',
+    password: 'testuser1234',
+    firstname: 'Test',
+    lastname: 'User'
+  };
+
+  before('Setup', async () => {
+    db.drop({ tableName: 'Comment', });
+    db.drop({ tableName: 'Rsvp' });
+    db.drop({ tableName: 'Question' });
+    db.drop({ tableName: '"User"' });
+
+    await db.queryDb(createTableQueries.createUserSQLQuery);
   });
 
   describe('POST /auth/signup', () => {
     beforeEach(async () => {
-      await db.queryDb(createTableQueries.createUserSQLQuery);
-    });
 
-    afterEach(async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
     });
 
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
         request(app)
           .post('/api/v2/auth/signup')
-          .send({
-            email: 'testuser@gmail.com',
-            password: 'testuser1234',
-            firstname: 'Test',
-            lastname: 'User'
-          })
+          .send(testUser)
           .expect(201)
           .end((err, res) => {
             if (err) return done(err);
@@ -45,19 +43,23 @@ describe.skip('User API', () => {
       });
     });
 
-    describe('handle invalid data', () => {
+    afterEach(async () => {
+    });
+
+    describe('handle invalid/incomplete data', () => {
       beforeEach(async () => {
         // create test user
         // TODO: Seed database prior to test
-
         await db.queryDb(createTableQueries.createUserSQLQuery);
 
         await db.queryDb({
           text: `INSERT INTO "User" (firstname,lastname,email,password)
-                 VALUES ('user1', 'user1', 'user1@email.com', 'user1234')
-                `
+                 VALUES ($1, $2, $3, $4)
+                `,
+          values: ['user1', 'user1', 'user1@email.com', 'user1234']
         });
       });
+
       it('should return an error if user already exist', (done) => {
         request(app)
           .post('/api/v2/auth/signup')
@@ -77,16 +79,15 @@ describe.skip('User API', () => {
           });
       });
     });
+
+    afterEach(() => {
+
+    });
   });
 
   describe('POST /auth/login', () => {
-    beforeEach(async () => {
-      await db.queryDb(createTableQueries.createUserSQLQuery);
-
-      // const hashedPassword = await bcrypt.hash('testuser1234', 10);
-
+    beforeEach('Add Test User', async () => {
       const salt = await bcrypt.genSalt(10);
-
       const hashedPassword = await bcrypt.hash('testuser1234', salt);
 
       const query = {
@@ -95,7 +96,6 @@ describe.skip('User API', () => {
         values: [hashedPassword]
       };
 
-      // test user
       await db.queryDb(query);
     });
     it('should login a user', (done) => {
@@ -105,7 +105,7 @@ describe.skip('User API', () => {
           email: 'testuser@gmail.com',
           password: 'testuser1234'
         })
-        .expect(200, done);
+        .expect(201, done);
     });
 
     it('should not login an unregistered user', (done) => {
@@ -125,15 +125,13 @@ describe.skip('User API', () => {
     });
 
     afterEach(async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+
     });
   });
-  after(async () => {
-    // DROP tables
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+  after('Teardown', async () => {
+    db.drop({ tableName: 'Comment', });
+    db.drop({ tableName: 'Rsvp' });
+    db.drop({ tableName: 'Question' });
+    db.drop({ tableName: '"User"' });
   });
 });

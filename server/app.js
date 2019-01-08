@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import userAPI from './routes/user';
 import indexAPI from './routes';
 import questionAPI from './routes/question';
-import dbQuery from './models';
+import db from './db';
 
 config();
 
@@ -15,7 +15,7 @@ app.set('json spaces', 2);
 
 /* Middlewares */
 if (app.get('env') === 'development') {
-  dbQuery.createTables();
+  db.sync();
   app.use(logger('dev'));
 }
 

@@ -91,28 +91,37 @@ export default {
   },
 
   async addComments(req, res) {
-    const { questionId, commentText } = req.body;
-
-    await db.queryDb(createTableQueries.createQuestionSQLQuery);
-
-    await db.queryDb(createTableQueries.createCommentSQLQuery);
-
-    const query1 = {
-      text: `INSERT INTO Comment (body, question)
-             VALUES ($1, $2)`,
-      values: [commentText, questionId]
-    };
-
     try {
-      const newRecordResults = await db.queryDb(query1);
+      const { questionId, commentText } = req.body;
+
+      await db.queryDb(createTableQueries.createCommentSQLQuery);
+
+      const addCommentsQuery = {
+        text: `INSERT INTO Comment (body, question)
+             VALUES ($1, $2) RETURNING *`,
+        values: [commentText, questionId]
+      };
+
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE id=$1',
+        values: [questionId]
+      });
+
+      const payload = {
+        question: questionId,
+        title: results.rows[0].title,
+        body: results.rows[0].body,
+        comment: commentText
+      };
+
+      await db.queryDb(addCommentsQuery);
 
       return res.status(201)
         .send({
           status: 201,
-          data: newRecordResults
+          data: [payload]
         });
     } catch (e) {
-      console.log(e);
       return res.status(400)
         .send({
           status: 400,

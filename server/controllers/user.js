@@ -73,9 +73,9 @@ export default {
         const match = await bcrypt.compare(password, encryptedpassword);
 
         if (match) {
-          return res.status(200)
+          return res.status(201)
             .send({
-              status: 200,
+              status: 201,
               data: [{
                 token: jwt.sign({ email }, process.env.JWT_SECRET, {
                   expiresIn: '24h'

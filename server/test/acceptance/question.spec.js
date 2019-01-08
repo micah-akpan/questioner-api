@@ -9,10 +9,9 @@ const agent = request(app);
 
 describe('Questions API', () => {
   before('Setup', async () => {
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-
     await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
   });
   describe('POST /api/v1/questions', () => {
@@ -126,6 +125,7 @@ describe('Questions API', () => {
     beforeEach(async () => {
       // bulk create
       // referenced tables
+
       await db.queryDb(createTableQueries.createUserSQLQuery);
 
       await db.queryDb(createTableQueries.createMeetupSQLQuery);
@@ -170,10 +170,9 @@ describe('Questions API', () => {
     });
 
     after(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-
       await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
     });
   });
