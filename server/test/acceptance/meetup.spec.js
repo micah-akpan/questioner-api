@@ -167,15 +167,16 @@ describe.skip('Meetups API', () => {
   });
 
 
-  describe('DELETE /api/v1/meetups/:id', () => {
+  describe.only('DELETE /meetups/<meetup-id>/', () => {
     it('should delete a single meetup', (done) => {
       agent
-        .delete('/api/v1/meetups/1')
+        .delete('/api/v2/meetups/1')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.should.have.property('data');
+          res.body.data.should.be.an('array');
           done();
         });
     });
@@ -204,7 +205,7 @@ describe.skip('Meetups API', () => {
   describe('Update a meetup Question', () => {
     it('should update a meetup question', (done) => {
       agent
-        .delete('/api/v1/meetups/2/questions/2')
+        .patch('/api/v1/meetups/2/questions/2')
         .send({ userId: '1' })
         .expect(200)
         .end((err, res) => {

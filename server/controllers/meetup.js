@@ -18,30 +18,28 @@ export default {
       const filteredMeetups = _.uniqBy(allMeetups, 'id');
 
       if (allMeetups.length) {
-        res.status(200).send({
+        return res.status(200).send({
           status: 200,
           data: filteredMeetups
         });
-      } else {
-        res.status(404).send({
-          status: 404,
-          error: `No meetups match with this search: ${req.query.searchTerm}`
-        });
       }
-    } else {
-      const meetupRecords = meetups
-        .map(meetup => omitProps(meetup, ['images', 'createdOn']))
-        .map((meetup) => {
-          meetup.title = meetup.topic;
-          delete meetup.topic;
-          return meetup;
-        });
-
-      return res.status(200).send({
-        status: 200,
-        data: meetupRecords
+      return res.status(404).send({
+        status: 404,
+        error: `No meetups match with this search: ${req.query.searchTerm}`
       });
     }
+    const meetupRecords = meetups
+      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+      .map((meetup) => {
+        meetup.title = meetup.topic;
+        delete meetup.topic;
+        return meetup;
+      });
+
+    return res.status(200).send({
+      status: 200,
+      data: meetupRecords
+    });
   },
 
   createNewMeetup(req, res) {
@@ -106,18 +104,17 @@ export default {
     if (meetupRecord) {
       const mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
 
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: [mRecord],
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The requested meetup does not exist'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The requested meetup does not exist'
+      });
   },
 
   deleteMeetup(req, res) {
@@ -128,18 +125,17 @@ export default {
 
       meetups.splice(meetupRecordIdx, 1);
 
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: []
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The requested meetup with the cannot be deleted because it does not exist'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The requested meetup with the cannot be deleted because it does not exist'
+      });
   },
 
   getUpcomingMeetups(req, res) {
@@ -148,24 +144,23 @@ export default {
     );
 
     if (!upComingMeetups.length) {
-      res.status(404).send({
+      return res.status(404).send({
         status: 404,
         error: 'There are no upcoming meetups'
       });
-    } else {
-      const meetupRecords = upComingMeetups
-        .map(meetup => omitProps(meetup, ['createdOn', 'images']))
-        .map((meetup) => {
-          meetup.title = meetup.topic;
-          delete meetup.topic;
-          return meetup;
-        });
-
-      res.status(200).send({
-        status: 200,
-        data: meetupRecords
-      });
     }
+    const meetupRecords = upComingMeetups
+      .map(meetup => omitProps(meetup, ['createdOn', 'images']))
+      .map((meetup) => {
+        meetup.title = meetup.topic;
+        delete meetup.topic;
+        return meetup;
+      });
+
+    return res.status(200).send({
+      status: 200,
+      data: meetupRecords
+    });
   },
 
   getQuestions(req, res) {
@@ -174,18 +169,17 @@ export default {
     );
 
     if (meetupQuestions.length) {
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: meetupQuestions
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'There are no questions for this meetup'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'There are no questions for this meetup'
+      });
   },
 
   deleteMeetupQuestion(req, res) {
@@ -200,18 +194,17 @@ export default {
       questions.splice(questionIdx, 1);
 
 
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: []
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The question cannot be deleted because it doesn\'t exist'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The question cannot be deleted because it doesn\'t exist'
+      });
   },
 
   updateMeetupQuestion(req, res) {
@@ -232,18 +225,17 @@ export default {
 
       questions[questionIdx] = questionRecord;
 
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: [questionRecord]
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The meetup you requested does not exist'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The meetup you requested does not exist'
+      });
   },
 
   getSingleMeetupQuestion(req, res) {
@@ -253,35 +245,33 @@ export default {
     );
 
     if (questionRecord) {
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: [questionRecord]
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The requested question cannot be found'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The requested question cannot be found'
+      });
   },
 
   getAllRsvps(req, res) {
     const rsvpRecords = rsvps.filter(rsvp => String(rsvp.meetup) === req.params.meetupId);
 
     if (rsvpRecords.length) {
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: rsvpRecords
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: 'The requested meetup has no rsvps at the moment'
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The requested meetup has no rsvps at the moment'
+      });
   }
 };
