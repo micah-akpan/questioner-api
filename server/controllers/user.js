@@ -44,7 +44,7 @@ export default {
         }]
       });
     } catch (e) {
-      res.status(400).send({
+      return res.status(400).send({
         status: 400,
         error: 'Invalid request, please check your email and try again'
       });
