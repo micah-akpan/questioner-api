@@ -6,35 +6,34 @@ export default {
     const mRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
 
     if (!mRecord) {
-      res.status(404)
+      return res.status(404)
         .send({
           status: 404,
           error: 'The meetup you are requesting does not exist'
         });
-    } else {
-      const { response, userId } = req.body;
-
-      const lastRsvpId = rsvps[rsvps.length - 1].id;
-
-      const newRsvp = {
-        id: lastRsvpId + 1,
-        meetup: mRecord.id,
-        user: userId,
-        status: response
-      };
-
-      rsvps.push(newRsvp);
-
-      const rsvpRecord = omitProps(newRsvp, ['id', 'user']);
-
-      rsvpRecord.topic = mRecord.topic;
-
-      res.status(201)
-        .send({
-          status: 201,
-          data: [rsvpRecord]
-        });
     }
+    const { response, userId } = req.body;
+
+    const lastRsvpId = rsvps[rsvps.length - 1].id;
+
+    const newRsvp = {
+      id: lastRsvpId + 1,
+      meetup: mRecord.id,
+      user: userId,
+      status: response
+    };
+
+    rsvps.push(newRsvp);
+
+    const rsvpRecord = omitProps(newRsvp, ['id', 'user']);
+
+    rsvpRecord.topic = mRecord.topic;
+
+    return res.status(201)
+      .send({
+        status: 201,
+        data: [rsvpRecord]
+      });
   },
 
   updateRsvp(req, res) {
@@ -48,18 +47,18 @@ export default {
 
       rsvps[rsvpRecordIdx] = rsvpRecord;
 
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: [rsvpRecord]
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: `The requested rsvp for meetup ${req.params.meetupId} does not exist`
-        });
     }
+    res.status(404)
+      .send({
+        status: 404,
+        error: `The requested rsvp for meetup ${req.params.meetupId} does not exist`
+      });
+
   },
 
   getRsvps(req, res) {
@@ -76,18 +75,17 @@ export default {
     );
 
     if (rsvpRecord) {
-      res.status(200)
+      return res.status(200)
         .send({
           status: 200,
           data: [rsvpRecord]
         });
-    } else {
-      res.status(404)
-        .send({
-          status: 404,
-          error: `The rsvp: ${req.params.rsvpId} for meetup:
-${req.params.meetupId} does not exist`
-        });
     }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: `The rsvp: ${req.params.rsvpId} for meetup:
+${req.params.meetupId} does not exist`
+      });
   }
 };

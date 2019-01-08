@@ -21,7 +21,7 @@ export default {
       votes: 0
     });
 
-    res.status(201)
+    return res.status(201)
       .send({
         status: 201,
         data: [{
@@ -37,57 +37,56 @@ export default {
     let question = questions.filter(q => String(q.id) === req.params.id)[0];
 
     if (!question) {
-      res.status(404).send({
+      return res.status(404).send({
         status: 404,
         error: `The question with the id: ${req.params.id} does not exist`
       });
-    } else {
-      question.votes += 1;
-      questions.forEach((q) => {
-        if (q.id === question.id) {
-          q = question;
-        }
-      });
-
-      question = omitProps(question, ['id', 'createdOn', 'createdBy']);
-
-      res.status(200).send({
-        status: 200,
-        data: [
-          question
-        ]
-      });
     }
+    question.votes += 1;
+    questions.forEach((q) => {
+      if (q.id === question.id) {
+        q = question;
+      }
+    });
+
+    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+    return res.status(200).send({
+      status: 200,
+      data: [
+        question
+      ]
+    });
   },
 
   downvoteQuestion(req, res) {
     let question = questions.filter(q => String(q.id) === req.params.id)[0];
 
     if (!question) {
-      res.status(404)
+      return res.status(404)
         .send({
           status: 404,
           error: `The question with the id: ${req.params.id} does not exist`
         });
-    } else {
-      question.votes = question.votes > 0 ? question.votes - 1 : 0;
-
-      question = omitProps(question, ['id', 'createdOn', 'createdBy']);
-
-      res.status(200)
-        .send({
-          status: 200,
-          data: [question]
-        });
     }
+    question.votes = question.votes > 0 ? question.votes - 1 : 0;
+
+    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+    return res.status(200)
+      .send({
+        status: 200,
+        data: [question]
+      });
   },
 
   getAllQuestions(req, res) {
     // for Admin ONLY
-    return res.status(200).send({
-      status: 200,
-      data: questions
-    });
+    return res.status(200)
+      .send({
+        status: 200,
+        data: questions
+      });
   },
 
   async addComments(req, res) {
