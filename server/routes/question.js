@@ -1,8 +1,8 @@
-// import { Router } from 'express';
-// import questionController from '../controllers/question';
+import { Router } from 'express';
+import questionController from '../controllers/question';
 // import schemaValidator from '../middlewares/schemaValidator';
 
-// const router = Router();
+const router = Router();
 
 // const validateRequest = schemaValidator();
 
@@ -14,5 +14,7 @@
 // router.patch('/questions/:id/upvote', questionController.upvoteQuestion);
 
 // router.patch('/questions/:id/downvote', questionController.downvoteQuestion);
+
+router.post('/comments', questionController.addComments);
 
 // export default router;

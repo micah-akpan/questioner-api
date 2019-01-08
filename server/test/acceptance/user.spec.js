@@ -5,7 +5,7 @@ import { app } from '../../app';
 import db from '../../db';
 import createTableQueries from '../../models/helpers';
 
-describe.only('User API', () => {
+describe.skip('User API', () => {
   before(async () => {
     // DROP tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });

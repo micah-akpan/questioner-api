@@ -88,4 +88,13 @@ export default {
   //     data: questions
   //   });
   // },
+
+  addComments(req, res) {
+    return res.status(201).send({
+      status: 201,
+      data: [{
+
+      }]
+    });
+  }
 };
