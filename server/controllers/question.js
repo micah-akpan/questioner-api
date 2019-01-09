@@ -2,7 +2,7 @@ import { omitProps } from '../utils';
 import db from '../db';
 import createTableQueries from '../models/helpers';
 
-/* eslint-disable */
+
 export default {
   async createQuestion(req, res) {
     const {
@@ -48,14 +48,14 @@ export default {
       if (question) {
         const { votes } = question;
 
-        const results = await db.queryDb({
+        const questionResults = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
                  WHERE id = $2 RETURNING *`,
           values: [votes + 1, req.params.questionId]
         });
 
-        question = omitProps(results.rows[0], ['id', 'createdOn', 'createdBy']);
+        question = omitProps(questionResults.rows[0], ['id', 'createdOn', 'createdBy']);
 
         return res.status(200).send({
           status: 200,
@@ -91,14 +91,14 @@ export default {
       if (question) {
         const { votes } = question;
 
-        const results = await db.queryDb({
+        const questionResults = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
                  WHERE id = $2 RETURNING *`,
           values: [votes > 0 ? votes - 1 : 0, req.params.questionId]
         });
 
-        question = omitProps(results.rows[0], ['id', 'createdOn', 'createdBy']);
+        question = omitProps(questionResults.rows[0], ['id', 'createdOn', 'createdBy']);
 
         return res.status(200).send({
           status: 200,
@@ -261,9 +261,7 @@ export default {
   },
 
   async updateMeetupQuestion(req, res) {
-
     try {
-
       const { meetupId, questionId } = req.params;
       const { title, body } = req.body;
 
@@ -272,22 +270,21 @@ export default {
         text: `SELECT * FROM Question
                WHERE id=$1 AND createdBy=$2 AND meetup=$3`,
         values: [questionId, req.body.userId, meetupId]
-      })
+      });
 
       const questionRecord = results.rows[0];
 
       if (questionRecord) {
-
-        const results = await db.queryDb({
+        const questionResults = await db.queryDb({
           text: `UPDATE Question
                  SET title=$1, body=$2
                  WHERE id=$3 RETURNING *`,
-          values: [title || questionRecord.title, 
+          values: [title || questionRecord.title,
             body || questionRecord.body, questionRecord.id
           ]
-        })
+        });
 
-        const updatedQuestion = results.rows[0];
+        const updatedQuestion = questionResults.rows[0];
 
         return res.status(200)
           .send({
@@ -302,17 +299,15 @@ export default {
           error: 'The meetup you requested does not exist'
         });
     } catch (e) {
-      console.log(e)
       return res.status(400)
         .send({
           status: 400,
           error: 'Invalid request. Please try again'
-        })
+        });
     }
   },
 
   async getSingleMeetupQuestion(req, res) {
-
     const { questionId, meetupId } = req.params;
 
     try {
@@ -342,7 +337,7 @@ export default {
         .send({
           status: 400,
           error: 'Invalid request. Please try again'
-        })
+        });
     }
   },
 };

@@ -6,6 +6,7 @@ import userAPI from './routes/user';
 import indexAPI from './routes';
 import questionAPI from './routes/question';
 import meetupAPI from './routes/meetup';
+import rsvpAPI from './routes/rsvp';
 import db from './db';
 
 config();
@@ -29,6 +30,7 @@ app.use('/', indexAPI);
 app.use('/api/v2/', userAPI);
 app.use('/api/v2/', questionAPI);
 app.use('/api/v2/', meetupAPI);
+app.use('/api/v2/', rsvpAPI);
 
 // catch 404 error and forward to
 // error handler

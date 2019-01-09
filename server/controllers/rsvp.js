@@ -1,39 +1,47 @@
-/* eslint-disable */
 import { omitProps, getIndex } from '../utils';
+import db from '../db';
 
+/* eslint-disable */
 export default {
-  makeRsvp(req, res) {
-    const mRecord = meetups.find(meetup => String(meetup.id) === req.params.meetupId);
+  async makeRsvp(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: `SELECT * FROM Meetup
+               WHERE id=$1`,
+        values: [req.params.meetupId]
+      });
 
-    if (!mRecord) {
+      const { response, userId } = req.body;
+
+      const meetupRecord = results.rows[0];
+      if (meetupRecord) {
+        const rsvpResults = await db.queryDb({
+          text: `INSERT INTO Rsvp ("user", meetup, response)
+                 VALUES ($1, $2, $3) RETURNING *`,
+          values: [userId, req.params.meetupId, response]
+        });
+
+        const newRsvp = omitProps(rsvpResults.rows[0], ['id', 'user']);
+
+        return res.status(201)
+          .send({
+            status: 201,
+            data: [newRsvp]
+          });
+      }
+
       return res.status(404)
         .send({
           status: 404,
           error: 'The meetup you are requesting does not exist'
         });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
     }
-    const { response, userId } = req.body;
-
-    const lastRsvpId = rsvps[rsvps.length - 1].id;
-
-    const newRsvp = {
-      id: lastRsvpId + 1,
-      meetup: mRecord.id,
-      user: userId,
-      status: response
-    };
-
-    rsvps.push(newRsvp);
-
-    const rsvpRecord = omitProps(newRsvp, ['id', 'user']);
-
-    rsvpRecord.topic = mRecord.topic;
-
-    return res.status(201)
-      .send({
-        status: 201,
-        data: [rsvpRecord]
-      });
   },
 
   updateRsvp(req, res) {
@@ -58,14 +66,37 @@ export default {
         status: 404,
         error: `The requested rsvp for meetup ${req.params.meetupId} does not exist`
       });
-
   },
 
-  getRsvps(req, res) {
-    return res.status(200).send({
-      status: 200,
-      data: rsvps
-    });
+  async getRsvps(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Rsvps WHERE meetup=$1',
+        values: [req.params.meetupId]
+      });
+
+      const rsvps = results.rows;
+
+      if (rsvps.length > 0) {
+        return res.status(200)
+          .send({
+            status: 200,
+            data: rsvps
+          });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'There are no RSVPs at the moment'
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
   },
 
   getRsvp(req, res) {
@@ -87,5 +118,5 @@ export default {
         error: `The rsvp: ${req.params.rsvpId} for meetup:
 ${req.params.meetupId} does not exist`
       });
-  }
+  },
 };

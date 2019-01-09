@@ -4,8 +4,6 @@ import { omitProps } from '../utils';
 import { search } from './helpers/search';
 
 export default {
-
-  /* eslint-disable no-undef */
   async getAllMeetups(req, res) {
     try {
       if (Object.keys(req.query).length) {
@@ -202,21 +200,4 @@ export default {
         });
     }
   },
-
-  getAllRsvps(req, res) {
-    const rsvpRecords = rsvps.filter(rsvp => String(rsvp.meetup) === req.params.meetupId);
-
-    if (rsvpRecords.length) {
-      return res.status(200)
-        .send({
-          status: 200,
-          data: rsvpRecords
-        });
-    }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The requested meetup has no rsvps at the moment'
-      });
-  }
 };

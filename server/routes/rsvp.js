@@ -7,7 +7,6 @@ const validateResult = schemaValidator();
 
 router
   .route('/meetups/:meetupId/rsvps')
-  .get(rsvpController.getRsvps)
   .post(validateResult, rsvpController.makeRsvp);
 
 router
