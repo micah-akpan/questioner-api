@@ -4,33 +4,35 @@ import createTableQueries from '../models/helpers';
 
 /* eslint-disable no-undef */
 export default {
-  createQuestion(req, res) {
+  async createQuestion(req, res) {
     const {
       title, body, meetupId, userId
     } = req.body;
 
-    const lastId = questions[questions.length - 1].id;
-
-    questions.push({
-      id: lastId + 1,
-      createdOn: new Date(),
-      createdBy: userId,
-      meetup: meetupId,
-      title,
-      body,
-      votes: 0
-    });
-
-    return res.status(201)
-      .send({
-        status: 201,
-        data: [{
-          user: userId,
-          meetup: meetupId,
-          title,
-          body
-        }]
+    try {
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, meetup, createdBy)
+               VALUES ($1, $2, $3, $4) RETURNING *`,
+        values: [title, body, meetupId, userId]
       });
+
+      return res.status(201)
+        .send({
+          status: 201,
+          data: [{
+            user: userId,
+            meetup: meetupId,
+            title,
+            body
+          }]
+        });
+    } catch (e) {
+      res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
   },
 
   upvoteQuestion(req, res) {
@@ -134,5 +136,36 @@ export default {
           error: 'Invalid request, please check and try again'
         });
     }
-  }
+  },
+
+  async getQuestions(req, res) {
+    try {
+      const result = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE meetup=$1',
+        values: [req.params.meetupId]
+      });
+
+      const meetupQuestions = result.rows;
+
+      if (meetupQuestions.length) {
+        return res.status(200)
+          .send({
+            status: 200,
+            data: meetupQuestions
+          });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'There are no questions for this meetup at the moment'
+        });
+    } catch (e) {
+      res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
+  },
 };

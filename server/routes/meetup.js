@@ -1,5 +1,6 @@
 import express from 'express';
 import meetupController from '../controllers/meetup';
+import questionController from '../controllers/question';
 import schemaValidator from '../middlewares/schemaValidator';
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router
   .get(meetupController.getSingleMeetup)
   .delete(meetupController.deleteMeetup);
 
-router.get('/meetups/:meetupId/questions', meetupController.getQuestions);
+router.get('/meetups/:meetupId/questions', questionController.getQuestions);
 
 router.get('/meetups/:meetupId/rsvps', meetupController.getAllRsvps);
 

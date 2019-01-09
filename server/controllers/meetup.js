@@ -45,7 +45,7 @@ export default {
           text: 'SELECT * FROM Meetup'
         });
         const meetupRecords = meetups.rows
-          .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+          .map(meetup => omitProps(meetup, ['images', 'createdOn', 'maxNumberOfAttendees']))
           .map((meetup) => {
             meetup.title = meetup.topic;
             delete meetup.topic;
@@ -72,79 +72,65 @@ export default {
     }
   },
 
-  createNewMeetup(req, res) {
+  async createNewMeetup(req, res) {
     const {
-      location, images, topic, happeningOn, tags
+      location, topic, happeningOn
     } = req.body;
 
-    const lastMeetupId = meetups[meetups.length - 1].id;
+    try {
+      const newMeetup = await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3) RETURNING *`,
+        values: [topic, location, happeningOn]
+      });
 
-    /* These validations aren't necessary
-       as a schema validation middleware
-       has been added only kept for reference
-    */
-    if (!topic || !location || !happeningOn) {
+      const meetupRecord = omitProps(newMeetup.rows[0], ['createdOn', 'images', 'id', 'maxNumberOfAttendees']);
+
+      return res.status(201)
+        .send({
+          status: 201,
+          data: [meetupRecord]
+        });
+    } catch (e) {
       return res.status(400)
         .send({
           status: 400,
-          error: 'The topic, location and happeningOn fields are required fields'
+          error: 'Invalid request, please try again'
         });
     }
-
-    if (Number.isNaN(new Date(happeningOn).getTime())) {
-      return res.status(422)
-        .send({
-          status: 422,
-          error: 'You provided an invalid meetup date'
-        });
-    }
-
-    if (new Date(happeningOn).getTime() < new Date().getTime()) {
-      return res.status(422).send({
-        status: 422,
-        error: 'Meetup Date provided is in the past, provide a future date'
-      });
-    }
-
-    const newMeetup = {
-      topic,
-      location,
-      happeningOn,
-      id: lastMeetupId + 1,
-      createdOn: new Date(),
-      images: images || [],
-      tags: tags || []
-    };
-
-    meetups.push(newMeetup);
-
-    const mRecord = omitProps(newMeetup, ['createdOn', 'images', 'id']);
-
-    return res.status(201).send({
-      status: 201,
-      data: [mRecord]
-    });
   },
 
-  getSingleMeetup(req, res) {
-    const meetupRecord = meetups.filter(
-      meetup => String(meetup.id) === req.params.meetupId
-    )[0];
+  async getSingleMeetup(req, res) {
+    try {
+      const result = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [req.params.meetupId]
+      });
 
-    if (meetupRecord) {
-      const mRecord = omitProps(meetupRecord, ['createdOn', 'images']);
+      const meetupRecord = result.rows[0];
 
-      return res.status(200)
+      if (meetupRecord) {
+        const mRecord = omitProps(meetupRecord, ['createdOn', 'images', 'maxNumberofAttendees']);
+
+        return res.status(200)
+          .send({
+            status: 200,
+            data: [mRecord]
+          });
+      }
+
+      return res.status(404)
         .send({
-          status: 200,
-          data: [mRecord],
+          status: 404,
+          error: 'The requested meetup does not exist'
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
         });
     }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The requested meetup does not exist'
-      });
   },
 
   async deleteMeetup(req, res) {
@@ -165,7 +151,7 @@ export default {
 
       await db.queryDb({
         text: 'DELETE FROM Meetup WHERE id=$1',
-        values: [req.params.id]
+        values: [req.params.meetupId]
       });
 
       return res.status(200)
@@ -182,48 +168,39 @@ export default {
     }
   },
 
-  getUpcomingMeetups(req, res) {
-    const upComingMeetups = meetups.filter(
-      meetup => new Date(meetup.happeningOn).getTime() >= Date.now()
-    );
+  async getUpcomingMeetups(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT id, topic, location, happeningOn, tags FROM Meetup WHERE happeningOn >= NOW()'
+      });
 
-    if (!upComingMeetups.length) {
+      const upComingMeetups = results.rows;
+
+      if (upComingMeetups.length > 0) {
+        const meetupRecords = upComingMeetups
+          .map((meetup) => {
+            meetup.title = meetup.topic;
+            delete meetup.topic;
+            return meetup;
+          });
+
+        return res.status(200).send({
+          status: 200,
+          data: meetupRecords
+        });
+      }
+
       return res.status(404).send({
         status: 404,
         error: 'There are no upcoming meetups'
       });
-    }
-    const meetupRecords = upComingMeetups
-      .map(meetup => omitProps(meetup, ['createdOn', 'images']))
-      .map((meetup) => {
-        meetup.title = meetup.topic;
-        delete meetup.topic;
-        return meetup;
-      });
-
-    return res.status(200).send({
-      status: 200,
-      data: meetupRecords
-    });
-  },
-
-  getQuestions(req, res) {
-    const meetupQuestions = questions.filter(
-      question => String(question.meetup) === req.params.meetupId
-    );
-
-    if (meetupQuestions.length) {
-      return res.status(200)
+    } catch (e) {
+      return res.status(400)
         .send({
-          status: 200,
-          data: meetupQuestions
+          status: 400,
+          error: 'Invalid request, please check and try again'
         });
     }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'There are no questions for this meetup'
-      });
   },
 
   async deleteMeetupQuestion(req, res) {
