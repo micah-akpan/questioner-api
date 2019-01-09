@@ -48,14 +48,14 @@ export default {
       if (question) {
         const { votes } = question;
 
-        await db.queryDb({
+        const results = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
-                 WHERE id = $2`,
+                 WHERE id = $2 RETURNING *`,
           values: [votes + 1, req.params.questionId]
         });
 
-        question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+        question = omitProps(results.rows[0], ['id', 'createdOn', 'createdBy']);
 
         return res.status(200).send({
           status: 200,
@@ -91,14 +91,14 @@ export default {
       if (question) {
         const { votes } = question;
 
-        await db.queryDb({
+        const results = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
-                 WHERE id = $2`,
+                 WHERE id = $2 RETURNING *`,
           values: [votes > 0 ? votes - 1 : 0, req.params.questionId]
         });
 
-        question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+        question = omitProps(results.rows[0], ['id', 'createdOn', 'createdBy']);
 
         return res.status(200).send({
           status: 200,
