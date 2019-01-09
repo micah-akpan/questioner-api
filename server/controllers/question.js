@@ -2,7 +2,7 @@ import { omitProps } from '../utils';
 import db from '../db';
 import createTableQueries from '../models/helpers';
 
-
+/* eslint-disable */
 export default {
   async createQuestion(req, res) {
     const {
@@ -228,5 +228,86 @@ export default {
           error: 'Invalid request, please try again'
         });
     }
+  },
+
+  async deleteMeetupQuestion(req, res) {
+    const { questionId, meetupId } = req.params;
+
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE id=$1 AND meetup=$2 AND createdBy=$3',
+        values: [questionId, meetupId, req.body.userId]
+      });
+
+      const question = results.rows[0];
+      if (question) {
+        await db.queryDb({
+          text: 'DELETE FROM Question WHERE id=$1',
+          values: [questionId]
+        });
+      }
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested question cannot be deleted because it doesn\'t exist'
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
+  },
+
+  updateMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.createdBy) === req.body.userId
+        && String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    const { title, body } = req.body;
+
+    if (questionRecord) {
+      questionRecord.title = title || questionRecord.title;
+
+      questionRecord.body = body || questionRecord.body;
+
+      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+
+      questions[questionIdx] = questionRecord;
+
+      return res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The meetup you requested does not exist'
+      });
+  },
+
+  getSingleMeetupQuestion(req, res) {
+    const questionRecord = questions.find(
+      question => String(question.meetup) === req.params.meetupId
+        && String(question.id) === req.params.questionId
+    );
+
+    if (questionRecord) {
+      return res.status(200)
+        .send({
+          status: 200,
+          data: [questionRecord]
+        });
+    }
+    return res.status(404)
+      .send({
+        status: 404,
+        error: 'The requested question cannot be found'
+      });
   },
 };

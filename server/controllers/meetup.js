@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import db from '../db';
-import { omitProps, getIndex } from '../utils';
+import { omitProps } from '../utils';
 import { search } from './helpers/search';
 
 export default {
@@ -201,64 +201,6 @@ export default {
           error: 'Invalid request, please check and try again'
         });
     }
-  },
-
-  async deleteMeetupQuestion(req, res) {
-    return res.status(500).send({
-      status: 500,
-      error: 'Meetup question cannot be deleted at this time'
-    });
-  },
-
-  updateMeetupQuestion(req, res) {
-    const questionRecord = questions.find(
-      question => String(question.createdBy) === req.body.userId
-        && String(question.meetup) === req.params.meetupId
-        && String(question.id) === req.params.questionId
-    );
-
-    const { title, body } = req.body;
-
-    if (questionRecord) {
-      questionRecord.title = title || questionRecord.title;
-
-      questionRecord.body = body || questionRecord.body;
-
-      const questionIdx = getIndex(questions, 'id', questionRecord.id);
-
-      questions[questionIdx] = questionRecord;
-
-      return res.status(200)
-        .send({
-          status: 200,
-          data: [questionRecord]
-        });
-    }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The meetup you requested does not exist'
-      });
-  },
-
-  getSingleMeetupQuestion(req, res) {
-    const questionRecord = questions.find(
-      question => String(question.meetup) === req.params.meetupId
-        && String(question.id) === req.params.questionId
-    );
-
-    if (questionRecord) {
-      return res.status(200)
-        .send({
-          status: 200,
-          data: [questionRecord]
-        });
-    }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The requested question cannot be found'
-      });
   },
 
   getAllRsvps(req, res) {
