@@ -11,9 +11,9 @@ router.route('/questions')
   .get(questionController.getAllQuestions)
   .post(validateRequest, questionController.createQuestion);
 
-router.patch('/questions/:id/upvote', questionController.upvoteQuestion);
+router.patch('/questions/:questionId/upvote', questionController.upvoteQuestion);
 
-router.patch('/questions/:id/downvote', questionController.downvoteQuestion);
+router.patch('/questions/:questionId/downvote', questionController.downvoteQuestion);
 
 router.post('/comments', questionController.addComments);
 

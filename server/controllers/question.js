@@ -2,7 +2,7 @@ import { omitProps } from '../utils';
 import db from '../db';
 import createTableQueries from '../models/helpers';
 
-/* eslint-disable no-undef */
+
 export default {
   async createQuestion(req, res) {
     const {
@@ -35,60 +35,120 @@ export default {
     }
   },
 
-  upvoteQuestion(req, res) {
-    let question = questions.filter(q => String(q.id) === req.params.id)[0];
-
-    if (!question) {
-      return res.status(404).send({
-        status: 404,
-        error: `The question with the id: ${req.params.id} does not exist`
+  async upvoteQuestion(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE id=$1',
+        values: [req.params.questionId]
       });
-    }
-    question.votes += 1;
-    questions.forEach((q) => {
-      if (q.id === question.id) {
-        q = question;
+
+      let question = results.rows[0];
+
+
+      if (question) {
+        const { votes } = question;
+
+        await db.queryDb({
+          text: `UPDATE Question
+                 SET votes = $1
+                 WHERE id = $2`,
+          values: [votes + 1, req.params.questionId]
+        });
+
+        question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+        return res.status(200).send({
+          status: 200,
+          data: [
+            question
+          ]
+        });
       }
-    });
-
-    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
-
-    return res.status(200).send({
-      status: 200,
-      data: [
-        question
-      ]
-    });
-  },
-
-  downvoteQuestion(req, res) {
-    let question = questions.filter(q => String(q.id) === req.params.id)[0];
-
-    if (!question) {
       return res.status(404)
         .send({
           status: 404,
-          error: `The question with the id: ${req.params.id} does not exist`
+          error: 'The question cannot be upvoted because it does not exist'
+        });
+    } catch (e) {
+      res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
         });
     }
-    question.votes = question.votes > 0 ? question.votes - 1 : 0;
-
-    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
-
-    return res.status(200)
-      .send({
-        status: 200,
-        data: [question]
-      });
   },
 
-  getAllQuestions(req, res) {
-    // for Admin ONLY
-    return res.status(200)
-      .send({
-        status: 200,
-        data: questions
+  async downvoteQuestion(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE id=$1',
+        values: [req.params.questionId]
       });
+
+      let question = results.rows[0];
+
+
+      if (question) {
+        const { votes } = question;
+
+        await db.queryDb({
+          text: `UPDATE Question
+                 SET votes = $1
+                 WHERE id = $2`,
+          values: [votes > 0 ? votes - 1 : 0, req.params.questionId]
+        });
+
+        question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+
+        return res.status(200).send({
+          status: 200,
+          data: [
+            question
+          ]
+        });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'The question cannot be downvoted because it does not exist'
+        });
+    } catch (e) {
+      res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
+  },
+
+  async getAllQuestions(req, res) {
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question ORDER BY votes DESC'
+      });
+
+      const questions = results.rows;
+
+      if (questions.length > 0) {
+        return res.status(200)
+          .send({
+            status: 200,
+            data: questions
+          });
+      }
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'There are no questions at the moment'
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
   },
 
   async addComments(req, res) {
@@ -141,7 +201,8 @@ export default {
   async getQuestions(req, res) {
     try {
       const result = await db.queryDb({
-        text: 'SELECT * FROM Question WHERE meetup=$1',
+        text: `SELECT * FROM Question WHERE meetup=$1
+               ORDER BY votes DESC`,
         values: [req.params.meetupId]
       });
 
