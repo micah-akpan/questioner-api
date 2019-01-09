@@ -127,7 +127,7 @@ describe('Questions API', () => {
     });
   });
 
-  describe('POST /comments', () => {
+  describe.only('POST /comments', () => {
     beforeEach(async () => {
       await db.queryDb({
         text: `INSERT INTO "User" (firstname, lastname, email, password)
@@ -209,10 +209,10 @@ describe('Questions API', () => {
           .send({
             commentText: 'a new comment'
           })
-          .expect(400)
+          .expect(404)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(400);
+            res.body.status.should.equal(404);
             res.body.should.have.property('error');
             done();
           });
