@@ -260,54 +260,89 @@ export default {
     }
   },
 
-  updateMeetupQuestion(req, res) {
-    const questionRecord = questions.find(
-      question => String(question.createdBy) === req.body.userId
-        && String(question.meetup) === req.params.meetupId
-        && String(question.id) === req.params.questionId
-    );
+  async updateMeetupQuestion(req, res) {
 
-    const { title, body } = req.body;
+    try {
 
-    if (questionRecord) {
-      questionRecord.title = title || questionRecord.title;
+      const { meetupId, questionId } = req.params;
+      const { title, body } = req.body;
 
-      questionRecord.body = body || questionRecord.body;
+      // console.log(req.body)
+      const results = await db.queryDb({
+        text: `SELECT * FROM Question
+               WHERE id=$1 AND createdBy=$2 AND meetup=$3`,
+        values: [questionId, req.body.userId, meetupId]
+      })
 
-      const questionIdx = getIndex(questions, 'id', questionRecord.id);
+      const questionRecord = results.rows[0];
 
-      questions[questionIdx] = questionRecord;
+      if (questionRecord) {
 
-      return res.status(200)
+        const results = await db.queryDb({
+          text: `UPDATE Question
+                 SET title=$1, body=$2
+                 WHERE id=$3 RETURNING *`,
+          values: [title || questionRecord.title, 
+            body || questionRecord.body, questionRecord.id
+          ]
+        })
+
+        const updatedQuestion = results.rows[0];
+
+        return res.status(200)
+          .send({
+            status: 200,
+            data: [updatedQuestion]
+          });
+      }
+
+      return res.status(404)
         .send({
-          status: 200,
-          data: [questionRecord]
+          status: 404,
+          error: 'The meetup you requested does not exist'
         });
+    } catch (e) {
+      console.log(e)
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request. Please try again'
+        })
     }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The meetup you requested does not exist'
-      });
   },
 
-  getSingleMeetupQuestion(req, res) {
-    const questionRecord = questions.find(
-      question => String(question.meetup) === req.params.meetupId
-        && String(question.id) === req.params.questionId
-    );
+  async getSingleMeetupQuestion(req, res) {
 
-    if (questionRecord) {
-      return res.status(200)
-        .send({
-          status: 200,
-          data: [questionRecord]
-        });
-    }
-    return res.status(404)
-      .send({
-        status: 404,
-        error: 'The requested question cannot be found'
+    const { questionId, meetupId } = req.params;
+
+    try {
+      const results = await db.queryDb({
+        text: `SELECT * FROM Question
+               WHERE id=$1 AND meetup=$2`,
+        values: [questionId, meetupId]
       });
+
+      const questionRecord = results.rows[0];
+
+      if (questionRecord) {
+        return res.status(200)
+          .send({
+            status: 200,
+            data: [questionRecord]
+          });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'The requested question does not exist'
+        });
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request. Please try again'
+        })
+    }
   },
 };
