@@ -30,11 +30,11 @@ export default {
       createMeetupSQLQuery
     } = tableQueries;
     try {
-      await pool.query(createCommentSQLQuery);
-      await pool.query(createQuestionSQLQuery);
       await pool.query(createUserSQLQuery);
-      await pool.query(createRsvpSQLQuery);
       await pool.query(createMeetupSQLQuery);
+      await pool.query(createQuestionSQLQuery);
+      await pool.query(createCommentSQLQuery);
+      await pool.query(createRsvpSQLQuery);
 
       logger.log({
         level: 'info',

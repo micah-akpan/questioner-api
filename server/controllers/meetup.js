@@ -6,41 +6,70 @@ import { search } from './helpers/search';
 export default {
 
   /* eslint-disable no-undef */
-  getAllMeetups(req, res) {
-    if (Object.keys(req.query).length) {
-      const { searchTerm } = req.query;
+  async getAllMeetups(req, res) {
+    try {
+      if (Object.keys(req.query).length) {
+        const { searchTerm } = req.query;
 
-      const byTopic = search(meetups, 'topic', searchTerm);
-      const byLocation = search(meetups, 'location', searchTerm);
-      const byTag = search(meetups, 'tags', searchTerm);
+        const meetups = await db.queryDb({
+          text: 'SELECT * FROM Meetup'
+        });
 
-      const allMeetups = [...byTopic, ...byLocation, ...byTag];
+        const meetupRecords = meetups.rows;
 
-      const filteredMeetups = _.uniqBy(allMeetups, 'id');
+        const byTopic = search(meetupRecords, 'topic', searchTerm);
+        const byLocation = search(meetupRecords, 'location', searchTerm);
+        const byTag = search(meetupRecords, 'tags', searchTerm);
 
-      if (allMeetups.length) {
-        return res.status(200).send({
-          status: 200,
-          data: filteredMeetups
+        const allMeetups = [...byTopic, ...byLocation, ...byTag];
+
+        const filteredMeetups = _.uniqBy(allMeetups, 'id');
+
+        if (allMeetups.length) {
+          return res.status(200)
+            .send({
+              status: 200,
+              data: filteredMeetups
+            });
+        }
+
+        return res.status(404).send({
+          status: 404,
+          error: `No meetups match with this search: ${req.query.searchTerm}`
         });
       }
-      return res.status(404).send({
-        status: 404,
-        error: `No meetups match with this search: ${req.query.searchTerm}`
-      });
-    }
-    const meetupRecords = meetups
-      .map(meetup => omitProps(meetup, ['images', 'createdOn']))
-      .map((meetup) => {
-        meetup.title = meetup.topic;
-        delete meetup.topic;
-        return meetup;
-      });
 
-    return res.status(200).send({
-      status: 200,
-      data: meetupRecords
-    });
+
+      try {
+        const meetups = await db.queryDb({
+          text: 'SELECT * FROM Meetup'
+        });
+        const meetupRecords = meetups.rows
+          .map(meetup => omitProps(meetup, ['images', 'createdOn']))
+          .map((meetup) => {
+            meetup.title = meetup.topic;
+            delete meetup.topic;
+            return meetup;
+          });
+
+        return res.status(200).send({
+          status: 200,
+          data: meetupRecords
+        });
+      } catch (e) {
+        return res.status(400)
+          .send({
+            status: 400,
+            error: 'Invalid request, please try again'
+          });
+      }
+    } catch (e) {
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please try again'
+        });
+    }
   },
 
   createNewMeetup(req, res) {
