@@ -1,7 +1,4 @@
 import jwt from 'jsonwebtoken';
-import * as Promise from 'bluebird';
-
-Promise.promisify(jwt.verify);
 
 export default {
   checkToken(req, res, next) {
