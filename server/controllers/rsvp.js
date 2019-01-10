@@ -1,11 +1,10 @@
-import { omitProps } from '../utils';
 import db from '../db';
 
 /* eslint-disable */
 export default {
   async makeRsvp(req, res) {
     try {
-      const results = await db.queryDb({
+      const meetupResults = await db.queryDb({
         text: `SELECT * FROM Meetup
                WHERE id=$1`,
         values: [req.params.meetupId]
@@ -13,7 +12,8 @@ export default {
 
       const { response, userId } = req.body;
 
-      const meetupRecord = results.rows[0];
+      const meetupRecord = meetupResults.rows[0];
+
       if (meetupRecord) {
         const rsvpResults = await db.queryDb({
           text: `INSERT INTO Rsvp ("user", meetup, response)
@@ -21,7 +21,14 @@ export default {
           values: [userId, req.params.meetupId, response]
         });
 
-        const newRsvp = omitProps(rsvpResults.rows[0], ['id', 'user']);
+
+        const { id, topic } = meetupRecord;
+
+        const newRsvp = {
+          meetup: id,
+          topic,
+          status: rsvpResults.rows[0].response
+        };
 
         return res.status(201)
           .send({

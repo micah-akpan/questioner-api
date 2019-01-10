@@ -7,7 +7,7 @@ import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe.only('Meetups API', () => {
+describe('Meetups API', () => {
   before('Setup', async () => {
     // sync tables
     // Drop referencing tables

@@ -5,7 +5,7 @@ import { app } from '../../app';
 import db from '../../db';
 import createTableQueries from '../../models/helpers';
 
-describe.only('User API', () => {
+describe('User API', () => {
   const testUser = {
     email: 'testuser@gmail.com',
     password: 'testuser1234',

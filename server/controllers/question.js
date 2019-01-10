@@ -297,7 +297,6 @@ export default {
           error: 'The meetup you requested does not exist'
         });
     } catch (e) {
-      console.log(e);
       return res.status(400)
         .send({
           status: 400,

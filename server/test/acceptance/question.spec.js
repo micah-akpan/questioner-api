@@ -127,7 +127,7 @@ describe('Questions API', () => {
     });
   });
 
-  describe.only('POST /comments', () => {
+  describe('POST /comments', () => {
     beforeEach(async () => {
       await db.queryDb({
         text: `INSERT INTO "User" (firstname, lastname, email, password)
