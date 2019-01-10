@@ -7,7 +7,7 @@ import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe('Meetups API', () => {
+describe.only('Meetups API', () => {
   before('Setup', async () => {
     // Drop referencing tables
     await db.queryDb({
@@ -26,7 +26,7 @@ describe('Meetups API', () => {
     // Create tables
     await db.queryDb(createTableQueries.createMeetupSQLQuery);
   });
-  describe('POST /api/v2/meetups', () => {
+  describe('POST /meetups', () => {
     describe('handle valid data', () => {
       it('should create a meetup', (done) => {
         agent
@@ -117,7 +117,32 @@ describe('Meetups API', () => {
   });
 
 
-  describe('GET /api/v2/meetups', () => {
+  describe('GET meetups', () => {
+    before(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+
+      await db.queryDb(createTableQueries.createMeetupSQLQuery);
+    });
+
+    beforeEach(async () => {
+      // bulk-create test meetups
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3),
+               ($4, $5, $6) RETURNING *`,
+        values: [
+          'meetup topic',
+          'meetup location',
+          getFutureDate(),
+          'next topic',
+          'next location',
+          getFutureDate()
+        ]
+      });
+    });
     it('should return a list of meetups', (done) => {
       agent
         .get('/api/v2/meetups')
@@ -132,7 +157,7 @@ describe('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v2/meetups?searchTerm=Meetup 1')
+        .get('/api/v2/meetups?searchTerm=meetup topic')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -145,7 +170,7 @@ describe('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v2/meetups?searchTerm=food festival')
+        .get('/api/v2/meetups?searchTerm=next location')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -155,10 +180,16 @@ describe('Meetups API', () => {
           done();
         });
     });
+
+    afterEach(async () => {
+      await db.queryDb({
+        text: 'DELETE FROM Meetup'
+      });
+    });
   });
 
 
-  describe('GET /api/v2/meetups/:id', () => {
+  describe('GET /meetups/<meetup-id>', () => {
     it('should return a single meetup', (done) => {
       agent
         .get('/api/v2/meetups/1')
@@ -188,7 +219,7 @@ describe('Meetups API', () => {
   });
 
 
-  describe.only('DELETE /meetups/<meetup-id>/', () => {
+  describe('DELETE /meetups/<meetup-id>/', () => {
     beforeEach(async () => {
       await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn)
