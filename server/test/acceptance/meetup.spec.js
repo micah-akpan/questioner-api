@@ -328,4 +328,8 @@ describe.only('Meetups API', () => {
       });
     });
   });
+
+  after(async () => {
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+  });
 });
