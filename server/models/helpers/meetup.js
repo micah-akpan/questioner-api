@@ -1,5 +1,5 @@
 export default {
-  text: `CREATE TABLE IF NOT EXISTS Meetup(
+  text: `CREATE TABLE IF NOT EXISTS Meetup (
       id SERIAL PRIMARY KEY,
       topic text NOT NULL,
       location text NOT NULL,

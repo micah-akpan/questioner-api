@@ -8,14 +8,15 @@ const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
-    db.dropTable({ tableName: 'Comment' });
-    db.dropTable({ tableName: 'Question' });
-    db.dropTable({ tableName: 'Meetup' });
-    db.dropTable({ tableName: '"User"' });
+    await db.dropTable({ tableName: 'Comment' });
+    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
 
     await db.createTable({ tableName: 'User' });
     await db.createTable({ tableName: 'Meetup' });
     await db.createTable({ tableName: 'Question' });
+    await db.createTable({ tableName: 'Comment' });
   });
 
   describe('POST /api/v2/questions', () => {
@@ -258,6 +259,8 @@ describe.only('Questions API', () => {
         VALUES ($1, $2, $3, $4)`,
         values: ['question 1', 'question body', 1, 1]
       });
+
+      await db.createTable({ tableName: 'Comment' });
     });
 
     describe('handle valid data', () => {
@@ -330,13 +333,13 @@ describe.only('Questions API', () => {
           });
       });
     });
+  });
 
-    after('Teardown', async () => {
-      await db.dropTable({ tableName: 'Comment' });
-      await db.dropTable({ tableName: 'Question' });
-      await db.dropTable({ tableName: 'Rsvp' });
-      await db.dropTable({ tableName: 'Meetup' });
-      await db.dropTable({ tableName: '"User"' });
-    });
+  after('Teardown', async () => {
+    await db.dropTable({ tableName: 'Comment' });
+    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
   });
 });

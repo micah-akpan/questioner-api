@@ -1,6 +1,5 @@
 import { omitProps } from '../utils';
 import db from '../db';
-import createTableQueries from '../models/helpers';
 
 
 export default {
@@ -155,14 +154,6 @@ export default {
     try {
       const { questionId, commentText } = req.body;
 
-      await db.queryDb(createTableQueries.createCommentSQLQuery);
-
-      const addCommentsQuery = {
-        text: `INSERT INTO Comment (body, question)
-             VALUES ($1, $2) RETURNING *`,
-        values: [commentText, questionId]
-      };
-
       const results = await db.queryDb({
         text: 'SELECT * FROM Question WHERE id=$1',
         values: [questionId]
@@ -174,6 +165,12 @@ export default {
           title: results.rows[0].title,
           body: results.rows[0].body,
           comment: commentText
+        };
+
+        const addCommentsQuery = {
+          text: `INSERT INTO Comment (body, question)
+               VALUES ($1, $2) RETURNING *`,
+          values: [commentText, questionId]
         };
 
         await db.queryDb(addCommentsQuery);
@@ -190,10 +187,11 @@ export default {
           error: 'You cannot comment on this question because the question does not exist'
         });
     } catch (e) {
+      console.log(e);
       return res.status(400)
         .send({
           status: 400,
-          error: 'Invalid request, please check and try again'
+          error: 'Invalid request, please try again'
         });
     }
   },

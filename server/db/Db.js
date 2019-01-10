@@ -19,7 +19,7 @@ class Db {
    * @param {*} query An object with 2 required fields (text and values)
    * @returns {Promise<QueryResult>} Returns a promise of the results of the query operation
    */
-  static queryDb(query) {
+  queryDb(query) {
     return this.dbClient.query(query);
   }
 
