@@ -47,10 +47,6 @@ describe.only('User API', () => {
 
     describe('handle invalid/incomplete data', () => {
       beforeEach(async () => {
-        // // create test user
-        // // TODO: Seed database prior to test
-        // await db.queryDb(createTableQueries.createUserSQLQuery);
-
         await db.queryDb({
           text: `INSERT INTO "User" (firstname,lastname,email,password)
                  VALUES ($1, $2, $3, $4)

@@ -13,8 +13,6 @@ describe.only('Meetups API', () => {
     await db.dropTable({ tableName: 'Meetup' });
 
     await db.createTable({ tableName: 'Meetup' });
-
-    // seed db
     await db.queryDb({
       text: `INSERT INTO Meetup(topic, location, happeningOn)
              VALUES ($1, $2, $3),
@@ -132,7 +130,6 @@ describe.only('Meetups API', () => {
     });
 
     beforeEach(async () => {
-      // bulk-create test meetups
       await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn)
                VALUES ($1, $2, $3),

@@ -1,6 +1,5 @@
 import { Pool } from 'pg';
 import dbConfig from '../models/config';
-// import tableQueries from '../models/helpers';
 import Db from './Db';
 
 

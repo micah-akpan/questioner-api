@@ -2,7 +2,7 @@ import logger from '../helpers';
 import tableQueries from '../models/helpers';
 
 /**
- * @class DB
+ * @class Db
  * @description DB specific operations
  */
 class Db {
@@ -16,6 +16,7 @@ class Db {
   }
 
   /**
+   * @method queryDb
    * @param {*} query An object with 2 required fields (text and values)
    * @returns {Promise<QueryResult>} Returns a promise of the results of the query operation
    */
@@ -24,10 +25,10 @@ class Db {
   }
 
   /**
+   * @method sync
    * @returns {String} Database tables sync success/failure message
    */
   async sync() {
-    // drops and creates all tables
     try {
       await this.createTable({ tableName: 'User' });
       await this.createTable({ tableName: 'Meetup' });
@@ -50,7 +51,6 @@ class Db {
     try {
       if (force) {
         const createTableQuery = this.tableQueries[tableName];
-        // return pool.query(createTableQuery);
         return this.dbClient.query(createTableQuery);
       }
     } catch (e) {
