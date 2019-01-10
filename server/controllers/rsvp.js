@@ -71,7 +71,7 @@ export default {
   async getRsvps(req, res) {
     try {
       const results = await db.queryDb({
-        text: 'SELECT * FROM Rsvps WHERE meetup=$1',
+        text: 'SELECT * FROM Rsvp WHERE meetup=$1',
         values: [req.params.meetupId]
       });
 
@@ -88,9 +88,10 @@ export default {
       return res.status(404)
         .send({
           status: 404,
-          error: 'There are no RSVPs at the moment'
+          error: 'There are no RSVPs for this meetup at the moment'
         });
     } catch (e) {
+      console.log(e)
       return res.status(400)
         .send({
           status: 400,
