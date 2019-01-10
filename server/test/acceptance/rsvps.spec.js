@@ -2,24 +2,21 @@ import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
 import db from '../../db';
-import createTables from '../../models/helpers';
 import { getFutureDate } from '../../utils';
-
 
 const agent = request(app);
 
-describe('RSVP API', () => {
+describe.only('RSVP API', () => {
   before(async () => {
-    // sync tables
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
 
-    const { createUserSQLQuery, createMeetupSQLQuery, createRsvpSQLQuery } = createTables;
-    await db.queryDb(createUserSQLQuery);
-    await db.queryDb(createMeetupSQLQuery);
-    await db.queryDb(createRsvpSQLQuery);
+    await db.createTable({ tableName: 'User' });
+    await db.createTable({ tableName: 'Meetup' });
+    await db.createTable({ tableName: 'Rsvp' });
   });
+
   describe('POST /meetups/<meetup-id>/rsvps', () => {
     beforeEach(async () => {
       await db.queryDb({
@@ -116,14 +113,13 @@ describe('RSVP API', () => {
 
   describe('GET /meetups/<meetup-id>/rsvps/<rsvp-id>', () => {
     before(async () => {
-      db.drop('Rsvp');
-      db.drop('"User"');
-      db.drop('Meetup');
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
 
-      const { createUserSQLQuery, createMeetupSQLQuery, createRsvpSQLQuery } = createTables;
-      await db.queryDb(createUserSQLQuery);
-      await db.queryDb(createMeetupSQLQuery);
-      await db.queryDb(createRsvpSQLQuery);
+      await db.createTable({ tableName: 'User' });
+      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable({ tableName: 'Rsvp' });
     });
     beforeEach(async () => {
       await db.queryDb({
@@ -174,7 +170,8 @@ describe('RSVP API', () => {
   });
 
   after(async () => {
-    db.drop('Meetup');
-    db.drop('"User"');
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
   });
 });

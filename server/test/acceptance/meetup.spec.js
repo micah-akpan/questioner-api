@@ -6,7 +6,7 @@ import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe('Meetups API', () => {
+describe.only('Meetups API', () => {
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
