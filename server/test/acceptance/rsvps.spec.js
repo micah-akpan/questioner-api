@@ -8,7 +8,7 @@ import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe.only('RSVP API', () => {
+describe('RSVP API', () => {
   before(async () => {
     // sync tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });

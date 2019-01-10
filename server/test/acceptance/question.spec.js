@@ -7,10 +7,11 @@ import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe('Questions API', () => {
+describe.only('Questions API', () => {
   before('Setup', async () => {
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
 
@@ -21,6 +22,19 @@ describe('Questions API', () => {
   });
 
   describe('POST /api/v2/questions', () => {
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (email, password, firstname, lastname)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['testuser@email.com', 'user1234', 'Test', 'User']
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'location 1', getFutureDate()]
+      });
+    });
     describe('handle valid data', () => {
       it('should create a question', (done) => {
         agent
@@ -28,8 +42,8 @@ describe('Questions API', () => {
           .send({
             title: 'question 1',
             body: 'question body',
-            meetupId: 2,
-            userId: 4
+            meetupId: 1,
+            userId: 1
           })
           .expect(201)
           .end((err, res) => {
@@ -63,7 +77,39 @@ describe('Questions API', () => {
     });
   });
 
-  describe('PATCH /api/v2/questions/<question-id>/upvote', () => {
+  describe('PATCH /questions/<question-id>/upvote', () => {
+    before(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+
+      // initialize all tables
+      await db.queryDb(createTableQueries.createUserSQLQuery);
+      await db.queryDb(createTableQueries.createMeetupSQLQuery);
+      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (email, password, firstname, lastname)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['testuser@email.com', 'user1234', 'Test', 'User']
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'location 1', getFutureDate()]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, createdBy, meetup)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['question 1', 'question body', 1, 1]
+      });
+    });
     it('should upvote a question', (done) => {
       agent
         .patch('/api/v2/questions/1/upvote')
@@ -89,6 +135,38 @@ describe('Questions API', () => {
   });
 
   describe('PATCH /api/v2/questions/<question-id>/downvote', () => {
+    before(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+
+      // initialize all tables
+      await db.queryDb(createTableQueries.createUserSQLQuery);
+      await db.queryDb(createTableQueries.createMeetupSQLQuery);
+      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (email, password, firstname, lastname)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['testuser@email.com', 'user1234', 'Test', 'User']
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'location 1', getFutureDate()]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, createdBy, meetup)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['question 1', 'question body', 1, 1]
+      });
+    });
     it('should downvote a question', (done) => {
       agent
         .patch('/api/v2/questions/1/downvote')
@@ -114,6 +192,47 @@ describe('Questions API', () => {
   });
 
   describe('GET /questions', () => {
+    before(async () => {
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+
+      // initialize all tables
+      await db.queryDb(createTableQueries.createUserSQLQuery);
+      await db.queryDb(createTableQueries.createMeetupSQLQuery);
+      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+
+      await db.queryDb({
+        text: `INSERT INTO "User" (email, password, firstname, lastname)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['testuser@email.com', 'user1234', 'Test', 'User']
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'location 1', getFutureDate()]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, createdBy, meetup)
+               VALUES ($1, $2, $3, $4),
+               ($5, $6, $7, $8)`,
+        values: [
+          'question 1',
+          'question body',
+          1,
+          1,
+
+          'question 2',
+          'question body 2',
+          1,
+          1
+        ]
+      });
+    });
     it('should return all questions', (done) => {
       agent
         .get('/api/v2/questions')
@@ -122,6 +241,7 @@ describe('Questions API', () => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.should.have.property('data');
+          res.body.data.length.should.equal(2);
           done();
         });
     });
