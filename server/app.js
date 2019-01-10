@@ -2,6 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
 import { config } from 'dotenv';
+import wLogger from './helpers';
 import indexRouter from './routes';
 import db from './db';
 
@@ -13,7 +14,21 @@ app.set('json spaces', 2);
 
 /* Middlewares */
 if (app.get('env') === 'development') {
-  db.sync();
+  // sync tables
+  db.sync()
+    .then((msg) => {
+      wLogger.log({
+        level: 'info',
+        message: msg
+      });
+    })
+    .catch((err) => {
+      wLogger.log({
+        level: 'info',
+        message: err
+      });
+    });
+
   app.use(logger('dev'));
 }
 
@@ -34,7 +49,6 @@ app.use((req, res, next) => {
 
 // Development error handler
 // This will print stacktraces
-
 if (app.get('env') === 'development') {
   app.use((err, req, res) => {
     res.status(err.status || 500);

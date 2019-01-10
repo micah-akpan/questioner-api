@@ -10,11 +10,11 @@ import createRsvpSQLQuery from './rsvp';
 import createCommentSQLQuery from './comment';
 
 const createTableSQLQueries = {
-  createMeetupSQLQuery,
-  createQuestionSQLQuery,
-  createUserSQLQuery,
-  createRsvpSQLQuery,
-  createCommentSQLQuery
+  Meetup: createMeetupSQLQuery,
+  Question: createQuestionSQLQuery,
+  User: createUserSQLQuery,
+  Rsvp: createRsvpSQLQuery,
+  Comment: createCommentSQLQuery
 };
 
 export default createTableSQLQueries;

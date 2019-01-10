@@ -2,23 +2,20 @@ import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
 import db from '../../db';
-import createTableQueries from '../../models/helpers';
 import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+    db.dropTable({ tableName: 'Comment' });
+    db.dropTable({ tableName: 'Question' });
+    db.dropTable({ tableName: 'Meetup' });
+    db.dropTable({ tableName: '"User"' });
 
-    // initialize all tables
-    await db.queryDb(createTableQueries.createUserSQLQuery);
-    await db.queryDb(createTableQueries.createMeetupSQLQuery);
-    await db.queryDb(createTableQueries.createQuestionSQLQuery);
+    await db.createTable({ tableName: 'User' });
+    await db.createTable({ tableName: 'Meetup' });
+    await db.createTable({ tableName: 'Question' });
   });
 
   describe('POST /api/v2/questions', () => {
@@ -79,16 +76,15 @@ describe.only('Questions API', () => {
 
   describe('PATCH /questions/<question-id>/upvote', () => {
     before(async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
 
-      // initialize all tables
-      await db.queryDb(createTableQueries.createUserSQLQuery);
-      await db.queryDb(createTableQueries.createMeetupSQLQuery);
-      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+      await db.createTable({ tableName: 'User' });
+      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable({ tableName: 'Question' });
     });
 
     beforeEach(async () => {
@@ -136,16 +132,15 @@ describe.only('Questions API', () => {
 
   describe('PATCH /api/v2/questions/<question-id>/downvote', () => {
     before(async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
 
-      // initialize all tables
-      await db.queryDb(createTableQueries.createUserSQLQuery);
-      await db.queryDb(createTableQueries.createMeetupSQLQuery);
-      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+      await db.createTable({ tableName: 'User' });
+      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable({ tableName: 'Question' });
     });
 
     beforeEach(async () => {
@@ -193,16 +188,15 @@ describe.only('Questions API', () => {
 
   describe('GET /questions', () => {
     before(async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
 
-      // initialize all tables
-      await db.queryDb(createTableQueries.createUserSQLQuery);
-      await db.queryDb(createTableQueries.createMeetupSQLQuery);
-      await db.queryDb(createTableQueries.createQuestionSQLQuery);
+      await db.createTable({ tableName: 'User' });
+      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable({ tableName: 'Question' });
 
       await db.queryDb({
         text: `INSERT INTO "User" (email, password, firstname, lastname)
@@ -259,13 +253,11 @@ describe.only('Questions API', () => {
         values: ['meetup topic 1', 'meetup location 1', getFutureDate()]
       });
 
-      const addNewQuestionQuery = {
+      await db.queryDb({
         text: `INSERT INTO Question (title, body, createdBy, meetup) 
         VALUES ($1, $2, $3, $4)`,
         values: ['question 1', 'question body', 1, 1]
-      };
-
-      await db.queryDb(addNewQuestionQuery);
+      });
     });
 
     describe('handle valid data', () => {
@@ -340,10 +332,11 @@ describe.only('Questions API', () => {
     });
 
     after('Teardown', async () => {
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Comment' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
     });
   });
 });
