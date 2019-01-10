@@ -264,8 +264,6 @@ export default {
     try {
       const { meetupId, questionId } = req.params;
       const { title, body } = req.body;
-
-      // console.log(req.body)
       const results = await db.queryDb({
         text: `SELECT * FROM Question
                WHERE id=$1 AND createdBy=$2 AND meetup=$3`,
@@ -277,10 +275,10 @@ export default {
       if (questionRecord) {
         const questionResults = await db.queryDb({
           text: `UPDATE Question
-                 SET title=$1, body=$2
+                 SET title=$1, body=$2, createdby=$4
                  WHERE id=$3 RETURNING *`,
           values: [title || questionRecord.title,
-            body || questionRecord.body, questionRecord.id
+            body || questionRecord.body, questionRecord.id, questionRecord.createdby
           ]
         });
 
@@ -299,6 +297,7 @@ export default {
           error: 'The meetup you requested does not exist'
         });
     } catch (e) {
+      console.log(e);
       return res.status(400)
         .send({
           status: 400,
