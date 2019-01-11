@@ -1,20 +1,22 @@
 import { Router } from 'express';
 import questionController from '../controllers/question';
 import schemaValidator from '../middlewares/schemaValidator';
+import Auth from '../middlewares/auth';
 
 const router = Router();
 
 const validateRequest = schemaValidator();
 
+const { isAdmin, checkToken } = Auth;
+
 router.route('/questions')
-// for Admin ONLY
-  .get(questionController.getAllQuestions)
-  .post(validateRequest, questionController.createQuestion);
+  .get(checkToken, isAdmin, questionController.getAllQuestions)
+  .post(checkToken, validateRequest, questionController.createQuestion);
 
-router.patch('/questions/:questionId/upvote', questionController.upvoteQuestion);
+router.patch('/questions/:questionId/upvote', checkToken, questionController.upvoteQuestion);
 
-router.patch('/questions/:questionId/downvote', questionController.downvoteQuestion);
+router.patch('/questions/:questionId/downvote', checkToken, questionController.downvoteQuestion);
 
-router.post('/comments', questionController.addComments);
+router.post('/comments', checkToken, questionController.addComments);
 
 export default router;

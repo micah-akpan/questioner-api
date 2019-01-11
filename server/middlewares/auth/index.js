@@ -9,7 +9,7 @@ export default {
         token = token.slice(7);
       }
 
-      jwt.verify(token, process.env.SECRET_JWT_KEY, (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
           return res.status(401)
             .send({
@@ -34,7 +34,7 @@ export default {
     if (!req.decodedToken.admin) {
       return res.status(403)
         .send({
-          message: 'Only admins can delete',
+          message: 'Only admins can create or delete a meetup',
           success: false
         });
     }
