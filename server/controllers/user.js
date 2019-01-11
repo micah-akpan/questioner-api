@@ -31,11 +31,15 @@ export default {
         values: [email, hashedPassword, firstname, lastname]
       };
 
-      const userAuthToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+      const newTableResult = await db.queryDb(createNewUserQuery);
+
+      const userAuthToken = jwt.sign({
+        email, admin: newTableResult.rows[0].isadmin
+      },
+      process.env.JWT_SECRET, {
         expiresIn: '24h'
       });
 
-      const newTableResult = await db.queryDb(createNewUserQuery);
       return res.status(201).send({
         status: 201,
         data: [{
@@ -63,12 +67,12 @@ export default {
 
       if (userResult.rows.length > 0) {
         // user exist
-        const checkPwdQuery = {
+        const selectUserQuery = {
           text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
           values: [email]
         };
 
-        const result = await db.queryDb(checkPwdQuery);
+        const result = await db.queryDb(selectUserQuery);
         const { encryptedpassword } = result.rows[0];
 
         const match = await bcrypt.compare(password, encryptedpassword);
@@ -78,7 +82,10 @@ export default {
             .send({
               status: 201,
               data: [{
-                token: jwt.sign({ email }, process.env.JWT_SECRET, {
+                token: jwt.sign({
+                  email,
+                  admin: userResult.rows[0].isadmin
+                }, process.env.JWT_SECRET, {
                   expiresIn: '24h'
                 }),
                 user: omitProps(userResult.rows[0], ['password'])
