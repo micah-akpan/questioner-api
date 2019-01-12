@@ -1,18 +1,12 @@
 import 'chai/register-should';
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
-import { getFutureDate } from '../../utils';
+import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
 describe.only('Meetups API', () => {
-  const createTestToken = (admin = false) => jwt.sign({
-    email: 'testuser@email.com', admin
-  }, process.env.JWT_SECRET, {
-    expiresIn: '24h'
-  });
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });

@@ -34,8 +34,8 @@ export default {
     if (!req.decodedToken.admin) {
       return res.status(403)
         .send({
-          message: 'Only admins can create or delete a meetup',
-          success: false
+          status: 403,
+          error: 'Only admins can create or delete a meetup'
         });
     }
 
