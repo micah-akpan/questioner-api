@@ -1,6 +1,6 @@
 import 'chai/register-should';
 import sinon from 'sinon';
-import schemaValidator from '../../../middlewares/schemaValidator';
+import schemaValidator from '../../../middlewares/schema/schemaValidator';
 
 describe.skip('Middlewares', () => {
   describe('Schema Validation Middleware', () => {

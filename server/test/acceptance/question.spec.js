@@ -1,29 +1,22 @@
 import 'chai/register-should';
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
-import { getFutureDate } from '../../utils';
+import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
 describe.only('Questions API', () => {
-  const createTestToken = (admin = false) => jwt.sign({
-    email: 'testuser@email.com', admin
-  }, process.env.JWT_SECRET, {
-    expiresIn: '24h'
-  });
-
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
 
-    await db.createTable({ tableName: 'User' });
-    await db.createTable({ tableName: 'Meetup' });
-    await db.createTable({ tableName: 'Question' });
-    await db.createTable({ tableName: 'Comment' });
+    await db.createTable('User');
+    await db.createTable('Meetup');
+    await db.createTable('Question');
+    await db.createTable('Comment');
   });
 
   describe('POST /api/v2/questions', () => {
@@ -92,9 +85,9 @@ describe.only('Questions API', () => {
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
 
-      await db.createTable({ tableName: 'User' });
-      await db.createTable({ tableName: 'Meetup' });
-      await db.createTable({ tableName: 'Question' });
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Question');
     });
 
     beforeEach(async () => {
@@ -150,9 +143,9 @@ describe.only('Questions API', () => {
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
 
-      await db.createTable({ tableName: 'User' });
-      await db.createTable({ tableName: 'Meetup' });
-      await db.createTable({ tableName: 'Question' });
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Question');
     });
 
     beforeEach(async () => {
@@ -208,9 +201,9 @@ describe.only('Questions API', () => {
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
 
-      await db.createTable({ tableName: 'User' });
-      await db.createTable({ tableName: 'Meetup' });
-      await db.createTable({ tableName: 'Question' });
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Question');
 
       await db.queryDb({
         text: `INSERT INTO "User" (email, password, firstname, lastname)
@@ -274,7 +267,7 @@ describe.only('Questions API', () => {
         values: ['question 1', 'question body', 1, 1]
       });
 
-      await db.createTable({ tableName: 'Comment' });
+      await db.createTable('Comment');
     });
 
     describe('handle valid data', () => {

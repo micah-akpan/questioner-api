@@ -18,7 +18,7 @@ describe.only('User API', () => {
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: '"User"' });
 
-    await db.createTable({ tableName: 'User' });
+    await db.createTable('User');
   });
 
   describe('POST /auth/signup', () => {

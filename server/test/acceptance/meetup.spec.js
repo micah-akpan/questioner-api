@@ -12,7 +12,7 @@ describe.only('Meetups API', () => {
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
 
-    await db.createTable({ tableName: 'Meetup' });
+    await db.createTable('Meetup');
     await db.queryDb({
       text: `INSERT INTO Meetup(topic, location, happeningOn)
              VALUES ($1, $2, $3),
@@ -131,7 +131,7 @@ describe.only('Meetups API', () => {
 
   describe('GET meetups', () => {
     before(async () => {
-      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable('Meetup');
     });
 
     beforeEach(async () => {
@@ -263,7 +263,7 @@ describe.only('Meetups API', () => {
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
 
-      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable('Meetup');
     });
     beforeEach(async () => {
       await db.queryDb({
@@ -309,7 +309,7 @@ describe.only('Meetups API', () => {
 
   describe('GET /meetups/upcoming', () => {
     before(async () => {
-      await db.createTable({ tableName: 'Meetup' });
+      await db.createTable('Meetup');
     });
 
     beforeEach(async () => {
