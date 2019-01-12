@@ -13,6 +13,7 @@ export default {
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
                VALUES ($1, $2, $3, $4) RETURNING createdBy as user, id, meetup, title, body`,
+        values: [title, body, meetupId, userId]
       });
 
       const newQuestion = questionResult.rows[0];
@@ -109,10 +110,8 @@ export default {
       });
     }
   },
-
   async downvoteQuestion(req, res) {
     try {
-
       const { questionId } = req.params;
       const results = await db.queryDb({
         text: 'SELECT id, createdBy as user, meetup, title, body, votes FROM Question WHERE id=$1',
@@ -160,7 +159,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: [question]
+            data: [question.rows[0]]
           }
         })
       }
@@ -192,23 +191,34 @@ export default {
       const questions = results.rows;
 
       if (questions.length > 0) {
-        return res.status(200)
-          .send({
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
             status: 200,
             data: questions
-          });
-      }
-      return res.status(404)
-        .send({
-          status: 404,
-          error: 'There are no questions at the moment'
+          }
         });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'There are no questions for this meetup at the moment'
+        }
+      });
     } catch (e) {
-      return res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      });
+
     }
   },
 
@@ -222,7 +232,7 @@ export default {
       });
 
       if (results.rows.length > 0) {
-        const payload = {
+        const newComment = {
           question: questionId,
           title: results.rows[0].title,
           body: results.rows[0].body,
@@ -236,24 +246,33 @@ export default {
         };
 
         await db.queryDb(addCommentsQuery);
-
-        return res.status(201)
-          .send({
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
             status: 201,
-            data: [payload]
-          });
-      }
-      return res.status(404)
-        .send({
-          status: 404,
-          error: 'You cannot comment on this question because the question does not exist'
+            data: [newComment]
+          }
         });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'You cannot post comments on this question because the question does not exist'
+        }
+      });
     } catch (e) {
-      return res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      });
     }
   },
 
@@ -268,24 +287,32 @@ export default {
       const meetupQuestions = result.rows;
 
       if (meetupQuestions.length) {
-        return res.status(200)
-          .send({
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
             status: 200,
             data: meetupQuestions
-          });
+          }
+        })
       }
-
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'There are no questions for this meetup at the moment'
-        });
+        }
+      })
     } catch (e) {
-      res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      })
     }
   },
 
@@ -305,17 +332,24 @@ export default {
           values: [questionId]
         });
       }
-      return res.status(404)
-        .send({
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'The requested question cannot be deleted because it doesn\'t exist'
-        });
+        }
+      })
     } catch (e) {
-      return res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      });
     }
   },
 
@@ -343,24 +377,33 @@ export default {
 
         const updatedQuestion = questionResults.rows[0];
 
-        return res.status(200)
-          .send({
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
             status: 200,
             data: [updatedQuestion]
-          });
+          }
+        })
       }
-
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'The meetup you requested does not exist'
-        });
+        }
+      })
     } catch (e) {
-      return res.status(400)
-        .send({
+
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
-          error: 'Invalid request. Please try again'
-        });
+          error: 'Invalid request, please try again'
+        }
+      })
     }
   },
 
@@ -377,24 +420,32 @@ export default {
       const questionRecord = results.rows[0];
 
       if (questionRecord) {
-        return res.status(200)
-          .send({
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
             status: 200,
             data: [questionRecord]
-          });
+          }
+        })
       }
-
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'The requested question does not exist'
-        });
+        }
+      })
     } catch (e) {
-      return res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request. Please try again'
-        });
+        }
+      })
     }
   },
 };
