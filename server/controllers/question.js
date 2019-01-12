@@ -39,12 +39,14 @@ export default {
 
   async upvoteQuestion(req, res) {
     try {
-      const results = await db.queryDb({
+      const { questionId } = req.params;
+
+      const questionResult = await db.queryDb({
         text: 'SELECT * FROM Question WHERE id=$1',
-        values: [req.params.questionId]
+        values: [questionId]
       });
 
-      let question = results.rows[0];
+      let question = questionResult.rows[0];
 
 
       if (question) {
@@ -54,7 +56,7 @@ export default {
           text: `UPDATE Question
                  SET votes = $1
                  WHERE id = $2 RETURNING *`,
-          values: [votes + 1, req.params.questionId]
+          values: [votes + 1, questionId]
         });
 
         question = omitProps(questionResults.rows[0], ['id', 'createdOn', 'createdBy']);
