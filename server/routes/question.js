@@ -7,10 +7,10 @@ const router = Router();
 
 const validateRequest = schemaValidator();
 
-const { isAdmin, checkToken } = Auth;
+const { checkToken } = Auth;
 
 router.route('/questions')
-  .get(checkToken, isAdmin, questionController.getAllQuestions)
+  .get(checkToken, questionController.getAllQuestions)
   .post(checkToken, validateRequest, questionController.createQuestion);
 
 router.patch('/questions/:questionId/upvote', checkToken, questionController.upvoteQuestion);

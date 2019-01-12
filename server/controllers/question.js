@@ -1,6 +1,7 @@
 import { omitProps } from '../utils';
 import db from '../db';
 import Question from '../models/Question';
+import { sendResponse } from './helpers';
 
 export default {
   async createQuestion(req, res) {
@@ -9,28 +10,30 @@ export default {
     } = req.body;
 
     try {
-      await db.queryDb({
+      const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
-               VALUES ($1, $2, $3, $4) RETURNING *`,
+               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
         values: [title, body, meetupId, userId]
       });
 
-      return res.status(201)
-        .send({
+      const newQuestion = questionResult.rows[0];
+      return sendResponse({
+        res,
+        status: 201,
+        payload: {
           status: 201,
-          data: [{
-            user: userId,
-            meetup: meetupId,
-            title,
-            body
-          }]
-        });
+          data: [newQuestion]
+        }
+      });
     } catch (e) {
-      res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      });
     }
   },
 
