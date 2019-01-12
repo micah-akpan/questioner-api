@@ -1,5 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate } from '../../utils';
@@ -7,6 +8,12 @@ import { getFutureDate } from '../../utils';
 const agent = request(app);
 
 describe.only('Questions API', () => {
+  const createTestToken = (admin = false) => jwt.sign({
+    email: 'testuser@email.com', admin
+  }, process.env.JWT_SECRET, {
+    expiresIn: '24h'
+  });
+
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
@@ -37,6 +44,7 @@ describe.only('Questions API', () => {
       it('should create a question', (done) => {
         agent
           .post('/api/v2/questions')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             title: 'question 1',
             body: 'question body',
@@ -60,6 +68,7 @@ describe.only('Questions API', () => {
       it('should return an error for missing data', (done) => {
         agent
           .post('/api/v2/questions')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             title: 'question 1'
           })
@@ -110,6 +119,7 @@ describe.only('Questions API', () => {
     it('should upvote a question', (done) => {
       agent
         .patch('/api/v2/questions/1/upvote')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -122,6 +132,7 @@ describe.only('Questions API', () => {
     it('should not upvote a non-existent question', (done) => {
       agent
         .patch('/api/v2/questions/999999999/upvote')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -166,6 +177,7 @@ describe.only('Questions API', () => {
     it('should downvote a question', (done) => {
       agent
         .patch('/api/v2/questions/1/downvote')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -178,6 +190,7 @@ describe.only('Questions API', () => {
     it('should not downvote a non-existent question', (done) => {
       agent
         .patch('/api/v2/questions/999999999/downvote')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -231,6 +244,7 @@ describe.only('Questions API', () => {
     it('should return all questions', (done) => {
       agent
         .get('/api/v2/questions')
+        .set('Authorization', `Bearer ${createTestToken(true)}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -267,6 +281,7 @@ describe.only('Questions API', () => {
       it('should add a comment to a question', (done) => {
         agent
           .post('/api/v2/comments')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 1,
             commentText: 'a comment'
@@ -285,6 +300,7 @@ describe.only('Questions API', () => {
       it('should add a comment to a question', (done) => {
         agent
           .post('/api/v2/comments')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 1,
             commentText: 'a new comment'
@@ -305,6 +321,7 @@ describe.only('Questions API', () => {
       it('should not add a comment to a non-existing question', (done) => {
         agent
           .post('/api/v2/comments')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 9999999,
             commentText: 'a new comment'
@@ -321,6 +338,7 @@ describe.only('Questions API', () => {
       it('should not add a comment if required data are missing', (done) => {
         agent
           .post('/api/v2/comments')
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             commentText: 'a new comment'
           })

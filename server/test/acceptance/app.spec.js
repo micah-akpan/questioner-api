@@ -2,7 +2,7 @@ import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
 
-describe('Main App Middleware test', () => {
+describe.only('Main App Middleware test', () => {
   describe('Error 404', () => {
     before(() => {
       // to suppress the error response

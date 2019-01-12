@@ -1,5 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate } from '../../utils';
@@ -7,6 +8,11 @@ import { getFutureDate } from '../../utils';
 const agent = request(app);
 
 describe.only('Meetups API', () => {
+  const createTestToken = (admin = false) => jwt.sign({
+    email: 'testuser@email.com', admin
+  }, process.env.JWT_SECRET, {
+    expiresIn: '24h'
+  });
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
@@ -39,11 +45,12 @@ describe.only('Meetups API', () => {
       it('should create a meetup', (done) => {
         agent
           .post('/api/v2/meetups')
+          .set('Authorization', `Bearer ${createTestToken(true)}`)
           .expect(201)
           .send({
             topic: 'Meetup 1',
             location: 'Meetup Location',
-            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
           })
           .end((err, res) => {
             if (err) return done(err);
@@ -58,11 +65,12 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v2/meetups')
-          .expect(422)
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             location: 'Meetup Location',
             happeningOn: new Date()
           })
+          .expect(422)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(422);
@@ -74,11 +82,12 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v2/meetups')
-          .expect(422)
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location'
           })
+          .expect(422)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(422);
@@ -90,12 +99,13 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if date is invalid', (done) => {
         agent
           .post('/api/v2/meetups')
-          .expect(422)
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location',
             happeningOn: 'Some Invalid date'
           })
+          .expect(422)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(422);
@@ -107,12 +117,13 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if date provided is past', (done) => {
         agent
           .post('/api/v2/meetups')
-          .expect(422)
+          .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location',
             happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
           })
+          .expect(422)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(422);
@@ -148,6 +159,7 @@ describe.only('Meetups API', () => {
     it('should return a list of meetups', (done) => {
       agent
         .get('/api/v2/meetups')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -160,6 +172,7 @@ describe.only('Meetups API', () => {
     it('should return a list of matched meetups', (done) => {
       agent
         .get('/api/v2/meetups?searchTerm=meetup topic')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -173,6 +186,7 @@ describe.only('Meetups API', () => {
     it('should return a list of matched meetups', (done) => {
       agent
         .get('/api/v2/meetups?searchTerm=next location')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -214,6 +228,7 @@ describe.only('Meetups API', () => {
       const meetupRecord = results.rows[0];
       agent
         .get(`/api/v2/meetups/${meetupRecord.id}`)
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -229,6 +244,7 @@ describe.only('Meetups API', () => {
     it('should return a 404 error for a non-existing meetup', (done) => {
       agent
         .get('/api/v2/meetups/9999999')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -266,6 +282,7 @@ describe.only('Meetups API', () => {
     it('should delete a single meetup', (done) => {
       agent
         .delete('/api/v2/meetups/1')
+        .set('Authorization', `Bearer ${createTestToken(true)}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -279,6 +296,7 @@ describe.only('Meetups API', () => {
     it('should return an error for a non-existing meetup', (done) => {
       agent
         .delete('/api/v2/meetups/9999999')
+        .set('Authorization', `Bearer ${createTestToken(true)}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -313,6 +331,7 @@ describe.only('Meetups API', () => {
     it('should return a list of upcoming meetups', (done) => {
       agent
         .get('/api/v2/meetups/upcoming')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200, done);
     });
 

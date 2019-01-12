@@ -2,7 +2,7 @@ import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
 
-describe('Questioner Index API', () => {
+describe.only('Questioner Index API', () => {
   it('should return a welcome message and a 200 status', (done) => {
     request(app)
       .get('/')
