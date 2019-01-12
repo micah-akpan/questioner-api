@@ -3,7 +3,6 @@ import request from 'supertest';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate, createTestToken } from '../../utils';
-import { getFutureDate } from '../../utils';
 
 
 const agent = request(app);
@@ -179,8 +178,6 @@ describe.only('RSVP API', () => {
       await db.dropTable({ tableName: 'Rsvp' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
-
     });
   });
-
-
+});
