@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { app } from '../../app';
 import db from '../../db';
 
-describe.only('User API', () => {
+describe('User API', () => {
   const testUser = {
     email: 'testuser@gmail.com',
     password: 'testuser1234',
