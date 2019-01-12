@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import questionController from '../controllers/question';
-import schemaValidator from '../middlewares/schemaValidator';
+import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
 
 const router = Router();

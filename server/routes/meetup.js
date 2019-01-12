@@ -2,7 +2,7 @@ import express from 'express';
 import meetupController from '../controllers/meetup';
 import questionController from '../controllers/question';
 import rsvpController from '../controllers/rsvp';
-import schemaValidator from '../middlewares/schemaValidator';
+import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
 
 const router = express.Router();

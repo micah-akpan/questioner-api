@@ -185,7 +185,6 @@ export default {
           error: 'You cannot comment on this question because the question does not exist'
         });
     } catch (e) {
-      console.log(e);
       return res.status(400)
         .send({
           status: 400,
