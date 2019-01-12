@@ -1,4 +1,4 @@
-import tableQueries from '../models/helpers';
+import tableQueries from '../models/schemas';
 
 /**
  * @class Db
