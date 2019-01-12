@@ -1,5 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate } from '../../utils';
@@ -7,6 +8,12 @@ import { getFutureDate } from '../../utils';
 const agent = request(app);
 
 describe.only('RSVP API', () => {
+  const createTestToken = (admin = false) => jwt.sign({
+    email: 'testuser@email.com', admin
+  }, process.env.JWT_SECRET, {
+    expiresIn: '24h'
+  });
+
   before(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Meetup' });
@@ -34,6 +41,7 @@ describe.only('RSVP API', () => {
     it('should rsvp a user', (done) => {
       agent
         .post('/api/v2/meetups/1/rsvps')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ response: 'maybe', userId: '1' })
         .expect(201)
         .end((err, res) => {
@@ -47,6 +55,7 @@ describe.only('RSVP API', () => {
     it('should not rsvp a user on a non-existent meetup', (done) => {
       agent
         .post('/api/v2/meetups/99999999/rsvps')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ response: 'yes', userId: '1' })
         .expect(404)
         .end((err, res) => {
@@ -59,6 +68,7 @@ describe.only('RSVP API', () => {
     it('should not rsvp a user if required fields are missing', (done) => {
       agent
         .post('/api/v2/meetups/1/rsvps')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(422)
         .end((err, res) => {
           if (err) return done(err);
@@ -73,6 +83,7 @@ describe.only('RSVP API', () => {
       agent
         .patch('/api/v2/meetups/1/rsvps/1')
         .send({ response: 'no' })
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -86,6 +97,7 @@ describe.only('RSVP API', () => {
     it('should update an existing RSVP', (done) => {
       agent
         .patch('/api/v2/meetups/1/rsvps/1')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ response: '' })
         .expect(200)
         .end((err, res) => {
@@ -100,6 +112,7 @@ describe.only('RSVP API', () => {
     it('should return an error for a non-existing RSVP', (done) => {
       agent
         .patch('/api/v2/meetups/999999999/rsvps/1')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ response: 'maybe' })
         .expect(404)
         .end((err, res) => {
@@ -143,6 +156,7 @@ describe.only('RSVP API', () => {
     it('should return a single meetup rsvp', (done) => {
       agent
         .get('/api/v2/meetups/1/rsvps/1')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -156,6 +170,7 @@ describe.only('RSVP API', () => {
     it('should return an error if meetup rsvp does not exist', (done) => {
       agent
         .get('/api/v2/meetups/1/rsvps/999999')
+        .set('Authorization', `Bearer ${createTestToken()}`)
         .end((err, res) => {
           if (err) return done(err);
           res.body.status.should.equal(404);
