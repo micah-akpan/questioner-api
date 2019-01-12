@@ -8,6 +8,8 @@ const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
     await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
@@ -17,6 +19,8 @@ describe.only('Questions API', () => {
     await db.createTable('Meetup');
     await db.createTable('Question');
     await db.createTable('Comment');
+    await db.createTable('Upvote');
+    await db.createTable('Downvote');
   });
 
   describe('POST /api/v2/questions', () => {
@@ -79,6 +83,8 @@ describe.only('Questions API', () => {
 
   describe('PATCH /questions/<question-id>/upvote', () => {
     before(async () => {
+      await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Comment' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Rsvp' });
@@ -88,6 +94,8 @@ describe.only('Questions API', () => {
       await db.createTable('User');
       await db.createTable('Meetup');
       await db.createTable('Question');
+      await db.createTable('Upvote');
+      await db.createTable('Downvote');
     });
 
     beforeEach(async () => {
@@ -113,6 +121,7 @@ describe.only('Questions API', () => {
       agent
         .patch('/api/v2/questions/1/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
+        .send({ userId: '1' })
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -122,10 +131,26 @@ describe.only('Questions API', () => {
         });
     });
 
+    it('should not upvote a question already upvoted by the same user', (done) => {
+      agent
+        .patch('/api/v2/questions/1/upvote')
+        .set('Authorization', `Bearer ${createTestToken()}`)
+        .send({ userId: '1' })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(422);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('This user has already upvoted this question. You cannot upvote a question more than once');
+          done();
+        });
+    });
+
     it('should not upvote a non-existent question', (done) => {
       agent
         .patch('/api/v2/questions/999999999/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
+        .send({ userId: '1' })
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -137,6 +162,8 @@ describe.only('Questions API', () => {
 
   describe('PATCH /api/v2/questions/<question-id>/downvote', () => {
     before(async () => {
+      await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Comment' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Rsvp' });
@@ -146,6 +173,8 @@ describe.only('Questions API', () => {
       await db.createTable('User');
       await db.createTable('Meetup');
       await db.createTable('Question');
+      await db.createTable('Upvote');
+      await db.createTable('Downvote');
     });
 
     beforeEach(async () => {
@@ -170,12 +199,28 @@ describe.only('Questions API', () => {
     it('should downvote a question', (done) => {
       agent
         .patch('/api/v2/questions/1/downvote')
+        .send({ userId: '1' })
         .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
           res.body.status.should.equal(200);
           res.body.data.should.be.an('array');
+          done();
+        });
+    });
+
+    it('should not downvote a question already downvoted by the same user', (done) => {
+      agent
+        .patch('/api/v2/questions/1/downvote')
+        .send({ userId: '1' })
+        .set('Authorization', `Bearer ${createTestToken()}`)
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(422);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('This user has already downvoted this question. You cannot downvote a question more than once');
           done();
         });
     });
@@ -195,6 +240,8 @@ describe.only('Questions API', () => {
 
   describe('GET /questions', () => {
     before(async () => {
+      await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Comment' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Rsvp' });
@@ -204,6 +251,8 @@ describe.only('Questions API', () => {
       await db.createTable('User');
       await db.createTable('Meetup');
       await db.createTable('Question');
+      await db.createTable('Upvote');
+      await db.createTable('Downvote');
 
       await db.queryDb({
         text: `INSERT INTO "User" (email, password, firstname, lastname)
@@ -347,6 +396,8 @@ describe.only('Questions API', () => {
   });
 
   after('Teardown', async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
     await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Rsvp' });

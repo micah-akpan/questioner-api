@@ -55,7 +55,7 @@ export default {
         const voteResult = await db.queryDb({
           text: `SELECT * FROM Upvote 
                  WHERE "user"=$1 AND question=$2`,
-          values: [question.user, question.id]
+          values: [req.body.userId, question.id]
         });
 
         if (arrayHasValues(voteResult.rows)) {
@@ -72,7 +72,7 @@ export default {
         await db.queryDb({
           text: `INSERT INTO Upvote ("user", question)
                  VALUES ($1, $2)`,
-          values: [question.user, question.id]
+          values: [req.body.userId, question.id]
         });
 
         const questionResults = await db.queryDb({
@@ -127,7 +127,7 @@ export default {
         const voteResult = await db.queryDb({
           text: `SELECT * FROM Downvote 
                  WHERE "user"=$1 AND question=$2`,
-          values: [question.user, question.id]
+          values: [req.body.userId, question.id]
         });
 
         if (arrayHasValues(voteResult.rows)) {
@@ -144,7 +144,7 @@ export default {
         await db.queryDb({
           text: `INSERT INTO Downvote ("user", question)
                  VALUES ($1, $2)`,
-          values: [question.user, question.id]
+          values: [req.body.userId, question.id]
         });
 
         question = await db.queryDb({
@@ -175,10 +175,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 404,
+        status: 400,
         payload: {
-          status: 404,
-          error: 'The question cannot be downvoted because it does not exist'
+          status: 400,
+          error: 'Invalid request, please try again'
         }
       });
     }
