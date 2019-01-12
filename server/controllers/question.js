@@ -1,4 +1,4 @@
-import { omitProps } from '../utils';
+import { omitProps, arrayHasValues } from '../utils';
 import db from '../db';
 import Question from '../models/Question';
 import { sendResponse } from './helpers';
@@ -12,7 +12,7 @@ export default {
     try {
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
-               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
+               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, id, meetup, title, body`,
         values: [title, body, meetupId, userId]
       });
 
@@ -22,7 +22,7 @@ export default {
         status: 201,
         payload: {
           status: 201,
-          data: [newQuestion]
+          data: [omitProps(newQuestion, ['id'])]
         }
       });
     } catch (e) {
@@ -39,52 +39,85 @@ export default {
 
   async upvoteQuestion(req, res) {
     try {
-      const results = await db.queryDb({
-        text: 'SELECT * FROM Question WHERE id=$1',
-        values: [req.params.questionId]
+      const { questionId } = req.params;
+
+      const questionResult = await db.queryDb({
+        text: 'SELECT id, createdBy as user, votes, meetup, title, body FROM Question WHERE id=$1',
+        values: [questionId]
       });
 
-      let question = results.rows[0];
+      const question = questionResult.rows[0];
 
 
       if (question) {
         const { votes } = question;
 
+        const voteResult = await db.queryDb({
+          text: `SELECT * FROM Upvote 
+                 WHERE "user"=$1 AND question=$2`,
+          values: [question.user, question.id]
+        });
+
+        if (arrayHasValues(voteResult.rows)) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This user has already upvoted this question. You cannot upvote a question more than once'
+            }
+          })
+        }
+
+        await db.queryDb({
+          text: `INSERT INTO Upvote ("user", question)
+                 VALUES ($1, $2)`,
+          values: [question.user, question.id]
+        });
+
         const questionResults = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
-                 WHERE id = $2 RETURNING *`,
-          values: [votes + 1, req.params.questionId]
+                 WHERE id = $2 RETURNING meetup, title, body, votes`,
+          values: [votes + 1, questionId]
         });
 
-        question = omitProps(questionResults.rows[0], ['id', 'createdOn', 'createdBy']);
-
-        return res.status(200).send({
+        return sendResponse({
+          res,
           status: 200,
-          data: [
-            question
-          ]
+          payload: {
+            status: 200,
+            data: [questionResults.rows[0]]
+          }
         });
       }
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'The question cannot be upvoted because it does not exist'
-        });
+        }
+      });
     } catch (e) {
-      res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
           error: 'Invalid request, please try again'
-        });
+        }
+      });
     }
   },
 
   async downvoteQuestion(req, res) {
     try {
+
+      const { questionId } = req.params;
       const results = await db.queryDb({
-        text: 'SELECT * FROM Question WHERE id=$1',
-        values: [req.params.questionId]
+        text: 'SELECT id, createdBy as user, meetup, title, body, votes FROM Question WHERE id=$1',
+        values: [questionId]
       });
 
       let question = results.rows[0];
@@ -93,34 +126,63 @@ export default {
       if (question) {
         const { votes } = question;
 
-        const questionResults = await db.queryDb({
+        const voteResult = await db.queryDb({
+          text: `SELECT * FROM Downvote 
+                 WHERE "user"=$1 AND question=$2`,
+          values: [question.user, question.id]
+        });
+
+        if (arrayHasValues(voteResult.rows)) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This user has already downvoted this question. You cannot downvote a question more than once'
+            }
+          })
+        }
+
+        await db.queryDb({
+          text: `INSERT INTO Downvote ("user", question)
+                 VALUES ($1, $2)`,
+          values: [question.user, question.id]
+        });
+
+        question = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
-                 WHERE id = $2 RETURNING *`,
-          values: [votes > 0 ? votes - 1 : 0, req.params.questionId]
+                 WHERE id = $2 RETURNING meetup, title, body, votes`,
+          values: [votes > 0 ? votes - 1 : 0, questionId]
         });
 
-        question = omitProps(questionResults.rows[0], ['id', 'createdOn', 'createdBy']);
-
-        return res.status(200).send({
+        return sendResponse({
+          res,
           status: 200,
-          data: [
-            question
-          ]
-        });
+          payload: {
+            status: 200,
+            data: [question]
+          }
+        })
       }
 
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'The question cannot be downvoted because it does not exist'
-        });
+        }
+      });
     } catch (e) {
-      res.status(400)
-        .send({
-          status: 400,
-          error: 'Invalid request, please try again'
-        });
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The question cannot be downvoted because it does not exist'
+        }
+      });
     }
   },
 
@@ -276,7 +338,7 @@ export default {
                  SET title=$1, body=$2, createdby=$4
                  WHERE id=$3 RETURNING *`,
           values: [title || questionRecord.title,
-            body || questionRecord.body, questionRecord.id, questionRecord.createdby
+          body || questionRecord.body, questionRecord.id, questionRecord.createdby
           ]
         });
 
