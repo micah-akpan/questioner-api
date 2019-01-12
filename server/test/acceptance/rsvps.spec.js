@@ -5,6 +5,7 @@ import db from '../../db';
 import { getFutureDate, createTestToken } from '../../utils';
 import { getFutureDate } from '../../utils';
 
+
 const agent = request(app);
 
 describe.only('RSVP API', () => {
@@ -118,70 +119,68 @@ describe.only('RSVP API', () => {
   });
 
   describe('GET /meetups/<meetup-id>/rsvps/<rsvp-id>', () => {
-    before(async () => { }
+    before(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Meetup' });
-    await db.dropTable({ tableName: '"User"' });
-
-    await db.createTable('User');
-    await db.createTable('Meetup');
-    await db.createTable('Rsvp');
-  });
-  beforeEach(async () => {
-    await db.queryDb({
-      text: `INSERT INTO Meetup (topic, location, happeningOn)
-               VALUES ($1, $2, $3)`,
-      values: ['m topic', 'm location', getFutureDate()]
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Rsvp');
     });
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['m topic', 'm location', getFutureDate()]
+      });
 
-    await db.queryDb({
-      text: `INSERT INTO "User" (email, password, firstname, lastname)
+      await db.queryDb({
+        text: `INSERT INTO "User" (email, password, firstname, lastname)
                VALUES ($1, $2, $3, $4)`,
-      values: ['user@email.com', 'user1234', 'user1', 'user1']
-    });
+        values: ['user@email.com', 'user1234', 'user1', 'user1']
+      });
 
-    await db.queryDb({
-      text: `INSERT INTO Rsvp (response, meetup, "user")
+      await db.queryDb({
+        text: `INSERT INTO Rsvp (response, meetup, "user")
                VALUES ($1, $2, $3)`,
-      values: ['yes', 1, 1]
+        values: ['yes', 1, 1]
+      });
+    });
+    it('should return a single meetup rsvp', (done) => {
+      agent
+        .get('/api/v2/meetups/1/rsvps/1')
+        .set('Authorization', `Bearer ${createTestToken()}`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.should.have.property('data');
+          res.body.data.length.should.equal(1);
+          done();
+        });
+    });
+    it('should return an error if meetup rsvp does not exist', (done) => {
+      agent
+        .get('/api/v2/meetups/1/rsvps/999999')
+        .set('Authorization', `Bearer ${createTestToken()}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    afterEach(async () => {
+      await db.queryDb({ text: 'DELETE FROM Rsvp' });
+    });
+
+    after(async () => {
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
     });
   });
-  it('should return a single meetup rsvp', (done) => {
-    agent
-      .get('/api/v2/meetups/1/rsvps/1')
-      .set('Authorization', `Bearer ${createTestToken()}`)
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-        res.body.status.should.equal(200);
-        res.body.should.have.property('data');
-        res.body.data.length.should.equal(1);
-        done();
-      });
-  });
-
-  it('should return an error if meetup rsvp does not exist', (done) => {
-    agent
-      .get('/api/v2/meetups/1/rsvps/999999')
-      .set('Authorization', `Bearer ${createTestToken()}`)
-      .end((err, res) => {
-        if (err) return done(err);
-        res.body.status.should.equal(404);
-        res.body.should.have.property('error');
-        done();
-      });
-  });
-
-  afterEach(async () => {
-    await db.queryDb({ text: 'DELETE FROM Rsvp' });
-  });
-
-  after(async () => {
-    await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Meetup' });
-    await db.dropTable({ tableName: '"User"' });
-
-  });
-});
 
 

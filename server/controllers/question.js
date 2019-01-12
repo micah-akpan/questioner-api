@@ -13,7 +13,6 @@ export default {
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
                VALUES ($1, $2, $3, $4) RETURNING createdBy as user, id, meetup, title, body`,
-        values: [title, body, meetupId, userId]
       });
 
       const newQuestion = questionResult.rows[0];
