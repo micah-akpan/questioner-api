@@ -340,5 +340,6 @@ describe.only('Meetups API', () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
   });
 });
