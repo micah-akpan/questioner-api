@@ -1,27 +1,20 @@
 import 'chai/register-should';
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
-import { getFutureDate } from '../../utils';
+import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
 describe.only('RSVP API', () => {
-  const createTestToken = (admin = false) => jwt.sign({
-    email: 'testuser@email.com', admin
-  }, process.env.JWT_SECRET, {
-    expiresIn: '24h'
-  });
-
   before(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
 
-    await db.createTable({ tableName: 'User' });
-    await db.createTable({ tableName: 'Meetup' });
-    await db.createTable({ tableName: 'Rsvp' });
+    await db.createTable('User');
+    await db.createTable('Meetup');
+    await db.createTable('Rsvp');
   });
 
   describe('POST /meetups/<meetup-id>/rsvps', () => {
@@ -130,9 +123,9 @@ describe.only('RSVP API', () => {
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
 
-      await db.createTable({ tableName: 'User' });
-      await db.createTable({ tableName: 'Meetup' });
-      await db.createTable({ tableName: 'Rsvp' });
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Rsvp');
     });
     beforeEach(async () => {
       await db.queryDb({

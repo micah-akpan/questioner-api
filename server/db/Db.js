@@ -1,4 +1,3 @@
-import logger from '../helpers';
 import tableQueries from '../models/helpers';
 
 /**
@@ -44,23 +43,12 @@ class Db {
 
   /**
    * @method createTable
-   * @param {*} tableCreationConfig
+   * @param {String} tableName
    * @returns {Promise} Returns a Promise that resolves to a table result or to a failure message
    */
-  createTable({ tableName, force = true }) {
-    try {
-      if (force) {
-        const createTableQuery = this.tableQueries[tableName];
-        return this.dbClient.query(createTableQuery);
-      }
-    } catch (e) {
-      logger.log({
-        level: 'error',
-        error: e
-      });
-
-      return Promise.reject(new Error(`${tableName} creation failed`));
-    }
+  createTable(tableName) {
+    const createTableQuery = this.tableQueries[tableName];
+    return this.dbClient.query(createTableQuery);
   }
 
   /**
@@ -69,40 +57,13 @@ class Db {
    * @returns {Promise} Returns a Promise that resolves to a table result or to a failure message
    */
   dropTable({ tableName, force = true }) {
-    try {
-      if (force) {
-        // interpolation ideal here
-        // since we are not feeding into this function
-        // data from the 'user'
-        return this.dbClient.query(`DROP TABLE IF EXISTS ${tableName}`);
-      }
-      return this.dbClient.query(`DROP TABLE ${tableName}`);
-    } catch (e) {
-      logger.log({
-        level: 'error',
-        error: e
-      });
-
-      return Promise.reject(new Error(`${tableName} creation failed`));
+    if (force) {
+      // interpolation ideal here
+      // since we are not feeding into this function
+      // data from the 'user'
+      return this.dbClient.query(`DROP TABLE IF EXISTS ${tableName}`);
     }
-  }
-
-  /**
-   * @method truncateAllRecords
-   * @param {*} tableTruncateConfig
-   * @returns {Promise} Resolves to the truncated table or a failure message
-   */
-  truncateAllRecords({ tableName }) {
-    try {
-      return this.dbClient.query(`DELETE FROM ${tableName}`);
-    } catch (e) {
-      logger.log({
-        level: 'error',
-        error: e
-      });
-
-      return Promise.reject(new Error('Data records delete operation failed'));
-    }
+    return this.dbClient.query(`DROP TABLE ${tableName}`);
   }
 }
 
