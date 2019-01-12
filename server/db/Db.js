@@ -29,11 +29,11 @@ class Db {
    */
   async sync() {
     try {
-      await this.createTable({ tableName: 'User' });
-      await this.createTable({ tableName: 'Meetup' });
-      await this.createTable({ tableName: 'Question' });
-      await this.createTable({ tableName: 'Comment' });
-      await this.createTable({ tableName: 'Rsvp' });
+      await this.createTable('User');
+      await this.createTable('Meetup');
+      await this.createTable('Question');
+      await this.createTable('Comment');
+      await this.createTable('Rsvp');
     } catch (e) {
       return Promise.reject(new Error('Table synchronization failed'));
     }
