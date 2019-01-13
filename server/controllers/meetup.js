@@ -238,4 +238,64 @@ export default {
       });
     }
   },
+
+  async addTagsToMeetup(req, res) {
+    try {
+      const meetupResult = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [req.params.meetupId]
+      });
+
+      if (arrayHasValues(meetupResult.rows)) {
+        const tags = parseStr(req.body.tags, ',');
+        if (tags.length > 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'You cannot add more than 5 tags to this meetup'
+            }
+          });
+        }
+
+        const [tag1 = 'NULL', tag2 = 'NULL', tag3 = 'NULL', tag4 = 'NULL', tag5 = 'NULL'] = tags;
+
+        const allTags = `{${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`;
+        const result = await db.queryDb({
+          text: `UPDATE Meetup
+                 SET tags=$1
+                 WHERE id=$2 RETURNING *`,
+          values: [allTags, req.params.meetupId]
+        });
+
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
+            status: 201,
+            data: [result.rows[0]]
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'You cannot add tags to this meetup, because the meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  }
 };

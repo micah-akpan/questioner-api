@@ -376,10 +376,73 @@ describe.only('Meetups API', () => {
     });
   });
 
+  describe('POST /meetups/<meetup-id>/tags', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+      await db.createTable('Meetup');
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+              VALUES ($1, $2, $3)`,
+        values: [
+          'meetup sample 1',
+          'meetup sample location',
+          getFutureDate(2)]
+      });
+    });
+
+    it('should add tags to a meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/1/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1'
+        })
+        .expect(201, done);
+    });
+
+    it('should not add tags to a non-existing meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/999999/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1'
+        })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should not add more than 5 tags to a meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/1/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1,meetup1,meetup1,meetup1'
+        })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('You cannot add more than 5 tags to this meetup');
+          done();
+        });
+    });
+  });
+
   after(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+    await db.dropTable({ tableName: '"User"' });
   });
 });
