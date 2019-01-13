@@ -1,5 +1,5 @@
 
-import db from '../db';
+import db from '../../db';
 
 /**
  * @class Model
@@ -9,9 +9,11 @@ class Model {
   /**
      * @constructor
      * @param {String} modelName
+     * @param {*} db
      */
   constructor(modelName) {
     this._name = modelName;
+    this._db = db;
   }
 
   /**
@@ -31,23 +33,24 @@ class Model {
   }
 
   /**
-     * @method findAll
-     * @returns {Promise} Resolves to the found records
-     */
-  async findAll() {
+   * @method findAll
+   * @param {*} options
+   * @returns {Promise} Resolves to the found records
+   */
+  async findAll(options) {
     const { orderBy, order } = options;
     // order [enum: asc|desc]
     if (Object.keys(options).length > 0) {
       switch (order) {
         case 'desc': {
-          return db.queryDb({
+          return this._db.queryDb({
             text: `SELECT * FROM ${this._name} ORDER BY $1 DESC`,
             values: [orderBy]
           });
         }
 
         default: {
-          return db.queryDb({
+          return this._db.queryDb({
             text: `SELECT * FROM ${this._name} ORDER BY ASC`,
             values: [orderBy]
           });
@@ -67,7 +70,7 @@ class Model {
       return Promise.reject(new Error('Please specify a primary key column value'));
     }
 
-    const results = await db.queryDb({
+    const results = await this._db.queryDb({
       text: `SELECT * FROM ${this._name} WHERE id=$1`,
       values: [pk]
     });
@@ -85,6 +88,7 @@ class Model {
      * @returns {Promise} Resolves to the update query op result or rejects with error
      * if 'pk' is not provided or is invalid
      */
+  /* eslint-disable */
   async findOneAndUpdate(pk) {
 
   }
@@ -96,7 +100,11 @@ class Model {
      * if 'pk' is not provided or is invalid
      */
   async create(payload) {
-
+    return new Promise((resolve, reject) => {
+      if (!payload) {
+        reject(new Error('Please provide a payload'))
+      }
+    })
   }
 }
 

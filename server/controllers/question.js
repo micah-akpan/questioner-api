@@ -1,15 +1,17 @@
 import { omitProps, arrayHasValues } from '../utils';
 import db from '../db';
-import Question from '../models/Question';
+import Question from '../models/all/Question';
 import { sendResponse } from './helpers';
 
 export default {
   async createQuestion(req, res) {
-    const {
-      title, body, meetupId, userId
-    } = req.body;
 
     try {
+
+      const {
+        title, body, meetupId, userId
+      } = req.body;
+
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
                VALUES ($1, $2, $3, $4) RETURNING createdBy as user, id, meetup, title, body`,
@@ -370,7 +372,7 @@ export default {
                  SET title=$1, body=$2, createdby=$4
                  WHERE id=$3 RETURNING *`,
           values: [title || questionRecord.title,
-            body || questionRecord.body, questionRecord.id, questionRecord.createdby
+          body || questionRecord.body, questionRecord.id, questionRecord.createdby
           ]
         });
 
