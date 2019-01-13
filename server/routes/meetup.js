@@ -4,6 +4,7 @@ import questionController from '../controllers/question';
 import rsvpController from '../controllers/rsvp';
 import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
+import Upload from '../middlewares/uploads';
 
 const router = express.Router();
 
@@ -38,6 +39,11 @@ router.get('/meetups/:meetupId/questions', checkToken,
 router.get('/meetups/:meetupId/rsvps', checkToken, isAdmin, rsvpController.getRsvps);
 
 router.post('/meetups/:meetupId/tags', checkToken, isAdmin, meetupController.addTagsToMeetup);
+router.post('/meetups/:meetupId/images',
+  checkToken,
+  isAdmin,
+  Upload.array('meetupPhotos', 4),
+  meetupController.addImagesToMeetup);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')

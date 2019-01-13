@@ -399,7 +399,7 @@ describe.only('Meetups API', () => {
     it('should add tags to a meetup', (done) => {
       agent
         .post('/api/v2/meetups/1/tags')
-        .set({ Authorization: `${adminTestToken}` })
+        .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1'
         })
@@ -409,7 +409,7 @@ describe.only('Meetups API', () => {
     it('should not add tags to a non-existing meetup', (done) => {
       agent
         .post('/api/v2/meetups/999999/tags')
-        .set({ Authorization: `${adminTestToken}` })
+        .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1'
         })
@@ -424,7 +424,7 @@ describe.only('Meetups API', () => {
     it('should not add more than 5 tags to a meetup', (done) => {
       agent
         .post('/api/v2/meetups/1/tags')
-        .set({ Authorization: `${adminTestToken}` })
+        .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1,meetup1,meetup1,meetup1'
         })
@@ -435,6 +435,37 @@ describe.only('Meetups API', () => {
           res.body.error.should.equal('You cannot add more than 5 tags to this meetup');
           done();
         });
+    });
+  });
+
+  describe('POST /meetups/<meetup-id>/images', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+      await db.createTable('Meetup');
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+              VALUES ($1, $2, $3)`,
+        values: [
+          'meetup sample 1',
+          'meetup sample location',
+          getFutureDate(2)]
+      });
+    });
+
+    it('should add images to a meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/1/images')
+        .set('Authorization', `Bearer ${adminTestToken}`)
+        .send({
+          meetupPhotos: ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']
+        })
+        .expect(201, done);
     });
   });
 
