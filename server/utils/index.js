@@ -112,7 +112,7 @@ export const objectHasProps = obj => Object.keys(obj).length > 0;
  * @returns {Array<String>} Returns an array of strings
  * @description Takes a str delimited by 'separator' and returns an array of strings
  */
-export const parseStr = (str, separator = ',') => {}
+export const parseStr = (str, separator = ',') => str.split(separator);
 
 export default {
   omitProps,
