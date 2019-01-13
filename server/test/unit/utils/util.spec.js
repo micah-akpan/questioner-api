@@ -160,7 +160,11 @@ describe.only('Utils', () => {
 
   describe('parseStr()', () => {
     it('should parse a string into an array of strings', () => {
-      parseStr('andela,tia,epic').should.deep.equal(['andela', 'tia', 'epic']);
+      parseStr('andela,tia,epic', ',').should.deep.equal(['andela', 'tia', 'epic']);
+    });
+
+    it('should parse a string into an array of string', () => {
+      parseStr('andela tia epic').should.deep.equal(['andela', 'tia', 'epic']);
     });
   });
 });

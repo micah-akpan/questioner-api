@@ -1,4 +1,4 @@
-import { omitProps, arrayHasValues } from '../utils';
+import { arrayHasValues } from '../utils';
 import db from '../db';
 import Question from '../models/Question';
 import { sendResponse } from './helpers';
@@ -11,7 +11,7 @@ export default {
       } = req.body;
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
-               VALUES ($1, $2, $3, $4, $5) RETURNING createdBy as user, id, meetup, title, body`,
+               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
         values: [title, body, meetupId, userId]
       });
 
@@ -21,7 +21,7 @@ export default {
         status: 201,
         payload: {
           status: 201,
-          data: [omitProps(newQuestion, ['id'])]
+          data: [newQuestion]
         }
       });
     } catch (e) {

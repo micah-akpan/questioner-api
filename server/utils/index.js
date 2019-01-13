@@ -108,11 +108,11 @@ export const objectHasProps = obj => Object.keys(obj).length > 0;
 /**
  * @func parseStr
  * @param {String} str
- * @param {String} separator
+ * @param {String} separator Separator string, by default uses a space
  * @returns {Array<String>} Returns an array of strings
  * @description Takes a str delimited by 'separator' and returns an array of strings
  */
-export const parseStr = (str, separator = ',') => str.split(separator);
+export const parseStr = (str, separator = ' ') => str.split(separator);
 
 export default {
   omitProps,
