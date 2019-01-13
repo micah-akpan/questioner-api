@@ -8,7 +8,8 @@ import {
   getIndex,
   createTestToken,
   arrayHasValues,
-  objectHasProps
+  objectHasProps,
+  parseStr
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -156,4 +157,10 @@ describe.only('Utils', () => {
       arrayHasValues({}).should.equal(false);
     });
   });
+
+  describe('parseStr()', () => {
+    it('should parse a string into an array of strings', () => {
+      parseStr('andela,tia,epic').should.deep.equal(['andela', 'tia', 'epic']);
+    })
+  })
 });

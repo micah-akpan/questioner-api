@@ -80,15 +80,39 @@ export const getIndex = (array, prop, value) => {
   return idx;
 };
 
+/**
+ * @func createTestToken
+ * @param {Boolean} admin
+ * @returns {String} Jwt token
+ */
 export const createTestToken = (admin = false) => jwt.sign({
   email: 'testuser@email.com', admin
 }, process.env.JWT_SECRET, {
   expiresIn: '24h'
 });
 
+/**
+ * @func arrayHasValues
+ * @param {Array} array
+ * @returns {Boolean} Returns true if array has values, false otherwise
+ */
 export const arrayHasValues = array => array.length > 0;
 
+/**
+ * @func objectHasProps
+ * @param {*} obj
+ * @returns {Boolean} Returns true if object has props, false otherwise
+ */
 export const objectHasProps = obj => Object.keys(obj).length > 0;
+
+/**
+ * @func parseStr
+ * @param {String} str
+ * @param {String} separator
+ * @returns {Array<String>} Returns an array of strings
+ * @description Takes a str delimited by 'separator' and returns an array of strings
+ */
+export const parseStr = (str, separator = ',') => {}
 
 export default {
   omitProps,
@@ -97,5 +121,6 @@ export default {
   hasProp,
   getProp,
   getIndex,
-  createTestToken
+  createTestToken,
+  parseStr
 };
