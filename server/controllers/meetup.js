@@ -2,7 +2,7 @@ import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
 import { sendResponse } from './helpers';
-import { arrayHasValues, objectHasProps } from '../utils';
+import { arrayHasValues, objectHasProps, parseStr } from '../utils';
 
 export default {
   async getAllMeetups(req, res) {
@@ -71,10 +71,10 @@ export default {
   async createNewMeetup(req, res) {
     try {
       const {
-        location, topic, happeningOn, tags
+        location, topic, happeningOn, tags = ''
       } = req.body;
 
-      const parsedTags = tags && tags.split(',');
+      const parsedTags = tags && parseStr(tags, ',');
       const MAX_TAGS = 5;
       const NULL = 'NULL';
 

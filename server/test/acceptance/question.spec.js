@@ -23,7 +23,7 @@ describe.only('Questions API', () => {
     await db.createTable('Downvote');
   });
 
-  describe('POST /api/v2/questions', () => {
+  describe('POST /questions', () => {
     beforeEach(async () => {
       await db.queryDb({
         text: `INSERT INTO "User" (email, password, firstname, lastname)
