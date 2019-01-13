@@ -438,7 +438,7 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe('POST /meetups/<meetup-id>/images', () => {
+  describe.skip('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
       await db.dropTable({ tableName: 'Question' });
@@ -456,16 +456,6 @@ describe.only('Meetups API', () => {
           'meetup sample location',
           getFutureDate(2)]
       });
-    });
-
-    it('should add images to a meetup', (done) => {
-      agent
-        .post('/api/v2/meetups/1/images')
-        .set('Authorization', `Bearer ${adminTestToken}`)
-        .send({
-          meetupPhotos: ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']
-        })
-        .expect(201, done);
     });
   });
 

@@ -347,6 +347,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendResponse({
         res,
         status: 400,
