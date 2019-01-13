@@ -66,7 +66,7 @@ export default {
               status: 422,
               error: 'This user has already upvoted this question. You cannot upvote a question more than once'
             }
-          })
+          });
         }
 
         await db.queryDb({
@@ -138,7 +138,7 @@ export default {
               status: 422,
               error: 'This user has already downvoted this question. You cannot downvote a question more than once'
             }
-          })
+          });
         }
 
         await db.queryDb({
@@ -161,7 +161,7 @@ export default {
             status: 200,
             data: [question.rows[0]]
           }
-        })
+        });
       }
 
       return sendResponse({
@@ -218,7 +218,6 @@ export default {
           error: 'Invalid request, please try again'
         }
       });
-
     }
   },
 
@@ -294,7 +293,7 @@ export default {
             status: 200,
             data: meetupQuestions
           }
-        })
+        });
       }
       return sendResponse({
         res,
@@ -303,7 +302,7 @@ export default {
           status: 404,
           error: 'There are no questions for this meetup at the moment'
         }
-      })
+      });
     } catch (e) {
       return sendResponse({
         res,
@@ -312,7 +311,7 @@ export default {
           status: 400,
           error: 'Invalid request, please try again'
         }
-      })
+      });
     }
   },
 
@@ -340,7 +339,7 @@ export default {
           status: 404,
           error: 'The requested question cannot be deleted because it doesn\'t exist'
         }
-      })
+      });
     } catch (e) {
       return sendResponse({
         res,
@@ -371,7 +370,7 @@ export default {
                  SET title=$1, body=$2, createdby=$4
                  WHERE id=$3 RETURNING *`,
           values: [title || questionRecord.title,
-          body || questionRecord.body, questionRecord.id, questionRecord.createdby
+            body || questionRecord.body, questionRecord.id, questionRecord.createdby
           ]
         });
 
@@ -384,7 +383,7 @@ export default {
             status: 200,
             data: [updatedQuestion]
           }
-        })
+        });
       }
       return sendResponse({
         res,
@@ -393,9 +392,8 @@ export default {
           status: 404,
           error: 'The meetup you requested does not exist'
         }
-      })
+      });
     } catch (e) {
-
       return sendResponse({
         res,
         status: 400,
@@ -403,7 +401,7 @@ export default {
           status: 400,
           error: 'Invalid request, please try again'
         }
-      })
+      });
     }
   },
 
@@ -427,7 +425,7 @@ export default {
             status: 200,
             data: [questionRecord]
           }
-        })
+        });
       }
       return sendResponse({
         res,
@@ -436,7 +434,7 @@ export default {
           status: 404,
           error: 'The requested question does not exist'
         }
-      })
+      });
     } catch (e) {
       return sendResponse({
         res,
@@ -445,7 +443,7 @@ export default {
           status: 400,
           error: 'Invalid request. Please try again'
         }
-      })
+      });
     }
   },
 };

@@ -1,4 +1,3 @@
-// import db from '../db';
 import Model from '.';
 
 /**
@@ -13,4 +12,4 @@ class Question extends Model {
   }
 }
 
-export default Question;
+export default new Question();
