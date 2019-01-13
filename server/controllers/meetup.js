@@ -265,7 +265,7 @@ export default {
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET tags=$1
-                 WHERE id=$2 RETURNING *`,
+                 WHERE id=$2 RETURNING id as meetup,topic,tags`,
           values: [allTags, req.params.meetupId]
         });
 
