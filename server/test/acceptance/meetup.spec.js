@@ -1,15 +1,36 @@
 import 'chai/register-should';
 import request from 'supertest';
 import { app } from '../../app';
+import db from '../../db';
+import createTableQueries from '../../models/helpers';
+import { getFutureDate } from '../../utils';
 
 const agent = request(app);
 
-describe.skip('Meetups API', () => {
-  describe('POST /api/v1/meetups', () => {
+describe('Meetups API', () => {
+  before('Setup', async () => {
+    // Drop referencing tables
+    await db.queryDb({
+      text: 'DROP TABLE IF EXISTS Rsvp'
+    });
+
+    await db.queryDb({
+      text: 'DROP TABLE IF EXISTS Question'
+    });
+
+
+    await db.queryDb({
+      text: 'DROP TABLE IF EXISTS Meetup'
+    });
+
+    // Create tables
+    await db.queryDb(createTableQueries.createMeetupSQLQuery);
+  });
+  describe('POST /api/v2/meetups', () => {
     describe('handle valid data', () => {
       it('should create a meetup', (done) => {
         agent
-          .post('/api/v1/meetups')
+          .post('/api/v2/meetups')
           .expect(201)
           .send({
             topic: 'Meetup 1',
@@ -29,7 +50,7 @@ describe.skip('Meetups API', () => {
     describe('handle invalid or missing data', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
-          .post('/api/v1/meetups')
+          .post('/api/v2/meetups')
           .expect(422)
           .send({
             location: 'Meetup Location',
@@ -45,7 +66,7 @@ describe.skip('Meetups API', () => {
 
       it('should not create a meetup if required fields are missing', (done) => {
         agent
-          .post('/api/v1/meetups')
+          .post('/api/v2/meetups')
           .expect(422)
           .send({
             topic: 'Awesome Meetup',
@@ -61,7 +82,7 @@ describe.skip('Meetups API', () => {
 
       it('should not create a meetup if date is invalid', (done) => {
         agent
-          .post('/api/v1/meetups')
+          .post('/api/v2/meetups')
           .expect(422)
           .send({
             topic: 'Awesome Meetup',
@@ -78,7 +99,7 @@ describe.skip('Meetups API', () => {
 
       it('should not create a meetup if date provided is past', (done) => {
         agent
-          .post('/api/v1/meetups')
+          .post('/api/v2/meetups')
           .expect(422)
           .send({
             topic: 'Awesome Meetup',
@@ -96,10 +117,10 @@ describe.skip('Meetups API', () => {
   });
 
 
-  describe('GET /api/v1/meetups', () => {
+  describe('GET /api/v2/meetups', () => {
     it('should return a list of meetups', (done) => {
       agent
-        .get('/api/v1/meetups')
+        .get('/api/v2/meetups')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -111,7 +132,7 @@ describe.skip('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v1/meetups?searchTerm=Meetup 1')
+        .get('/api/v2/meetups?searchTerm=Meetup 1')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -124,7 +145,7 @@ describe.skip('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v1/meetups?searchTerm=food festival')
+        .get('/api/v2/meetups?searchTerm=food festival')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -137,10 +158,10 @@ describe.skip('Meetups API', () => {
   });
 
 
-  describe('GET /api/v1/meetups/:id', () => {
+  describe('GET /api/v2/meetups/:id', () => {
     it('should return a single meetup', (done) => {
       agent
-        .get('/api/v1/meetups/1')
+        .get('/api/v2/meetups/1')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -155,7 +176,7 @@ describe.skip('Meetups API', () => {
 
     it('should return a 404 error for a non-existing meetup', (done) => {
       agent
-        .get('/api/v1/meetups/9999999')
+        .get('/api/v2/meetups/9999999')
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -168,6 +189,14 @@ describe.skip('Meetups API', () => {
 
 
   describe.only('DELETE /meetups/<meetup-id>/', () => {
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+              VALUES ($1, $2, $3)`,
+        values: ['meetup sample 1', 'meetup sample location', getFutureDate(2)]
+      });
+    });
+
     it('should delete a single meetup', (done) => {
       agent
         .delete('/api/v2/meetups/1')
@@ -183,7 +212,7 @@ describe.skip('Meetups API', () => {
 
     it('should return an error for a non-existing meetup', (done) => {
       agent
-        .delete('/api/v1/meetups/9999999')
+        .delete('/api/v2/meetups/9999999')
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -192,12 +221,18 @@ describe.skip('Meetups API', () => {
           done();
         });
     });
+
+    afterEach(async () => {
+      await db.queryDb({
+        text: 'DELETE FROM Meetup'
+      });
+    });
   });
 
-  describe('GET /api/v1/meetups/upcoming', () => {
+  describe('GET /api/v2/meetups/upcoming', () => {
     it('should return a list of upcoming meetups', (done) => {
       agent
-        .get('/api/v1/meetups/upcoming')
+        .get('/api/v2/meetups/upcoming')
         .expect(200, done);
     });
   });
@@ -205,7 +240,7 @@ describe.skip('Meetups API', () => {
   describe('Update a meetup Question', () => {
     it('should update a meetup question', (done) => {
       agent
-        .patch('/api/v1/meetups/2/questions/2')
+        .patch('/api/v2/meetups/2/questions/2')
         .send({ userId: '1' })
         .expect(200)
         .end((err, res) => {
@@ -219,7 +254,7 @@ describe.skip('Meetups API', () => {
 
     it('should return an error for a question that doesn\'t exist', (done) => {
       agent
-        .delete('/api/v1/meetups/2/questions/2')
+        .delete('/api/v2/meetups/2/questions/2')
         .send({ userId: '9999999' })
         .expect(404)
         .end((err, res) => {
@@ -234,7 +269,7 @@ describe.skip('Meetups API', () => {
   describe('Fetch all questions of a specific meetup', () => {
     it('should return all questions asked in a meetup', (done) => {
       agent
-        .get('/api/v1/meetups/1/questions')
+        .get('/api/v2/meetups/1/questions')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -247,7 +282,7 @@ describe.skip('Meetups API', () => {
 
     it('should return an error for no questions', (done) => {
       agent
-        .get('/api/v1/meetups/9999999/questions')
+        .get('/api/v2/meetups/9999999/questions')
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -261,7 +296,7 @@ describe.skip('Meetups API', () => {
   describe('Fetch a meetup question GET /meetups/<meetup-id>/questions/<question-id>', () => {
     it('should return a meetup question record', (done) => {
       agent
-        .get('/api/v1/meetups/3/questions/3')
+        .get('/api/v2/meetups/3/questions/3')
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -274,7 +309,7 @@ describe.skip('Meetups API', () => {
 
     it('should return an error for a non-existing meetup question', (done) => {
       agent
-        .get('/api/v1/meetups/3/questions/9999999')
+        .get('/api/v2/meetups/3/questions/9999999')
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -287,7 +322,7 @@ describe.skip('Meetups API', () => {
     describe('Fetch all RSVPs of a meetup, GET /meetups/<meetup-id>/rsvps', () => {
       it('should return all RSVPs of a meetup', (done) => {
         agent
-          .get('/api/v1/meetups/1/rsvps')
+          .get('/api/v2/meetups/1/rsvps')
           .expect(200)
           .end((err, res) => {
             if (err) return done(err);
@@ -299,7 +334,7 @@ describe.skip('Meetups API', () => {
 
       it('should return an error if there are no RSVPs for a meetup', (done) => {
         agent
-          .get('/api/v1/meetups/999999/rsvps')
+          .get('/api/v2/meetups/999999/rsvps')
           .expect(404)
           .end((err, res) => {
             if (err) return done(err);

@@ -202,6 +202,21 @@ describe('Questions API', () => {
             done();
           });
       });
+
+      it('should not add a comment if required data are missing', (done) => {
+        agent
+          .post('/api/v2/comments')
+          .send({
+            commentText: 'a new comment'
+          })
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
     });
 
     after('Teardown', async () => {
