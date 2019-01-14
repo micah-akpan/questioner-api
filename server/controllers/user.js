@@ -44,10 +44,11 @@ export default {
         }]
       });
     } catch (e) {
-      res.status(400).send({
-        status: 400,
-        error: 'Invalid request, please check your email and try again'
-      });
+      return res.status(400)
+        .send({
+          status: 400,
+          error: 'Invalid request, please check your email and try again'
+        });
     }
   },
 
@@ -73,9 +74,9 @@ export default {
         const match = await bcrypt.compare(password, encryptedpassword);
 
         if (match) {
-          return res.status(200)
+          return res.status(201)
             .send({
-              status: 200,
+              status: 201,
               data: [{
                 token: jwt.sign({ email }, process.env.JWT_SECRET, {
                   expiresIn: '24h'

@@ -2,12 +2,10 @@ import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
 import { config } from 'dotenv';
-// import meetupAPI from './routes/meetup';
-// import questionAPI from './routes/question';
-// import rsvpAPI from './routes/rsvp';
 import userAPI from './routes/user';
 import indexAPI from './routes';
-import dbQuery from './models';
+import questionAPI from './routes/question';
+import db from './db';
 
 config();
 
@@ -17,7 +15,7 @@ app.set('json spaces', 2);
 
 /* Middlewares */
 if (app.get('env') === 'development') {
-  dbQuery.createTables();
+  db.sync();
   app.use(logger('dev'));
 }
 
@@ -27,10 +25,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/', indexAPI);
-// app.use('/api/v1', meetupAPI);
-// app.use('/api/v1', questionAPI);
-// app.use('/api/v1', rsvpAPI);
 app.use('/api/v2/', userAPI);
+app.use('/api/v2/', questionAPI);
 
 // catch 404 error and forward to
 // error handler

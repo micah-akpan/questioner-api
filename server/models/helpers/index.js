@@ -7,12 +7,14 @@ import createMeetupSQLQuery from './meetup';
 import createQuestionSQLQuery from './question';
 import createUserSQLQuery from './user';
 import createRsvpSQLQuery from './rsvp';
+import createCommentSQLQuery from './comment';
 
 const createTableSQLQueries = {
   createMeetupSQLQuery,
   createQuestionSQLQuery,
   createUserSQLQuery,
-  createRsvpSQLQuery
+  createRsvpSQLQuery,
+  createCommentSQLQuery
 };
 
 export default createTableSQLQueries;
