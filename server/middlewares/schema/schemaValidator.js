@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import Schemas from '../models/schemas';
-import { isBoolean, hasProp, getProp } from '../utils';
+import Schemas from './schemas';
+import { isBoolean, hasProp, getProp } from '../../utils';
 
 export default (useJoiError = false) => {
   const _useJoiError = isBoolean(useJoiError) && useJoiError;

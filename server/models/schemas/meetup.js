@@ -1,11 +1,13 @@
-import Joi from 'joi';
-
-const meetupDataSchema = Joi.object().keys({
-  topic: Joi.string().strict().required(),
-  happeningOn: Joi.date().iso().required().min('now'),
-  location: Joi.string().required(),
-  tags: Joi.string(),
-  images: Joi.array()
-});
-
-export default meetupDataSchema;
+export default {
+  text: `CREATE TABLE IF NOT EXISTS Meetup (
+      id SERIAL PRIMARY KEY,
+      topic text NOT NULL,
+      location text NOT NULL,
+      happeningOn DATE NOT NULL,
+      CHECK (happeningOn >= NOW()),
+      createdOn DATE DEFAULT NOW(),
+      images text[],
+      tags text[],
+      maxNumberOfAttendees INTEGER DEFAULT 50
+    )`
+};

@@ -1,17 +1,25 @@
-
+import jwt from 'jsonwebtoken';
 /**
  * @func omitProps
  * @param {Object} obj
  * @param {Array<String>} propsToOmit
+ * @param {Boolean} caseInsensitive
  * @return {Object} A new object with some props omitted
  * @description Takes an object, omits some props from the object and returns a new object
  */
-export const omitProps = (obj, propsToOmit) => {
+export const omitProps = (obj, propsToOmit, caseInsensitive = true) => {
   const newObject = {};
   const objKeys = Object.keys(obj);
 
+  let newPropsToOmit = [];
+  if (caseInsensitive) {
+    newPropsToOmit = propsToOmit.map(props => props.toLowerCase());
+  } else {
+    newPropsToOmit = propsToOmit;
+  }
+
   for (const prop of objKeys) {
-    if (!propsToOmit.includes(prop)) {
+    if (!newPropsToOmit.includes(prop.toLowerCase())) {
       newObject[prop] = obj[prop];
     }
   }
@@ -72,11 +80,22 @@ export const getIndex = (array, prop, value) => {
   return idx;
 };
 
+export const createTestToken = (admin = false) => jwt.sign({
+  email: 'testuser@email.com', admin
+}, process.env.JWT_SECRET, {
+  expiresIn: '24h'
+});
+
+export const arrayHasValues = array => array.length > 0;
+
+export const objectHasProps = obj => Object.keys(obj).length > 0;
+
 export default {
   omitProps,
   getFutureDate,
   isBoolean,
   hasProp,
   getProp,
-  getIndex
+  getIndex,
+  createTestToken
 };

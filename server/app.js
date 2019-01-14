@@ -2,10 +2,8 @@ import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
 import { config } from 'dotenv';
-import userAPI from './routes/user';
-import indexAPI from './routes';
-import questionAPI from './routes/question';
-import meetupAPI from './routes/meetup';
+import wLogger from './helpers';
+import indexRouter from './routes';
 import db from './db';
 
 config();
@@ -16,7 +14,21 @@ app.set('json spaces', 2);
 
 /* Middlewares */
 if (app.get('env') === 'development') {
-  db.sync();
+  // sync tables
+  db.sync()
+    .then((msg) => {
+      wLogger.log({
+        level: 'info',
+        message: msg
+      });
+    })
+    .catch((err) => {
+      wLogger.log({
+        level: 'info',
+        message: err
+      });
+    });
+
   app.use(logger('dev'));
 }
 
@@ -25,10 +37,7 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use('/', indexAPI);
-app.use('/api/v2/', userAPI);
-app.use('/api/v2/', questionAPI);
-app.use('/api/v2/', meetupAPI);
+app.use('/', indexRouter);
 
 // catch 404 error and forward to
 // error handler
@@ -40,7 +49,6 @@ app.use((req, res, next) => {
 
 // Development error handler
 // This will print stacktraces
-
 if (app.get('env') === 'development') {
   app.use((err, req, res) => {
     res.status(err.status || 500);

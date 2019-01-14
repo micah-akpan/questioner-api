@@ -2,9 +2,9 @@
  * @module
  * @description different env database configuration
  */
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
 const {
   DB_USER,
@@ -22,7 +22,8 @@ export default {
     password: DB_PASSWORD,
     database: DB_DEV,
     host: 'localhost',
-    port: 5432
+    port: 5432,
+    pool: 10
   },
 
   test: {

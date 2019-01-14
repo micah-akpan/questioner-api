@@ -1,31 +1,46 @@
 import express from 'express';
 import meetupController from '../controllers/meetup';
-import schemaValidator from '../middlewares/schemaValidator';
+import questionController from '../controllers/question';
+import rsvpController from '../controllers/rsvp';
+import schemaValidator from '../middlewares/schema/schemaValidator';
+import Auth from '../middlewares/auth';
 
 const router = express.Router();
+
+const { checkToken, isAdmin } = Auth;
 
 const validateRequest = schemaValidator(true);
 
 router
   .route('/meetups')
-  .post(validateRequest, meetupController.createNewMeetup)
-  .get(meetupController.getAllMeetups);
+  .post(
+    validateRequest,
+    checkToken,
+    isAdmin,
+    meetupController.createNewMeetup
+  )
+  .get(checkToken, meetupController.getAllMeetups);
 
-router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
+router.get('/meetups/upcoming',
+  checkToken,
+  meetupController.getUpcomingMeetups);
 
 router
   .route('/meetups/:meetupId')
-  .get(meetupController.getSingleMeetup)
-  .delete(meetupController.deleteMeetup);
+  .get(checkToken, meetupController.getSingleMeetup)
+  .delete(checkToken,
+    isAdmin,
+    meetupController.deleteMeetup);
 
-router.get('/meetups/:meetupId/questions', meetupController.getQuestions);
+router.get('/meetups/:meetupId/questions', checkToken,
+  questionController.getQuestions);
 
-router.get('/meetups/:meetupId/rsvps', meetupController.getAllRsvps);
+router.get('/meetups/:meetupId/rsvps', checkToken, isAdmin, rsvpController.getRsvps);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')
-  .get(meetupController.getSingleMeetupQuestion)
-  .patch(meetupController.updateMeetupQuestion)
-  .delete(meetupController.deleteMeetupQuestion);
+  .get(checkToken, questionController.getSingleMeetupQuestion)
+  .patch(checkToken, questionController.updateMeetupQuestion)
+  .delete(checkToken, isAdmin, questionController.deleteMeetupQuestion);
 
 export default router;

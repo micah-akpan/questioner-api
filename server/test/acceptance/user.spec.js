@@ -3,9 +3,8 @@ import request from 'supertest';
 import bcrypt from 'bcrypt';
 import { app } from '../../app';
 import db from '../../db';
-import createTableQueries from '../../models/helpers';
 
-describe.only('User API', () => {
+describe('User API', () => {
   const testUser = {
     email: 'testuser@gmail.com',
     password: 'testuser1234',
@@ -14,12 +13,12 @@ describe.only('User API', () => {
   };
 
   before('Setup', async () => {
-    db.drop({ tableName: 'Comment', });
-    db.drop({ tableName: 'Rsvp' });
-    db.drop({ tableName: 'Question' });
-    db.drop({ tableName: '"User"' });
+    await db.dropTable({ tableName: 'Comment', });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: '"User"' });
 
-    await db.queryDb(createTableQueries.createUserSQLQuery);
+    await db.createTable('User');
   });
 
   describe('POST /auth/signup', () => {
@@ -48,10 +47,6 @@ describe.only('User API', () => {
 
     describe('handle invalid/incomplete data', () => {
       beforeEach(async () => {
-        // create test user
-        // TODO: Seed database prior to test
-        await db.queryDb(createTableQueries.createUserSQLQuery);
-
         await db.queryDb({
           text: `INSERT INTO "User" (firstname,lastname,email,password)
                  VALUES ($1, $2, $3, $4)
@@ -129,9 +124,9 @@ describe.only('User API', () => {
     });
   });
   after('Teardown', async () => {
-    db.drop({ tableName: 'Comment', });
-    db.drop({ tableName: 'Rsvp' });
-    db.drop({ tableName: 'Question' });
-    db.drop({ tableName: '"User"' });
+    await db.dropTable({ tableName: 'Comment', });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: '"User"' });
   });
 });

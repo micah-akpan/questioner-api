@@ -5,14 +5,22 @@ import {
   isBoolean,
   hasProp,
   getProp,
-  getIndex
+  getIndex,
+  createTestToken,
+  arrayHasValues,
+  objectHasProps
 } from '../../../utils';
 
-describe('Utils', () => {
+describe.only('Utils', () => {
   describe('omitProps()', () => {
     it('should omit some props from an obj', () => {
       const obj = { a: 1, b: 2, c: 3 };
       omitProps(obj, ['a', 'b']).should.deep.equal({ c: 3 });
+    });
+
+    it('should omit some props from an obj', () => {
+      const obj = { a: 1, b: 2, c: 3 };
+      omitProps(obj, ['a', 'b'], false).should.deep.equal({ c: 3 });
     });
   });
 
@@ -115,6 +123,37 @@ describe('Utils', () => {
       ];
 
       getIndex(arr, 'a', 4).should.equal(-1);
+    });
+  });
+
+  describe('createTestToken()', () => {
+    it('should return a JWT token', () => {
+      const token = createTestToken({
+        admin: true
+      });
+
+      token.should.be.a('string');
+      token.split('.').length.should.equal(3);
+    });
+  });
+
+  describe('arrayHasValues()', () => {
+    it('should return true', () => {
+      arrayHasValues([1, 2, 3]).should.equal(true);
+    });
+
+    it('should return false', () => {
+      arrayHasValues([]).should.equal(false);
+    });
+  });
+
+  describe('objectHasProps()', () => {
+    it('should return true', () => {
+      objectHasProps({ a: 1 }).should.equal(true);
+    });
+
+    it('should return false', () => {
+      arrayHasValues({}).should.equal(false);
     });
   });
 });

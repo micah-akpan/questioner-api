@@ -1,105 +1,231 @@
-import { omitProps } from '../utils';
+import { omitProps, arrayHasValues } from '../utils';
 import db from '../db';
-import createTableQueries from '../models/helpers';
+import Question from '../models/all/Question';
+import { sendResponse } from './helpers';
 
-/* eslint-disable no-undef */
 export default {
-  createQuestion(req, res) {
-    const {
-      title, body, meetupId, userId
-    } = req.body;
+  async createQuestion(req, res) {
 
-    const lastId = questions[questions.length - 1].id;
+    try {
 
-    questions.push({
-      id: lastId + 1,
-      createdOn: new Date(),
-      createdBy: userId,
-      meetup: meetupId,
-      title,
-      body,
-      votes: 0
-    });
+      const {
+        title, body, meetupId, userId
+      } = req.body;
 
-    return res.status(201)
-      .send({
+      const questionResult = await db.queryDb({
+        text: `INSERT INTO Question (title, body, meetup, createdBy)
+               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, id, meetup, title, body`,
+        values: [title, body, meetupId, userId]
+      });
+
+      const newQuestion = questionResult.rows[0];
+      return sendResponse({
+        res,
         status: 201,
-        data: [{
-          user: userId,
-          meetup: meetupId,
-          title,
-          body
-        }]
+        payload: {
+          status: 201,
+          data: [omitProps(newQuestion, ['id'])]
+        }
       });
-  },
-
-  upvoteQuestion(req, res) {
-    let question = questions.filter(q => String(q.id) === req.params.id)[0];
-
-    if (!question) {
-      return res.status(404).send({
-        status: 404,
-        error: `The question with the id: ${req.params.id} does not exist`
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
       });
     }
-    question.votes += 1;
-    questions.forEach((q) => {
-      if (q.id === question.id) {
-        q = question;
-      }
-    });
-
-    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
-
-    return res.status(200).send({
-      status: 200,
-      data: [
-        question
-      ]
-    });
   },
 
-  downvoteQuestion(req, res) {
-    let question = questions.filter(q => String(q.id) === req.params.id)[0];
+  async upvoteQuestion(req, res) {
+    try {
+      const { questionId } = req.params;
 
-    if (!question) {
-      return res.status(404)
-        .send({
-          status: 404,
-          error: `The question with the id: ${req.params.id} does not exist`
+      const questionResult = await db.queryDb({
+        text: 'SELECT id, createdBy as user, votes, meetup, title, body FROM Question WHERE id=$1',
+        values: [questionId]
+      });
+
+      const question = questionResult.rows[0];
+
+
+      if (question) {
+        const { votes } = question;
+
+        const voteResult = await db.queryDb({
+          text: `SELECT * FROM Upvote 
+                 WHERE "user"=$1 AND question=$2`,
+          values: [question.user, question.id]
         });
-    }
-    question.votes = question.votes > 0 ? question.votes - 1 : 0;
 
-    question = omitProps(question, ['id', 'createdOn', 'createdBy']);
+        if (arrayHasValues(voteResult.rows)) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This user has already upvoted this question. You cannot upvote a question more than once'
+            }
+          });
+        }
 
-    return res.status(200)
-      .send({
-        status: 200,
-        data: [question]
+        await db.queryDb({
+          text: `INSERT INTO Upvote ("user", question)
+                 VALUES ($1, $2)`,
+          values: [question.user, question.id]
+        });
+
+        const questionResults = await db.queryDb({
+          text: `UPDATE Question
+                 SET votes = $1
+                 WHERE id = $2 RETURNING meetup, title, body, votes`,
+          values: [votes + 1, questionId]
+        });
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [questionResults.rows[0]]
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The question cannot be upvoted because it does not exist'
+        }
       });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  },
+  async downvoteQuestion(req, res) {
+    try {
+      const { questionId } = req.params;
+      const results = await db.queryDb({
+        text: 'SELECT id, createdBy as user, meetup, title, body, votes FROM Question WHERE id=$1',
+        values: [questionId]
+      });
+
+      let question = results.rows[0];
+
+
+      if (question) {
+        const { votes } = question;
+
+        const voteResult = await db.queryDb({
+          text: `SELECT * FROM Downvote 
+                 WHERE "user"=$1 AND question=$2`,
+          values: [question.user, question.id]
+        });
+
+        if (arrayHasValues(voteResult.rows)) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This user has already downvoted this question. You cannot downvote a question more than once'
+            }
+          });
+        }
+
+        await db.queryDb({
+          text: `INSERT INTO Downvote ("user", question)
+                 VALUES ($1, $2)`,
+          values: [question.user, question.id]
+        });
+
+        question = await db.queryDb({
+          text: `UPDATE Question
+                 SET votes = $1
+                 WHERE id = $2 RETURNING meetup, title, body, votes`,
+          values: [votes > 0 ? votes - 1 : 0, questionId]
+        });
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [question.rows[0]]
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The question cannot be downvoted because it does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The question cannot be downvoted because it does not exist'
+        }
+      });
+    }
   },
 
-  getAllQuestions(req, res) {
-    // for Admin ONLY
-    return res.status(200)
-      .send({
-        status: 200,
-        data: questions
+  async getAllQuestions(req, res) {
+    try {
+      const results = await Question.findAll({ orderBy: 'votes', order: 'desc' });
+
+      const questions = results.rows;
+
+      if (questions.length > 0) {
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: questions
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'There are no questions for this meetup at the moment'
+        }
       });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
   },
 
   async addComments(req, res) {
     try {
       const { questionId, commentText } = req.body;
-
-      await db.queryDb(createTableQueries.createCommentSQLQuery);
-
-      const addCommentsQuery = {
-        text: `INSERT INTO Comment (body, question)
-             VALUES ($1, $2) RETURNING *`,
-        values: [commentText, questionId]
-      };
 
       const results = await db.queryDb({
         text: 'SELECT * FROM Question WHERE id=$1',
@@ -107,32 +233,219 @@ export default {
       });
 
       if (results.rows.length > 0) {
-        const payload = {
+        const newComment = {
           question: questionId,
           title: results.rows[0].title,
           body: results.rows[0].body,
           comment: commentText
         };
 
-        await db.queryDb(addCommentsQuery);
+        const addCommentsQuery = {
+          text: `INSERT INTO Comment (body, question)
+               VALUES ($1, $2) RETURNING *`,
+          values: [commentText, questionId]
+        };
 
-        return res.status(201)
-          .send({
+        await db.queryDb(addCommentsQuery);
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
             status: 201,
-            data: [payload]
-          });
+            data: [newComment]
+          }
+        });
       }
-      return res.status(404)
-        .send({
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
-          error: 'You cannot comment on this question because the question does not exist'
-        });
+          error: 'You cannot post comments on this question because the question does not exist'
+        }
+      });
     } catch (e) {
-      return res.status(400)
-        .send({
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
           status: 400,
-          error: 'Invalid request, please check and try again'
-        });
+          error: 'Invalid request, please try again'
+        }
+      });
     }
-  }
+  },
+
+  async getQuestions(req, res) {
+    try {
+      const result = await db.queryDb({
+        text: `SELECT * FROM Question WHERE meetup=$1
+               ORDER BY votes DESC`,
+        values: [req.params.meetupId]
+      });
+
+      const meetupQuestions = result.rows;
+
+      if (meetupQuestions.length) {
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: meetupQuestions
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'There are no questions for this meetup at the moment'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  },
+
+  async deleteMeetupQuestion(req, res) {
+    const { questionId, meetupId } = req.params;
+
+    try {
+      const results = await db.queryDb({
+        text: 'SELECT * FROM Question WHERE id=$1 AND meetup=$2 AND createdBy=$3',
+        values: [questionId, meetupId, req.body.userId]
+      });
+
+      const question = results.rows[0];
+      if (question) {
+        await db.queryDb({
+          text: 'DELETE FROM Question WHERE id=$1',
+          values: [questionId]
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The requested question cannot be deleted because it doesn\'t exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  },
+
+  async updateMeetupQuestion(req, res) {
+    try {
+      const { meetupId, questionId } = req.params;
+      const { title, body } = req.body;
+      const results = await db.queryDb({
+        text: `SELECT * FROM Question
+               WHERE id=$1 AND createdBy=$2 AND meetup=$3`,
+        values: [questionId, req.body.userId, meetupId]
+      });
+
+      const questionRecord = results.rows[0];
+
+      if (questionRecord) {
+        const questionResults = await db.queryDb({
+          text: `UPDATE Question
+                 SET title=$1, body=$2, createdby=$4
+                 WHERE id=$3 RETURNING *`,
+          values: [title || questionRecord.title,
+          body || questionRecord.body, questionRecord.id, questionRecord.createdby
+          ]
+        });
+
+        const updatedQuestion = questionResults.rows[0];
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [updatedQuestion]
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The meetup you requested does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  },
+
+  async getSingleMeetupQuestion(req, res) {
+    const { questionId, meetupId } = req.params;
+
+    try {
+      const results = await db.queryDb({
+        text: `SELECT * FROM Question
+               WHERE id=$1 AND meetup=$2`,
+        values: [questionId, meetupId]
+      });
+
+      const questionRecord = results.rows[0];
+
+      if (questionRecord) {
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [questionRecord]
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The requested question does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request. Please try again'
+        }
+      });
+    }
+  },
 };
