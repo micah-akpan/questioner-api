@@ -1,10 +1,13 @@
 import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
+import { config } from 'dotenv';
 import meetupAPI from './routes/meetup';
 import questionAPI from './routes/question';
 import rsvpAPI from './routes/rsvp';
 import indexAPI from './routes';
+
+config();
 
 export const app = express();
 
