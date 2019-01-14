@@ -10,7 +10,7 @@ describe.only('User API', () => {
     // DROP tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Users' });
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
   });
 
   describe('POST /auth/signup', () => {
@@ -21,7 +21,7 @@ describe.only('User API', () => {
     afterEach(async () => {
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Users' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
     });
 
     describe('handle valid/complete data', () => {
@@ -53,7 +53,7 @@ describe.only('User API', () => {
         await db.queryDb(createTableQueries.createUserSQLQuery);
 
         await db.queryDb({
-          text: `INSERT INTO Users(firstname,lastname,email,password)
+          text: `INSERT INTO "User" (firstname,lastname,email,password)
                  VALUES ('user1', 'user1', 'user1@email.com', 'user1234')
                 `
         });
@@ -72,7 +72,7 @@ describe.only('User API', () => {
             if (err) return done(err);
             res.body.status.should.equal(422);
             res.body.should.have.property('error');
-            res.body.error.should.equal('A user with this email already exists');
+            res.body.error.should.equal('A user with this email already exist');
             done();
           });
       });
@@ -90,7 +90,7 @@ describe.only('User API', () => {
       const hashedPassword = await bcrypt.hash('testuser1234', salt);
 
       const query = {
-        text: `INSERT INTO Users (firstname, lastname, email, password)
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
         VALUES ('testuser', 'testuser', 'testuser@gmail.com', $1)`,
         values: [hashedPassword]
       };
@@ -127,13 +127,13 @@ describe.only('User API', () => {
     afterEach(async () => {
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
       await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-      await db.queryDb({ text: 'DROP TABLE IF EXISTS Users' });
+      await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
     });
   });
   after(async () => {
     // DROP tables
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Rsvp' });
     await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Users' });
+    await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' });
   });
 });

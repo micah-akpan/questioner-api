@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
+import { omitProps } from '../utils';
 
 export default {
   async signUpUser(req, res) {
@@ -9,7 +10,7 @@ export default {
     } = req.body;
 
     const getUserQuery = {
-      text: 'SELECT * FROM Users WHERE email=$1',
+      text: 'SELECT * FROM "User" WHERE email=$1',
       values: [email]
     };
 
@@ -17,35 +18,35 @@ export default {
       const result = await db.queryDb(getUserQuery);
       if (result.rows.length > 0) {
         // user exist
-        res.status(422).send({
+        return res.status(422).send({
           status: 422,
-          error: 'A user with this email already exists'
-        });
-      } else {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const createNewUserQuery = {
-          text: `INSERT INTO Users(email,password,firstname,lastname)
-                         VALUES ($1, $2, $3, $4) RETURNING *`,
-          values: [email, hashedPassword, firstname, lastname]
-        };
-
-        const userAuthToken = jwt.sign({ email }, process.env.JWT_SECRET, {
-          expiresIn: '24h'
-        });
-
-        const newTableResult = await db.queryDb(createNewUserQuery);
-        res.status(201).send({
-          status: 201,
-          data: [{
-            token: userAuthToken,
-            user: newTableResult.rows[0]
-          }]
+          error: 'A user with this email already exist'
         });
       }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const createNewUserQuery = {
+        text: `INSERT INTO "User" (email,password,firstname,lastname)
+                         VALUES ($1, $2, $3, $4) RETURNING *`,
+        values: [email, hashedPassword, firstname, lastname]
+      };
+
+      const userAuthToken = jwt.sign({ email }, process.env.JWT_SECRET, {
+        expiresIn: '24h'
+      });
+
+      const newTableResult = await db.queryDb(createNewUserQuery);
+      return res.status(201).send({
+        status: 201,
+        data: [{
+          token: userAuthToken,
+          user: omitProps(newTableResult.rows[0], ['password'])
+        }]
+      });
     } catch (e) {
       res.status(400).send({
         status: 400,
-        error: e.toString()
+        error: 'Invalid request, please check your email and try again'
       });
     }
   },
@@ -55,14 +56,14 @@ export default {
 
     try {
       const userResult = await db.queryDb({
-        text: 'SELECT * FROM Users WHERE email=$1',
+        text: 'SELECT * FROM "User" WHERE email=$1',
         values: [email]
       });
 
       if (userResult.rows.length > 0) {
         // user exist
         const checkPwdQuery = {
-          text: 'SELECT password as encryptedPassword FROM Users WHERE email=$1',
+          text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
           values: [email]
         };
 
@@ -72,24 +73,23 @@ export default {
         const match = await bcrypt.compare(password, encryptedpassword);
 
         if (match) {
-          res.status(200)
+          return res.status(200)
             .send({
               status: 200,
               data: [{
                 token: jwt.sign({ email }, process.env.JWT_SECRET, {
                   expiresIn: '24h'
                 }),
-                user: userResult.rows[0]
+                user: omitProps(userResult.rows[0], ['password'])
               }]
             });
-        } else {
-          throw new Error('You entered an incorrect password, please check and try again');
         }
+        throw new Error('You entered an incorrect password, please check and try again');
       } else {
-        throw new Error('Incorrect email or password. Please check and try again');
+        throw new Error('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
       }
     } catch (e) {
-      res.status(422)
+      return res.status(422)
         .send({
           status: 422,
           error: e.message
