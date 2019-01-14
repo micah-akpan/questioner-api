@@ -1,6 +1,6 @@
 import { arrayHasValues } from '../utils';
 import db from '../db';
-import Question from '../models/Question';
+import Question from '../models/all/Question';
 import { sendResponse } from './helpers';
 
 export default {
