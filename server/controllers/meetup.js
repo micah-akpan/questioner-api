@@ -297,5 +297,64 @@ export default {
         }
       });
     }
+  },
+
+  async addImagesToMeetup(req, res) {
+    try {
+      const meetupResult = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [req.params.meetupId]
+      });
+
+      if (arrayHasValues(meetupResult.rows)) {
+        if (req.files.length === 0) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              error: 'You must provide at least one image'
+            }
+          });
+        }
+
+        const NULL = 'NULL';
+
+        const [image1 = NULL, image2 = NULL, image3 = NULL, image4 = NULL] = req.files;
+        const images = `{${image1.filename}, ${image2.filename}, ${image3.filename}, ${image4.filename}}`;
+        const result = await db.queryDb({
+          text: `UPDATE Meetup
+                 SET images=$1
+                 WHERE id=$2 RETURNING id as meetup, topic, images`,
+          values: [images, req.params.meetupId]
+        });
+
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
+            status: 201,
+            data: [result.rows[0]]
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'You cannot add images to this meetup, because the meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
   }
 };
