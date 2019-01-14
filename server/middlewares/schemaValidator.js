@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import Schemas from '../data/schemas';
+import Schemas from '../models/schemas';
 import { isBoolean, hasProp, getProp } from '../utils';
 
 export default (useJoiError = false) => {

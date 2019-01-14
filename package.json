@@ -9,7 +9,7 @@
     "dev:start": "nodemon --require @babel/register ./server/bin/www",
     "start": "node --require @babel/register ./server/bin/www",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js ./server",
-    "test": "nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --exit",
+    "test": "NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "husky": {
@@ -53,11 +53,13 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.2.0",
+    "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "helmet": "^3.15.0",
     "joi": "^14.3.0",
+    "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "pg": "^7.7.1",

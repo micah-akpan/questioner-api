@@ -6,8 +6,8 @@ export default {
       othername text,
       email text NOT NULL,
       password text NOT NULL,
-      phoneNumber INTEGER NOT NULL,
-      username text NOT NULL,
+      phoneNumber INTEGER,
+      username text,
       registered DATE DEFAULT NOW(),
       isAdmin boolean DEFAULT FALSE
     )`
