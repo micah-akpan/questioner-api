@@ -2,7 +2,7 @@ import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
 import { sendResponse } from './helpers';
-import { arrayHasValues, objectHasProps } from '../utils';
+import { arrayHasValues, objectHasProps, parseStr } from '../utils';
 
 export default {
   async getAllMeetups(req, res) {
@@ -45,14 +45,9 @@ export default {
         });
       }
       const meetups = await db.queryDb({
-        text: 'SELECT id, topic, location, happeningOn, tags FROM Meetup'
+        text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup'
       });
-      const meetupRecords = meetups.rows
-        .map((meetup) => {
-          meetup.title = meetup.topic;
-          delete meetup.topic;
-          return meetup;
-        });
+      const meetupRecords = meetups.rows;
       return sendResponse({
         res,
         status: 200,
@@ -74,15 +69,31 @@ export default {
   },
 
   async createNewMeetup(req, res) {
-    const {
-      location, topic, happeningOn
-    } = req.body;
-
     try {
+      const {
+        location, topic, happeningOn, tags = ''
+      } = req.body;
+
+      const parsedTags = tags && parseStr(tags, ',');
+      const MAX_TAGS = 5;
+      const NULL = 'NULL';
+
+      if (parsedTags && parsedTags.length > MAX_TAGS) {
+        return sendResponse({
+          res,
+          status: 422,
+          payload: {
+            status: 422,
+            error: 'You cannot add more than 5 tags to this meetup'
+          }
+        });
+      }
+
+      const [tag1 = NULL, tag2 = NULL, tag3 = NULL, tag4 = NULL, tag5 = NULL] = parsedTags;
       const newMeetup = await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn)
-               VALUES ($1, $2, $3) RETURNING topic, location, happeningOn, tags`,
-        values: [topic, location, happeningOn]
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
+               VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn, tags`,
+        values: [topic, location, happeningOn, `{ ${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`]
       });
       const meetupRecord = newMeetup.rows[0];
 
@@ -227,4 +238,64 @@ export default {
       });
     }
   },
+
+  async addTagsToMeetup(req, res) {
+    try {
+      const meetupResult = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [req.params.meetupId]
+      });
+
+      if (arrayHasValues(meetupResult.rows)) {
+        const tags = parseStr(req.body.tags, ',');
+        if (tags.length > 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'You cannot add more than 5 tags to this meetup'
+            }
+          });
+        }
+
+        const [tag1 = 'NULL', tag2 = 'NULL', tag3 = 'NULL', tag4 = 'NULL', tag5 = 'NULL'] = tags;
+
+        const allTags = `{${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`;
+        const result = await db.queryDb({
+          text: `UPDATE Meetup
+                 SET tags=$1
+                 WHERE id=$2 RETURNING id as meetup,topic,tags`,
+          values: [allTags, req.params.meetupId]
+        });
+
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
+            status: 201,
+            data: [result.rows[0]]
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'You cannot add tags to this meetup, because the meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 400,
+        payload: {
+          status: 400,
+          error: 'Invalid request, please try again'
+        }
+      });
+    }
+  }
 };

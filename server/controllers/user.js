@@ -77,17 +77,17 @@ export default {
 
         const match = await bcrypt.compare(password, encryptedpassword);
 
+        const userToken = jwt.sign({ email, admin: userResult.rows[0].isadmin },
+          process.env.JWT_SECRET, {
+            expiresIn: '24h'
+          });
+
         if (match) {
           return res.status(201)
             .send({
               status: 201,
               data: [{
-                token: jwt.sign({
-                  email,
-                  admin: userResult.rows[0].isadmin
-                }, process.env.JWT_SECRET, {
-                  expiresIn: '24h'
-                }),
+                token: userToken,
                 user: omitProps(userResult.rows[0], ['password'])
               }]
             });

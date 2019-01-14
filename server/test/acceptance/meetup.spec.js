@@ -6,7 +6,9 @@ import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe('Meetups API', () => {
+describe.only('Meetups API', () => {
+  const adminTestToken = createTestToken(true);
+  const userTestToken = createTestToken();
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
@@ -39,7 +41,7 @@ describe('Meetups API', () => {
       it('should create a meetup', (done) => {
         agent
           .post('/api/v2/meetups')
-          .set('Authorization', `Bearer ${createTestToken(true)}`)
+          .set('Authorization', `Bearer ${adminTestToken}`)
           .expect(201)
           .send({
             topic: 'Meetup 1',
@@ -59,7 +61,7 @@ describe('Meetups API', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v2/meetups')
-          .set('Authorization', `Bearer ${createTestToken()}`)
+          .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             location: 'Meetup Location',
             happeningOn: new Date()
@@ -69,6 +71,26 @@ describe('Meetups API', () => {
             if (err) return done(err);
             res.body.status.should.equal(422);
             res.body.should.have.property('error');
+            done();
+          });
+      });
+
+      it('should return an error for meetup tags greater than 5', (done) => {
+        agent
+          .post('/api/v2/meetups')
+          .set('Authorization', `Bearer ${adminTestToken}`)
+          .expect(422)
+          .send({
+            topic: 'Meetup 1',
+            location: 'Meetup Location',
+            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+            tags: 'meetup1,meetup1,meetupx,mymeetup,meetup1,fun'
+          })
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.should.have.property('error');
+            res.body.error.should.equal('You cannot add more than 5 tags to this meetup');
+            res.body.status.should.equal(422);
             done();
           });
       });
@@ -111,7 +133,25 @@ describe('Meetups API', () => {
       it('should not create a meetup if date provided is past', (done) => {
         agent
           .post('/api/v2/meetups')
-          .set('Authorization', `Bearer ${createTestToken()}`)
+          .set('Authorization', `Bearer ${adminTestToken}`)
+          .send({
+            topic: 'Awesome Meetup',
+            location: 'Meetup Location',
+            happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
+          })
+          .expect(422)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(422);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
+
+      it('should not create a meetup if date provided is past', (done) => {
+        agent
+          .post('/api/v2/meetups')
+          .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location',
@@ -153,7 +193,7 @@ describe('Meetups API', () => {
     it('should return a list of meetups', (done) => {
       agent
         .get('/api/v2/meetups')
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -166,7 +206,7 @@ describe('Meetups API', () => {
     it('should return a list of matched meetups', (done) => {
       agent
         .get('/api/v2/meetups?searchTerm=meetup topic')
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -180,7 +220,7 @@ describe('Meetups API', () => {
     it('should return a list of matched meetups', (done) => {
       agent
         .get('/api/v2/meetups?searchTerm=next location')
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -222,7 +262,7 @@ describe('Meetups API', () => {
       const meetupRecord = results.rows[0];
       agent
         .get(`/api/v2/meetups/${meetupRecord.id}`)
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -238,7 +278,7 @@ describe('Meetups API', () => {
     it('should return a 404 error for a non-existing meetup', (done) => {
       agent
         .get('/api/v2/meetups/9999999')
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -276,7 +316,7 @@ describe('Meetups API', () => {
     it('should delete a single meetup', (done) => {
       agent
         .delete('/api/v2/meetups/1')
-        .set('Authorization', `Bearer ${createTestToken(true)}`)
+        .set('Authorization', `Bearer ${adminTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -290,7 +330,7 @@ describe('Meetups API', () => {
     it('should return an error for a non-existing meetup', (done) => {
       agent
         .delete('/api/v2/meetups/9999999')
-        .set('Authorization', `Bearer ${createTestToken(true)}`)
+        .set('Authorization', `Bearer ${adminTestToken}`)
         .expect(404)
         .end((err, res) => {
           if (err) return done(err);
@@ -325,7 +365,7 @@ describe('Meetups API', () => {
     it('should return a list of upcoming meetups', (done) => {
       agent
         .get('/api/v2/meetups/upcoming')
-        .set('Authorization', `Bearer ${createTestToken()}`)
+        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200, done);
     });
 
@@ -336,10 +376,73 @@ describe('Meetups API', () => {
     });
   });
 
+  describe('POST /meetups/<meetup-id>/tags', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+      await db.createTable('Meetup');
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+              VALUES ($1, $2, $3)`,
+        values: [
+          'meetup sample 1',
+          'meetup sample location',
+          getFutureDate(2)]
+      });
+    });
+
+    it('should add tags to a meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/1/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1'
+        })
+        .expect(201, done);
+    });
+
+    it('should not add tags to a non-existing meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/999999/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1'
+        })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should not add more than 5 tags to a meetup', (done) => {
+      agent
+        .post('/api/v2/meetups/1/tags')
+        .set({ Authorization: `${adminTestToken}` })
+        .send({
+          tags: 'meetup1,meetup1,meetup1,meetup1,meetup1,meetup1'
+        })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('You cannot add more than 5 tags to this meetup');
+          done();
+        });
+    });
+  });
+
   after(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
     await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
-    await db.queryDb({ text: 'DROP TABLE IF EXISTS Question' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS "User"' }); await db.queryDb({ text: 'DROP TABLE IF EXISTS Meetup' });
+    await db.dropTable({ tableName: '"User"' });
   });
 });

@@ -37,6 +37,8 @@ router.get('/meetups/:meetupId/questions', checkToken,
 
 router.get('/meetups/:meetupId/rsvps', checkToken, isAdmin, rsvpController.getRsvps);
 
+router.post('/meetups/:meetupId/tags', checkToken, isAdmin, meetupController.addTagsToMeetup);
+
 router
   .route('/meetups/:meetupId/questions/:questionId')
   .get(checkToken, questionController.getSingleMeetupQuestion)
