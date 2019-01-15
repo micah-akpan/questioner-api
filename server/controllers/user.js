@@ -6,7 +6,7 @@ import { omitProps } from '../utils';
 export default {
   async signUpUser(req, res) {
     const {
-      email, password, firstname, lastname
+      email, password, firstname, lastname = ''
     } = req.body;
 
     const getUserQuery = {
@@ -58,6 +58,12 @@ export default {
 
   async loginUser(req, res) {
     const { email, password } = req.body;
+
+    const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    // Assumption: User is allowed to login with either email or username
+    const isEmail = emailRegExp.test(email);
+    console.log(isEmail);
 
     try {
       const userResult = await db.queryDb({
