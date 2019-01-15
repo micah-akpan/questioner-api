@@ -57,50 +57,97 @@ export default {
   },
 
   async loginUser(req, res) {
-    const { email, password } = req.body;
-
-    const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    // Assumption: User is allowed to login with either email or username
-    const isEmail = emailRegExp.test(email);
-    console.log(isEmail);
-
     try {
-      const userResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE email=$1',
-        values: [email]
-      });
+      const { email, password, username } = req.body;
 
-      if (userResult.rows.length > 0) {
-        // user exist
-        const selectUserQuery = {
-          text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
+      const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      // Assumption: User is allowed to login with either email or username
+
+      if (emailRegExp.test(email)) {
+        // user provided a valid email address
+        const userResult = await db.queryDb({
+          text: 'SELECT * FROM "User" WHERE email=$1',
           values: [email]
-        };
+        });
 
-        const result = await db.queryDb(selectUserQuery);
-        const { encryptedpassword } = result.rows[0];
+        if (userResult.rows.length > 0) {
+          // user exist
+          const selectUserQuery = {
+            text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
+            values: [email]
+          };
 
-        const match = await bcrypt.compare(password, encryptedpassword);
+          const result = await db.queryDb(selectUserQuery);
+          const { encryptedpassword } = result.rows[0];
 
-        const userToken = jwt.sign({ email, admin: userResult.rows[0].isadmin },
-          process.env.JWT_SECRET, {
-            expiresIn: '24h'
+          const match = await bcrypt.compare(password, encryptedpassword);
+
+          const userToken = jwt.sign({ email, admin: userResult.rows[0].isadmin },
+            process.env.JWT_SECRET, {
+              expiresIn: '24h'
+            });
+
+          if (match) {
+            return res.status(201)
+              .send({
+                status: 201,
+                data: [{
+                  token: userToken,
+                  user: omitProps(userResult.rows[0], ['password'])
+                }]
+              });
+          }
+          throw new Error('You entered an incorrect password, please check and try again');
+        } else {
+          throw new Error('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
+        }
+      } else if (username || !emailRegExp.test(email)) {
+        // Assumption: the UI allows a user to
+        // enter either an email or a username in the provided email field
+
+        // Making request using an HTTP Client besides a browser
+        // A user can enter an additional username field (either email or the username)
+        // will be used.
+        const userName = username || email;
+
+        // user entered a username field
+        const userResult = await db.queryDb({
+          text: 'SELECT * FROM "User" WHERE username=$1',
+          values: [userName]
+        });
+
+        if (userResult.rows.length > 0) {
+          // a user exist with this username
+          const result = await db.queryDb({
+            text: 'SELECT password as encryptedPassword FROM "User" WHERE username=$1',
+            values: [userName]
           });
 
-        if (match) {
-          return res.status(201)
-            .send({
-              status: 201,
-              data: [{
-                token: userToken,
-                user: omitProps(userResult.rows[0], ['password'])
-              }]
+          const { encryptedpassword } = result.rows[0];
+
+          const match = await bcrypt.compare(password, encryptedpassword);
+
+          const userToken = jwt.sign({ email, admin: userResult.rows[0].isadmin },
+            process.env.JWT_SECRET, {
+              expiresIn: '24h'
             });
+
+          if (match) {
+            return res.status(201)
+              .send({
+                status: 201,
+                data: [{
+                  token: userToken,
+                  user: omitProps(userResult.rows[0], ['password'])
+                }]
+              });
+          }
+
+          throw new Error('You entered an incorrect password, please check and try again');
+        } else {
+          throw new Error('A user with this username does not exist. If you don`t have a username yet, you can login using your email');
         }
-        throw new Error('You entered an incorrect password, please check and try again');
-      } else {
-        throw new Error('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
       }
     } catch (e) {
       return res.status(422)
