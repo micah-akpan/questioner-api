@@ -2,7 +2,7 @@ import 'chai/register-should';
 import sinon from 'sinon';
 import schemaValidator from '../../../middlewares/schema/schemaValidator';
 
-describe.skip('Middlewares', () => {
+describe('Middlewares', () => {
   describe('Schema Validation Middleware', () => {
     describe('Question Schema Validation', () => {
       it('can validate question schema: incomplete data', () => {

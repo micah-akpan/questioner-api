@@ -5,7 +5,7 @@ import db from '../../../db';
 
 chai.use(chaiAsPromised);
 
-describe.only('DB', () => {
+describe('DB', () => {
   describe('Drop table', () => {
     before(async () => {
       await db.createTable('User');

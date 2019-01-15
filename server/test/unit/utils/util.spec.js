@@ -12,7 +12,7 @@ import {
   parseStr
 } from '../../../utils';
 
-describe.only('Utils', () => {
+describe('Utils', () => {
   describe('omitProps()', () => {
     it('should omit some props from an obj', () => {
       const obj = { a: 1, b: 2, c: 3 };
