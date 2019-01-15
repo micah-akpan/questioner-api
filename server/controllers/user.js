@@ -3,6 +3,15 @@ import jwt from 'jsonwebtoken';
 import db from '../db';
 import { omitProps } from '../utils';
 
+const user = {
+  async getUserPassword({ condition, value }) {
+    return db.queryDb({
+      text: `SELECT password as encryptedPassword FROM "User" WHERE ${condition}=$1`,
+      values: [value]
+    });
+  }
+};
+
 export default {
   async signUpUser(req, res) {
     const {
@@ -73,12 +82,14 @@ export default {
 
         if (userResult.rows.length > 0) {
           // user exist
-          const selectUserQuery = {
-            text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
-            values: [email]
-          };
+          // const selectUserQuery = {
+          //   text: 'SELECT password as encryptedPassword FROM "User" WHERE email=$1',
+          //   values: [email]
+          // };
 
-          const result = await db.queryDb(selectUserQuery);
+          const result = await user.getUserPassword({ condition: 'email', value: email });
+
+          // const result = await db.queryDb(selectUserQuery);
           const { encryptedpassword } = result.rows[0];
 
           const match = await bcrypt.compare(password, encryptedpassword);
@@ -118,11 +129,7 @@ export default {
         });
 
         if (userResult.rows.length > 0) {
-          // a user exist with this username
-          const result = await db.queryDb({
-            text: 'SELECT password as encryptedPassword FROM "User" WHERE username=$1',
-            values: [userName]
-          });
+          const result = await user.getUserPassword({ condition: 'username', value: userName });
 
           const { encryptedpassword } = result.rows[0];
 
