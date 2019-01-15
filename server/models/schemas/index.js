@@ -8,7 +8,6 @@ import createQuestionSQLQuery from './question';
 import createUserSQLQuery from './user';
 import createRsvpSQLQuery from './rsvp';
 import createCommentSQLQuery from './comment';
-import createVoteSQLQuery from './vote';
 import createUpvoteSQLQuery from './upvote';
 import createDownvoteSQLQuery from './downvote';
 
@@ -18,7 +17,6 @@ const createTableSQLQueries = {
   User: createUserSQLQuery,
   Rsvp: createRsvpSQLQuery,
   Comment: createCommentSQLQuery,
-  Vote: createVoteSQLQuery,
   Upvote: createUpvoteSQLQuery,
   Downvote: createDownvoteSQLQuery
 };
