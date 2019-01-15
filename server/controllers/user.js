@@ -4,7 +4,7 @@ import db from '../db';
 import { omitProps } from '../utils';
 import userHelpers from './helpers/user';
 
-const user = userHelpers(db, jwt);
+const userHelper = userHelpers(db, jwt);
 
 
 export default {
@@ -42,12 +42,12 @@ export default {
       };
 
       const newTableResult = await db.queryDb(createNewUserQuery);
+      const userRecord = newTableResult.rows[0];
 
-      const userAuthToken = jwt.sign({
-        email, admin: newTableResult.rows[0].isadmin
-      },
-      process.env.JWT_SECRET, {
-        expiresIn: '24h'
+      const userAuthToken = userHelper.obtainToken({
+        payload: {
+          email, admin: userRecord.isadmin
+        }
       });
 
       return res.status(201).send({
@@ -77,8 +77,9 @@ export default {
       const { email, password, username } = req.body;
 
       /**
+       * @const emailRegExp
        * @author https://emailregex.com/
-       * @description This regex was obtained at the https://email.regex.com
+       * @description This regex was obtained at https://email.regex.com
        */
       const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -91,12 +92,12 @@ export default {
 
         if (userResult.rows.length > 0) {
           // user with this email exist
-          const result = await user.getUserPassword({ condition: 'email', value: email });
+          const result = await userHelper.getUserPassword({ condition: 'email', value: email });
           const { encryptedpassword } = result.rows[0];
 
           const match = await bcrypt.compare(password, encryptedpassword);
 
-          const userToken = user.obtainToken({
+          const userAuthToken = userHelper.obtainToken({
             payload: {
               email,
               admin: userResult.rows[0].isadmin
@@ -108,23 +109,25 @@ export default {
               .send({
                 status: 201,
                 data: [{
-                  token: userToken,
+                  token: userAuthToken,
                   user: omitProps(userResult.rows[0], ['password'])
                 }]
               });
           }
-          // throw new Error('You entered an incorrect password, please check and try again');
-          throw user.createUserError('You entered an incorrect password, please check and try again');
+          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
         } else {
-          throw user.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
+          throw userHelper.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
         }
       } else if (username || !emailRegExp.test(email)) {
-        // Assumption: the UI allows a user to
-        // enter either an email or a username in the provided email field
-
-        // Making request using an HTTP Client besides a browser
-        // A user can enter an additional username field (either email or the username)
-        // will be used.
+        // ===========================================================
+        /* Assumption: the Frontend UI allows a user to
+         * enter either an email or a username in the provided email field
+         *
+         * Making request using an HTTP Client besides a browser,
+         * a user can enter an additional username field.
+         * (Either email or the username) will be used.
+        */
+        // ===========================================================
         const userName = username || email;
         const userResult = await db.queryDb({
           text: 'SELECT * FROM "User" WHERE username=$1',
@@ -132,29 +135,32 @@ export default {
         });
 
         if (userResult.rows.length > 0) {
-          const result = await user.getUserPassword({ condition: 'username', value: userName });
+          const result = await userHelper.getUserPassword({
+            condition: 'username',
+            value: userName
+          });
           const { encryptedpassword } = result.rows[0];
+          const userRecord = userResult.rows[0];
 
           const match = await bcrypt.compare(password, encryptedpassword);
 
-          const userToken = jwt.sign({ email, admin: userResult.rows[0].isadmin },
-            process.env.JWT_SECRET, {
-              expiresIn: '24h'
-            });
+          const userAuthToken = userHelper.obtainToken({
+            email, admin: userRecord.isadmin
+          });
 
           if (match) {
             return res.status(201)
               .send({
                 status: 201,
                 data: [{
-                  token: userToken,
+                  token: userAuthToken,
                   user: omitProps(userResult.rows[0], ['password'])
                 }]
               });
           }
-          throw user.createUserError('You entered an incorrect password, please check and try again');
+          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
         } else {
-          throw user.createUserError('A user with this username does not exist. If you don`t have a username yet, you can login using your email');
+          throw userHelper.createUserError('A user with this username does not exist. If you don`t have a username yet, you can login using your email');
         }
       }
     } catch (e) {
