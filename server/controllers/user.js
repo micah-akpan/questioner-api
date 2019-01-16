@@ -69,9 +69,9 @@ export default {
         }]
       });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
+          status: 500,
           error: 'Invalid request, please check your email and try again'
         });
     }
@@ -125,11 +125,21 @@ export default {
                 }]
               });
           }
-          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
-        } else {
-          throw userHelper.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup');
+          return res.status(400)
+            .send({
+              status: 400,
+              error: 'You entered an incorrect password, please check and try again'
+            });
         }
-      } else if (username || !emailRegExp.test(email)) {
+
+        return res.status(400)
+          .send({
+            status: 400,
+            error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
+          });
+      }
+
+      if (username || !emailRegExp.test(email)) {
         // ===========================================================
         /* Assumption: the Frontend UI allows a user to
          * enter either an email or a username in the provided email field
@@ -169,15 +179,22 @@ export default {
                 }]
               });
           }
-          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
-        } else {
-          throw userHelper.createUserError('A user with this username does not exist. If you don`t have a username yet, you can login using your email');
+          return res.status(400)
+            .send({
+              status: 400,
+              error: 'You entered an incorrect password, please check and try again'
+            });
         }
+        return res.status(400)
+          .send({
+            status: 400,
+            error: 'A user with this username does not exist. If you don`t have a username yet, you can login using your email'
+          });
       }
     } catch (e) {
-      return res.status(422)
+      return res.status(500)
         .send({
-          status: 422,
+          status: 500,
           error: e.message
         });
     }
