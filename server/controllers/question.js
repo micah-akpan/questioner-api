@@ -7,8 +7,10 @@ export default {
   async createQuestion(req, res) {
     try {
       const {
-        title, body, meetupId, userId = req.decodedToken.userId
+        title, body, meetupId
       } = req.body;
+
+      const userId = req.decodedToken.userId || req.body.userId;
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
                VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
@@ -39,6 +41,7 @@ export default {
   async upvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
+      const userId = req.decodedToken.userId || req.body.userId;
 
       const questionResult = await db.queryDb({
         text: 'SELECT id, createdBy as user, votes, meetup, title, body FROM Question WHERE id=$1',
@@ -54,7 +57,7 @@ export default {
         const voteResult = await db.queryDb({
           text: `SELECT * FROM Upvote 
                  WHERE "user"=$1 AND question=$2`,
-          values: [req.body.userId, question.id]
+          values: [userId, question.id]
         });
 
         if (arrayHasValues(voteResult.rows)) {
@@ -71,7 +74,7 @@ export default {
         await db.queryDb({
           text: `INSERT INTO Upvote ("user", question)
                  VALUES ($1, $2)`,
-          values: [req.body.userId, question.id]
+          values: [userId, question.id]
         });
 
         const questionResults = await db.queryDb({
@@ -112,6 +115,7 @@ export default {
   async downvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
+      const userId = req.decodedToken.userId || req.body.userId;
       const results = await db.queryDb({
         text: 'SELECT id, createdBy as user, meetup, title, body, votes FROM Question WHERE id=$1',
         values: [questionId]
@@ -126,7 +130,7 @@ export default {
         const voteResult = await db.queryDb({
           text: `SELECT * FROM Downvote 
                  WHERE "user"=$1 AND question=$2`,
-          values: [req.body.userId, question.id]
+          values: [userId, question.id]
         });
 
         if (arrayHasValues(voteResult.rows)) {
@@ -143,7 +147,7 @@ export default {
         await db.queryDb({
           text: `INSERT INTO Downvote ("user", question)
                  VALUES ($1, $2)`,
-          values: [req.body.userId, question.id]
+          values: [userId, question.id]
         });
 
         question = await db.queryDb({
@@ -316,11 +320,12 @@ export default {
 
   async deleteMeetupQuestion(req, res) {
     const { questionId, meetupId } = req.params;
+    const { userId } = req.decodedToken;
 
     try {
       const results = await db.queryDb({
         text: 'SELECT * FROM Question WHERE id=$1 AND meetup=$2 AND createdBy=$3',
-        values: [questionId, meetupId, req.body.userId]
+        values: [questionId, meetupId, userId]
       });
 
       const question = results.rows[0];
@@ -328,6 +333,15 @@ export default {
         await db.queryDb({
           text: 'DELETE FROM Question WHERE id=$1',
           values: [questionId]
+        });
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [`The question with id: ${questionId} has been deleted successfully`]
+          }
         });
       }
 

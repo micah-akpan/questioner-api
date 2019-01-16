@@ -1,5 +1,6 @@
 import 'chai/register-should';
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate, createTestToken } from '../../utils';
@@ -7,6 +8,9 @@ import { getFutureDate, createTestToken } from '../../utils';
 const agent = request(app);
 
 describe.only('Questions API', () => {
+  const adminTestToken = jwt.sign({ userId: 1, admin: true }, process.env.JWT_SECRET, {
+    expiresIn: '1h'
+  });
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Question' });
 
@@ -387,6 +391,57 @@ describe.only('Questions API', () => {
             done();
           });
       });
+    });
+  });
+
+  describe('DELETE /meetups/<meetup-id>/questions/<question-id>', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Question');
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ('test1', 'test1', 'test1@test.com', 'test1234')`
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'topic 2', getFutureDate()]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, meetup, createdBy)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['title 1', 'body 1', 1, 1]
+      });
+    });
+
+    it('should delete a meetup question', (done) => {
+      agent
+        .delete('/api/v1/meetups/1/questions/1')
+        .set('access-token', adminTestToken)
+        .expect(200, done);
+    });
+
+    after(() => {
+      db.dropTable({ tableName: 'Rsvp' });
+      db.dropTable({ tableName: 'Upvote' });
+      db.dropTable({ tableName: 'Downvote' });
+      db.dropTable({ tableName: 'Question' });
+      db.dropTable({ tableName: 'Meetup' });
+      db.dropTable({ tableName: '"User"' });
     });
   });
 
