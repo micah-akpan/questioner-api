@@ -296,12 +296,10 @@ describe.only('Meetups API', () => {
 
   describe('DELETE /meetups/<meetup-id>/', () => {
     before(async () => {
-      await db.dropTable({ tableName: 'Rsvp' });
-      await db.dropTable({ tableName: 'Comment' });
-      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
-
       await db.createTable('Meetup');
+      await db.createTable('User');
+      await db.createTable('Question');
     });
     beforeEach(async () => {
       await db.queryDb({

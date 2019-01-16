@@ -165,6 +165,22 @@ export default {
       });
 
       if (arrayHasValues(results.rows)) {
+        const meetupRecord = results.rows[0];
+
+        const questionsResult = await db.queryDb({
+          text: 'SELECT * FROM Question WHERE meetup=$1',
+          values: [meetupRecord.id]
+        });
+
+        if (arrayHasValues(questionsResult.rows)) {
+          // there are questions of this meetup
+          await db.queryDb({
+            text: 'DELETE FROM Question WHERE meetup=$1',
+            values: [meetupRecord.id]
+          });
+        }
+
+
         await db.queryDb({
           text: 'DELETE FROM Meetup WHERE id=$1',
           values: [meetupId]
