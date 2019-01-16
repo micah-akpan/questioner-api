@@ -29,7 +29,7 @@ describe.only('User API', () => {
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
         request(app)
-          .post('/api/v2/auth/signup')
+          .post('/api/v1/auth/signup')
           .send(testUser)
           .expect(201)
           .end((err, res) => {
@@ -57,7 +57,7 @@ describe.only('User API', () => {
 
       it('should return an error if user already exist', (done) => {
         request(app)
-          .post('/api/v2/auth/signup')
+          .post('/api/v1/auth/signup')
           .send({
             email: 'user1@email.com',
             password: 'user1234',
@@ -95,7 +95,7 @@ describe.only('User API', () => {
     });
     it('should login a user', (done) => {
       request(app)
-        .post('/api/v2/auth/login')
+        .post('/api/v1/auth/login')
         .send({
           email: 'testuser@gmail.com',
           password: 'testuser1234'
@@ -105,7 +105,7 @@ describe.only('User API', () => {
 
     it('should not login an unregistered user', (done) => {
       request(app)
-        .post('/api/v2/auth/login')
+        .post('/api/v1/auth/login')
         .send({
           email: 'nonuser1@gmail.com',
           password: 'testuser1234'

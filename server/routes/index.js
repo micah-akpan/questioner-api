@@ -10,9 +10,9 @@ router.get('/', (req, res) => res.send({
   message: 'Welcome to the Questioner API'
 }));
 
-router.use('/api/v2', userRouter);
-router.use('/api/v2', meetupRouter);
-router.use('/api/v2', rsvpRouter);
-router.use('/api/v2', questionRouter);
+router.use('/api/v1', userRouter);
+router.use('/api/v1', meetupRouter);
+router.use('/api/v1', rsvpRouter);
+router.use('/api/v1', questionRouter);
 
 export default router;

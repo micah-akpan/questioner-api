@@ -40,7 +40,7 @@ describe.only('Meetups API', () => {
     describe('handle valid data', () => {
       it('should create a meetup', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
           .expect(201)
           .send({
@@ -60,7 +60,7 @@ describe.only('Meetups API', () => {
     describe('handle invalid or missing data', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             location: 'Meetup Location',
@@ -77,7 +77,7 @@ describe.only('Meetups API', () => {
 
       it('should return an error for meetup tags greater than 5', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
           .expect(422)
           .send({
@@ -97,7 +97,7 @@ describe.only('Meetups API', () => {
 
       it('should not create a meetup if required fields are missing', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             topic: 'Awesome Meetup',
@@ -114,7 +114,7 @@ describe.only('Meetups API', () => {
 
       it('should not create a meetup if date is invalid', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             topic: 'Awesome Meetup',
@@ -132,7 +132,7 @@ describe.only('Meetups API', () => {
 
       it('should not create a meetup if date provided is past', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             topic: 'Awesome Meetup',
@@ -150,7 +150,7 @@ describe.only('Meetups API', () => {
 
       it('should not create a meetup if date provided is past', (done) => {
         agent
-          .post('/api/v2/meetups')
+          .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             topic: 'Awesome Meetup',
@@ -192,7 +192,7 @@ describe.only('Meetups API', () => {
     });
     it('should return a list of meetups', (done) => {
       agent
-        .get('/api/v2/meetups')
+        .get('/api/v1/meetups')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -205,7 +205,7 @@ describe.only('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v2/meetups?searchTerm=meetup topic')
+        .get('/api/v1/meetups?searchTerm=meetup topic')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -219,7 +219,7 @@ describe.only('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v2/meetups?searchTerm=next location')
+        .get('/api/v1/meetups?searchTerm=next location')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -261,7 +261,7 @@ describe.only('Meetups API', () => {
     it('should return a single meetup', (done) => {
       const meetupRecord = results.rows[0];
       agent
-        .get(`/api/v2/meetups/${meetupRecord.id}`)
+        .get(`/api/v1/meetups/${meetupRecord.id}`)
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -277,7 +277,7 @@ describe.only('Meetups API', () => {
 
     it('should return a 404 error for a non-existing meetup', (done) => {
       agent
-        .get('/api/v2/meetups/9999999')
+        .get('/api/v1/meetups/9999999')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(404)
         .end((err, res) => {
@@ -315,7 +315,7 @@ describe.only('Meetups API', () => {
 
     it('should delete a single meetup', (done) => {
       agent
-        .delete('/api/v2/meetups/1')
+        .delete('/api/v1/meetups/1')
         .set('Authorization', `Bearer ${adminTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -329,7 +329,7 @@ describe.only('Meetups API', () => {
 
     it('should return an error for a non-existing meetup', (done) => {
       agent
-        .delete('/api/v2/meetups/9999999')
+        .delete('/api/v1/meetups/9999999')
         .set('Authorization', `Bearer ${adminTestToken}`)
         .expect(404)
         .end((err, res) => {
@@ -364,7 +364,7 @@ describe.only('Meetups API', () => {
     });
     it('should return a list of upcoming meetups', (done) => {
       agent
-        .get('/api/v2/meetups/upcoming')
+        .get('/api/v1/meetups/upcoming')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200, done);
     });
@@ -398,7 +398,7 @@ describe.only('Meetups API', () => {
 
     it('should add tags to a meetup', (done) => {
       agent
-        .post('/api/v2/meetups/1/tags')
+        .post('/api/v1/meetups/1/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1'
@@ -408,7 +408,7 @@ describe.only('Meetups API', () => {
 
     it('should not add tags to a non-existing meetup', (done) => {
       agent
-        .post('/api/v2/meetups/999999/tags')
+        .post('/api/v1/meetups/999999/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1'
@@ -423,7 +423,7 @@ describe.only('Meetups API', () => {
 
     it('should not add more than 5 tags to a meetup', (done) => {
       agent
-        .post('/api/v2/meetups/1/tags')
+        .post('/api/v1/meetups/1/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
           tags: 'meetup1,meetup1,meetup1,meetup1,meetup1,meetup1'
