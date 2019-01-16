@@ -127,7 +127,7 @@ export default {
           }
           throw userHelper.createUserError('You entered an incorrect password, please check and try again');
         } else {
-          throw userHelper.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
+          throw userHelper.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup');
         }
       } else if (username || !emailRegExp.test(email)) {
         // ===========================================================
