@@ -64,19 +64,15 @@ describe.only('User API', () => {
             firstname: 'user1',
             lastname: 'user1'
           })
-          .expect(422)
+          .expect(409)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(409);
             res.body.should.have.property('error');
             res.body.error.should.equal('The email you provided is already used by another user');
             done();
           });
       });
-    });
-
-    afterEach(() => {
-
     });
   });
 
@@ -110,10 +106,10 @@ describe.only('User API', () => {
           email: 'nonuser1@gmail.com',
           password: 'testuser1234'
         })
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           done();
         });

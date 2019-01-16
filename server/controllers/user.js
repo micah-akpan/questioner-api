@@ -125,16 +125,16 @@ export default {
                 }]
               });
           }
-          return res.status(400)
+          return res.status(409)
             .send({
-              status: 400,
+              status: 409,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
 
-        return res.status(400)
+        return res.status(409)
           .send({
-            status: 400,
+            status: 409,
             error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
           });
       }
@@ -179,15 +179,15 @@ export default {
                 }]
               });
           }
-          return res.status(400)
+          return res.status(409)
             .send({
-              status: 400,
+              status: 409,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
-        return res.status(400)
+        return res.status(409)
           .send({
-            status: 400,
+            status: 409,
             error: 'A user with this username does not exist. If you don`t have a username yet, you can login using your email'
           });
       }
