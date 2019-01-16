@@ -399,8 +399,8 @@ describe.only('Questions API', () => {
       await db.dropTable({ tableName: 'Upvote' });
       await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Comment' });
-      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
 
@@ -449,8 +449,9 @@ describe.only('Questions API', () => {
     await db.dropTable({ tableName: 'Upvote' });
     await db.dropTable({ tableName: 'Downvote' });
     await db.dropTable({ tableName: 'Comment' });
-    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Rsvp' });
+
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
   });

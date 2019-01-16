@@ -10,6 +10,7 @@ const agent = request(app);
 describe.only('RSVP API', () => {
   before(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
 
@@ -176,6 +177,7 @@ describe.only('RSVP API', () => {
 
     after(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
     });
