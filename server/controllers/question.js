@@ -7,7 +7,7 @@ export default {
   async createQuestion(req, res) {
     try {
       const {
-        title, body, meetupId, userId
+        title, body, meetupId, userId = req.decodedToken.userId
       } = req.body;
       const questionResult = await db.queryDb({
         text: `INSERT INTO Question (title, body, meetup, createdBy)
@@ -29,7 +29,7 @@ export default {
         res,
         status: 500,
         payload: {
-          status: 400,
+          status: 500,
           error: 'Invalid request, please check request and try again'
         }
       });
