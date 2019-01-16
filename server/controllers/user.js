@@ -35,13 +35,12 @@ export default {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      const createNewUserQuery = {
+
+      const newTableResult = await db.queryDb({
         text: `INSERT INTO "User" (email,password,firstname,lastname)
                          VALUES ($1, $2, $3, $4) RETURNING *`,
         values: [email, hashedPassword, firstname, lastname]
-      };
-
-      const newTableResult = await db.queryDb(createNewUserQuery);
+      });
       const userRecord = newTableResult.rows[0];
 
       const userAuthToken = userHelper.obtainToken({
