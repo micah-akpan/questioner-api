@@ -8,12 +8,12 @@ const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
-    await db.dropTable({ tableName: 'Upvote' });
-    await db.dropTable({ tableName: 'Downvote' });
-    await db.dropTable({ tableName: 'Comment' });
+    // await db.dropTable({ tableName: 'Upvote' });
+    // await db.dropTable({ tableName: 'Downvote' });
+    // await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
-    await db.dropTable({ tableName: 'Meetup' });
-    await db.dropTable({ tableName: '"User"' });
+    // await db.dropTable({ tableName: 'Meetup' });
+    // await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('User');
     await db.createTable('Meetup');
@@ -136,10 +136,10 @@ describe.only('Questions API', () => {
         .patch('/api/v1/questions/1/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ userId: '1' })
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           res.body.error.should.equal('This user has already upvoted this question. You cannot upvote a question more than once');
           done();
@@ -215,10 +215,10 @@ describe.only('Questions API', () => {
         .patch('/api/v1/questions/1/downvote')
         .send({ userId: '1' })
         .set('Authorization', `Bearer ${createTestToken()}`)
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           res.body.error.should.equal('This user has already downvoted this question. You cannot downvote a question more than once');
           done();

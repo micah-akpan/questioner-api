@@ -19,29 +19,29 @@ export default {
         email, password, firstname, lastname = '', username = ''
       } = req.body;
 
-      const userByEmailResult = await userHelper.userExist({
-        condition: 'email',
-        value: [email]
+      const userByEmailResult = await db.queryDb({
+        text: 'SELECT  * FROM "User" WHERE email=$1',
+        values: [email]
       });
 
-      const userByUsernameResult = await userHelper.userExist({
-        condition: 'username',
-        value: [username]
+      const userByUsernameResult = await db.queryDb({
+        text: 'SELECT  * FROM "User" WHERE username=$1',
+        values: [username]
       });
 
-      if (arrayHasValues(userByEmailResult)) {
+      if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(422)
+        return res.status(409)
           .send({
-            status: 422,
+            status: 409,
             error: 'The email you provided is already used by another user'
           });
       }
 
-      if (arrayHasValues(userByUsernameResult)) {
-        return res.status(422)
+      if (arrayHasValues(userByUsernameResult.rows)) {
+        return res.status(409)
           .send({
-            status: 422,
+            status: 409,
             error: 'The username you provided is already used by another user'
           });
       }

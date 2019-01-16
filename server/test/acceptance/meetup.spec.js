@@ -96,7 +96,7 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
-          .set('Authorization', `Bearer ${createTestToken()}`)
+          .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location'
@@ -113,7 +113,7 @@ describe.only('Meetups API', () => {
       it('should not create a meetup if date is invalid', (done) => {
         agent
           .post('/api/v1/meetups')
-          .set('Authorization', `Bearer ${createTestToken()}`)
+          .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             topic: 'Awesome Meetup',
             location: 'Meetup Location',
