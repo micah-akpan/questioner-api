@@ -35,7 +35,7 @@ export default {
       return res.status(403)
         .send({
           status: 403,
-          error: 'Only admins can create or delete a meetup'
+          error: 'The requested action is only for admins'
         });
     }
 

@@ -19,5 +19,12 @@ export default (db, jwt) => ({
     return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn
     });
+  },
+
+  async userExist({ condition, value }) {
+    return db.queryDb({
+      text: `SELECT * FROM "User" WHERE ${condition}=$1`,
+      values: [value]
+    });
   }
 });

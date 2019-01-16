@@ -29,7 +29,7 @@ describe.only('User API', () => {
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
         request(app)
-          .post('/api/v2/auth/signup')
+          .post('/api/v1/auth/signup')
           .send(testUser)
           .expect(201)
           .end((err, res) => {
@@ -57,26 +57,22 @@ describe.only('User API', () => {
 
       it('should return an error if user already exist', (done) => {
         request(app)
-          .post('/api/v2/auth/signup')
+          .post('/api/v1/auth/signup')
           .send({
             email: 'user1@email.com',
             password: 'user1234',
             firstname: 'user1',
             lastname: 'user1'
           })
-          .expect(422)
+          .expect(409)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(409);
             res.body.should.have.property('error');
-            res.body.error.should.equal('A user with this email already exist');
+            res.body.error.should.equal('The email you provided is already used by another user');
             done();
           });
       });
-    });
-
-    afterEach(() => {
-
     });
   });
 
@@ -95,7 +91,7 @@ describe.only('User API', () => {
     });
     it('should login a user', (done) => {
       request(app)
-        .post('/api/v2/auth/login')
+        .post('/api/v1/auth/login')
         .send({
           email: 'testuser@gmail.com',
           password: 'testuser1234'
@@ -105,15 +101,15 @@ describe.only('User API', () => {
 
     it('should not login an unregistered user', (done) => {
       request(app)
-        .post('/api/v2/auth/login')
+        .post('/api/v1/auth/login')
         .send({
           email: 'nonuser1@gmail.com',
           password: 'testuser1234'
         })
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           done();
         });

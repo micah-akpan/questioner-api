@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { omitProps } from '../utils';
+import { omitProps, arrayHasValues } from '../utils';
 import userHelpers from './helpers/user';
 
 const userHelper = userHelpers(db, jwt);
-
 
 export default {
   /**
@@ -15,23 +14,36 @@ export default {
    * @returns {*}  JSON object indicating a successful or failed sign up request
    */
   async signUpUser(req, res) {
-    const {
-      email, password, firstname, lastname = ''
-    } = req.body;
-
-    const getUserQuery = {
-      text: 'SELECT * FROM "User" WHERE email=$1',
-      values: [email]
-    };
-
     try {
-      const result = await db.queryDb(getUserQuery);
-      if (result.rows.length > 0) {
+      const {
+        email, password, firstname, lastname = '', username = ''
+      } = req.body;
+
+      const userByEmailResult = await db.queryDb({
+        text: 'SELECT  * FROM "User" WHERE email=$1',
+        values: [email]
+      });
+
+      const userByUsernameResult = await db.queryDb({
+        text: 'SELECT  * FROM "User" WHERE username=$1',
+        values: [username]
+      });
+
+      if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(422).send({
-          status: 422,
-          error: 'A user with this email already exist'
-        });
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'The email you provided is already used by another user'
+          });
+      }
+
+      if (arrayHasValues(userByUsernameResult.rows)) {
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'The username you provided is already used by another user'
+          });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,10 +69,10 @@ export default {
         }]
       });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
-          error: 'Invalid request, please check your email and try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
@@ -113,11 +125,21 @@ export default {
                 }]
               });
           }
-          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
-        } else {
-          throw userHelper.createUserError('A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v2/auth/signup');
+          return res.status(409)
+            .send({
+              status: 409,
+              error: 'You entered an incorrect password, please check and try again'
+            });
         }
-      } else if (username || !emailRegExp.test(email)) {
+
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
+          });
+      }
+
+      if (username || !emailRegExp.test(email)) {
         // ===========================================================
         /* Assumption: the Frontend UI allows a user to
          * enter either an email or a username in the provided email field
@@ -157,16 +179,23 @@ export default {
                 }]
               });
           }
-          throw userHelper.createUserError('You entered an incorrect password, please check and try again');
-        } else {
-          throw userHelper.createUserError('A user with this username does not exist. If you don`t have a username yet, you can login using your email');
+          return res.status(409)
+            .send({
+              status: 409,
+              error: 'You entered an incorrect password, please check and try again'
+            });
         }
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'A user with this username does not exist. If you don`t have a username yet, you can login using your email'
+          });
       }
     } catch (e) {
-      return res.status(422)
+      return res.status(500)
         .send({
-          status: 422,
-          error: e.message
+          status: 500,
+          error: 'Invalid request, please check your email and try again'
         });
     }
   }

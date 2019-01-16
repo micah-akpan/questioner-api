@@ -27,10 +27,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
           status: 400,
-          error: 'Invalid request, please try again'
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -60,9 +60,9 @@ export default {
         if (arrayHasValues(voteResult.rows)) {
           return sendResponse({
             res,
-            status: 422,
+            status: 409,
             payload: {
-              status: 422,
+              status: 409,
               error: 'This user has already upvoted this question. You cannot upvote a question more than once'
             }
           });
@@ -101,10 +101,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -132,9 +132,9 @@ export default {
         if (arrayHasValues(voteResult.rows)) {
           return sendResponse({
             res,
-            status: 422,
+            status: 409,
             payload: {
-              status: 422,
+              status: 409,
               error: 'This user has already downvoted this question. You cannot downvote a question more than once'
             }
           });
@@ -174,10 +174,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -211,10 +211,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -265,10 +265,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -305,10 +305,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -342,10 +342,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -395,10 +395,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -437,10 +437,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request. Please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }

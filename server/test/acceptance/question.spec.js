@@ -8,12 +8,12 @@ const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
-    await db.dropTable({ tableName: 'Upvote' });
-    await db.dropTable({ tableName: 'Downvote' });
-    await db.dropTable({ tableName: 'Comment' });
+    // await db.dropTable({ tableName: 'Upvote' });
+    // await db.dropTable({ tableName: 'Downvote' });
+    // await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
-    await db.dropTable({ tableName: 'Meetup' });
-    await db.dropTable({ tableName: '"User"' });
+    // await db.dropTable({ tableName: 'Meetup' });
+    // await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('User');
     await db.createTable('Meetup');
@@ -40,7 +40,7 @@ describe.only('Questions API', () => {
     describe('handle valid data', () => {
       it('should create a question', (done) => {
         agent
-          .post('/api/v2/questions')
+          .post('/api/v1/questions')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             title: 'question 1',
@@ -64,7 +64,7 @@ describe.only('Questions API', () => {
     describe('handle invalid data', () => {
       it('should return an error for missing data', (done) => {
         agent
-          .post('/api/v2/questions')
+          .post('/api/v1/questions')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             title: 'question 1'
@@ -119,7 +119,7 @@ describe.only('Questions API', () => {
     });
     it('should upvote a question', (done) => {
       agent
-        .patch('/api/v2/questions/1/upvote')
+        .patch('/api/v1/questions/1/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ userId: '1' })
         .expect(200)
@@ -133,13 +133,13 @@ describe.only('Questions API', () => {
 
     it('should not upvote a question already upvoted by the same user', (done) => {
       agent
-        .patch('/api/v2/questions/1/upvote')
+        .patch('/api/v1/questions/1/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ userId: '1' })
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           res.body.error.should.equal('This user has already upvoted this question. You cannot upvote a question more than once');
           done();
@@ -148,7 +148,7 @@ describe.only('Questions API', () => {
 
     it('should not upvote a non-existent question', (done) => {
       agent
-        .patch('/api/v2/questions/999999999/upvote')
+        .patch('/api/v1/questions/999999999/upvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ userId: '1' })
         .expect(404)
@@ -160,7 +160,7 @@ describe.only('Questions API', () => {
     });
   });
 
-  describe('PATCH /api/v2/questions/<question-id>/downvote', () => {
+  describe('PATCH /api/v1/questions/<question-id>/downvote', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Upvote' });
       await db.dropTable({ tableName: 'Downvote' });
@@ -198,7 +198,7 @@ describe.only('Questions API', () => {
     });
     it('should downvote a question', (done) => {
       agent
-        .patch('/api/v2/questions/1/downvote')
+        .patch('/api/v1/questions/1/downvote')
         .send({ userId: '1' })
         .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(200)
@@ -212,13 +212,13 @@ describe.only('Questions API', () => {
 
     it('should not downvote a question already downvoted by the same user', (done) => {
       agent
-        .patch('/api/v2/questions/1/downvote')
+        .patch('/api/v1/questions/1/downvote')
         .send({ userId: '1' })
         .set('Authorization', `Bearer ${createTestToken()}`)
-        .expect(422)
+        .expect(409)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(409);
           res.body.should.have.property('error');
           res.body.error.should.equal('This user has already downvoted this question. You cannot downvote a question more than once');
           done();
@@ -227,7 +227,7 @@ describe.only('Questions API', () => {
 
     it('should not downvote a non-existent question', (done) => {
       agent
-        .patch('/api/v2/questions/999999999/downvote')
+        .patch('/api/v1/questions/999999999/downvote')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .expect(404)
         .end((err, res) => {
@@ -285,7 +285,7 @@ describe.only('Questions API', () => {
     });
     it('should return all questions', (done) => {
       agent
-        .get('/api/v2/questions')
+        .get('/api/v1/questions')
         .set('Authorization', `Bearer ${createTestToken(true)}`)
         .expect(200)
         .end((err, res) => {
@@ -322,7 +322,7 @@ describe.only('Questions API', () => {
     describe('handle valid data', () => {
       it('should add a comment to a question', (done) => {
         agent
-          .post('/api/v2/comments')
+          .post('/api/v1/comments')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 1,
@@ -341,7 +341,7 @@ describe.only('Questions API', () => {
 
       it('should add a comment to a question', (done) => {
         agent
-          .post('/api/v2/comments')
+          .post('/api/v1/comments')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 1,
@@ -362,7 +362,7 @@ describe.only('Questions API', () => {
     describe('handle invalid data', () => {
       it('should not add a comment to a non-existing question', (done) => {
         agent
-          .post('/api/v2/comments')
+          .post('/api/v1/comments')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             questionId: 9999999,
@@ -379,7 +379,7 @@ describe.only('Questions API', () => {
 
       it('should not add a comment if required data are missing', (done) => {
         agent
-          .post('/api/v2/comments')
+          .post('/api/v1/comments')
           .set('Authorization', `Bearer ${createTestToken()}`)
           .send({
             commentText: 'a new comment'
