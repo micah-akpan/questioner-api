@@ -14,7 +14,7 @@ router.get('/', (req, res) => res.send({
 }));
 
 router.use('/api/v1', userRouter);
-router.use('/api/v1', meetupRouter);
+router.use('/api/v1', checkToken, meetupRouter);
 router.use('/api/v1', checkToken, rsvpRouter);
 router.use('/api/v1', checkToken, questionRouter);
 

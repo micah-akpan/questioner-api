@@ -10,13 +10,13 @@ const router = express.Router();
 
 const { isAdmin } = Auth;
 
-const validateRequest = schemaValidator(true);
+const validateRequest = schemaValidator();
 
 router
   .route('/meetups')
   .post(
-    validateRequest,
     isAdmin,
+    validateRequest,
     meetupController.createNewMeetup
   )
   .get(meetupController.getAllMeetups);
