@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import meetupController from '../../../controllers/meetup';
 import { getFutureDate } from '../../../utils';
 
-describe.skip('Meetups API', () => {
+describe('Meetups API', () => {
   describe('Get all meetups', () => {
     it('should fetch all meetups', () => {
       const res = {};

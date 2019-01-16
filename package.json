@@ -9,7 +9,7 @@
     "dev:start": "nodemon --require @babel/register ./server/bin/www",
     "start": "node --require @babel/register ./server/bin/www",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js ./server",
-    "test": "NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --exit",
+    "test": "cross-env NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "husky": {
@@ -33,6 +33,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",

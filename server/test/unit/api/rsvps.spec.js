@@ -2,7 +2,7 @@ import 'chai/register-should';
 import sinon from 'sinon';
 import rsvpController from '../../../controllers/rsvp';
 
-describe.skip('RSVP Meetup API', () => {
+describe('RSVP Meetup API', () => {
   describe('Make RSVP', () => {
     describe('handle valid data', () => {
       it('should make rsvp for a meetup', () => {
