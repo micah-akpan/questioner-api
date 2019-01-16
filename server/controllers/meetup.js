@@ -316,7 +316,6 @@ export default {
   },
 
   async addImagesToMeetup(req, res) {
-    // console.log(req.files);
     try {
       const meetupResult = await db.queryDb({
         text: 'SELECT * FROM Meetup WHERE id=$1',

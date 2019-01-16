@@ -8,12 +8,7 @@ const agent = request(app);
 
 describe.only('Questions API', () => {
   before('Setup', async () => {
-    // await db.dropTable({ tableName: 'Upvote' });
-    // await db.dropTable({ tableName: 'Downvote' });
-    // await db.dropTable({ tableName: 'Comment' });
     await db.dropTable({ tableName: 'Question' });
-    // await db.dropTable({ tableName: 'Meetup' });
-    // await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('User');
     await db.createTable('Meetup');

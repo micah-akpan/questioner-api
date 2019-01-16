@@ -57,7 +57,8 @@ export default {
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
-          email, admin: userRecord.isadmin
+          admin: userRecord.isadmin,
+          userId: userRecord.id
         }
       });
 
@@ -108,10 +109,12 @@ export default {
 
           const match = await bcrypt.compare(password, encryptedpassword);
 
+          const userRecord = userResult.rows[0];
+
           const userAuthToken = userHelper.obtainToken({
             payload: {
-              email,
-              admin: userResult.rows[0].isadmin
+              admin: userRecord.isadmin,
+              userId: userRecord.id
             }
           });
 
