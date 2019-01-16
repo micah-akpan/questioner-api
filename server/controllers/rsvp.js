@@ -1,6 +1,5 @@
 import db from '../db';
 
-/* eslint-disable */
 export default {
   async makeRsvp(req, res) {
     try {
@@ -43,34 +42,31 @@ export default {
           error: 'The meetup you are requesting does not exist'
         });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
 
   async updateRsvp(req, res) {
-
     try {
-
       const { meetupId, rsvpId } = req.params;
       const results = await db.queryDb({
         text: `SELECT * FROM Rsvp 
                WHERE id=$1 AND meetup=$2`,
         values: [rsvpId, meetupId]
-      })
+      });
 
       const rsvpRecord = results.rows[0];
       if (rsvpRecord) {
-
         const updatedRsvp = await db.queryDb({
           text: `UPDATE Rsvp
                  SET response=$1
                  WHERE id=$2 RETURNING *`,
           values: [req.body.response || rsvpRecord.response, rsvpRecord.id]
-        })
+        });
         return res.status(200)
           .send({
             status: 200,
@@ -82,12 +78,12 @@ export default {
         .send({
           status: 404,
           error: `The rsvp with the id: ${req.params.rsvpId} for meetup with the id: ${req.params.meetupId} does not exist`
-        })
+        });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
@@ -115,10 +111,10 @@ export default {
           error: 'There are no RSVPs for this meetup at the moment'
         });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
@@ -148,11 +144,11 @@ export default {
           error: `The rsvp with the id: ${req.params.rsvpId} for meetup with the id: ${req.params.meetupId} does not exist`
         });
     } catch (e) {
-      return res.status(400)
+      return res.status(500)
         .send({
-          status: 400,
-          error: 'Invalid request, Please try again'
-        })
+          status: 500,
+          error: 'Invalid request, please check request and try again'
+        });
     }
   }
 };

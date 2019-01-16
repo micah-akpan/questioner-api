@@ -72,7 +72,7 @@ export default {
       return res.status(500)
         .send({
           status: 500,
-          error: 'Invalid request, please check your email and try again'
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
@@ -195,7 +195,7 @@ export default {
       return res.status(500)
         .send({
           status: 500,
-          error: e.message
+          error: 'Invalid request, please check your email and try again'
         });
     }
   }

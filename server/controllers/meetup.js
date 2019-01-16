@@ -59,10 +59,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -108,10 +108,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          data: 'Invalid request, please try again'
+          status: 500,
+          data: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -147,10 +147,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -191,10 +191,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request. Please check and try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -230,10 +230,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 404,
+        status: 500,
         payload: {
-          status: 404,
-          error: 'There are no upcoming meetups at the moment'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -290,10 +290,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
@@ -349,10 +349,10 @@ export default {
     } catch (e) {
       return sendResponse({
         res,
-        status: 400,
+        status: 500,
         payload: {
-          status: 400,
-          error: 'Invalid request, please try again'
+          status: 500,
+          error: 'Invalid request, please check request and try again'
         }
       });
     }
