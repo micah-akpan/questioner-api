@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { omitProps } from '../utils';
+import { omitProps, arrayHasValues } from '../utils';
 import userHelpers from './helpers/user';
 
 const userHelper = userHelpers(db, jwt);
-
 
 export default {
   /**
@@ -15,23 +14,36 @@ export default {
    * @returns {*}  JSON object indicating a successful or failed sign up request
    */
   async signUpUser(req, res) {
-    const {
-      email, password, firstname, lastname = ''
-    } = req.body;
-
-    const getUserQuery = {
-      text: 'SELECT * FROM "User" WHERE email=$1',
-      values: [email]
-    };
-
     try {
-      const result = await db.queryDb(getUserQuery);
-      if (result.rows.length > 0) {
+      const {
+        email, password, firstname, lastname = '', username = ''
+      } = req.body;
+
+      const userByEmailResult = await userHelper.userExist({
+        condition: 'email',
+        value: [email]
+      });
+
+      const userByUsernameResult = await userHelper.userExist({
+        condition: 'username',
+        value: [username]
+      });
+
+      if (arrayHasValues(userByEmailResult)) {
         // user exist
-        return res.status(422).send({
-          status: 422,
-          error: 'A user with this email already exist'
-        });
+        return res.status(422)
+          .send({
+            status: 422,
+            error: 'The email you provided is already used by another user'
+          });
+      }
+
+      if (arrayHasValues(userByUsernameResult)) {
+        return res.status(422)
+          .send({
+            status: 422,
+            error: 'The username you provided is already used by another user'
+          });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);

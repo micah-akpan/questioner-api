@@ -69,7 +69,7 @@ describe.only('User API', () => {
             if (err) return done(err);
             res.body.status.should.equal(422);
             res.body.should.have.property('error');
-            res.body.error.should.equal('A user with this email already exist');
+            res.body.error.should.equal('The email you provided is already used by another user');
             done();
           });
       });

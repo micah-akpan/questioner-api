@@ -10,6 +10,7 @@ export default {
       username text,
       registered DATE DEFAULT NOW(),
       isAdmin boolean DEFAULT FALSE,
-      bio text
+      bio text,
+      UNIQUE(email, username)
     )`
 };
