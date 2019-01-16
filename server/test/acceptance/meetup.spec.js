@@ -399,7 +399,13 @@ describe.only('Meetups API', () => {
         .send({
           tags: 'meetup1,meetup1,meetup1'
         })
-        .expect(201, done);
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.data.should.be.an('array');
+          res.body.data[0].should.have.property('tags');
+          done();
+        });
     });
 
     it('should not add tags to a non-existing meetup', (done) => {
@@ -434,10 +440,10 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe.skip('POST /meetups/<meetup-id>/images', () => {
+  describe('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
-      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Comment' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
@@ -452,6 +458,25 @@ describe.only('Meetups API', () => {
           'meetup sample location',
           getFutureDate(2)]
       });
+    });
+
+    it('should add images to a meetup', (done) => {
+      agent
+        .post('/api/v1/meetups/1/images')
+        .set('access-token', adminTestToken)
+        .attach('meetupPhotos', `${process.cwd()}/server/assets/yoyo.jpeg`)
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(201);
+          res.body.data.should.be.an('array');
+          res.body.data[0].should.have.property('images');
+          done();
+        });
+    });
+
+    after(() => {
+      // TODO: Delete all created images in the 'assets' directory
     });
   });
 
