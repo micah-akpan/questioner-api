@@ -37,7 +37,6 @@ class Db {
       await this.createTable('Upvote');
       await this.createTable('Downvote');
     } catch (e) {
-      console.log(e);
       return Promise.reject(new Error('Table synchronization failed'));
     }
 
