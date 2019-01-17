@@ -12,23 +12,27 @@ export const app = express();
 
 app.set('json spaces', 2);
 
-// sync tables
-db.sync()
-  .then((msg) => {
-    wLogger.log({
-      level: 'info',
-      message: msg
-    });
-  })
-  .catch((err) => {
-    wLogger.log({
-      level: 'error',
-      message: err
-    });
-  });
+const env = app.get('env');
 
 /* Middlewares */
-if (app.get('env') === 'development') {
+if (env === 'development' || env === 'production') {
+  // sync tables
+  db.sync()
+    .then((msg) => {
+      wLogger.log({
+        level: 'info',
+        message: msg
+      });
+    })
+    .catch((err) => {
+      wLogger.log({
+        level: 'error',
+        message: err
+      });
+    });
+}
+
+if (env === 'development') {
   app.use(logger('dev'));
 }
 

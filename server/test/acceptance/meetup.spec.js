@@ -10,7 +10,13 @@ describe.only('Meetups API', () => {
   const adminTestToken = createTestToken(true);
   const userTestToken = createTestToken();
   before('Setup', async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
+    await db.dropTable({ tableName: 'Comment' });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('Meetup');
     await db.queryDb({
@@ -487,8 +493,11 @@ describe.only('Meetups API', () => {
   });
 
   after(async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
     await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Comment' });
+
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
