@@ -31,17 +31,17 @@ export default {
 
       if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
+            status: 401,
             error: 'The email you provided is already used by another user'
           });
       }
 
       if (arrayHasValues(userByUsernameResult.rows)) {
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
+            status: 401,
             error: 'The username you provided is already used by another user'
           });
       }
@@ -128,16 +128,16 @@ export default {
                 }]
               });
           }
-          return res.status(409)
+          return res.status(401)
             .send({
-              status: 409,
+              status: 401,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
 
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
+            status: 401,
             error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
           });
       }
