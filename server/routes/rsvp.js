@@ -10,8 +10,8 @@ const { allowOnly, checkParams } = Misc;
 
 router
   .route('/meetups/:meetupId/rsvps')
-  .post(validateResult,
-    checkParams,
+  .post(checkParams,
+    validateResult,
     allowOnly(['yes', 'no', 'maybe']), rsvpController.makeRsvp);
 
 router
