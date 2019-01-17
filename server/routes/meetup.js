@@ -5,10 +5,12 @@ import rsvpController from '../controllers/rsvp';
 import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
 import Upload from '../middlewares/uploads';
+import Misc from '../middlewares/misc';
 
 const router = express.Router();
 
 const { isAdmin } = Auth;
+const { checkParams } = Misc;
 
 const validateRequest = schemaValidator();
 
@@ -25,8 +27,8 @@ router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
 
 router
   .route('/meetups/:meetupId')
-  .get(meetupController.getSingleMeetup)
-  .delete(isAdmin, meetupController.deleteMeetup);
+  .get(checkParams, meetupController.getSingleMeetup)
+  .delete(checkParams, isAdmin, meetupController.deleteMeetup);
 
 router.get('/meetups/:meetupId/questions', questionController.getQuestions);
 
