@@ -352,6 +352,7 @@ export default {
             res,
             status: 422,
             payload: {
+              status: 422,
               error: 'You must provide at least one image'
             }
           });
