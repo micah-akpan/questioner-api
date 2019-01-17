@@ -74,6 +74,22 @@ export default {
         location, topic, happeningOn, tags = ''
       } = req.body;
 
+      const meetupByLocation = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE location=$1 AND happeningOn=$2',
+        values: [location, happeningOn]
+      });
+
+      if (meetupByLocation.rows.length > 0) {
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
+            status: 409,
+            error: 'A meetup is scheduled on the same day at the same location'
+          }
+        });
+      }
+
       const parsedTags = tags && parseStr(tags, ',');
       const MAX_TAGS = 5;
       const NULL = 'NULL';
