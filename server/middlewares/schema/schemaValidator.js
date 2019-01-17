@@ -38,7 +38,7 @@ export default (useJoiError = false) => {
               message: message.replace(/['"]/g, ''),
             }));
 
-            let errorMsg = ' ';
+            let errorMsg = '';
 
             // Forms a user friendly validation error
             // message
@@ -55,12 +55,23 @@ export default (useJoiError = false) => {
 
             errorMsg = errorMsg.trim();
 
-            const CustomError = {
-              status: 422,
-              error: errorMsg
+            const makeCustomError = (msg) => {
+              if (msg.search('required') > -1) {
+                return {
+                  status: 400,
+                  error: errorMsg
+                };
+              }
+
+              return {
+                status: 422,
+                error: errorMsg
+              };
             };
 
-            res.status(422).send(_useJoiError ? JoiError : CustomError);
+            const customError = makeCustomError(errorMsg);
+
+            res.status(422).send(_useJoiError ? JoiError : customError);
           } else {
             req.body = data;
             next();

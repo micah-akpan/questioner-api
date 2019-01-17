@@ -41,6 +41,7 @@ router.get('/meetups/:meetupId/rsvps',
 
 router.post('/meetups/:meetupId/tags',
   checkParams,
+  validateRequest,
   isAdmin,
   meetupController.addTagsToMeetup);
 

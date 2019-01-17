@@ -2,6 +2,7 @@ import meetupSchema from './meetup';
 import questionSchema from './question';
 import rsvpSchema from './rsvp';
 import userSchema from './user';
+import tagSchema from './tag';
 
 const loginUserSchema = userSchema.getUserDataSchema('login');
 const signUpUserSchema = userSchema.getUserDataSchema('sign-up');
@@ -12,5 +13,6 @@ export default {
   '/meetups/:meetupId/rsvps': rsvpSchema,
   '/meetups/:meetupId/rsvps/:rsvpId': rsvpSchema,
   '/auth/signup': signUpUserSchema,
-  '/auth/login': loginUserSchema
+  '/auth/login': loginUserSchema,
+  '/meetups/:meetupId/tags': tagSchema
 };
