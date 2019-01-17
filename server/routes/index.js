@@ -7,6 +7,7 @@ import Auth from '../middlewares/auth';
 import Misc from '../middlewares/misc';
 
 const { checkToken } = Auth;
+const { trimBody } = Misc;
 
 const router = Router();
 
@@ -14,9 +15,9 @@ router.get('/', (req, res) => res.send({
   message: 'Welcome to the Questioner API'
 }));
 
-router.use('/api/v1', Misc.trimBody, userRouter);
-router.use('/api/v1', checkToken, meetupRouter);
-router.use('/api/v1', checkToken, rsvpRouter);
-router.use('/api/v1', checkToken, questionRouter);
+router.use('/api/v1', trimBody, userRouter);
+router.use('/api/v1', trimBody, checkToken, meetupRouter);
+router.use('/api/v1', trimBody, checkToken, rsvpRouter);
+router.use('/api/v1', trimBody, checkToken, questionRouter);
 
 export default router;
