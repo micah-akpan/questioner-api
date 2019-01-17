@@ -12,6 +12,7 @@ export const app = express();
 
 app.set('json spaces', 2);
 
+console.log(`env = ${process.env.NODE_ENV}`);
 // sync tables
 db.sync()
   .then((msg) => {
