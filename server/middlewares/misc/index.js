@@ -12,5 +12,16 @@ export default {
       }
       next();
     };
+  },
+
+  trimBody(req, res, next) {
+    const keys = Object.keys(req.body);
+    const newRequestBody = {};
+    keys.forEach((k) => {
+      newRequestBody[k] = req.body[k].trim();
+    });
+
+    req.body = newRequestBody;
+    next();
   }
 };
