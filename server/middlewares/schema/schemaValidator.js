@@ -55,6 +55,15 @@ export default (useJoiError = false) => {
 
             errorMsg = errorMsg.trim();
 
+            /**
+             * @func makeCustomError
+             * @param {String} msg The Error msg
+             * @returns {*} custom error
+             * @description Returns a
+             * custom Error based
+             * on a substring found in the error
+             * message: 'msg'
+             */
             const makeCustomError = (msg) => {
               if (msg.search('required') > -1) {
                 return {
