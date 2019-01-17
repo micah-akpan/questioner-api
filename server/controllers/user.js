@@ -138,7 +138,7 @@ export default {
         return res.status(401)
           .send({
             status: 401,
-            error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
+            error: `A user with this email: ${email} does not exist.`
           });
       }
 
@@ -182,16 +182,16 @@ export default {
                 }]
               });
           }
-          return res.status(409)
+          return res.status(401)
             .send({
-              status: 409,
+              status: 401,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
-            error: 'A user with this username does not exist. If you don`t have a username yet, you can login using your email'
+            status: 401,
+            error: `A user with the username: ${userName} does not exist`
           });
       }
     } catch (e) {
