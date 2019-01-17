@@ -138,7 +138,7 @@ export default {
         return res.status(401)
           .send({
             status: 401,
-            error: `A user with this email: ${email} does not exist.`
+            error: 'Your email is incorrect'
           });
       }
 
@@ -191,7 +191,7 @@ export default {
         return res.status(401)
           .send({
             status: 401,
-            error: `A user with the username: ${userName} does not exist`
+            error: 'Your username is incorrect'
           });
       }
     } catch (e) {
