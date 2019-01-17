@@ -70,6 +70,7 @@ export default {
         }]
       });
     } catch (e) {
+      console.log(e);
       return res.status(500)
         .send({
           status: 500,
