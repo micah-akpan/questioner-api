@@ -47,7 +47,6 @@ router.post('/meetups/:meetupId/tags',
 
 router.post('/meetups/:meetupId/images',
   checkParams,
-  validateRequest,
   isAdmin,
   Upload.array('meetupPhotos', 4),
   meetupController.addImagesToMeetup);

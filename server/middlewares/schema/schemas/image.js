@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const imageDataSchema = Joi.object().keys({
-  meetupPhotos: Joi.array().required()
+  meetupPhotos: Joi.binary().required()
 });
 
 export default imageDataSchema;
