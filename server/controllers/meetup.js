@@ -349,9 +349,7 @@ export default {
           });
         }
 
-        const NULL = 'NULL';
-
-        const [image1 = NULL, image2 = NULL, image3 = NULL, image4 = NULL] = req.files;
+        const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
         const images = `{${image1.filename}, ${image2.filename}, ${image3.filename}, ${image4.filename}}`;
         const result = await db.queryDb({
           text: `UPDATE Meetup
@@ -360,12 +358,17 @@ export default {
           values: [images, req.params.meetupId]
         });
 
+        const meetupRecord = result.rows[0];
+        const parsedImages = meetupRecord.images.map(image => (image === 'undefined' ? '' : image));
+
+        meetupRecord.images = parsedImages;
+
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [result.rows[0]]
+            data: [meetupRecord]
           }
         });
       }
@@ -379,7 +382,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendResponse({
         res,
         status: 500,
