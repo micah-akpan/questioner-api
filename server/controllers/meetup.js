@@ -48,6 +48,7 @@ export default {
         text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup'
       });
       const meetupRecords = meetups.rows;
+
       return sendResponse({
         res,
         status: 200,
