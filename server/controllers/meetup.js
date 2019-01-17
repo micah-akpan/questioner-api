@@ -278,8 +278,9 @@ export default {
         values: [req.params.meetupId]
       });
 
+      const { tags } = req.body;
+
       if (arrayHasValues(meetupResult.rows)) {
-        const tags = parseStr(req.body.tags, ',');
         if (tags.length > 5) {
           return sendResponse({
             res,
@@ -301,12 +302,18 @@ export default {
           values: [allTags, req.params.meetupId]
         });
 
+        const meetupRecord = result.rows[0];
+
+        const parsedTags = meetupRecord.tags.map(tag => (tag === null ? '' : tag));
+
+        meetupRecord.tags = parsedTags;
+
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [result.rows[0]]
+            data: [meetupRecord]
           }
         });
       }

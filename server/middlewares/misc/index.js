@@ -18,7 +18,13 @@ export default {
     const keys = Object.keys(req.body);
     const newRequestBody = {};
     keys.forEach((k) => {
-      newRequestBody[k] = req.body[k].trim();
+      if (typeof req.body[k] === 'string') {
+        newRequestBody[k] = req.body[k].trim();
+      } else if (Array.isArray(req.body[k])) {
+        const array = req.body[k];
+        const newArray = array.map(value => value.trim());
+        newRequestBody[k] = newArray;
+      }
     });
 
     req.body = newRequestBody;
