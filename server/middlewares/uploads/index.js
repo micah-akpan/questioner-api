@@ -1,17 +1,18 @@
 import multer from 'multer';
-import path from 'path';
-import crypto from 'crypto';
+import cloudinary from 'cloudinary';
+import cloudinaryStorage from 'multer-storage-cloudinary';
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, path.resolve(__dirname, '../', '../', 'assets'));
-  },
-  filename(req, file, cb) {
-    crypto.randomBytes(16, (err, raw) => {
-      if (err) return cb(err, null);
-      cb(null, `${raw.toString('hex')}${path.extname(file.originalname)}`);
-    });
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
+const storage = cloudinaryStorage({
+  cloudinary,
+  folder: 'demo',
+  allowedFormats: ['jpg', 'png'],
+  transformation: [{ width: 500, height: 500, crop: 'limit' }]
 });
 
 export default multer({ storage });
