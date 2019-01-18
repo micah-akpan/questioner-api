@@ -10,6 +10,7 @@ const agent = request(app);
 describe.only('RSVP API', () => {
   before(async () => {
     await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
 
@@ -62,10 +63,10 @@ describe.only('RSVP API', () => {
       agent
         .post('/api/v1/meetups/1/rsvps')
         .set('Authorization', `Bearer ${createTestToken()}`)
-        .expect(422)
+        .expect(400)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(400);
           done();
         });
     });
@@ -176,6 +177,7 @@ describe.only('RSVP API', () => {
 
     after(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
     });

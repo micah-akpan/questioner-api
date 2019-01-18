@@ -8,9 +8,16 @@ const agent = request(app);
 
 describe.only('Meetups API', () => {
   const adminTestToken = createTestToken(true);
+  console.log(adminTestToken);
   const userTestToken = createTestToken();
   before('Setup', async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
+    await db.dropTable({ tableName: 'Comment' });
+    await db.dropTable({ tableName: 'Rsvp' });
+    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
+    await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('Meetup');
     await db.queryDb({
@@ -62,18 +69,18 @@ describe.only('Meetups API', () => {
           .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             location: 'Meetup Location',
-            happeningOn: new Date()
+            happeningOn: getFutureDate(3)
           })
-          .expect(422)
+          .expect(400)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(400);
             res.body.should.have.property('error');
             done();
           });
       });
 
-      it('should return an error for meetup tags greater than 5', (done) => {
+      it('should return an error if tags is not in array form', (done) => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
@@ -81,14 +88,13 @@ describe.only('Meetups API', () => {
           .send({
             topic: 'Meetup 1',
             location: 'Meetup Location',
-            happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-            tags: 'meetup1,meetup1,meetupx,mymeetup,meetup1,fun'
+            happeningOn: getFutureDate(10),
+            tags: 'meetup1'
           })
           .end((err, res) => {
             if (err) return done(err);
             res.body.should.have.property('error');
-            res.body.error.should.equal('You cannot add more than 5 tags to this meetup');
-            res.body.status.should.equal(422);
+            res.body.error.should.equal('tags must be an array');
             done();
           });
       });
@@ -101,10 +107,10 @@ describe.only('Meetups API', () => {
             topic: 'Awesome Meetup',
             location: 'Meetup Location'
           })
-          .expect(422)
+          .expect(400)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(400);
             res.body.should.have.property('error');
             done();
           });
@@ -296,7 +302,13 @@ describe.only('Meetups API', () => {
 
   describe('DELETE /meetups/<meetup-id>/', () => {
     before(async () => {
+      await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Rsvp' });
       await db.dropTable({ tableName: 'Meetup' });
+
       await db.createTable('Meetup');
       await db.createTable('User');
       await db.createTable('Question');
@@ -383,12 +395,13 @@ describe.only('Meetups API', () => {
       await db.createTable('Meetup');
 
       await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn)
-              VALUES ($1, $2, $3)`,
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
+              VALUES ($1, $2, $3, $4)`,
         values: [
           'meetup sample 1',
           'meetup sample location',
-          getFutureDate(2)]
+          getFutureDate(2),
+          '{ "tag1"}']
       });
     });
 
@@ -397,17 +410,23 @@ describe.only('Meetups API', () => {
         .post('/api/v1/meetups/1/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
-          tags: 'meetup1,meetup1,meetup1'
+          tags: ['meetup1', 'meetup2']
         })
-        .expect(201, done);
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.data.should.be.an('array');
+          res.body.data[0].should.have.property('tags');
+          done();
+        });
     });
 
     it('should not add tags to a non-existing meetup', (done) => {
       agent
-        .post('/api/v1/meetups/999999/tags')
+        .post('/api/v1/meetups/9999/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
-          tags: 'meetup1,meetup1,meetup1'
+          tags: ['meetup1', 'meetup1', 'meetup1']
         })
         .expect(404)
         .end((err, res) => {
@@ -422,7 +441,7 @@ describe.only('Meetups API', () => {
         .post('/api/v1/meetups/1/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
-          tags: 'meetup1,meetup1,meetup1,meetup1,meetup1,meetup1'
+          tags: ['meetup1', 'meetup1', 'meetup1', 'meetup1', 'meetup1', 'meetup1']
         })
         .expect(422)
         .end((err, res) => {
@@ -437,7 +456,7 @@ describe.only('Meetups API', () => {
   describe.skip('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
-      await db.dropTable({ tableName: 'Question' });
+      await db.dropTable({ tableName: 'Comment' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
@@ -453,11 +472,33 @@ describe.only('Meetups API', () => {
           getFutureDate(2)]
       });
     });
+
+    it('should add images to a meetup', (done) => {
+      agent
+        .post('/api/v1/meetups/1/images')
+        .set('access-token', adminTestToken)
+        .attach('meetupPhotos', `${process.cwd()}/server/assets/yoyo.jpeg`)
+        .expect(201)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(201);
+          res.body.data.should.be.an('array');
+          res.body.data[0].should.have.property('images');
+          done();
+        });
+    });
+
+    after(() => {
+      // TODO: Delete all created images in the 'assets' directory
+    });
   });
 
   after(async () => {
+    await db.dropTable({ tableName: 'Upvote' });
+    await db.dropTable({ tableName: 'Downvote' });
     await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Question' });
+    await db.dropTable({ tableName: 'Comment' });
+
     await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });

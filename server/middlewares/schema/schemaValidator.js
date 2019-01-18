@@ -38,20 +38,49 @@ export default (useJoiError = false) => {
               message: message.replace(/['"]/g, ''),
             }));
 
+            let errorMsg = '';
 
-            let errorMsg = ' ';
-
-            details.forEach((detail) => {
+            // Forms a user friendly validation error
+            // message
+            details.forEach((detail, i) => {
               errorMsg += detail.message;
-              errorMsg += ', ';
+              if (i === details.length - 2) {
+                errorMsg += ' and ';
+              } else if (i === details.length - 1) {
+                errorMsg += '';
+              } else {
+                errorMsg += ', ';
+              }
             });
 
-            const CustomError = {
-              status: 422,
-              error: `Invalid request data: ${errorMsg} please review request and try again.`
+            errorMsg = errorMsg.trim();
+
+            /**
+             * @func makeCustomError
+             * @param {String} msg The Error msg
+             * @returns {*} custom error
+             * @description Returns a
+             * custom Error based
+             * on a substring found in the error
+             * message: 'msg'
+             */
+            const makeCustomError = (msg) => {
+              if (msg.search('required') > -1) {
+                return {
+                  status: 400,
+                  error: errorMsg
+                };
+              }
+
+              return {
+                status: 422,
+                error: errorMsg
+              };
             };
 
-            res.status(422).send(_useJoiError ? JoiError : CustomError);
+            const customError = makeCustomError(errorMsg);
+
+            res.status(customError.status).send(_useJoiError ? JoiError : customError);
           } else {
             req.body = data;
             next();

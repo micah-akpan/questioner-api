@@ -1,8 +1,8 @@
 import 'chai/register-should';
 import sinon from 'sinon';
 import httpMocks from 'node-mocks-http';
-import Auth from '../../../middlewares/auth';
-import { createTestToken } from '../../../utils';
+import Auth from '../../../../middlewares/auth';
+import { createTestToken } from '../../../../utils';
 
 describe.only('Auth Middlewares', () => {
   let testToken = '';

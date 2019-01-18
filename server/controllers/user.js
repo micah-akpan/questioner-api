@@ -31,17 +31,17 @@ export default {
 
       if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
+            status: 401,
             error: 'The email you provided is already used by another user'
           });
       }
 
       if (arrayHasValues(userByUsernameResult.rows)) {
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
+            status: 401,
             error: 'The username you provided is already used by another user'
           });
       }
@@ -57,7 +57,8 @@ export default {
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
-          email, admin: userRecord.isadmin
+          admin: userRecord.isadmin,
+          userId: userRecord.id
         }
       });
 
@@ -108,10 +109,12 @@ export default {
 
           const match = await bcrypt.compare(password, encryptedpassword);
 
+          const userRecord = userResult.rows[0];
+
           const userAuthToken = userHelper.obtainToken({
             payload: {
-              email,
-              admin: userResult.rows[0].isadmin
+              admin: userRecord.isadmin,
+              userId: userRecord.id
             }
           });
 
@@ -125,17 +128,17 @@ export default {
                 }]
               });
           }
-          return res.status(409)
+          return res.status(401)
             .send({
-              status: 409,
+              status: 401,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
 
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
-            error: 'A user with this email does not exist. Please check and try again. you can create an account at: http://localhost:9999/api/v1/auth/signup'
+            status: 401,
+            error: 'Your email is incorrect'
           });
       }
 
@@ -179,16 +182,16 @@ export default {
                 }]
               });
           }
-          return res.status(409)
+          return res.status(401)
             .send({
-              status: 409,
+              status: 401,
               error: 'You entered an incorrect password, please check and try again'
             });
         }
-        return res.status(409)
+        return res.status(401)
           .send({
-            status: 409,
-            error: 'A user with this username does not exist. If you don`t have a username yet, you can login using your email'
+            status: 401,
+            error: 'Your username is incorrect'
           });
       }
     } catch (e) {

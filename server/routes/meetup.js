@@ -5,10 +5,12 @@ import rsvpController from '../controllers/rsvp';
 import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
 import Upload from '../middlewares/uploads';
+import Misc from '../middlewares/misc';
 
 const router = express.Router();
 
 const { isAdmin } = Auth;
+const { checkParams } = Misc;
 
 const validateRequest = schemaValidator();
 
@@ -25,23 +27,34 @@ router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
 
 router
   .route('/meetups/:meetupId')
-  .get(meetupController.getSingleMeetup)
-  .delete(isAdmin, meetupController.deleteMeetup);
+  .get(checkParams, meetupController.getSingleMeetup)
+  .delete(checkParams, isAdmin, meetupController.deleteMeetup);
 
-router.get('/meetups/:meetupId/questions', questionController.getQuestions);
+router.get('/meetups/:meetupId/questions',
+  checkParams,
+  questionController.getQuestions);
 
-router.get('/meetups/:meetupId/rsvps', isAdmin, rsvpController.getRsvps);
+router.get('/meetups/:meetupId/rsvps',
+  checkParams,
+  isAdmin,
+  rsvpController.getRsvps);
 
-router.post('/meetups/:meetupId/tags', isAdmin, meetupController.addTagsToMeetup);
+router.post('/meetups/:meetupId/tags',
+  checkParams,
+  validateRequest,
+  isAdmin,
+  meetupController.addTagsToMeetup);
+
 router.post('/meetups/:meetupId/images',
+  checkParams,
   isAdmin,
   Upload.array('meetupPhotos', 4),
   meetupController.addImagesToMeetup);
 
 router
   .route('/meetups/:meetupId/questions/:questionId')
-  .get(questionController.getSingleMeetupQuestion)
-  .patch(questionController.updateMeetupQuestion)
-  .delete(isAdmin, questionController.deleteMeetupQuestion);
+  .get(checkParams, questionController.getSingleMeetupQuestion)
+  .patch(checkParams, questionController.updateMeetupQuestion)
+  .delete(checkParams, isAdmin, questionController.deleteMeetupQuestion);
 
 export default router;

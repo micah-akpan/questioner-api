@@ -9,11 +9,25 @@ export default {
         values: [req.params.meetupId]
       });
 
-      const { response, userId } = req.body;
+      const { response } = req.body;
+      const userId = req.decodedToken.userId || req.body.userId;
 
       const meetupRecord = meetupResults.rows[0];
 
       if (meetupRecord) {
+        const userAlreadyRsvpedResult = await db.queryDb({
+          text: 'SELECT * FROM Rsvp WHERE "user"=$1',
+          values: [userId]
+        });
+
+        if (userAlreadyRsvpedResult.rows.length > 0) {
+          // user already rsvped
+          return res.status(409)
+            .send({
+              status: 409,
+              error: 'You have already rsvped for this meetup'
+            });
+        }
         const rsvpResults = await db.queryDb({
           text: `INSERT INTO Rsvp ("user", meetup, response)
                  VALUES ($1, $2, $3) RETURNING *`,
@@ -39,7 +53,7 @@ export default {
       return res.status(404)
         .send({
           status: 404,
-          error: 'The meetup you are requesting does not exist'
+          error: `The requested meetup with the id: ${req.params.meetupId} does not exist`
         });
     } catch (e) {
       return res.status(500)

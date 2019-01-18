@@ -13,7 +13,8 @@ const {
   DB_TEST,
   DB_PROD_USER,
   DB_PROD_PASSWORD,
-  DB_PROD
+  DB_PROD_NAME,
+  DB_PROD_HOST
 } = process.env;
 
 export default {
@@ -37,8 +38,8 @@ export default {
   production: {
     user: DB_PROD_USER,
     password: DB_PROD_PASSWORD,
-    database: DB_PROD,
-    host: null,
-    port: null
+    database: DB_PROD_NAME,
+    host: DB_PROD_HOST,
+    port: 5432
   }
 };

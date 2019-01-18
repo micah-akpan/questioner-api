@@ -12,8 +12,10 @@ export const app = express();
 
 app.set('json spaces', 2);
 
+const env = app.get('env');
+
 /* Middlewares */
-if (app.get('env') === 'development') {
+if (env === 'development' || env === 'production') {
   // sync tables
   db.sync()
     .then((msg) => {
@@ -24,11 +26,13 @@ if (app.get('env') === 'development') {
     })
     .catch((err) => {
       wLogger.log({
-        level: 'info',
+        level: 'error',
         message: err
       });
     });
+}
 
+if (env === 'development') {
   app.use(logger('dev'));
 }
 

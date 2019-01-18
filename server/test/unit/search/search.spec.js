@@ -1,5 +1,5 @@
 import 'chai/register-should';
-import { search } from '../../controllers/helpers/search';
+import { search } from '../../../controllers/helpers/search';
 
 describe.only('search()', () => {
   describe('Search by topic and other criteria', () => {
@@ -12,7 +12,7 @@ describe.only('search()', () => {
       search(data, 'topic', 'planet mars').length.should.be.greaterThan(0);
     });
 
-    it('should an empty list for no match', () => {
+    it('should return an empty list for no match', () => {
       const data = [
         { title: 'mars' },
         { title: 'cryptoeconomics' }

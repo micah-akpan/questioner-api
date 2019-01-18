@@ -48,6 +48,7 @@ export default {
         text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup'
       });
       const meetupRecords = meetups.rows;
+
       return sendResponse({
         res,
         status: 200,
@@ -73,6 +74,22 @@ export default {
       const {
         location, topic, happeningOn, tags = ''
       } = req.body;
+
+      const meetupByLocation = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE location=$1 AND happeningOn=$2',
+        values: [location, happeningOn]
+      });
+
+      if (meetupByLocation.rows.length > 0) {
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
+            status: 409,
+            error: 'A meetup is scheduled on the same day at the same location'
+          }
+        });
+      }
 
       const parsedTags = tags && parseStr(tags, ',');
       const MAX_TAGS = 5;
@@ -262,8 +279,9 @@ export default {
         values: [req.params.meetupId]
       });
 
-      if (arrayHasValues(meetupResult.rows)) {
-        const tags = parseStr(req.body.tags, ',');
+      const { tags } = req.body;
+
+      if (meetupResult.rows.length > 0) {
         if (tags.length > 5) {
           return sendResponse({
             res,
@@ -274,23 +292,57 @@ export default {
             }
           });
         }
+        const newTags = meetupResult.rows[0].tags
+          .concat(tags)
+          .filter(tag => tag !== null);
 
-        const [tag1 = 'NULL', tag2 = 'NULL', tag3 = 'NULL', tag4 = 'NULL', tag5 = 'NULL'] = tags;
+        /* eslint-disable */
+        // This parses the str and forms into a
+        // a compatible postgres array insertion string
+        let allTags = '{';
+        newTags.forEach((tag, i) => {
+          if (i === newTags.length - 1) {
+            allTags += tag;
+            allTags += '}';
+          } else {
+            allTags += tag;
+            allTags += ', ';
+          }
+        })
 
-        const allTags = `{${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`;
+        /**
+         * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+         * @param {Array<String>} a
+         * @returns {Array<String>} Returns only unique set of values
+         */
+        function uniq(a) {
+          var seen = {};
+          return a.filter(function (item) {
+            return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+          });
+        }
+
+        const uniqueTags = uniq(newTags)
+
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET tags=$1
                  WHERE id=$2 RETURNING id as meetup,topic,tags`,
-          values: [allTags, req.params.meetupId]
+          values: [uniqueTags, req.params.meetupId]
         });
+
+        const meetupRecord = result.rows[0];
+
+        const parsedTags = meetupRecord.tags.map(tag => (tag === null ? '' : tag));
+
+        meetupRecord.tags = parsedTags;
 
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [result.rows[0]]
+            data: [meetupRecord]
           }
         });
       }
@@ -304,6 +356,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendResponse({
         res,
         status: 500,
@@ -328,15 +381,14 @@ export default {
             res,
             status: 422,
             payload: {
+              status: 422,
               error: 'You must provide at least one image'
             }
           });
         }
 
-        const NULL = 'NULL';
-
-        const [image1 = NULL, image2 = NULL, image3 = NULL, image4 = NULL] = req.files;
-        const images = `{${image1.filename}, ${image2.filename}, ${image3.filename}, ${image4.filename}}`;
+        const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
+        const images = `{${image1.url}, ${image2.url}, ${image3.url}, ${image4.url}}`;
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
@@ -344,12 +396,17 @@ export default {
           values: [images, req.params.meetupId]
         });
 
+        const meetupRecord = result.rows[0];
+        const parsedImages = meetupRecord.images.map(image => (image === 'undefined' ? '' : image));
+
+        meetupRecord.images = parsedImages;
+
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [result.rows[0]]
+            data: [meetupRecord]
           }
         });
       }
