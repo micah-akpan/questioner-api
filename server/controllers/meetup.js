@@ -292,17 +292,43 @@ export default {
             }
           });
         }
+        const newTags = meetupResult.rows[0].tags
+          .concat(tags)
+          .filter(tag => tag !== null);
 
-        const NULL = 'NULL';
+        /* eslint-disable */
+        // This parses the str and forms into a
+        // a compatible postgres array insertion string
+        let allTags = '{';
+        newTags.forEach((tag, i) => {
+          if (i === newTags.length - 1) {
+            allTags += tag;
+            allTags += '}';
+          } else {
+            allTags += tag;
+            allTags += ', ';
+          }
+        })
 
-        const [tag1 = NULL, tag2 = NULL, tag3 = NULL, tag4 = NULL, tag5 = NULL] = tags;
+        /**
+         * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+         * @param {Array<String>} a
+         * @returns {Array<String>} Returns only unique set of values
+         */
+        function uniq(a) {
+          var seen = {};
+          return a.filter(function (item) {
+            return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+          });
+        }
 
-        const allTags = `{${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`;
+        const uniqueTags = uniq(newTags)
+
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET tags=$1
                  WHERE id=$2 RETURNING id as meetup,topic,tags`,
-          values: [allTags, req.params.meetupId]
+          values: [uniqueTags, req.params.meetupId]
         });
 
         const meetupRecord = result.rows[0];
@@ -330,6 +356,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendResponse({
         res,
         status: 500,
