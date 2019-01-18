@@ -68,7 +68,7 @@ describe.only('Meetups API', () => {
           .set('Authorization', `Bearer ${adminTestToken}`)
           .send({
             location: 'Meetup Location',
-            happeningOn: new Date()
+            happeningOn: getFutureDate(3)
           })
           .expect(422)
           .end((err, res) => {
@@ -88,7 +88,7 @@ describe.only('Meetups API', () => {
             topic: 'Meetup 1',
             location: 'Meetup Location',
             happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-            tags: 'meetup1,meetup1,meetupx,mymeetup,meetup1,fun'
+            tags: ['meetup1']
           })
           .end((err, res) => {
             if (err) return done(err);

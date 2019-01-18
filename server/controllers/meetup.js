@@ -293,7 +293,9 @@ export default {
           });
         }
 
-        const [tag1 = 'NULL', tag2 = 'NULL', tag3 = 'NULL', tag4 = 'NULL', tag5 = 'NULL'] = tags;
+        const NULL = 'NULL';
+
+        const [tag1 = NULL, tag2 = NULL, tag3 = NULL, tag4 = NULL, tag5 = NULL] = tags;
 
         const allTags = `{${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`;
         const result = await db.queryDb({
@@ -391,6 +393,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendResponse({
         res,
         status: 500,
