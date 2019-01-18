@@ -281,7 +281,7 @@ export default {
 
       const { tags } = req.body;
 
-      if (arrayHasValues(meetupResult.rows)) {
+      if (meetupResult.rows.length > 0) {
         if (tags.length > 5) {
           return sendResponse({
             res,

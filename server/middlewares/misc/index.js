@@ -33,7 +33,15 @@ export default {
 
   checkParams(req, res, next) {
     const strs = Object.keys(req.params);
+    const MAX_INT_POS = 2147483647; // maximum value an integer database type can contain
     strs.forEach((s) => {
+      if (Number(req.params[s]) > MAX_INT_POS) {
+        return res.status(422)
+          .send({
+            status: 422,
+            error: `Params cannot be a value greater than ${MAX_INT_POS}`
+          });
+      }
       const param = parseInt(req.params[s], 10);
       if (Number.isNaN(param)) {
         return res
@@ -55,5 +63,7 @@ export default {
     });
 
     next();
-  }
+  },
+
+
 };

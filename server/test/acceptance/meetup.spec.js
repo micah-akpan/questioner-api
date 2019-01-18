@@ -62,7 +62,7 @@ describe.only('Meetups API', () => {
     });
 
     describe('handle invalid or missing data', () => {
-      it.skip('should not create a meetup if required fields are missing', (done) => {
+      it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
@@ -98,7 +98,7 @@ describe.only('Meetups API', () => {
           });
       });
 
-      it.skip('should not create a meetup if required fields are missing', (done) => {
+      it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
@@ -421,10 +421,10 @@ describe.only('Meetups API', () => {
 
     it('should not add tags to a non-existing meetup', (done) => {
       agent
-        .post('/api/v1/meetups/999999/tags')
+        .post('/api/v1/meetups/9999/tags')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .send({
-          tags: 'meetup1,meetup1,meetup1'
+          tags: ['meetup1', 'meetup1', 'meetup1']
         })
         .expect(404)
         .end((err, res) => {
