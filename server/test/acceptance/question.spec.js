@@ -7,7 +7,7 @@ import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe.only('Questions API', () => {
+describe('Questions API', () => {
   const adminTestToken = jwt.sign({ userId: 1, admin: true }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   });
@@ -68,10 +68,10 @@ describe.only('Questions API', () => {
           .send({
             title: 'question 1'
           })
-          .expect(422)
+          .expect(400)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(400);
             res.body.should.have.property('error');
             res.body.error.should.be.a('string');
             done();

@@ -80,7 +80,7 @@ export default (useJoiError = false) => {
 
             const customError = makeCustomError(errorMsg);
 
-            res.status(422).send(_useJoiError ? JoiError : customError);
+            res.status(customError.status).send(_useJoiError ? JoiError : customError);
           } else {
             req.body = data;
             next();

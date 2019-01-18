@@ -63,10 +63,10 @@ describe.only('RSVP API', () => {
       agent
         .post('/api/v1/meetups/1/rsvps')
         .set('Authorization', `Bearer ${createTestToken()}`)
-        .expect(422)
+        .expect(400)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(422);
+          res.body.status.should.equal(400);
           done();
         });
     });
