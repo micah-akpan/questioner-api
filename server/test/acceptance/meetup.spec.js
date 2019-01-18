@@ -8,6 +8,7 @@ const agent = request(app);
 
 describe.only('Meetups API', () => {
   const adminTestToken = createTestToken(true);
+  console.log(adminTestToken);
   const userTestToken = createTestToken();
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Upvote' });
@@ -394,12 +395,13 @@ describe.only('Meetups API', () => {
       await db.createTable('Meetup');
 
       await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn)
-              VALUES ($1, $2, $3)`,
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
+              VALUES ($1, $2, $3, $4)`,
         values: [
           'meetup sample 1',
           'meetup sample location',
-          getFutureDate(2)]
+          getFutureDate(2),
+          '{ "tag1"}']
       });
     });
 
