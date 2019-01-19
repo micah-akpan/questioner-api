@@ -4,9 +4,9 @@ export default {
       const { response } = req.body;
       if (!(allowedValues.includes(response))) {
         return res
-          .status(422)
+          .status(400)
           .send({
-            status: 422,
+            status: 400,
             error: 'response can only be one of yes, no or maybe'
           });
       }

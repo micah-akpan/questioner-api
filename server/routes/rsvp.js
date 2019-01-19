@@ -6,17 +6,17 @@ import Misc from '../middlewares/misc';
 const router = Router();
 const validateResult = schemaValidator();
 
-const { allowOnly, checkParams } = Misc;
+const { checkParams } = Misc;
 
 router
   .route('/meetups/:meetupId/rsvps')
   .post(checkParams,
     validateResult,
-    allowOnly(['yes', 'no', 'maybe']), rsvpController.makeRsvp);
+    rsvpController.makeRsvp);
 
 router
   .route('/meetups/:meetupId/rsvps/:rsvpId')
   .get(checkParams, rsvpController.getRsvp)
-  .patch(checkParams, rsvpController.updateRsvp);
+  .patch(checkParams, validateResult, rsvpController.updateRsvp);
 
 export default router;
