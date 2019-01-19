@@ -356,7 +356,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendResponse({
         res,
         status: 500,
@@ -420,7 +419,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e)
       return sendResponse({
         res,
         status: 500,
