@@ -16,7 +16,7 @@ export default {
   async signUpUser(req, res) {
     try {
       const {
-        email, password, firstname, lastname = '',
+        email, password, firstname, lastname,
       } = req.body;
 
       const userByEmailResult = await db.queryDb({

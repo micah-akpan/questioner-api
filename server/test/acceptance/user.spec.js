@@ -22,10 +22,6 @@ describe.only('User API', () => {
   });
 
   describe('POST /auth/signup', () => {
-    beforeEach(async () => {
-
-    });
-
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
         request(app)
