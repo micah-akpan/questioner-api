@@ -63,7 +63,7 @@ class Db {
       // interpolation ideal here
       // since we are not feeding into this function
       // data from the 'user'
-      return this.dbClient.query(`DROP TABLE IF EXISTS ${tableName}`);
+      return this.dbClient.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
     }
     return this.dbClient.query(`DROP TABLE ${tableName}`);
   }

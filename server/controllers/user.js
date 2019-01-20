@@ -16,7 +16,7 @@ export default {
   async signUpUser(req, res) {
     try {
       const {
-        email, password, firstname, lastname = '', username = ''
+        email, password, firstname, lastname,
       } = req.body;
 
       const userByEmailResult = await db.queryDb({
@@ -24,25 +24,12 @@ export default {
         values: [email]
       });
 
-      const userByUsernameResult = await db.queryDb({
-        text: 'SELECT  * FROM "User" WHERE username=$1',
-        values: [username]
-      });
-
       if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(401)
+        return res.status(409)
           .send({
-            status: 401,
+            status: 409,
             error: 'The email you provided is already used by another user'
-          });
-      }
-
-      if (arrayHasValues(userByUsernameResult.rows)) {
-        return res.status(401)
-          .send({
-            status: 401,
-            error: 'The username you provided is already used by another user'
           });
       }
 
@@ -86,114 +73,51 @@ export default {
    */
   async loginUser(req, res) {
     try {
-      const { email, password, username } = req.body;
+      const { email, password } = req.body;
 
-      /**
-       * @const emailRegExp
-       * @author https://emailregex.com/
-       * @description This regex was obtained at https://email.regex.com
-       */
-      const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const userResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE email=$1',
+        values: [email]
+      });
 
-      if (emailRegExp.test(email)) {
-        // user provided a valid email address
-        const userResult = await db.queryDb({
-          text: 'SELECT * FROM "User" WHERE email=$1',
-          values: [email]
+      if (arrayHasValues(userResult.rows)) {
+        // user with this email exist
+        const result = await userHelper.getUserPassword({ condition: 'email', value: email });
+        const { encryptedpassword } = result.rows[0];
+
+        const match = await bcrypt.compare(password, encryptedpassword);
+
+        const userRecord = userResult.rows[0];
+
+        const userAuthToken = userHelper.obtainToken({
+          payload: {
+            admin: userRecord.isadmin,
+            userId: userRecord.id
+          }
         });
 
-        if (userResult.rows.length > 0) {
-          // user with this email exist
-          const result = await userHelper.getUserPassword({ condition: 'email', value: email });
-          const { encryptedpassword } = result.rows[0];
-
-          const match = await bcrypt.compare(password, encryptedpassword);
-
-          const userRecord = userResult.rows[0];
-
-          const userAuthToken = userHelper.obtainToken({
-            payload: {
-              admin: userRecord.isadmin,
-              userId: userRecord.id
-            }
-          });
-
-          if (match) {
-            return res.status(201)
-              .send({
-                status: 201,
-                data: [{
-                  token: userAuthToken,
-                  user: omitProps(userResult.rows[0], ['password'])
-                }]
-              });
-          }
-          return res.status(401)
+        if (match) {
+          return res.status(201)
             .send({
-              status: 401,
-              error: 'You entered an incorrect password, please check and try again'
-            });
-        }
-
-        return res.status(401)
-          .send({
-            status: 401,
-            error: 'Your email is incorrect'
-          });
-      }
-
-      if (username || !emailRegExp.test(email)) {
-        // ===========================================================
-        /* Assumption: the Frontend UI allows a user to
-         * enter either an email or a username in the provided email field
-         *
-         * Making request using an HTTP Client besides a browser,
-         * a user can enter an additional username field.
-         * (Either email or the username) will be used.
-        */
-        // ===========================================================
-        const userName = username || email;
-        const userResult = await db.queryDb({
-          text: 'SELECT * FROM "User" WHERE username=$1',
-          values: [userName]
-        });
-
-        if (userResult.rows.length > 0) {
-          const result = await userHelper.getUserPassword({
-            condition: 'username',
-            value: userName
-          });
-          const { encryptedpassword } = result.rows[0];
-          const userRecord = userResult.rows[0];
-
-          const match = await bcrypt.compare(password, encryptedpassword);
-
-          const userAuthToken = userHelper.obtainToken({
-            email, admin: userRecord.isadmin
-          });
-
-          if (match) {
-            return res.status(201)
-              .send({
-                status: 201,
-                data: [{
-                  token: userAuthToken,
-                  user: omitProps(userResult.rows[0], ['password'])
-                }]
-              });
-          }
-          return res.status(401)
-            .send({
-              status: 401,
-              error: 'You entered an incorrect password, please check and try again'
+              status: 201,
+              data: [{
+                token: userAuthToken,
+                user: omitProps(userResult.rows[0], ['password'])
+              }]
             });
         }
         return res.status(401)
           .send({
             status: 401,
-            error: 'Your username is incorrect'
+            error: 'You entered an incorrect password, please check and try again'
           });
       }
+
+      return res.status(401)
+        .send({
+          status: 401,
+          error: 'Your email is incorrect'
+        });
     } catch (e) {
       return res.status(500)
         .send({

@@ -7,9 +7,8 @@ import { getFutureDate, createTestToken } from '../../utils';
 const agent = request(app);
 
 describe.only('Meetups API', () => {
-  const adminTestToken = createTestToken(true);
-  console.log(adminTestToken);
-  const userTestToken = createTestToken();
+  const adminTestToken = createTestToken({ admin: true });
+  const userTestToken = createTestToken({ admin: false });
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Upvote' });
     await db.dropTable({ tableName: 'Downvote' });
@@ -20,25 +19,6 @@ describe.only('Meetups API', () => {
     await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('Meetup');
-    await db.queryDb({
-      text: `INSERT INTO Meetup(topic, location, happeningOn)
-             VALUES ($1, $2, $3),
-             ($4, $5, $6),
-             ($7, $8, $9)`,
-      values: [
-        'topic 1',
-        'location 1',
-        getFutureDate(),
-
-        'topic 2',
-        'location 2',
-        getFutureDate(),
-
-        'topic 3',
-        'location 3',
-        getFutureDate()
-      ]
-    });
   });
 
   describe('POST /meetups', () => {
@@ -52,6 +32,7 @@ describe.only('Meetups API', () => {
             topic: 'Meetup 1',
             location: 'Meetup Location',
             happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+            tags: []
           })
           .end((err, res) => {
             if (err) return done(err);
@@ -84,7 +65,7 @@ describe.only('Meetups API', () => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
-          .expect(422)
+          .expect(400)
           .send({
             topic: 'Meetup 1',
             location: 'Meetup Location',
@@ -125,10 +106,10 @@ describe.only('Meetups API', () => {
             location: 'Meetup Location',
             happeningOn: 'Some Invalid date'
           })
-          .expect(422)
+          .expect(400)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(400);
             res.body.should.have.property('error');
             done();
           });
@@ -143,28 +124,10 @@ describe.only('Meetups API', () => {
             location: 'Meetup Location',
             happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
           })
-          .expect(422)
+          .expect(400)
           .end((err, res) => {
             if (err) return done(err);
-            res.body.status.should.equal(422);
-            res.body.should.have.property('error');
-            done();
-          });
-      });
-
-      it('should not create a meetup if date provided is past', (done) => {
-        agent
-          .post('/api/v1/meetups')
-          .set('Authorization', `Bearer ${adminTestToken}`)
-          .send({
-            topic: 'Awesome Meetup',
-            location: 'Meetup Location',
-            happeningOn: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))
-          })
-          .expect(422)
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.status.should.equal(422);
+            res.body.status.should.equal(400);
             res.body.should.have.property('error');
             done();
           });

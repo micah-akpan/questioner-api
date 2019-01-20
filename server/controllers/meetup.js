@@ -2,7 +2,7 @@ import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
 import { sendResponse } from './helpers';
-import { arrayHasValues, objectHasProps, parseStr } from '../utils';
+import { arrayHasValues, objectHasProps, uniq } from '../utils';
 
 export default {
   async getAllMeetups(req, res) {
@@ -72,7 +72,7 @@ export default {
   async createNewMeetup(req, res) {
     try {
       const {
-        location, topic, happeningOn, tags = ''
+        location, topic, happeningOn, tags
       } = req.body;
 
       const meetupByLocation = await db.queryDb({
@@ -80,7 +80,7 @@ export default {
         values: [location, happeningOn]
       });
 
-      if (meetupByLocation.rows.length > 0) {
+      if (arrayHasValues(meetupByLocation.rows)) {
         return sendResponse({
           res,
           status: 409,
@@ -91,11 +91,7 @@ export default {
         });
       }
 
-      const parsedTags = tags && parseStr(tags, ',');
-      const MAX_TAGS = 5;
-      const NULL = 'NULL';
-
-      if (parsedTags && parsedTags.length > MAX_TAGS) {
+      if (tags.length > 5) {
         return sendResponse({
           res,
           status: 422,
@@ -106,12 +102,28 @@ export default {
         });
       }
 
-      const [tag1 = NULL, tag2 = NULL, tag3 = NULL, tag4 = NULL, tag5 = NULL] = parsedTags;
+      /* eslint-disable */
+      // This parses the str and forms into a
+      // a compatible postgres array insertion string
+      let allTags = '{';
+      tags.forEach((tag, i) => {
+        if (i === tags.length - 1) {
+          allTags += tag;
+          allTags += '}';
+        } else {
+          allTags += tag;
+          allTags += ', ';
+        }
+      })
+
+      const uniqueTags = uniq(tags);
+
       const newMeetup = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
                VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn, tags`,
-        values: [topic, location, happeningOn, `{ ${tag1}, ${tag2}, ${tag3}, ${tag4}, ${tag5}}`]
+        values: [topic, location, happeningOn, uniqueTags]
       });
+
       const meetupRecord = newMeetup.rows[0];
 
       return sendResponse({
@@ -310,19 +322,7 @@ export default {
           }
         })
 
-        /**
-         * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
-         * @param {Array<String>} a
-         * @returns {Array<String>} Returns only unique set of values
-         */
-        function uniq(a) {
-          var seen = {};
-          return a.filter(function (item) {
-            return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-          });
-        }
-
-        const uniqueTags = uniq(newTags)
+        const uniqueTags = uniq(newTags);
 
         const result = await db.queryDb({
           text: `UPDATE Meetup
@@ -356,7 +356,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendResponse({
         res,
         status: 500,

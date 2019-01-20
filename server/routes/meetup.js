@@ -1,7 +1,6 @@
 import express from 'express';
 import meetupController from '../controllers/meetup';
 import questionController from '../controllers/question';
-import rsvpController from '../controllers/rsvp';
 import schemaValidator from '../middlewares/schema/schemaValidator';
 import Auth from '../middlewares/auth';
 import Upload from '../middlewares/uploads';
@@ -34,10 +33,10 @@ router.get('/meetups/:meetupId/questions',
   checkParams,
   questionController.getQuestions);
 
-router.get('/meetups/:meetupId/rsvps',
-  checkParams,
-  isAdmin,
-  rsvpController.getRsvps);
+// router.get('/meetups/:meetupId/rsvps',
+//   checkParams,
+//   isAdmin,
+//   rsvpController.getRsvps);
 
 router.post('/meetups/:meetupId/tags',
   checkParams,

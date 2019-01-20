@@ -5,15 +5,14 @@ export default {
     if (type === 'sign-up') {
       return Joi.object().keys({
         email: Joi.string().email().strict().required(),
-        password: Joi.string().min(7).required(),
+        password: Joi.string().min(8).required(),
         firstname: Joi.string().required(),
-        lastname: Joi.string()
+        lastname: Joi.string().required()
       });
     }
     return Joi.object().keys({
       email: Joi.string().strict(),
-      password: Joi.string().min(7).required(),
-      username: Joi.string()
+      password: Joi.string().min(8).required()
     });
   }
 };

@@ -64,19 +64,10 @@ export default (useJoiError = false) => {
              * on a substring found in the error
              * message: 'msg'
              */
-            const makeCustomError = (msg) => {
-              if (msg.search('required') > -1) {
-                return {
-                  status: 400,
-                  error: errorMsg
-                };
-              }
-
-              return {
-                status: 422,
-                error: errorMsg
-              };
-            };
+            const makeCustomError = msg => ({
+              status: 400,
+              error: msg
+            });
 
             const customError = makeCustomError(errorMsg);
 

@@ -3,14 +3,15 @@ import db from '../db';
 export default {
   async makeRsvp(req, res) {
     try {
+      const { meetupId } = req.params;
       const meetupResults = await db.queryDb({
         text: `SELECT * FROM Meetup
                WHERE id=$1`,
-        values: [req.params.meetupId]
+        values: [meetupId]
       });
 
       const { response } = req.body;
-      const userId = req.decodedToken.userId || req.body.userId;
+      const { userId } = req.decodedToken || req.body;
 
       const meetupRecord = meetupResults.rows[0];
 
@@ -31,7 +32,7 @@ export default {
         const rsvpResults = await db.queryDb({
           text: `INSERT INTO Rsvp ("user", meetup, response)
                  VALUES ($1, $2, $3) RETURNING *`,
-          values: [userId, req.params.meetupId, response]
+          values: [userId, meetupId, response]
         });
 
 
@@ -67,19 +68,22 @@ export default {
   async updateRsvp(req, res) {
     try {
       const { meetupId, rsvpId } = req.params;
+      const { userId } = req.decodedToken || req.body;
+
       const results = await db.queryDb({
         text: `SELECT * FROM Rsvp 
-               WHERE id=$1 AND meetup=$2`,
-        values: [rsvpId, meetupId]
+                 WHERE id=$1 AND meetup=$2 AND "user"=$3`,
+        values: [rsvpId, meetupId, userId]
       });
 
       const rsvpRecord = results.rows[0];
+
       if (rsvpRecord) {
         const updatedRsvp = await db.queryDb({
           text: `UPDATE Rsvp
-                 SET response=$1
-                 WHERE id=$2 RETURNING *`,
-          values: [req.body.response || rsvpRecord.response, rsvpRecord.id]
+                   SET response=$1
+                   WHERE id=$2 RETURNING *`,
+          values: [req.body.response, rsvpRecord.id]
         });
         return res.status(200)
           .send({
@@ -91,7 +95,7 @@ export default {
       return res.status(404)
         .send({
           status: 404,
-          error: `The rsvp with the id: ${req.params.rsvpId} for meetup with the id: ${req.params.meetupId} does not exist`
+          error: 'The requested rsvp does not exist for this user'
         });
     } catch (e) {
       return res.status(500)

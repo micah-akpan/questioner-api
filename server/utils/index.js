@@ -85,8 +85,9 @@ export const getIndex = (array, prop, value) => {
  * @param {Boolean} admin
  * @returns {String} Jwt token
  */
-export const createTestToken = (admin = false) => jwt.sign({
-  email: 'testuser@email.com', admin
+export const createTestToken = ({ admin = false, userId = 1 }) => jwt.sign({
+  admin,
+  userId
 }, process.env.JWT_SECRET, {
   expiresIn: '24h'
 });
@@ -114,6 +115,18 @@ export const objectHasProps = obj => Object.keys(obj).length > 0;
  */
 export const parseStr = (str, separator = ' ') => str.split(separator);
 
+/**
+ * @func uniq
+ * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+ * @param {Array<String>} a
+ * @returns {Array<String>} Returns only unique set of values
+ */
+export const uniq = (a) => {
+  const seen = {};
+  /* eslint-disable */
+  return a.filter((item) => seen.hasOwnProperty(item) ? false : (seen[item] = true));
+}
+
 export default {
   omitProps,
   getFutureDate,
@@ -122,5 +135,6 @@ export default {
   getProp,
   getIndex,
   createTestToken,
-  parseStr
+  parseStr,
+  uniq
 };
