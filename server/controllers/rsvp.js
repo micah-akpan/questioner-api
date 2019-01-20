@@ -82,7 +82,7 @@ export default {
           text: `UPDATE Rsvp
                    SET response=$1
                    WHERE id=$2 RETURNING *`,
-          values: [req.body.response || rsvpRecord.response, rsvpRecord.id]
+          values: [req.body.response, rsvpRecord.id]
         });
         return res.status(200)
           .send({
