@@ -47,6 +47,21 @@ describe.only('RSVP API', () => {
         });
     });
 
+    it('should not rsvp a meetup more than once for the same user', (done) => {
+      const testToken = createTestToken({ userId: undefined });
+      agent
+        .post('/api/v1/meetups/1/rsvps')
+        .set('Authorization', `Bearer ${testToken}`)
+        .send({ response: 'maybe', userId: 1 })
+        .expect(409)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(409);
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
     it('should not rsvp a user on a non-existent meetup', (done) => {
       agent
         .post('/api/v1/meetups/99999999/rsvps')

@@ -3,14 +3,15 @@ import db from '../db';
 export default {
   async makeRsvp(req, res) {
     try {
+      const { meetupId } = req.params;
       const meetupResults = await db.queryDb({
         text: `SELECT * FROM Meetup
                WHERE id=$1`,
-        values: [req.params.meetupId]
+        values: [meetupId]
       });
 
       const { response } = req.body;
-      const userId = req.decodedToken.userId || req.body.userId;
+      const { userId } = req.decodedToken || req.body;
 
       const meetupRecord = meetupResults.rows[0];
 
@@ -31,7 +32,7 @@ export default {
         const rsvpResults = await db.queryDb({
           text: `INSERT INTO Rsvp ("user", meetup, response)
                  VALUES ($1, $2, $3) RETURNING *`,
-          values: [userId, req.params.meetupId, response]
+          values: [userId, meetupId, response]
         });
 
 
