@@ -182,4 +182,47 @@ describe.only('RSVP API', () => {
       await db.dropTable({ tableName: '"User"' });
     });
   });
+
+  describe('GET /meetups/<meetup-id>/rsvps', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+
+      await db.createTable('Meetup');
+      await db.createTable('User');
+      await db.createTable('Rsvp');
+
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ('test', 'user', 'testuser@email.com', 'test1234'
+               )`
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['topic 1', 'location 1', getFutureDate()]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Rsvp ("user", meetup, response)
+              VALUES($1, $2, $3)`,
+        values: [1, 1, 'yes']
+      });
+    });
+
+    it('should return a list of rsvps', (done) => {
+      agent
+        .get('/api/v1/meetups/1/rsvps')
+        .set('access-token', userTestToken)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
+    });
+  });
 });

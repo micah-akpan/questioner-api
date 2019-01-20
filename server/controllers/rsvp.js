@@ -67,18 +67,21 @@ export default {
   async updateRsvp(req, res) {
     try {
       const { meetupId, rsvpId } = req.params;
+      const { userId } = req.decodedToken || req.body;
+
       const results = await db.queryDb({
         text: `SELECT * FROM Rsvp 
-               WHERE id=$1 AND meetup=$2`,
-        values: [rsvpId, meetupId]
+                 WHERE id=$1 AND meetup=$2 AND "user"=$3`,
+        values: [rsvpId, meetupId, userId]
       });
 
       const rsvpRecord = results.rows[0];
+
       if (rsvpRecord) {
         const updatedRsvp = await db.queryDb({
           text: `UPDATE Rsvp
-                 SET response=$1
-                 WHERE id=$2 RETURNING *`,
+                   SET response=$1
+                   WHERE id=$2 RETURNING *`,
           values: [req.body.response || rsvpRecord.response, rsvpRecord.id]
         });
         return res.status(200)
@@ -91,7 +94,7 @@ export default {
       return res.status(404)
         .send({
           status: 404,
-          error: `The rsvp with the id: ${req.params.rsvpId} for meetup with the id: ${req.params.meetupId} does not exist`
+          error: 'The requested rsvp does not exist for this user'
         });
     } catch (e) {
       return res.status(500)
