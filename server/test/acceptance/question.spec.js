@@ -1,16 +1,15 @@
 import 'chai/register-should';
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe('Questions API', () => {
-  const adminTestToken = jwt.sign({ userId: 1, admin: true }, process.env.JWT_SECRET, {
-    expiresIn: '1h'
-  });
+describe.only('Questions API', () => {
+  const adminTestToken = createTestToken(true);
+  const userTestToken = createTestToken();
+
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Question' });
 
@@ -38,16 +37,16 @@ describe('Questions API', () => {
     });
     describe('handle valid data', () => {
       it('should create a question', (done) => {
-        agent
+        request(app)
           .post('/api/v1/questions')
-          .set('Authorization', `Bearer ${createTestToken()}`)
+          .set('Authorization', `Bearer ${userTestToken}`)
           .send({
             title: 'question 1',
             body: 'question body',
-            meetupId: 1,
-            userId: 1
+            meetupId: '1',
+            userId: 3
           })
-          .expect(201)
+          .expect(404)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(201);
@@ -298,6 +297,22 @@ describe('Questions API', () => {
   });
 
   describe('POST /comments', () => {
+    before(async () => {
+      // await db.dropTable({ tableName: 'Upvote' });
+      // await db.dropTable({ tableName: 'Downvote' });
+      await db.dropTable({ tableName: 'Comment' });
+      await db.dropTable({ tableName: 'Question' });
+      // await db.dropTable({ tableName: 'Rsvp' });
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: '"User"' });
+
+      await db.createTable('User');
+      await db.createTable('Meetup');
+      await db.createTable('Question');
+      // await db.createTable('Upvote');
+      // await db.createTable('Downvote');
+      await db.createTable('Comment');
+    });
     beforeEach(async () => {
       await db.queryDb({
         text: `INSERT INTO "User" (firstname, lastname, email, password)
@@ -314,8 +329,6 @@ describe('Questions API', () => {
         VALUES ($1, $2, $3, $4)`,
         values: ['question 1', 'question body', 1, 1]
       });
-
-      await db.createTable('Comment');
     });
 
     describe('handle valid data', () => {
@@ -433,15 +446,6 @@ describe('Questions API', () => {
         .delete('/api/v1/meetups/1/questions/1')
         .set('access-token', adminTestToken)
         .expect(200, done);
-    });
-
-    after(() => {
-      db.dropTable({ tableName: 'Rsvp' });
-      db.dropTable({ tableName: 'Upvote' });
-      db.dropTable({ tableName: 'Downvote' });
-      db.dropTable({ tableName: 'Question' });
-      db.dropTable({ tableName: 'Meetup' });
-      db.dropTable({ tableName: '"User"' });
     });
   });
 

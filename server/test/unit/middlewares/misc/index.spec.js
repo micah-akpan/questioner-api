@@ -50,7 +50,7 @@ describe.only('Misc middleware', () => {
       middleware(req, res, next);
 
       res.status.calledOnce.should.be.true;
-      res.status.firstCall.args[0].should.equal(422);
+      res.status.firstCall.args[0].should.equal(400);
     });
   });
 });

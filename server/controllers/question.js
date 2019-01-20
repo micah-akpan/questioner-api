@@ -10,20 +10,36 @@ export default {
         title, body, meetupId
       } = req.body;
 
-      const userId = req.decodedToken.userId || req.body.userId;
-      const questionResult = await db.queryDb({
-        text: `INSERT INTO Question (title, body, meetup, createdBy)
-               VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
-        values: [title, body, meetupId, userId]
+      const meetupResult = await db.queryDb({
+        text: 'SELECT * FROM Meetup WHERE id=$1',
+        values: [meetupId]
       });
 
-      const newQuestion = questionResult.rows[0];
+      if (arrayHasValues(meetupResult.rows)) {
+        // meetup exist
+        const userId = req.decodedToken.userId || req.body.userId;
+        const questionResult = await db.queryDb({
+          text: `INSERT INTO Question (title, body, meetup, createdBy)
+                 VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
+          values: [title, body, meetupId, userId]
+        });
+
+        const newQuestion = questionResult.rows[0];
+        return sendResponse({
+          res,
+          status: 201,
+          payload: {
+            status: 201,
+            data: [newQuestion]
+          }
+        });
+      }
       return sendResponse({
         res,
-        status: 201,
+        status: 404,
         payload: {
-          status: 201,
-          data: [newQuestion]
+          status: 404,
+          error: `The meetup with id: ${meetupId} does not exist`
         }
       });
     } catch (e) {
@@ -226,7 +242,7 @@ export default {
 
   async addComments(req, res) {
     try {
-      const { questionId, commentText } = req.body;
+      const { questionId, comment } = req.body;
 
       const results = await db.queryDb({
         text: 'SELECT * FROM Question WHERE id=$1',
@@ -238,13 +254,13 @@ export default {
           question: questionId,
           title: results.rows[0].title,
           body: results.rows[0].body,
-          comment: commentText
+          comment
         };
 
         const addCommentsQuery = {
           text: `INSERT INTO Comment (body, question)
                VALUES ($1, $2) RETURNING *`,
-          values: [commentText, questionId]
+          values: [comment, questionId]
         };
 
         await db.queryDb(addCommentsQuery);

@@ -93,12 +93,11 @@ describe.only('RSVP API', () => {
         .patch('/api/v1/meetups/1/rsvps/1')
         .set('Authorization', `Bearer ${createTestToken()}`)
         .send({ response: '' })
-        .expect(200)
+        .expect(400)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(200);
-          res.body.data.should.be.an('array');
-          res.body.data[0].response.should.equal('no');
+          res.body.status.should.equal(400);
+          res.body.should.have.property('error');
           done();
         });
     });
