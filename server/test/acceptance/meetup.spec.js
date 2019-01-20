@@ -32,6 +32,7 @@ describe.only('Meetups API', () => {
             topic: 'Meetup 1',
             location: 'Meetup Location',
             happeningOn: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+            tags: []
           })
           .end((err, res) => {
             if (err) return done(err);

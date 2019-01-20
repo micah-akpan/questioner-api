@@ -31,26 +31,4 @@ describe.only('Misc middleware', () => {
       next.calledOnce.should.be.true;
     });
   });
-
-  describe('allowValues()', () => {
-    it('should only allow enum values', () => {
-      const req = {
-        body: {
-          response: 'g'
-        }
-      };
-      const res = {};
-      const next = sinon.spy();
-
-      res.status = sinon.fake.returns(res);
-      res.send = sinon.fake.returns(res);
-
-      const allowedValues = ['a', 'b', 'c'];
-      const middleware = Misc.allowOnly(allowedValues);
-      middleware(req, res, next);
-
-      res.status.calledOnce.should.be.true;
-      res.status.firstCall.args[0].should.equal(400);
-    });
-  });
 });

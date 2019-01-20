@@ -9,7 +9,8 @@ import {
   createTestToken,
   arrayHasValues,
   objectHasProps,
-  parseStr
+  parseStr,
+  uniq
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -136,6 +137,16 @@ describe.only('Utils', () => {
       token.should.be.a('string');
       token.split('.').length.should.equal(3);
     });
+
+    it('should return a JWT token', () => {
+      const token = createTestToken({
+        admin: true,
+        userId: 10
+      });
+
+      token.should.be.a('string');
+      token.split('.').length.should.equal(3);
+    });
   });
 
   describe('arrayHasValues()', () => {
@@ -165,6 +176,12 @@ describe.only('Utils', () => {
 
     it('should parse a string into an array of string', () => {
       parseStr('andela tia epic').should.deep.equal(['andela', 'tia', 'epic']);
+    });
+  });
+
+  describe('uniq', () => {
+    it('should return only unique values in an array', () => {
+      uniq(['a', 'b', 'b', 'a']).should.deep.equal(['a', 'b']);
     });
   });
 });
