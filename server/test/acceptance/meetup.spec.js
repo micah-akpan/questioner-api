@@ -7,8 +7,8 @@ import { getFutureDate, createTestToken } from '../../utils';
 const agent = request(app);
 
 describe.only('Meetups API', () => {
-  const adminTestToken = createTestToken(true);
-  const userTestToken = createTestToken();
+  const adminTestToken = createTestToken({ admin: true });
+  const userTestToken = createTestToken({ admin: false });
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Upvote' });
     await db.dropTable({ tableName: 'Downvote' });
@@ -19,25 +19,6 @@ describe.only('Meetups API', () => {
     await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('Meetup');
-    await db.queryDb({
-      text: `INSERT INTO Meetup(topic, location, happeningOn)
-             VALUES ($1, $2, $3),
-             ($4, $5, $6),
-             ($7, $8, $9)`,
-      values: [
-        'topic 1',
-        'location 1',
-        getFutureDate(),
-
-        'topic 2',
-        'location 2',
-        getFutureDate(),
-
-        'topic 3',
-        'location 3',
-        getFutureDate()
-      ]
-    });
   });
 
   describe('POST /meetups', () => {

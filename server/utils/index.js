@@ -85,8 +85,9 @@ export const getIndex = (array, prop, value) => {
  * @param {Boolean} admin
  * @returns {String} Jwt token
  */
-export const createTestToken = (admin = false) => jwt.sign({
-  email: 'testuser@email.com', admin
+export const createTestToken = ({ admin = false, userId = 1 }) => jwt.sign({
+  admin,
+  userId
 }, process.env.JWT_SECRET, {
   expiresIn: '24h'
 });

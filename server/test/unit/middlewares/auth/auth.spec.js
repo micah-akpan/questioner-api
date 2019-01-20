@@ -11,7 +11,7 @@ describe.only('Auth Middlewares', () => {
   let res = {};
 
   before(() => {
-    testToken = createTestToken();
+    testToken = createTestToken({});
 
     authHeader = {
       authorization: `Bearer ${testToken}`,
@@ -38,7 +38,6 @@ describe.only('Auth Middlewares', () => {
         req.decodedToken.should.be.an('object');
         req.decodedToken.should.have.property('admin');
         req.decodedToken.admin.should.equal(false);
-        req.decodedToken.should.have.property('email');
         next.calledOnce.should.equal(true);
       });
     });
