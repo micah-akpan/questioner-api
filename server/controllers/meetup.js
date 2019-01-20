@@ -2,7 +2,7 @@ import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
 import { sendResponse } from './helpers';
-import { arrayHasValues, objectHasProps } from '../utils';
+import { arrayHasValues, objectHasProps, uniq } from '../utils';
 
 export default {
   async getAllMeetups(req, res) {
@@ -115,18 +115,6 @@ export default {
           allTags += ', ';
         }
       })
-
-      /**
-         * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
-         * @param {Array<String>} a
-         * @returns {Array<String>} Returns only unique set of values
-         */
-      function uniq(a) {
-        var seen = {};
-        return a.filter(function (item) {
-          return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-        });
-      }
 
       const uniqueTags = uniq(tags);
 
@@ -334,19 +322,7 @@ export default {
           }
         })
 
-        /**
-         * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
-         * @param {Array<String>} a
-         * @returns {Array<String>} Returns only unique set of values
-         */
-        function uniq(a) {
-          var seen = {};
-          return a.filter(function (item) {
-            return seen.hasOwnProperty(item) ? false : (seen[item] = true);
-          });
-        }
-
-        const uniqueTags = uniq(newTags)
+        const uniqueTags = uniq(newTags);
 
         const result = await db.queryDb({
           text: `UPDATE Meetup

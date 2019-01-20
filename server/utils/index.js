@@ -115,6 +115,18 @@ export const objectHasProps = obj => Object.keys(obj).length > 0;
  */
 export const parseStr = (str, separator = ' ') => str.split(separator);
 
+/**
+ * @func uniq
+ * @author https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+ * @param {Array<String>} a
+ * @returns {Array<String>} Returns only unique set of values
+ */
+export const uniq = (a) => {
+  const seen = {};
+  /* eslint-disable */
+  return a.filter((item) => seen.hasOwnProperty(item) ? false : (seen[item] = true));
+}
+
 export default {
   omitProps,
   getFutureDate,
@@ -123,5 +135,6 @@ export default {
   getProp,
   getIndex,
   createTestToken,
-  parseStr
+  parseStr,
+  uniq
 };
