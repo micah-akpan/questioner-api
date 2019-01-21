@@ -1,7 +1,5 @@
 import 'chai/register-should';
-import Helpers from '../../../controllers/helpers';
-
-const { RecordTransformer } = Helpers;
+import RecordTransformer from '../../../controllers/helpers/RecordTransformer';
 
 describe.only('RecordTransformer', () => {
   const testRecords = [
@@ -15,10 +13,6 @@ describe.only('RecordTransformer', () => {
       id: 3, name: 'my name', likes: null, dislikes: ['something']
     },
   ];
-
-  before(() => {
-
-  });
 
   describe('class', () => {
     it('should be a function', () => {
