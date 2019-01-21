@@ -3,21 +3,7 @@ import db from '../db';
 import { search } from './helpers/search';
 import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
-
-// transforms meetup records
-const transformMeetups = meetups => meetups.map((meetup) => {
-  meetup.tags = meetup.tags === null ? [] : meetup.tags;
-
-  const tags = meetup.tags.map((tag) => {
-    if (tag === null) {
-      tag = '';
-    }
-    return tag;
-  });
-
-  meetup.tags = tags;
-  return meetup;
-});
+import RecordTransformer from './helpers/RecordTransformer';
 
 export default {
   async getAllMeetups(req, res) {
@@ -39,7 +25,9 @@ export default {
 
         let filteredMeetups = _.uniqBy(allMeetups, 'id');
 
-        filteredMeetups = transformMeetups(filteredMeetups);
+        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'nulls-to-empty-array');
+
+        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'inner-nulls-with-empty-string');
 
         if (allMeetups.length) {
           return sendResponse({
@@ -57,14 +45,18 @@ export default {
           status: 404,
           payload: {
             status: 404,
-            error: `No meetups match with this search: ${req.query.searchTerm}`
+            error: `No meetups match with this search: ${searchTerm}`
           }
         });
       }
       const meetups = await db.queryDb({
-        text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup'
+        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
       });
-      const meetupRecords = meetups.rows;
+      let meetupRecords = meetups.rows;
+
+      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'nulls-to-empty-array');
+
+      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'inner-nulls-with-empty-string');
 
       return sendResponse({
         res,
@@ -137,11 +129,15 @@ export default {
 
       const newMeetup = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
-               VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn, tags`,
+               VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn as "happeningOn", tags`,
         values: [topic, location, happeningOn, uniqueTags]
       });
 
-      const meetupRecord = newMeetup.rows[0];
+      let meetup = RecordTransformer.transform(newMeetup.rows, 'tags', 'nulls-to-empty-array');
+
+      meetup = RecordTransformer.transform(newMeetup.rows, 'tags', 'inner-nulls-with-empty-string');
+
+      const meetupRecord = meetup[0];
 
       return sendResponse({
         res,
@@ -166,11 +162,15 @@ export default {
   async getSingleMeetup(req, res) {
     try {
       const result = await db.queryDb({
-        text: 'SELECT id, topic, location, happeningOn, tags FROM Meetup WHERE id=$1',
+        text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup WHERE id=$1',
         values: [req.params.meetupId]
       });
 
-      const meetupRecord = result.rows[0];
+      let meetups = RecordTransformer.transform(result.rows, 'tags', 'nulls-to-empty-array');
+
+      meetups = RecordTransformer.transform(result.rows, 'tags', 'inner-nulls-with-empty-string');
+
+      const meetupRecord = meetups[0];
 
       if (meetupRecord) {
         return sendResponse({
@@ -268,7 +268,9 @@ export default {
         text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup WHERE happeningOn >= NOW()'
       });
 
-      const upComingMeetups = results.rows;
+      let upComingMeetups = RecordTransformer.transform(results.rows, 'tags', 'nulls-to-empty-array');
+
+      upComingMeetups = RecordTransformer.transform(upComingMeetups, 'tags', 'inner-nulls-with-empty-string');
 
       if (arrayHasValues(upComingMeetups)) {
         return sendResponse({
@@ -326,7 +328,7 @@ export default {
           .filter(tag => tag !== null);
 
         /* eslint-disable */
-        // This parses the str and forms into a
+        // This parses the str and transforms it into a
         // a compatible postgres array insertion string
         let allTags = '{';
         newTags.forEach((tag, i) => {
