@@ -4,6 +4,21 @@ import { search } from './helpers/search';
 import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 
+// transforms meetup records
+const transformMeetups = meetups => meetups.map((meetup) => {
+  meetup.tags = meetup.tags === null ? [] : meetup.tags;
+
+  const tags = meetup.tags.map((tag) => {
+    if (tag === null) {
+      tag = '';
+    }
+    return tag;
+  });
+
+  meetup.tags = tags;
+  return meetup;
+});
+
 export default {
   async getAllMeetups(req, res) {
     try {
@@ -11,7 +26,7 @@ export default {
         const { searchTerm } = req.query;
 
         const meetups = await db.queryDb({
-          text: 'SELECT * FROM Meetup'
+          text: 'SELECT id, topic, location, happeningon as "happeningOn", tags FROM Meetup'
         });
 
         const meetupRecords = meetups.rows;
@@ -22,7 +37,9 @@ export default {
 
         const allMeetups = [...byTopic, ...byLocation, ...byTag];
 
-        const filteredMeetups = _.uniqBy(allMeetups, 'id');
+        let filteredMeetups = _.uniqBy(allMeetups, 'id');
+
+        filteredMeetups = transformMeetups(filteredMeetups);
 
         if (allMeetups.length) {
           return sendResponse({
