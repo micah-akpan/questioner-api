@@ -9,9 +9,7 @@ Questioner is a question crowdsourcing tool that provides support for meetup org
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-1. Copy the git repo url
-    * SSH:[git@github.com:emrys8/questioner-api.git](git@github.com:emrys8/questioner-api.git)
-    * HTTPS:[https://github.com/emrys8/questioner-api.git](https://github.com/emrys8/questioner-api.git)
+1. Copy the git repo url [https://github.com/emrys8/questioner-api.git](https://github.com/emrys8/questioner-api.git)
 2. Clone repo: `git clone <git-url>` to have a copy of the project on your local machine
 3. Install project dependencies: `npm install` or `yarn install` if using yarn
 4. Create a local database: take note of your user database name, password and username
