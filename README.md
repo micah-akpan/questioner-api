@@ -27,11 +27,9 @@ You need the following to use the **Questioner** API:
 
 ### Installing
 
-1. Add Add a .env file to the project and add these project-specific environment variables to the file:
+1. Add a .env file to the project and add these project-specific environment variables to the file.
 A template of the .env with the name .env-sample can be found at the project root
-
 2. Supply all the information needed in the .env as specified in the .env-sample
-
 3. Install the project dependencies. Run `npm install`
 
 Now **Questioner** has been successfully installed.
@@ -45,12 +43,7 @@ Now **Questioner** has been successfully installed.
 2. The above step will automatically carry out migration on your database
 
 ## Running the tests
-1. Setup the following test environment variables:
-    * DB_USER=db_test_user
-    * DB_PASSWORD=db_test_password
-    * DB_TEST=db_test_name
-
-2. Run `npm test`
+  *  Run `npm test`
 
 ## Deployment
 
@@ -62,10 +55,6 @@ Now **Questioner** has been successfully installed.
 
 ## API Docs
   * **[Apiary](https://questionerapi.docs.apiary.io)**
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
