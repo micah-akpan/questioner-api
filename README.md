@@ -1,6 +1,3 @@
-# Questioner
-Questioner is a question crowdsourcing tool that provides support for meetup organizers, with features that help them prioritize questions asked by potential attendees.
-
 [![Build Status](https://travis-ci.com/emrys8/questioner-api.svg?branch=develop)](https://travis-ci.com/emrys8/questioner-api) [![Coverage Status](https://coveralls.io/repos/github/emrys8/questioner-api/badge.svg?branch=develop)](https://coveralls.io/github/emrys8/questioner-api?branch=develop)
 
 
@@ -30,17 +27,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need the following to use the API successfully:
+You need the following to use the **Questioner** API:
+* [Node.js](https://nodejs.org/en/download/) 6 and above
+* [Postman Native](https://www.getpostman.com/downloads/) or [Postman Chrome Extension](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en)
 * A locally installed [PostgreSQL Database server](https://www.postgresql.org/download/) (version 9+)
-* [Postman](https://www.getpostman.com/downloads/)
-
-```
-Give examples
-```
+* [Git](https://git-scm.com/downloads)
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
 
 1. Install the project dependencies
 
@@ -75,10 +68,10 @@ A step by step series of examples that tell you how to get a development env run
 
 3. Ensure your PostgreSQL server is running
   #### Unix
-  ```/usr/sbin/service postgresql status```
+  * `/usr/sbin/service postgresql status`
 
   #### Windows
-  ``` Using the [pgAdmin](https://www.pgadmin.org/download/) application, you can verify if your server is running```
+  * Using the [pgAdmin](https://www.pgadmin.org/download/) application, you can verify if your server is running
 
 4. Start the application server
   `npm run start:dev`
@@ -98,7 +91,7 @@ A step by step series of examples that tell you how to get a development env run
   * DB_PASSWORD=db_test_password
   * DB_TEST=db_test_name
 
-2. `npm test`
+2. Run `npm test`
 
 ## Deployment
 
