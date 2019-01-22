@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/emrys8/questioner-api.svg?branch=develop)](https://travis-ci.com/emrys8/questioner-api) [![Coverage Status](https://coveralls.io/repos/github/emrys8/questioner-api/badge.svg?branch=develop)](https://coveralls.io/github/emrys8/questioner-api?branch=develop)
+[![Build Status](https://travis-ci.com/emrys8/questioner-api.svg?branch=develop)](https://travis-ci.com/emrys8/questioner-api) [![Coverage Status](https://coveralls.io/repos/github/emrys8/questioner-api/badge.svg?branch=develop)](https://coveralls.io/github/emrys8/questioner-api?branch=develop) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![HitCount](http://hits.dwyl.io/emrys8/questioner-api.svg)](http://hits.dwyl.io/emrys8/questioner-api)
 
 
 # Questioner
