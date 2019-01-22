@@ -63,7 +63,7 @@ Now **Questioner** has been successfully installed.
 
 
 ## API Docs
-  * [Apiary](questionerapi.docs.apiary.io)
+  * **[Apiary](https://questionerapi.docs.apiary.io)**
 
 ## Contributing
 
