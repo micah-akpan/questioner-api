@@ -1,0 +1,6 @@
+{
+  "files": {
+    "included": ["./server/**"],
+    "excluded": ["./node_modules", "./coverage", "./gulpfile.js"]
+  }
+}
