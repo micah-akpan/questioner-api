@@ -9,21 +9,14 @@ Questioner is a question crowdsourcing tool that provides support for meetup org
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-1. Clone repo: `git clone git@github.com:emrys8/questioner-api.git`
+1. Copy the git repo url
+  * SSH: [git@github.com:emrys8/questioner-api.git](git@github.com:emrys8/questioner-api.git)
+  * HTTPS:[https://github.com/emrys8/questioner-api.git](https://github.com/emrys8/questioner-api.git)
+2. Clone repo: `git clone <git-url>` to have a copy of the project on your local machine
 2. Install project dependencies: `npm install` or `yarn install` if using yarn
-3. Setup the following environment variables
-  * development:
-    * DB_USER
-    * DB_PASSWORD
-    * DB_DEV
-
-  * test
-    * DB_USER
-    * DB_PASSWORD
-    * DB_TEST
-
+3. Add a .env file and add the environment variables specified in .env-sample file
 4. Start the server: `npm run dev:start`
-5. Launch Postman and test all endpoints
+5. Launch Postman and test the endpoints specified in the docs
 
 ### Prerequisites
 
@@ -35,39 +28,22 @@ You need the following to use the **Questioner** API:
 
 ### Installing
 
-1. Install the project dependencies
+1. Add Add a .env file to the project and add these project-specific environment variables to the file:
+A template of the .env with the name .env-sample can be found at the project root
 
-```npm install```
+2. Supply all the information needed in the .env as specified in the .env-sample
 
-2. Add Add a .env file to the project and add these project-specific environment variables to the file:
-  * development:
-    * DB_USER
-    * DB_PASSWORD
-    * DB_DEV
+3. Install the project dependencies. Run `npm install`
 
-  * test
-    * DB_USER
-    * DB_PASSWORD
-    * DB_TEST
+Now **Questioner** has been successfully installed.
 
-3. Ensure your PostgreSQL server is running
-  #### Unix
-  * `/usr/sbin/service postgresql status`
-
-  #### Windows
-  * Using the [pgAdmin](https://www.pgadmin.org/download/) application, you can verify if your server is running
-
-4. Start the application server
+## Running the app
+1. Start the application server
   `npm run start:dev`
   By default, the server starts listening on port 9999.
   You can change this by setting the server to listen on another port
   ```PORT=<port-number> npm run dev:start```
-
-
-#### To get the list of all meetups, you can do the following:
-1. Launch Postman
-2. Add the endpoint to the request box: localhost:9999/api/v1/meetups/
-3. Set the request method to 'GET' and send the request
+2. The above step will automatically carry out migration on your database
 
 ## Running the tests
 1. Setup the following test environment variables:
