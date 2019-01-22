@@ -10,13 +10,14 @@ Questioner is a question crowdsourcing tool that provides support for meetup org
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 1. Copy the git repo url
-  * SSH: [git@github.com:emrys8/questioner-api.git](git@github.com:emrys8/questioner-api.git)
-  * HTTPS:[https://github.com/emrys8/questioner-api.git](https://github.com/emrys8/questioner-api.git)
+    * SSH:[git@github.com:emrys8/questioner-api.git](git@github.com:emrys8/questioner-api.git)
+    * HTTPS:[https://github.com/emrys8/questioner-api.git](https://github.com/emrys8/questioner-api.git)
 2. Clone repo: `git clone <git-url>` to have a copy of the project on your local machine
-2. Install project dependencies: `npm install` or `yarn install` if using yarn
-3. Add a .env file and add the environment variables specified in .env-sample file
-4. Start the server: `npm run dev:start`
-5. Launch Postman and test the endpoints specified in the docs
+3. Install project dependencies: `npm install` or `yarn install` if using yarn
+4. Create a local database: take note of your user database name, password and username
+5. Add a .env file and add the environment variables specified in .env-sample file
+6. Start the server: `npm run dev:start`
+7. Launch Postman and test the endpoints specified in the docs
 
 ### Prerequisites
 
@@ -47,9 +48,9 @@ Now **Questioner** has been successfully installed.
 
 ## Running the tests
 1. Setup the following test environment variables:
-  * DB_USER=db_test_user
-  * DB_PASSWORD=db_test_password
-  * DB_TEST=db_test_name
+    * DB_USER=db_test_user
+    * DB_PASSWORD=db_test_password
+    * DB_TEST=db_test_name
 
 2. Run `npm test`
 
