@@ -39,7 +39,7 @@ You need the following to use the **Questioner** API:
 
 ```npm install```
 
-2. Add project-specific environment variables:
+2. Add Add a .env file to the project and add these project-specific environment variables to the file:
   * development:
     * DB_USER
     * DB_PASSWORD
@@ -49,22 +49,6 @@ You need the following to use the **Questioner** API:
     * DB_USER
     * DB_PASSWORD
     * DB_TEST
-
-  #### Ways to set your environment variables 
-
-  ##### Approach 1 (from the command line)
-
-  ###### Unix (Mac or Linux variants)
-  * `export DB_USER=myuser`
-
-  ###### Windows
-  * Please refer [here](https://www.computerhope.com/issues/ch000549.htm) to enable you set environment variables for your windows environment
-
-  ##### Approach 2
-  * Create a .env file in the project root
-    `touch .env`
-  * Add all the variables. For example:
-    DB_USER=my_db_user
 
 3. Ensure your PostgreSQL server is running
   #### Unix
