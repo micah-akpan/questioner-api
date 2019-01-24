@@ -39,7 +39,7 @@ export default {
         text: `INSERT INTO "User" (email,password,firstname,lastname)
                          VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
                          email, othername, phonenumber as "phoneNumber", registered,
-                         isadmin as "isAdmin", bio`,
+                         isadmin as "isAdmin", birthday, bio`,
         values: [email, hashedPassword, firstname, lastname]
       });
       const userRecord = replaceNullValue(newTableResult.rows[0], '');
@@ -79,7 +79,8 @@ export default {
       const userResult = await db.queryDb({
         text: `SELECT id, firstname, lastname, 
             email, othername, phonenumber as "phoneNumber",
-            registered, isadmin as "isAdmin", bio FROM "User" WHERE email=$1`,
+            registered, isadmin as "isAdmin", birthday bio FROM "User" 
+            WHERE email=$1`,
         values: [email]
       });
 
@@ -119,7 +120,7 @@ export default {
       return res.status(401)
         .send({
           status: 401,
-          error: 'Your email is incorrect'
+          error: 'A user with this email does not exist'
         });
     } catch (e) {
       return res.status(500)
