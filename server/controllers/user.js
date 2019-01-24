@@ -131,6 +131,10 @@ export default {
     }
   },
 
+  async getUser(req, res) {
+    return res.status(404).send('Not implemented');
+  },
+
   async getAllUsers(req, res) {
     return res.status(404).send('Not implemented');
   },

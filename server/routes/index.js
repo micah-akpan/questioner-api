@@ -3,6 +3,7 @@ import meetupRouter from './meetup';
 import questionRouter from './question';
 import rsvpRouter from './rsvp';
 import userRouter from './user';
+import userAdminRouter from './admin-users';
 import Auth from '../middlewares/auth';
 import Misc from '../middlewares/misc';
 
@@ -19,5 +20,6 @@ router.use('/api/v1', trimBody, userRouter);
 router.use('/api/v1', trimBody, checkToken, meetupRouter);
 router.use('/api/v1', trimBody, checkToken, rsvpRouter);
 router.use('/api/v1', trimBody, checkToken, questionRouter);
+router.use('/api/v1', trimBody, checkToken, userAdminRouter);
 
 export default router;

@@ -1,10 +1,8 @@
 import { Router } from 'express';
 import userController from '../controllers/user';
-import userSchemaValidator from '../middlewares/schema/schemaValidator';
-import Auth from '../middlewares/auth';
+import userDataValidator from '../middlewares/schema/schemaValidator';
 
-const validateRequest = userSchemaValidator();
-const { isAdmin } = Auth;
+const validateRequest = userDataValidator();
 
 const router = Router();
 
@@ -15,9 +13,5 @@ router.post('/auth/signup',
 router.post('/auth/login',
   validateRequest,
   userController.loginUser);
-
-router.route('/users/')
-  .get(isAdmin, validateRequest, userController.getAllUsers)
-  .post(userController.updateUserProfile);
 
 export default router;
