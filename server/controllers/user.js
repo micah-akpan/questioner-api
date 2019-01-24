@@ -37,26 +37,37 @@ export default {
 
       const newTableResult = await db.queryDb({
         text: `INSERT INTO "User" (email,password,firstname,lastname)
-                         VALUES ($1, $2, $3, $4) RETURNING *`,
+                         VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
+                         email, password, othername, phonenumber as "phoneNumber", registered,
+                         isadmin as "isAdmin", bio`,
         values: [email, hashedPassword, firstname, lastname]
       });
       const userRecord = newTableResult.rows[0];
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
-          admin: userRecord.isadmin,
+          admin: userRecord.isAdmin,
           userId: userRecord.id
         }
       });
+
+      for (const i in userRecord) {
+        if (Object.prototype.hasOwnProperty.call(userRecord, i)) {
+          if (userRecord[i] === null) {
+            userRecord[i] = '';
+          }
+        }
+      }
 
       return res.status(201).send({
         status: 201,
         data: [{
           token: userAuthToken,
-          user: omitProps(newTableResult.rows[0], ['password'])
+          user: omitProps(userRecord, ['password'])
         }]
       });
     } catch (e) {
+      console.log(e);
       return res.status(500)
         .send({
           status: 500,

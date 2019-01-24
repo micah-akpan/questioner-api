@@ -10,7 +10,8 @@ import {
   arrayHasValues,
   objectHasProps,
   parseStr,
-  uniq
+  uniq,
+  replaceNullValue
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -179,9 +180,23 @@ describe.only('Utils', () => {
     });
   });
 
-  describe('uniq', () => {
+  describe('uniq()', () => {
     it('should return only unique values in an array', () => {
       uniq(['a', 'b', 'b', 'a']).should.deep.equal(['a', 'b']);
+    });
+  });
+
+  describe('replaceNullValue()', () => {
+    it('should replace null object prop values with a replacer value', () => {
+      replaceNullValue({ a: 1, b: null }, '').should.deep.equal({
+        a: 1, b: ''
+      });
+    });
+
+    it('should replace null object prop values with a replacer value', () => {
+      replaceNullValue({ a: 1, b: null }, 0).should.deep.equal({
+        a: 1, b: 0
+      });
     });
   });
 });
