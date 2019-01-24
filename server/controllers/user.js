@@ -149,14 +149,29 @@ export default {
 
       const { userId } = req.decodedToken || req.body;
 
-      const userResult = await db.queryDb({
+      // enforcing unique usernames
+      // at the controller level
+      const userByUsernameResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE username=$1 AND id <> $2',
+        values: [username, userId]
+      });
+
+      if (userByUsernameResult.rows.length > 0) {
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'The username you provided is already used by another user'
+          });
+      }
+
+      const userByIdResult = await db.queryDb({
         text: 'SELECT * FROM "User" WHERE id=$1',
         values: [userId]
       });
 
-      if (userResult.rows.length === 1) {
+      if (userByIdResult.rows.length === 1) {
         const encryptedPassword = await bcrypt.hash(password, 10);
-        const user = userResult.rows[0];
+        const user = userByIdResult.rows[0];
 
         const userData = {
           firstname: firstname || user.firstname,
