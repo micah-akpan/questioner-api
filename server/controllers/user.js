@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { omitProps, arrayHasValues } from '../utils';
+import { arrayHasValues, replaceNullValue } from '../utils';
 import userHelpers from './helpers/user';
 
 const userHelper = userHelpers(db, jwt);
@@ -38,11 +38,11 @@ export default {
       const newTableResult = await db.queryDb({
         text: `INSERT INTO "User" (email,password,firstname,lastname)
                          VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
-                         email, password, othername, phonenumber as "phoneNumber", registered,
+                         email, othername, phonenumber as "phoneNumber", registered,
                          isadmin as "isAdmin", bio`,
         values: [email, hashedPassword, firstname, lastname]
       });
-      const userRecord = newTableResult.rows[0];
+      const userRecord = replaceNullValue(newTableResult.rows[0], '');
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
@@ -50,24 +50,14 @@ export default {
           userId: userRecord.id
         }
       });
-
-      for (const i in userRecord) {
-        if (Object.prototype.hasOwnProperty.call(userRecord, i)) {
-          if (userRecord[i] === null) {
-            userRecord[i] = '';
-          }
-        }
-      }
-
       return res.status(201).send({
         status: 201,
         data: [{
           token: userAuthToken,
-          user: omitProps(userRecord, ['password'])
+          user: userRecord
         }]
       });
     } catch (e) {
-      console.log(e);
       return res.status(500)
         .send({
           status: 500,
@@ -87,7 +77,9 @@ export default {
       const { email, password } = req.body;
 
       const userResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE email=$1',
+        text: `SELECT id, firstname, lastname, 
+            email, othername, phonenumber as "phoneNumber",
+            registered, isadmin as "isAdmin", bio FROM "User" WHERE email=$1`,
         values: [email]
       });
 
@@ -98,11 +90,11 @@ export default {
 
         const match = await bcrypt.compare(password, encryptedpassword);
 
-        const userRecord = userResult.rows[0];
+        const userRecord = replaceNullValue(userResult.rows[0], '');
 
         const userAuthToken = userHelper.obtainToken({
           payload: {
-            admin: userRecord.isadmin,
+            admin: userRecord.isAdmin,
             userId: userRecord.id
           }
         });
@@ -113,7 +105,7 @@ export default {
               status: 201,
               data: [{
                 token: userAuthToken,
-                user: omitProps(userResult.rows[0], ['password'])
+                user: userRecord
               }]
             });
         }
