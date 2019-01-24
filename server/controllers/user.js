@@ -120,13 +120,13 @@ export default {
       return res.status(401)
         .send({
           status: 401,
-          error: 'A user with this email does not exist'
+          error: 'The email you entered does not belong to any account.'
         });
     } catch (e) {
       return res.status(500)
         .send({
           status: 500,
-          error: 'Invalid request, please check your email and try again'
+          error: 'Invalid request, please check and try again'
         });
     }
   }
