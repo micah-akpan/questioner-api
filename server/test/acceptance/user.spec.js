@@ -139,7 +139,14 @@ describe.only('User API', () => {
           email: 'usera@email.com',
           password: 'user1234'
         })
-        .expect(200, done);
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data[0].firstname.should.equal('userA');
+          done();
+        });
     });
   });
   after('Teardown', async () => {

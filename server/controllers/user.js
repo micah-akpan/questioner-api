@@ -155,6 +155,7 @@ export default {
       });
 
       if (userResult.rows.length === 1) {
+        const user = userResult.rows[0];
         const encryptedPassword = await bcrypt.hash(password, 10);
         const updateUserResult = await db.queryDb({
           text: `UPDATE "User"
@@ -164,8 +165,11 @@ export default {
                  WHERE id=$10 RETURNING id, firstname, lastname,
                  email, phoneNumber as "phoneNumber", othername,
                  username, isadmin as "isAdmin", birthday, bio`,
-          values: [firstname, lastname, email, encryptedPassword, username,
-            birthday, othername, phoneNumber, bio, userId]
+          values: [firstname || user.firstname, lastname
+            || user.firstname, email || user.email,
+          encryptedPassword || user.password, username || user.username,
+          birthday || user.birthday, othername || user.othername,
+          phoneNumber || user.phonenumber, bio || user.bio, userId]
         });
 
         const userRecord = replaceNullValue(updateUserResult.rows[0], '');
