@@ -140,6 +140,53 @@ export default {
   },
 
   async updateUserProfile(req, res) {
-    return res.status(404).send('Not implemented');
+    try {
+      const {
+        firstname, lastname, email,
+        password, username, birthday, othername,
+        phoneNumber, bio
+      } = req.body;
+
+      const { userId } = req.decodedToken || req.body;
+
+      const userResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE id=$1',
+        values: [userId]
+      });
+
+      if (userResult.rows.length === 1) {
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        const updateUserResult = await db.queryDb({
+          text: `UPDATE "User"
+                 SET firstname=$1,lastname=$2, email=$3,
+                     password=$4, username=$5, birthday=$6,
+                     othername=$7, phoneNumber=$8, bio=$9
+                 WHERE id=$10 RETURNING id, firstname, lastname,
+                 email, phoneNumber as "phoneNumber", othername,
+                 username, isadmin as "isAdmin", birthday, bio`,
+          values: [firstname, lastname, email, encryptedPassword, username,
+            birthday, othername, phoneNumber, bio, userId]
+        });
+
+        const userRecord = replaceNullValue(updateUserResult.rows[0], '');
+
+        return res.status(200).send({
+          status: 200,
+          data: [userRecord]
+        });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'This user does not have an account'
+        });
+    } catch (e) {
+      return res.status(500)
+        .send({
+          status: 500,
+          error: 'Invalid request, please try again'
+        });
+    }
   }
 };

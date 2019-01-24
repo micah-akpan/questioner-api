@@ -27,7 +27,7 @@ export default {
           lastname: Joi.string(),
           username: Joi.string(),
           othername: Joi.string(),
-          phonenumber: Joi.number().integer().max(15),
+          phoneNumber: Joi.number().integer().max(15),
           bio: Joi.string(),
           birthday: Joi.date()
         });

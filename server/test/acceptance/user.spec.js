@@ -129,10 +129,16 @@ describe.only('User API', () => {
       });
     });
 
-    it('should update user1 profile', (done) => {
+    it('should update user\'s profile', (done) => {
       request(app)
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
+        .send({
+          firstname: 'userA',
+          lastname: 'userA',
+          email: 'usera@email.com',
+          password: 'user1234'
+        })
         .expect(200, done);
     });
   });
