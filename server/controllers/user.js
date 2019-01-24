@@ -79,7 +79,7 @@ export default {
       const userResult = await db.queryDb({
         text: `SELECT id, firstname, lastname, 
             email, othername, phonenumber as "phoneNumber",
-            registered, isadmin as "isAdmin", birthday bio FROM "User" 
+            registered, isadmin as "isAdmin", birthday, bio FROM "User" 
             WHERE email=$1`,
         values: [email]
       });
