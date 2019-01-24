@@ -5,6 +5,7 @@
 
 import { Router } from 'express';
 import Auth from '../middlewares/auth';
+import Upload from '../middlewares/uploads';
 import userController from '../controllers/user';
 import userDataValidator from '../middlewares/schema/schemaValidator';
 
@@ -20,6 +21,10 @@ router.get('/users/',
 
 router.route('/users/:userId')
   .get(isAdmin, validateRequest, userController.getUser)
-  .patch(validateRequest, userController.updateUserProfile);
+  .patch(
+    validateRequest,
+    Upload.single('user-avatar'),
+    userController.updateUserProfile
+  );
 
 export default router;
