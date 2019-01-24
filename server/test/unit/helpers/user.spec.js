@@ -18,7 +18,7 @@ describe.only('User Helpers', () => {
   describe('Helper', () => {
     it('should return an object with methods', () => {
       userHelper.should.be.an('object');
-      Object.keys(userHelper).length.should.equal(4);
+      Object.keys(userHelper).length.should.equal(3);
     });
   });
 
