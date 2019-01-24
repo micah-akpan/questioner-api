@@ -11,7 +11,7 @@ export default {
       });
     }
     return Joi.object().keys({
-      email: Joi.string().strict().required(),
+      email: Joi.string().email().strict().required(),
       password: Joi.string().min(8).required()
     });
   }
