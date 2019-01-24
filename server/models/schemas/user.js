@@ -12,6 +12,7 @@ export default {
       registered DATE DEFAULT NOW(),
       isAdmin boolean DEFAULT FALSE,
       bio text,
+      avatar text,
       UNIQUE(email, username)
     )`
 };
