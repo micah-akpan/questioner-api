@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
+import cors from 'cors';
 import { config } from 'dotenv';
 import wLogger from './helpers';
 import indexRouter from './routes';
@@ -35,6 +36,10 @@ if (env === 'development' || env === 'production') {
 if (env === 'development') {
   app.use(logger('dev'));
 }
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 app.use(helmet());
 
