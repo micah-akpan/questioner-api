@@ -406,7 +406,7 @@ export default {
         }
 
         const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
-        const images = `{${image1.url}, ${image2.url}, ${image3.url}, ${image4.url}}`;
+        const images = `{${image1.secure_url}, ${image2.secure_url}, ${image3.secure_url}, ${image4.secure_url}}`;
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
