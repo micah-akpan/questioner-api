@@ -18,7 +18,7 @@ router.get('/users/',
   userController.getAllUsers);
 
 
-router.route('/users/:userId/')
+router.route('/users/:userId')
   .get(isAdmin, validateRequest, userController.getUser)
   .patch(validateRequest, userController.updateUserProfile);
 

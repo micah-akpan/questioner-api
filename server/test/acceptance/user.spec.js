@@ -3,6 +3,7 @@ import request from 'supertest';
 import bcrypt from 'bcrypt';
 import { app } from '../../app';
 import db from '../../db';
+import { createTestToken } from '../../utils';
 
 describe.only('User API', () => {
   const testUser = {
@@ -11,6 +12,8 @@ describe.only('User API', () => {
     firstname: 'Test',
     lastname: 'User'
   };
+
+  const testToken = createTestToken({});
 
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Comment', });
@@ -110,9 +113,27 @@ describe.only('User API', () => {
           done();
         });
     });
+  });
 
-    afterEach(async () => {
+  describe('PATCH /users/:userId', () => {
+    before(async () => {
+      await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
+    });
 
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['user1', 'user1', 'user1@email.com', 'user1234']
+      });
+    });
+
+    it('should update user1 profile', (done) => {
+      request(app)
+        .patch('/api/v1/users/1')
+        .set('Authorization', `Bearer ${testToken}`)
+        .expect(200, done);
     });
   });
   after('Teardown', async () => {
