@@ -129,5 +129,13 @@ export default {
           error: 'Invalid request, please check and try again'
         });
     }
+  },
+
+  async getAllUsers(req, res) {
+    return res.status(404).send('Not implemented');
+  },
+
+  async updateUserProfile(req, res) {
+    return res.status(404).send('Not implemented');
   }
 };
