@@ -116,7 +116,7 @@ describe.only('User API', () => {
     });
   });
 
-  describe.skip('PATCH /users/:userId', () => {
+  describe('PATCH /users/:userId', () => {
     before(async () => {
       await db.dropTable({ tableName: '"User"' });
       await db.createTable('User');
@@ -131,17 +131,17 @@ describe.only('User API', () => {
     });
 
     it('should update user\'s profile', (done) => {
-      /* eslint-disable */
       const imageBuffer = Buffer.from(`${process.cwd()}/server/assets/yoyo.jpeg`);
       request(app)
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
-        .send({
-          firstname: 'userA',
-          lastname: 'userA',
-          email: 'usera@email.com',
-          password: 'user1234',
-        })
+        // .send({
+        //   firstname: 'userA',
+        //   lastname: 'userA',
+        //   email: 'usera@email.com',
+        //   password: 'user1234',
+        // })
+        .attach('user-avatar', imageBuffer)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
