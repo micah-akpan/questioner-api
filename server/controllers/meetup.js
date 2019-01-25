@@ -327,20 +327,6 @@ export default {
           .concat(tags)
           .filter(tag => tag !== null);
 
-        /* eslint-disable */
-        // This parses the str and transforms it into a
-        // a compatible postgres array insertion string
-        let allTags = '{';
-        newTags.forEach((tag, i) => {
-          if (i === newTags.length - 1) {
-            allTags += tag;
-            allTags += '}';
-          } else {
-            allTags += tag;
-            allTags += ', ';
-          }
-        })
-
         const uniqueTags = uniq(newTags);
 
         const result = await db.queryDb({

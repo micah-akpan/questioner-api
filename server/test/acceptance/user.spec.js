@@ -116,7 +116,7 @@ describe.only('User API', () => {
     });
   });
 
-  describe('PATCH /users/:userId', () => {
+  describe.skip('PATCH /users/:userId', () => {
     before(async () => {
       await db.dropTable({ tableName: '"User"' });
       await db.createTable('User');
@@ -135,12 +135,6 @@ describe.only('User API', () => {
       request(app)
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
-        // .send({
-        //   firstname: 'userA',
-        //   lastname: 'userA',
-        //   email: 'usera@email.com',
-        //   password: 'user1234',
-        // })
         .attach('user-avatar', imageBuffer)
         .expect(200)
         .end((err, res) => {
