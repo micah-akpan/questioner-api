@@ -135,6 +135,12 @@ describe.only('User API', () => {
       request(app)
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
+        .field({
+          firstname: 'userA',
+          lastname: 'userA',
+          email: 'userA@email.com',
+          password: 'user1234'
+        })
         .attach('user-avatar', imageBuffer)
         .expect(200)
         .end((err, res) => {
