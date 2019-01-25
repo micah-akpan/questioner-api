@@ -6,6 +6,7 @@ import db from '../../db';
 import { createTestToken } from '../../utils';
 
 describe.only('User API', () => {
+  const agent = request(app);
   const testUser = {
     email: 'testuser@gmail.com',
     password: 'testuser1234',
@@ -27,7 +28,7 @@ describe.only('User API', () => {
   describe('POST /auth/signup', () => {
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
-        request(app)
+        agent
           .post('/api/v1/auth/signup')
           .send(testUser)
           .expect(201)
@@ -55,7 +56,7 @@ describe.only('User API', () => {
       });
 
       it('should return an error if user already exist', (done) => {
-        request(app)
+        agent
           .post('/api/v1/auth/signup')
           .send({
             email: 'user1@email.com',
@@ -89,7 +90,7 @@ describe.only('User API', () => {
       await db.queryDb(query);
     });
     it('should login a user', (done) => {
-      request(app)
+      agent
         .post('/api/v1/auth/login')
         .send({
           email: 'testuser@gmail.com',
@@ -99,7 +100,7 @@ describe.only('User API', () => {
     });
 
     it('should not login an unregistered user', (done) => {
-      request(app)
+      agent
         .post('/api/v1/auth/login')
         .send({
           email: 'nonuser1@gmail.com',
@@ -115,7 +116,7 @@ describe.only('User API', () => {
     });
   });
 
-  describe('PATCH /users/:userId', () => {
+  describe.skip('PATCH /users/:userId', () => {
     before(async () => {
       await db.dropTable({ tableName: '"User"' });
       await db.createTable('User');
@@ -130,6 +131,8 @@ describe.only('User API', () => {
     });
 
     it('should update user\'s profile', (done) => {
+      /* eslint-disable */
+      const imageBuffer = Buffer.from(`${process.cwd()}/server/assets/yoyo.jpeg`);
       request(app)
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
@@ -137,7 +140,7 @@ describe.only('User API', () => {
           firstname: 'userA',
           lastname: 'userA',
           email: 'usera@email.com',
-          password: 'user1234'
+          password: 'user1234',
         })
         .expect(200)
         .end((err, res) => {

@@ -452,7 +452,7 @@ describe.only('Meetups API', () => {
     });
 
     after(() => {
-      // TODO: Delete all created images in the 'assets' directory
+
     });
   });
 
