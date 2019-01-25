@@ -33,11 +33,6 @@ router.get('/meetups/:meetupId/questions',
   checkParams,
   questionController.getQuestions);
 
-// router.get('/meetups/:meetupId/rsvps',
-//   checkParams,
-//   isAdmin,
-//   rsvpController.getRsvps);
-
 router.post('/meetups/:meetupId/tags',
   checkParams,
   validateRequest,

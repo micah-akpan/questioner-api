@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { omitProps, arrayHasValues } from '../utils';
+import { arrayHasValues, replaceNullValue } from '../utils';
 import userHelpers from './helpers/user';
 
 const userHelper = userHelpers(db, jwt);
@@ -37,23 +37,24 @@ export default {
 
       const newTableResult = await db.queryDb({
         text: `INSERT INTO "User" (email,password,firstname,lastname)
-                         VALUES ($1, $2, $3, $4) RETURNING *`,
+                         VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
+                         email, othername, phonenumber as "phoneNumber", registered,
+                         isadmin as "isAdmin", birthday, bio`,
         values: [email, hashedPassword, firstname, lastname]
       });
-      const userRecord = newTableResult.rows[0];
+      const userRecord = replaceNullValue(newTableResult.rows[0], '');
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
-          admin: userRecord.isadmin,
+          admin: userRecord.isAdmin,
           userId: userRecord.id
         }
       });
-
       return res.status(201).send({
         status: 201,
         data: [{
           token: userAuthToken,
-          user: omitProps(newTableResult.rows[0], ['password'])
+          user: userRecord
         }]
       });
     } catch (e) {
@@ -76,7 +77,10 @@ export default {
       const { email, password } = req.body;
 
       const userResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE email=$1',
+        text: `SELECT id, firstname, lastname, 
+            email, othername, phonenumber as "phoneNumber",
+            registered, isadmin as "isAdmin", birthday, bio FROM "User" 
+            WHERE email=$1`,
         values: [email]
       });
 
@@ -87,11 +91,11 @@ export default {
 
         const match = await bcrypt.compare(password, encryptedpassword);
 
-        const userRecord = userResult.rows[0];
+        const userRecord = replaceNullValue(userResult.rows[0], '');
 
         const userAuthToken = userHelper.obtainToken({
           payload: {
-            admin: userRecord.isadmin,
+            admin: userRecord.isAdmin,
             userId: userRecord.id
           }
         });
@@ -102,7 +106,7 @@ export default {
               status: 201,
               data: [{
                 token: userAuthToken,
-                user: omitProps(userResult.rows[0], ['password'])
+                user: userRecord
               }]
             });
         }
@@ -116,13 +120,105 @@ export default {
       return res.status(401)
         .send({
           status: 401,
-          error: 'Your email is incorrect'
+          error: 'The email you entered does not belong to any account.'
         });
     } catch (e) {
       return res.status(500)
         .send({
           status: 500,
-          error: 'Invalid request, please check your email and try again'
+          error: 'Invalid request, please check and try again'
+        });
+    }
+  },
+
+  async getUser(req, res) {
+    return res.status(404).send('Not implemented');
+  },
+
+  async getAllUsers(req, res) {
+    return res.status(404).send('Not implemented');
+  },
+
+  async updateUserProfile(req, res) {
+    try {
+      const {
+        firstname, lastname, email,
+        password, username, birthday, othername,
+        phoneNumber, bio
+      } = req.body;
+
+      const { userId } = req.decodedToken || req.body;
+
+      // enforcing unique usernames
+      // at the controller level
+      const userByUsernameResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE username=$1 AND id <> $2',
+        values: [username, userId]
+      });
+
+      if (userByUsernameResult.rows.length > 0) {
+        return res.status(409)
+          .send({
+            status: 409,
+            error: 'The username you provided is already used by another user'
+          });
+      }
+
+      const userByIdResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE id=$1',
+        values: [userId]
+      });
+
+      if (userByIdResult.rows.length === 1) {
+        const user = userByIdResult.rows[0];
+
+        const encryptedPassword = password && await bcrypt.hash(password, 10);
+
+        const userData = {
+          firstname: firstname || user.firstname,
+          lastname: lastname || user.lastname,
+          email: email || user.email,
+          password: encryptedPassword || user.password,
+          username: username || user.username,
+          othername: othername || user.othername,
+          birthday: birthday || user.birthday,
+          phoneNumber: phoneNumber || user.phonenumber,
+          bio: bio || user.bio,
+          avatar: req.file.secure_url || user.avatar
+        };
+
+        const updateUserResult = await db.queryDb({
+          text: `UPDATE "User"
+                 SET firstname=$1,lastname=$2, email=$3,
+                     password=$4, username=$5, birthday=$6,
+                     othername=$7, phoneNumber=$8, bio=$9, avatar=$10
+                 WHERE id=$11 RETURNING id, firstname, lastname,
+                 email, phoneNumber as "phoneNumber", othername,
+                 username, isadmin as "isAdmin", birthday, bio, avatar`,
+          values: [userData.firstname, userData.lastname, userData.email,
+            userData.password, userData.username, userData.birthday,
+            userData.othername, userData.phoneNumber, userData.bio,
+            userData.avatar, userId]
+        });
+
+        const userRecord = replaceNullValue(updateUserResult.rows[0], '');
+
+        return res.status(200).send({
+          status: 200,
+          data: [userRecord]
+        });
+      }
+
+      return res.status(404)
+        .send({
+          status: 404,
+          error: 'This user does not have an account'
+        });
+    } catch (e) {
+      return res.status(500)
+        .send({
+          status: 500,
+          error: 'Invalid request, please try again'
         });
     }
   }

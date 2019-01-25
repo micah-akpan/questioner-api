@@ -1,13 +1,17 @@
 import { Router } from 'express';
 import userController from '../controllers/user';
-import userSchemaValidator from '../middlewares/schema/schemaValidator';
+import userDataValidator from '../middlewares/schema/schemaValidator';
 
-const validateRequest = userSchemaValidator();
+const validateRequest = userDataValidator();
 
 const router = Router();
 
-router.post('/auth/signup', validateRequest, userController.signUpUser);
+router.post('/auth/signup',
+  validateRequest,
+  userController.signUpUser);
 
-router.post('/auth/login', validateRequest, userController.loginUser);
+router.post('/auth/login',
+  validateRequest,
+  userController.loginUser);
 
 export default router;

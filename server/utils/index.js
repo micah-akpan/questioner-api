@@ -127,6 +127,25 @@ export const uniq = (a) => {
   return a.filter((item) => seen.hasOwnProperty(item) ? false : (seen[item] = true));
 }
 
+/**
+ * @func replaceNullValue
+ * @param {*} obj
+ * @param {*} replacer
+ * @returns {*} Returns a no-null prop value object
+ */
+export const replaceNullValue = (obj, replacer) => {
+  const newObject = Object.assign({}, obj);
+  for (const prop in newObject) {
+    if (Object.prototype.hasOwnProperty.call(newObject, prop)) {
+      if (newObject[prop] === null) {
+        newObject[prop] = replacer;
+      }
+    }
+  }
+
+  return newObject;
+} 
+
 export default {
   omitProps,
   getFutureDate,

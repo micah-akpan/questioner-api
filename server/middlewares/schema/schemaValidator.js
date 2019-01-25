@@ -15,7 +15,7 @@ export default (useJoiError = false) => {
     const { path } = req.route;
     const method = req.method.toLowerCase();
 
-    const _supportedMethods = ['post', 'patch'];
+    const _supportedMethods = ['post', 'patch', 'put'];
 
     if (_supportedMethods.includes(method) && hasProp(Schemas, path)) {
       const _schema = getProp(Schemas, path);

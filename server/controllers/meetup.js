@@ -327,20 +327,6 @@ export default {
           .concat(tags)
           .filter(tag => tag !== null);
 
-        /* eslint-disable */
-        // This parses the str and transforms it into a
-        // a compatible postgres array insertion string
-        let allTags = '{';
-        newTags.forEach((tag, i) => {
-          if (i === newTags.length - 1) {
-            allTags += tag;
-            allTags += '}';
-          } else {
-            allTags += tag;
-            allTags += ', ';
-          }
-        })
-
         const uniqueTags = uniq(newTags);
 
         const result = await db.queryDb({
@@ -406,7 +392,7 @@ export default {
         }
 
         const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
-        const images = `{${image1.url}, ${image2.url}, ${image3.url}, ${image4.url}}`;
+        const images = `{${image1.secure_url}, ${image2.secure_url}, ${image3.secure_url}, ${image4.secure_url}}`;
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1

@@ -3,14 +3,18 @@ import request from 'supertest';
 import bcrypt from 'bcrypt';
 import { app } from '../../app';
 import db from '../../db';
+import { createTestToken } from '../../utils';
 
 describe.only('User API', () => {
+  const agent = request(app);
   const testUser = {
     email: 'testuser@gmail.com',
     password: 'testuser1234',
     firstname: 'Test',
     lastname: 'User'
   };
+
+  const testToken = createTestToken({});
 
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Comment', });
@@ -24,7 +28,7 @@ describe.only('User API', () => {
   describe('POST /auth/signup', () => {
     describe('handle valid/complete data', () => {
       it('should create a new user', (done) => {
-        request(app)
+        agent
           .post('/api/v1/auth/signup')
           .send(testUser)
           .expect(201)
@@ -52,7 +56,7 @@ describe.only('User API', () => {
       });
 
       it('should return an error if user already exist', (done) => {
-        request(app)
+        agent
           .post('/api/v1/auth/signup')
           .send({
             email: 'user1@email.com',
@@ -86,7 +90,7 @@ describe.only('User API', () => {
       await db.queryDb(query);
     });
     it('should login a user', (done) => {
-      request(app)
+      agent
         .post('/api/v1/auth/login')
         .send({
           email: 'testuser@gmail.com',
@@ -96,7 +100,7 @@ describe.only('User API', () => {
     });
 
     it('should not login an unregistered user', (done) => {
-      request(app)
+      agent
         .post('/api/v1/auth/login')
         .send({
           email: 'nonuser1@gmail.com',
@@ -110,9 +114,42 @@ describe.only('User API', () => {
           done();
         });
     });
+  });
 
-    afterEach(async () => {
+  describe.skip('PATCH /users/:userId', () => {
+    before(async () => {
+      await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
+    });
 
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['user1', 'user1', 'user1@email.com', 'user1234']
+      });
+    });
+
+    it('should update user\'s profile', (done) => {
+      const imageBuffer = Buffer.from(`${process.cwd()}/server/assets/yoyo.jpeg`);
+      request(app)
+        .patch('/api/v1/users/1')
+        .set('Authorization', `Bearer ${testToken}`)
+        .field({
+          firstname: 'userA',
+          lastname: 'userA',
+          email: 'userA@email.com',
+          password: 'user1234'
+        })
+        .attach('user-avatar', imageBuffer)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data[0].firstname.should.equal('userA');
+          done();
+        });
     });
   });
   after('Teardown', async () => {
