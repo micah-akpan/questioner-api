@@ -11,7 +11,9 @@ import {
   objectHasProps,
   parseStr,
   uniq,
-  replaceNullValue
+  replaceNullValue,
+  wordToPosition,
+  toCamelCase
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -197,6 +199,38 @@ describe.only('Utils', () => {
       replaceNullValue({ a: 1, b: null }, 0).should.deep.equal({
         a: 1, b: 0
       });
+    });
+  });
+
+  describe('wordToPosition()', () => {
+    it('should return a hash of words to position', () => {
+      wordToPosition(['hello', 'bob'], 'hellobob').should.deep.equal({
+        hello: 0,
+        bob: 5
+      });
+    });
+
+    it('should return a hash of words to position', () => {
+      wordToPosition(['lorem', 'ipsum'], 'ipsum').should.deep.equal({
+        ipsum: 0
+      });
+    });
+  });
+
+  describe('CaseChange', () => {
+    it('should return a camelcased version of a word', () => {
+      const words = ['hello', 'world', 'created', 'at'];
+      toCamelCase(words, 'helloworld').should.equal('helloWorld');
+    });
+
+    it('should return a camelcased version of a word', () => {
+      const words = ['happening', 'on', 'created', 'at'];
+      toCamelCase(words, 'happeningon').should.equal('happeningOn');
+    });
+
+    it('should return a camelcased version of a word', () => {
+      const words = ['happening', 'on', 'created', 'at'];
+      toCamelCase(words, 'createdat').should.equal('createdAt');
     });
   });
 });

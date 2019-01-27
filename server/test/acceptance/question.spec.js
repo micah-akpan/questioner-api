@@ -32,7 +32,7 @@ describe.only('Questions API', () => {
         values: ['topic 1', 'location 1', getFutureDate()]
       });
     });
-    describe.skip('handle valid data', () => {
+    describe('handle valid data', () => {
       it('should create a question', (done) => {
         request(app)
           .post('/api/v1/questions')
@@ -41,9 +41,9 @@ describe.only('Questions API', () => {
             title: 'question 1',
             body: 'question body',
             meetupId: '1',
-            userId: 1
+            userId: '1'
           })
-          .expect(404)
+          .expect(201)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(201);
@@ -315,16 +315,16 @@ describe.only('Questions API', () => {
       });
     });
 
-    describe.skip('handle valid data', () => {
+    describe('handle valid data', () => {
       it('should add a comment to a question', (done) => {
         agent
           .post('/api/v1/comments')
           .set('Authorization', `Bearer ${userTestToken}`)
           .send({
-            questionId: 1,
+            questionId: '1',
             comment: 'a comment'
           })
-          .expect(400)
+          .expect(201)
           .end((err, res) => {
             if (err) return done(err);
             res.body.status.should.equal(201);
@@ -340,7 +340,7 @@ describe.only('Questions API', () => {
           .post('/api/v1/comments')
           .set('Authorization', `Bearer ${userTestToken}`)
           .send({
-            questionId: 1,
+            questionId: '1',
             comment: 'a new comment'
           })
           .expect(201)
@@ -356,12 +356,12 @@ describe.only('Questions API', () => {
     });
 
     describe('handle invalid data', () => {
-      it.skip('should not add a comment to a non-existing question', (done) => {
+      it('should not add a comment to a non-existing question', (done) => {
         agent
           .post('/api/v1/comments')
           .set('Authorization', `Bearer ${userTestToken}`)
           .send({
-            questionId: 9999999,
+            questionId: '9999999',
             comment: 'a new comment'
           })
           .expect(404)
