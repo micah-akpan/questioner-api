@@ -143,10 +143,10 @@ describe.only('User API', () => {
           password: 'user1234'
         })
         .attach('user-avatar', imageBuffer)
-        .expect(500)
+        .expect(200)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(500);
+          res.body.status.should.equal(200);
           res.body.data.should.be.an('array');
           res.body.data[0].firstname.should.equal('userA');
           done();
@@ -161,10 +161,10 @@ describe.only('User API', () => {
   describe('GET /users', () => {
     before(async () => {
       await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
     });
 
     beforeEach(async () => {
-      await db.createTable('User');
       await db.queryDb({
         text: `INSERT INTO "User" (firstname, lastname, email, password)
                VALUES ('user1', 'user1', 'user1@email.com', 'user1234')`
@@ -173,6 +173,26 @@ describe.only('User API', () => {
     it('should return all non-admin registered users', (done) => {
       agent
         .get('/api/v1/users')
+        .set({ Authorization: `Bearer ${adminTestToken}` })
+        .expect(200, done);
+    });
+  });
+
+  describe('GET /users/<user-id>', () => {
+    before(async () => {
+      await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ('user1', 'user1', 'user1@email.com', 'user1234')`
+      });
+    });
+    it('should return all non-admin registered users', (done) => {
+      agent
+        .get('/api/v1/users/1')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .expect(200, done);
     });

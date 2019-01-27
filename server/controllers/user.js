@@ -27,11 +27,14 @@ export default {
 
       if (arrayHasValues(userByEmailResult.rows)) {
         // user exist
-        return res.status(409)
-          .send({
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
             status: 409,
             error: 'The email you provided is already used by another user'
-          });
+          }
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,19 +54,26 @@ export default {
           userId: userRecord.id
         }
       });
-      return res.status(201).send({
+      return sendResponse({
+        res,
         status: 201,
-        data: [{
-          token: userAuthToken,
-          user: userRecord
-        }]
+        payload: {
+          status: 201,
+          data: [{
+            token: userAuthToken,
+            user: userRecord
+          }]
+        }
       });
     } catch (e) {
-      return res.status(500)
-        .send({
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
           status: 500,
           error: 'Invalid request, please check request and try again'
-        });
+        }
+      });
     }
   },
 
@@ -102,20 +112,26 @@ export default {
         });
 
         if (match) {
-          return res.status(201)
-            .send({
+          return sendResponse({
+            res,
+            status: 201,
+            payload: {
               status: 201,
               data: [{
                 token: userAuthToken,
                 user: userRecord
               }]
-            });
+            }
+          });
         }
-        return res.status(401)
-          .send({
+        return sendResponse({
+          res,
+          status: 401,
+          payload: {
             status: 401,
             error: 'You entered an incorrect password, please check and try again'
-          });
+          }
+        });
       }
 
       return res.status(401)
@@ -127,13 +143,58 @@ export default {
       return res.status(500)
         .send({
           status: 500,
-          error: 'Invalid request, please check and try again'
+          error: 'Invalid request, please check request and try again'
         });
     }
   },
 
   async getUser(req, res) {
-    return res.status(404).send('Not implemented');
+    try {
+      const usersResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE id=$1',
+        values: [req.params.userId]
+      });
+
+      if (arrayHasValues(usersResult.rows)) {
+        const records = usersResult.rows
+          .map(row => replaceNullValue(row))
+          .map(row => omitProps(row, ['password']))
+          .map((row) => {
+            row.phoneNumber = row.phonenumber;
+            row.isAdmin = row.isadmin;
+            delete row.phonenumber;
+            delete row.isadmin;
+            return row;
+          });
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: records
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'This user does not exist at the moment'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request. Please try again'
+        }
+      });
+    }
   },
 
   async getAllUsers(req, res) {
@@ -178,7 +239,7 @@ export default {
         status: 500,
         payload: {
           status: 500,
-          error:  'Invalid request, please try again'
+          error: 'Invalid request, please check request and try again'
         }
       })
     }
@@ -194,6 +255,17 @@ export default {
 
       const { userId } = req.decodedToken || req.body;
 
+      if (userId !== Number(req.params.userId)) {
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
+            status: 409,
+            error: 'You can only update your own personal data'
+          }
+        })
+      }
+
       // enforcing unique usernames
       // at the controller level
       const userByUsernameResult = await db.queryDb({
@@ -201,12 +273,15 @@ export default {
         values: [username, userId]
       });
 
-      if (userByUsernameResult.rows.length > 0) {
-        return res.status(409)
-          .send({
+      if (arrayHasValues(userByUsernameResult.rows)) {
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
             status: 409,
             error: 'The username you provided is already used by another user'
-          });
+          }
+        })
       }
 
       const userByIdResult = await db.queryDb({
@@ -214,7 +289,7 @@ export default {
         values: [userId]
       });
 
-      if (userByIdResult.rows.length === 1) {
+      if (arrayHasValues(userByIdResult.rows)) {
         const user = userByIdResult.rows[0];
 
         const encryptedPassword = password && await bcrypt.hash(password, 10);
@@ -229,7 +304,7 @@ export default {
           birthday: birthday || user.birthday,
           phoneNumber: phoneNumber || user.phonenumber,
           bio: bio || user.bio,
-          avatar: req.file.secure_url || user.avatar
+          avatar: req.file && req.file.secure_url || user.avatar
         };
 
         const updateUserResult = await db.queryDb({
@@ -248,23 +323,33 @@ export default {
 
         const userRecord = replaceNullValue(updateUserResult.rows[0], '');
 
-        return res.status(200).send({
+        return sendResponse({
+          res,
           status: 200,
-          data: [userRecord]
-        });
+          payload: {
+            status: 200,
+            data: [userRecord]
+          }
+        })
       }
 
-      return res.status(404)
-        .send({
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
           status: 404,
           error: 'This user does not have an account'
-        });
+        }
+      })
     } catch (e) {
-      return res.status(500)
-        .send({
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
           status: 500,
-          error: 'Invalid request, please try again'
-        });
+          error: 'Invalid request, please check request and try again'
+        }
+      })
     }
   }
 };
