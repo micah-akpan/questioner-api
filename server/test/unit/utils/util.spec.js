@@ -13,9 +13,8 @@ import {
   uniq,
   replaceNullValue,
   wordToPosition,
+  toCamelCase
 } from '../../../utils';
-
-import CaseChange from '../../../utils/CaseChange';
 
 describe.only('Utils', () => {
   describe('omitProps()', () => {
@@ -220,18 +219,18 @@ describe.only('Utils', () => {
 
   describe('CaseChange', () => {
     it('should return a camelcased version of a word', () => {
-      const caseChange = new CaseChange(['hello', 'world', 'created', 'at']);
-      caseChange.toCamelCase('helloworld').should.equal('helloWorld');
+      const words = ['hello', 'world', 'created', 'at'];
+      toCamelCase(words, 'helloworld').should.equal('helloWorld');
     });
 
     it('should return a camelcased version of a word', () => {
-      const caseChange = new CaseChange(['happening', 'on', 'created', 'at']);
-      caseChange.toCamelCase('happeningon').should.equal('happeningOn');
+      const words = ['happening', 'on', 'created', 'at'];
+      toCamelCase(words, 'happeningon').should.equal('happeningOn');
     });
 
     it('should return a camelcased version of a word', () => {
-      const caseChange = new CaseChange(['happening', 'on', 'created', 'at']);
-      caseChange.toCamelCase('createdat').should.equal('createdAt');
+      const words = ['happening', 'on', 'created', 'at'];
+      toCamelCase(words, 'createdat').should.equal('createdAt');
     });
   });
 });

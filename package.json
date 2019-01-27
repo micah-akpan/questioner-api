@@ -9,7 +9,7 @@
     "dev:start": "nodemon --require @babel/register ./server/bin/www",
     "start": "node --require @babel/register ./server/bin/www",
     "lint": "eslint --fix --ignore-path .gitignore --ext .js ./server",
-    "test": "NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --timeout 5000 --exit",
+    "test": "NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --timeout 10000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "husky": {

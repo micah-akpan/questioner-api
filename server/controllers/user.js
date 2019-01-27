@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { arrayHasValues, replaceNullValue } from '../utils';
+import { sendResponse } from './helpers';
+import { arrayHasValues, replaceNullValue, omitProps } from '../utils';
 import userHelpers from './helpers/user';
 
 const userHelper = userHelpers(db, jwt);
@@ -141,11 +142,40 @@ export default {
       const usersResult = await db.queryDb({
         text: 'SELECT * FROM "User" WHERE isAdmin=FALSE'
       });
+
+      if (arrayHasValues(usersResult.rows)) {
+        const users = usersResult.rows
+          .map(row => replaceNullValue(row))
+          .map(row => omitProps(row, ['password']))
+          .map(row => row)
+          ;
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: users
+          }
+        })
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'No registered users at the moment'
+        }
+      })
     } catch (e) {
-      return res.status(500).send({
+      return sendResponse({
+        res,
         status: 500,
-        error: 'Invalid request, please try again'
-      });
+        payload: {
+          status: 500,
+          error:  'Invalid request, please try again'
+        }
+      })
     }
   },
 

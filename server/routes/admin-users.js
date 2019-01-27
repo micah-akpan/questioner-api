@@ -14,7 +14,7 @@ const router = Router();
 const validateRequest = userDataValidator();
 const { isAdmin } = Auth;
 
-router.get('/users/',
+router.get('/users',
   isAdmin,
   userController.getAllUsers);
 

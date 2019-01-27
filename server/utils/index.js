@@ -133,7 +133,7 @@ export const uniq = (a) => {
  * @param {*} replacer
  * @returns {*} Returns a no-null prop value object
  */
-export const replaceNullValue = (obj, replacer) => {
+export const replaceNullValue = (obj, replacer = '') => {
   const newObject = Object.assign({}, obj);
   for (const prop in newObject) {
     if (Object.prototype.hasOwnProperty.call(newObject, prop)) {
@@ -154,8 +154,26 @@ export const wordToPosition = (words, word) => {
       wordHash[w] = newWord.search(w);
     }
   });
-
   return wordHash;
+}
+
+/**
+ * @func toCamelCase
+ * @param {Array<String>} words A list of words to search for a match from
+ * @param {String} word The word to be camelcased
+ * @returns {String} A camelcased version of `word`
+ */
+export const toCamelCase = (words, word) => {
+    const wordHash = wordToPosition(words, word);
+
+    let newStr = '';
+    for (const prop in wordHash) {
+      if (Object.prototype.hasOwnProperty.call(wordHash, prop)) {
+        newStr += wordHash[prop] === 0 ? prop : `${prop[0].toUpperCase()}${prop.substring(1)}`;
+      }
+    }
+
+    return newStr;
 }
 
 export default {
