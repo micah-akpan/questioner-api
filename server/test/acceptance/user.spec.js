@@ -15,6 +15,7 @@ describe.only('User API', () => {
   };
 
   const testToken = createTestToken({});
+  const adminTestToken = createTestToken({ admin: true });
 
   before('Setup', async () => {
     await db.dropTable({ tableName: 'Comment', });
@@ -132,7 +133,7 @@ describe.only('User API', () => {
 
     it.skip('should update user\'s profile', (done) => {
       const imageBuffer = Buffer.from(`${process.cwd()}/server/assets/yoyo.jpeg`);
-      request(app)
+      agent
         .patch('/api/v1/users/1')
         .set('Authorization', `Bearer ${testToken}`)
         .field({
@@ -150,6 +151,30 @@ describe.only('User API', () => {
           res.body.data[0].firstname.should.equal('userA');
           done();
         });
+    });
+
+    after(async () => {
+      await db.dropTable({ tableName: '"User"' });
+    });
+  });
+
+  describe('GET /users', () => {
+    before(async () => {
+      await db.dropTable({ tableName: '"User"' });
+    });
+
+    beforeEach(async () => {
+      await db.createTable('User');
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ('user1', 'user1', 'user1@email.com', 'user1234')`
+      });
+    });
+    it('should return all non-admin registered users', (done) => {
+      agent
+        .get('/api/v1/users')
+        .set({ Authorization: `Bearer ${adminTestToken}` })
+        .expect(200, done);
     });
   });
   after('Teardown', async () => {

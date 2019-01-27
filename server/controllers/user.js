@@ -147,8 +147,13 @@ export default {
         const users = usersResult.rows
           .map(row => replaceNullValue(row))
           .map(row => omitProps(row, ['password']))
-          .map(row => row)
-          ;
+          .map(row => {
+            row.isAdmin = row.isadmin;
+            row.phoneNumber = row.phonenumber;
+            delete row.isadmin;
+            delete row.phonenumber;
+            return row;
+          })
         return sendResponse({
           res,
           status: 200,
