@@ -136,7 +136,17 @@ export default {
   },
 
   async getAllUsers(req, res) {
-    return res.status(404).send('Not implemented');
+    try {
+      /* eslint-disable */
+      const usersResult = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE isAdmin=FALSE'
+      });
+    } catch (e) {
+      return res.status(500).send({
+        status: 500,
+        error: 'Invalid request, please try again'
+      });
+    }
   },
 
   async updateUserProfile(req, res) {
@@ -196,9 +206,9 @@ export default {
                  email, phoneNumber as "phoneNumber", othername,
                  username, isadmin as "isAdmin", birthday, bio, avatar`,
           values: [userData.firstname, userData.lastname, userData.email,
-            userData.password, userData.username, userData.birthday,
-            userData.othername, userData.phoneNumber, userData.bio,
-            userData.avatar, userId]
+          userData.password, userData.username, userData.birthday,
+          userData.othername, userData.phoneNumber, userData.bio,
+          userData.avatar, userId]
         });
 
         const userRecord = replaceNullValue(updateUserResult.rows[0], '');

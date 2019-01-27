@@ -144,7 +144,19 @@ export const replaceNullValue = (obj, replacer) => {
   }
 
   return newObject;
-} 
+}
+
+export const wordToPosition = (words, word) => {
+  const wordHash = {};
+  const newWord = word.toLowerCase();
+  words.forEach((w) => {
+    if (newWord.search(w) > -1) {
+      wordHash[w] = newWord.search(w);
+    }
+  });
+
+  return wordHash;
+}
 
 export default {
   omitProps,
