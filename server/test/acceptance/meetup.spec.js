@@ -416,7 +416,7 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe('POST /meetups/<meetup-id>/images', () => {
+  describe.skip('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Rsvp' });
       await db.dropTable({ tableName: 'Comment' });
