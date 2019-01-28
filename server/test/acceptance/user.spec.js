@@ -190,11 +190,45 @@ describe.only('User API', () => {
                VALUES ('user1', 'user1', 'user1@email.com', 'user1234')`
       });
     });
-    it('should return all non-admin registered users', (done) => {
+    it('should return a registered user', (done) => {
       agent
         .get('/api/v1/users/1')
         .set({ Authorization: `Bearer ${adminTestToken}` })
         .expect(200, done);
+    });
+  });
+
+  describe('DELETE /users/<user-id>', () => {
+    before(async () => {
+      await db.dropTable({ tableName: '"User"' });
+      await db.createTable('User');
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO "User" (firstname, lastname, email, password)
+               VALUES ('user1', 'user1', 'user1@email.com', 'user1234')`
+      });
+    });
+
+    it('should delete/deactivate a user account', (done) => {
+      agent
+        .delete('/api/v1/users/1')
+        .set({ Authorization: `Bearer ${testToken}` })
+        .expect(200, done);
+    });
+
+    it('should not delete/deactivate a non-existing user account', (done) => {
+      agent
+        .delete('/api/v1/users/9999999')
+        .set({ Authorization: `Bearer ${testToken}` })
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(404);
+          res.body.should.have.property('error');
+          done();
+        });
     });
   });
   after('Teardown', async () => {

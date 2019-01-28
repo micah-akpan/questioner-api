@@ -134,17 +134,23 @@ export default {
         });
       }
 
-      return res.status(401)
-        .send({
+      return sendResponse({
+        res,
+        status: 401,
+        payload: {
           status: 401,
           error: 'The email you entered does not belong to any account.'
-        });
+        }
+      });
     } catch (e) {
-      return res.status(500)
-        .send({
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
           status: 500,
           error: 'Invalid request, please check request and try again'
-        });
+        }
+      });
     }
   },
 
@@ -258,9 +264,9 @@ export default {
       if (userId !== Number(req.params.userId)) {
         return sendResponse({
           res,
-          status: 409,
+          status: 422,
           payload: {
-            status: 409,
+            status: 422,
             error: 'You can only update your own personal data'
           }
         })
@@ -350,6 +356,63 @@ export default {
           error: 'Invalid request, please check request and try again'
         }
       })
+    }
+  },
+
+  async deleteUser(req, res) {
+    try {
+      const { userId } = req.decodedToken || req.body;
+
+      const result = await db.queryDb({
+        text: 'SELECT * FROM "User" WHERE id=$1',
+        values: [userId]
+      });
+
+      if (arrayHasValues(result.rows)) {
+        if (userId !== Number(req.params.userId)) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'You can only deactivate your own account'
+            }
+          })
+        }
+
+        await db.queryDb({
+          text: 'DELETE FROM "User" WHERE id=$1',
+          values: [req.params.userId]
+        });
+
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [`User ${userId} account has been deactivated successfully`]
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: `A user with this account does not exist`
+        }
+      });
+
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request. Please check request and try again'
+        }
+      });
     }
   }
 };
