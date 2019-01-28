@@ -28,6 +28,7 @@ router.route('/users/:userId')
     validateRequest,
     Upload.single('user-avatar'),
     userController.updateUserProfile
-  );
+  )
+  .delete(checkParams, userController.deleteUser);
 
 export default router;
