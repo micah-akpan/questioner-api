@@ -134,17 +134,23 @@ export default {
         });
       }
 
-      return res.status(401)
-        .send({
+      return sendResponse({
+        res,
+        status: 401,
+        payload: {
           status: 401,
           error: 'The email you entered does not belong to any account.'
-        });
+        }
+      });
     } catch (e) {
-      return res.status(500)
-        .send({
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
           status: 500,
           error: 'Invalid request, please check request and try again'
-        });
+        }
+      });
     }
   },
 
