@@ -12,7 +12,7 @@ export default {
         const { searchTerm } = req.query;
 
         const meetups = await db.queryDb({
-          text: 'SELECT id, topic, location, happeningon as "happeningOn", tags FROM Meetup'
+          text: 'SELECT id, topic, location, happeningon as "happeningOn", tags, images FROM Meetup'
         });
 
         const meetupRecords = meetups.rows;
@@ -50,13 +50,14 @@ export default {
         });
       }
       const meetups = await db.queryDb({
-        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
+        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags, images FROM Meetup'
       });
       let meetupRecords = meetups.rows;
 
       meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'nulls-to-empty-array');
-
       meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'inner-nulls-with-empty-string');
+      meetupRecords = RecordTransformer.transform(meetupRecords, 'images', 'nulls-to-empty-array');
+      meetupRecords = RecordTransformer.transform(meetupRecords, 'images', 'inner-nulls-with-empty-string');
 
       return sendResponse({
         res,
@@ -110,20 +111,6 @@ export default {
           }
         });
       }
-
-      /* eslint-disable */
-      // This parses the str and forms into a
-      // a compatible postgres array insertion string
-      let allTags = '{';
-      tags.forEach((tag, i) => {
-        if (i === tags.length - 1) {
-          allTags += tag;
-          allTags += '}';
-        } else {
-          allTags += tag;
-          allTags += ', ';
-        }
-      })
 
       const uniqueTags = uniq(tags);
 
@@ -401,7 +388,8 @@ export default {
         });
 
         const meetupRecord = result.rows[0];
-        const parsedImages = meetupRecord.images.map(image => (image === 'undefined' ? '' : image));
+        const parsedImages = meetupRecord.images
+          .map(image => (image === 'undefined' ? '' : image));
 
         meetupRecord.images = parsedImages;
 

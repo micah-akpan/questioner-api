@@ -40,7 +40,7 @@ class RecordTransformer {
       case 'inner-nulls-with-empty-string': {
         const newRecords = records.map((record) => {
           const values = record[field].map((value) => {
-            if (value === null) {
+            if (value === null || value === 'undefined') {
               value = '';
             }
 
