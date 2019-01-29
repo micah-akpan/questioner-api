@@ -12,6 +12,7 @@ export default (useJoiError = false) => {
   };
 
   return (req, res, next) => {
+    console.log(`path = ${req.route.path}`);
     const { path } = req.route;
     const method = req.method.toLowerCase();
 

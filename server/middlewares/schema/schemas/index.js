@@ -4,6 +4,7 @@ import rsvpSchema from './rsvp';
 import userSchema from './user';
 import tagSchema from './tag';
 import commentSchema from './comment';
+import imageSchema from './image';
 
 const { getUserDataSchema } = userSchema;
 
@@ -20,5 +21,6 @@ export default {
   '/auth/login': loginUserSchema,
   '/users/:userId': userProfileSchema,
   '/meetups/:meetupId/tags': tagSchema,
-  '/comments': commentSchema
+  '/comments': commentSchema,
+  '/meetups/:meetupId/images': imageSchema
 };
