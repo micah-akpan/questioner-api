@@ -377,23 +377,10 @@ export default {
   async addImagesToMeetup(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupResult = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [meetupId]
-      });
+
+      const meetupResult = await Meetup.findByPk(meetupId);
 
       if (arrayHasValues(meetupResult.rows)) {
-        if (req.files.length === 0) {
-          return sendResponse({
-            res,
-            status: 422,
-            payload: {
-              status: 422,
-              error: 'You must provide at least one image'
-            }
-          });
-        }
-
         req.files.forEach(async (file) => {
           await db.queryDb({
             text: `INSERT INTO Image (imageUrl, meetup)
@@ -435,6 +422,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e)
       return sendResponse({
         res,
         status: 500,
