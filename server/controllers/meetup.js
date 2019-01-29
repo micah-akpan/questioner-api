@@ -374,9 +374,10 @@ export default {
 
   async addImagesToMeetup(req, res) {
     try {
+      const { meetupId } = req.params;
       const meetupResult = await db.queryDb({
         text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [req.params.meetupId]
+        values: [meetupId]
       });
 
       if (arrayHasValues(meetupResult.rows)) {
@@ -391,13 +392,13 @@ export default {
           });
         }
 
-        const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
-        const images = `{${image1.secure_url}, ${image2.secure_url}, ${image3.secure_url}, ${image4.secure_url}}`;
+        const images = req.files.map(file => file.secure_url);
+
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
                  WHERE id=$2 RETURNING id as meetup, topic, images`,
-          values: [images, req.params.meetupId]
+          values: [images, meetupId]
         });
 
         const meetupRecord = result.rows[0];
