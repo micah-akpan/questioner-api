@@ -5,6 +5,7 @@ import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 import RecordTransformer from './helpers/RecordTransformer';
 import Meetup from '../models/all/Meetup';
+import Image from '../models/all/Image';
 
 export default {
   async getAllMeetups(req, res) {
@@ -451,21 +452,10 @@ export default {
 
   async getAllMeetupImages(req, res) {
     try {
-
-      // ===============================================
-        const results = await Meetup.find({
-          topic: 'my-topic',
-          location: 'my-location'
-        }, 'AND');
-      // ===============================================
       const { meetupId } = req.params;
       const meetupByIdResult = await Meetup.findByPk(meetupId);
       if (arrayHasValues(meetupByIdResult.rows)) {
-        const meetupImagesResult = await db.queryDb({
-          text: 'SELECT * FROM Image WHERE meetup=$1',
-          values: [meetupId]
-        });
-
+        const meetupImagesResult = await Image.find({ meetup: meetupId });
         const images = meetupImagesResult.rows;
 
         if (arrayHasValues(images)) {
@@ -498,7 +488,6 @@ export default {
         }
       })
     } catch (e) {
-      console.log(e)
       return sendResponse({
         res,
         status: 500,

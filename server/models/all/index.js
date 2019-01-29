@@ -92,9 +92,22 @@ class Model {
    */
   async find(fields, op) {
     const columnNames = Object.keys(fields);
+    const _supportedOps = ['OR', 'AND'];
+
+    if (columnNames.length > 1) {
+      // Multiple query fields with no operator
+      if (typeof op !== 'string') {
+        return Promise.reject(new Error('Query operator must be a string'));
+      }
+
+      if (!(_supportedOps.includes(op))) {
+        return Promise.reject(new Error('Please provide a valid operator(OR|AND)'));
+      }
+    }
+
     const queryString = this.makeQueryString(columnNames, op);
     const queryValues = columnNames.map(columnName => fields[columnName]);
-    await db.queryDb({
+    return db.queryDb({
       text: queryString,
       values: queryValues
     });
