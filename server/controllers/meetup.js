@@ -4,9 +4,7 @@ import { search } from './helpers/search';
 import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 import RecordTransformer from './helpers/RecordTransformer';
-import Meetup from '../models/all/Meetup';
-import Image from '../models/all/Image';
-import Question from '../models/all/Question';
+import { Meetup, Image, Question } from '../models/all';
 
 export default {
   async getAllMeetups(req, res) {
