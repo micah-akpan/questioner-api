@@ -14,11 +14,11 @@ export default {
       if (objectHasProps(req.query)) {
         const { searchTerm } = req.query;
 
-        const meetups = await db.queryDb({
-          text: 'SELECT id, topic, location, happeningon as "happeningOn", tags FROM Meetup'
+        const meetupResults = await db.queryDb({
+          text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup'
         });
 
-        const meetupRecords = meetups.rows;
+        const meetupRecords = meetupResults.rows;
 
         const byTopic = search(meetupRecords, 'topic', searchTerm);
         const byLocation = search(meetupRecords, 'location', searchTerm);
@@ -26,11 +26,7 @@ export default {
 
         const allMeetups = [...byTopic, ...byLocation, ...byTag];
 
-        let filteredMeetups = _.uniqBy(allMeetups, 'id');
-
-        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'nulls-to-empty-array');
-
-        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'inner-nulls-with-empty-string');
+        const filteredMeetups = _.uniqBy(allMeetups, 'id');
 
         if (allMeetups.length) {
           return sendResponse({
@@ -52,21 +48,17 @@ export default {
           }
         });
       }
-      const meetups = await db.queryDb({
+      const meetupResults = await db.queryDb({
         text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
       });
-      let meetupRecords = meetups.rows;
-
-      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'nulls-to-empty-array');
-
-      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'inner-nulls-with-empty-string');
+      const meetups = meetupResults.rows;
 
       return sendResponse({
         res,
         status: 200,
         payload: {
           status: 200,
-          data: meetupRecords
+          data: meetups
         }
       });
     } catch (e) {
