@@ -85,7 +85,7 @@ class Model {
 
   /**
    * @method find
-   * @param {*} fields An hash of column names to filter
+   * @param {*} fields An hash of column names to filter by
    * @param {String} op OR|AND
    * @returns {Promise} Returns a Promise that resolves to the
    * result of the query
