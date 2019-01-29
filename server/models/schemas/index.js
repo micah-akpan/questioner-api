@@ -10,6 +10,7 @@ import createRsvpSQLQuery from './rsvp';
 import createCommentSQLQuery from './comment';
 import createUpvoteSQLQuery from './upvote';
 import createDownvoteSQLQuery from './downvote';
+import createImageSQLQuery from './image';
 
 const createTableSQLQueries = {
   Meetup: createMeetupSQLQuery,
@@ -18,7 +19,8 @@ const createTableSQLQueries = {
   Rsvp: createRsvpSQLQuery,
   Comment: createCommentSQLQuery,
   Upvote: createUpvoteSQLQuery,
-  Downvote: createDownvoteSQLQuery
+  Downvote: createDownvoteSQLQuery,
+  Image: createImageSQLQuery
 };
 
 export default createTableSQLQueries;

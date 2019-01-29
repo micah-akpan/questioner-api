@@ -36,7 +36,9 @@ class Db {
       await this.createTable('Rsvp');
       await this.createTable('Upvote');
       await this.createTable('Downvote');
+      await this.createTable('Image');
     } catch (e) {
+      console.log(e);
       return Promise.reject(new Error('Table synchronization failed'));
     }
 

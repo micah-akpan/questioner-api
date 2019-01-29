@@ -33,17 +33,23 @@ router.get('/meetups/:meetupId/questions',
   checkParams,
   questionController.getQuestions);
 
-router.post('/meetups/:meetupId/tags',
-  checkParams,
-  validateRequest,
-  isAdmin,
-  meetupController.addTagsToMeetup);
+router.route('/meetups/:meetupId/tags')
+  .get(checkParams, meetupController.getAllMeetupTags)
+  .post(
+    checkParams,
+    validateRequest,
+    isAdmin,
+    meetupController.addTagsToMeetup
+  );
 
-router.post('/meetups/:meetupId/images',
-  checkParams,
-  isAdmin,
-  Upload.array('meetupPhotos', 4),
-  meetupController.addImagesToMeetup);
+router.route('/meetups/:meetupId/images')
+  .get(checkParams, meetupController.getAllMeetupImages)
+  .post(
+    checkParams,
+    isAdmin,
+    Upload.array('meetupPhotos', 4),
+    meetupController.addImagesToMeetup
+  );
 
 router
   .route('/meetups/:meetupId/questions/:questionId')

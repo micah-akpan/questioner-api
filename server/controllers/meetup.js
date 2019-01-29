@@ -433,5 +433,13 @@ export default {
         }
       });
     }
+  },
+
+  async getAllMeetupTags(req, res) {
+    return res.status(404).send('Not Implemented');
+  },
+
+  async getAllMeetupImages(req, res) {
+    return res.status(404).send('Not implemented');
   }
 };
