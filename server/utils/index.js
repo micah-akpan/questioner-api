@@ -176,6 +176,14 @@ export const toCamelCase = (words, word) => {
     return newStr;
 }
 
+/**
+ * @func getLastElement
+ * @param {Array} array
+ * @returns {*} The last element in the `array`
+ * @description Returns the last element in `array`
+ */
+export const getLastElement = (array) => array[array.length - 1];
+
 export default {
   omitProps,
   getFutureDate,

@@ -4,6 +4,7 @@ import { search } from './helpers/search';
 import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 import RecordTransformer from './helpers/RecordTransformer';
+import Meetup from '../models/all/Meetup';
 
 export default {
   async getAllMeetups(req, res) {
@@ -392,6 +393,14 @@ export default {
           });
         }
 
+        req.files.forEach(async (file) => {
+          await db.queryDb({
+            text: `INSERT INTO Image (imageUrl, meetup)
+                   VALUES ($1, $2)`,
+            values: [file.secure_url, meetupId]
+          })
+        })
+
         const images = req.files.map(file => file.secure_url);
 
         const result = await db.queryDb({
@@ -441,6 +450,63 @@ export default {
   },
 
   async getAllMeetupImages(req, res) {
-    return res.status(404).send('Not implemented');
+    try {
+
+      // ===============================================
+        const results = await Meetup.find({
+          topic: 'my-topic',
+          location: 'my-location'
+        }, 'AND');
+      // ===============================================
+      const { meetupId } = req.params;
+      const meetupByIdResult = await Meetup.findByPk(meetupId);
+      if (arrayHasValues(meetupByIdResult.rows)) {
+        const meetupImagesResult = await db.queryDb({
+          text: 'SELECT * FROM Image WHERE meetup=$1',
+          values: [meetupId]
+        });
+
+        const images = meetupImagesResult.rows;
+
+        if (arrayHasValues(images)) {
+          return sendResponse({
+            res,
+            status: 200,
+            payload: {
+              status: 200,
+              data: images
+            }
+          })
+        }
+
+        return sendResponse({
+          res,
+          status: 404,
+          payload: {
+            status: 404,
+            error: 'There are no images for this meetup at the moment'
+          }
+        })
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'This meetup does not exist'
+        }
+      })
+    } catch (e) {
+      console.log(e)
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request, please check request and try again'
+        }
+      })
+    }
   }
-};
+}

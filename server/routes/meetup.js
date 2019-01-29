@@ -46,7 +46,6 @@ router.route('/meetups/:meetupId/images')
   .get(checkParams, meetupController.getAllMeetupImages)
   .post(
     checkParams,
-    validateRequest,
     isAdmin,
     Upload.array('meetupPhotos', 4),
     meetupController.addImagesToMeetup

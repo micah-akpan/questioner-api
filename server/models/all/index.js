@@ -1,5 +1,6 @@
 
 import db from '../../db';
+import { getLastElement } from '../../utils';
 
 /**
  * @class Model
@@ -80,6 +81,41 @@ class Model {
         text: `DELETE FROM ${this._name} WHERE id=$1`
       });
     }
+  }
+
+  /**
+   * @method find
+   * @param {*} fields An hash of column names to filter
+   * @param {String} op OR|AND
+   * @returns {Promise} Returns a Promise that resolves to the
+   * result of the query
+   */
+  async find(fields, op) {
+    const columnNames = Object.keys(fields);
+    const queryString = this.makeQueryString(columnNames, op);
+    const queryValues = columnNames.map(columnName => fields[columnName]);
+    await db.queryDb({
+      text: queryString,
+      values: queryValues
+    });
+  }
+
+  /**
+   * @func makeQueryString
+   * @param {*} columnNames columnNames is an array of table column names
+   * @param {String} op OR|AND
+   * @returns {String} A query string
+   */
+  makeQueryString(columnNames, op) {
+    let queryString = `SELECT * FROM ${this._name} WHERE `;
+    let count = 1; // keeps track of the prepared query variables
+    columnNames.forEach((columnName) => {
+      queryString += `${columnName}=$${count} ${getLastElement(columnNames) !== columnName
+        ? op : ''} `;
+      count += 1;
+    });
+
+    return queryString;
   }
 
   /**

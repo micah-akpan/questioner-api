@@ -12,7 +12,6 @@ export default (useJoiError = false) => {
   };
 
   return (req, res, next) => {
-    console.log(`path = ${req.route.path}`);
     const { path } = req.route;
     const method = req.method.toLowerCase();
 
@@ -63,7 +62,7 @@ export default (useJoiError = false) => {
              * @description Returns a
              * custom Error based
              * on a substring found in the error
-             * message: 'msg'
+             * message: `msg`
              */
             const makeCustomError = msg => ({
               status: 400,
