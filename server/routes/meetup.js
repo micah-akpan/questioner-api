@@ -51,6 +51,9 @@ router.route('/meetups/:meetupId/images')
     meetupController.addImagesToMeetup
   );
 
+router.route('/meetups/:meetupId/images/:imageId')
+  .get(checkParams, meetupController.getSingleMeetupImage);
+
 router
   .route('/meetups/:meetupId/questions/:questionId')
   .get(checkParams, questionController.getSingleMeetupQuestion)

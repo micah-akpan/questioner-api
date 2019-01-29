@@ -438,5 +438,56 @@ export default {
         }
       });
     }
+  },
+
+  async getSingleMeetupImage(req, res) {
+    try {
+      const { meetupId, imageId } = req.params;
+      const meetupExist = await Meetup.recordExist(meetupId);
+      if (meetupExist) {
+        const imageResult = await db.queryDb({
+          text: 'SELECT * FROM Image WHERE id=$1',
+          values: [imageId]
+        });
+        const image = imageResult.rows[0];
+        if (image) {
+          return sendResponse({
+            res,
+            status: 200,
+            payload: {
+              status: 200,
+              data: [image]
+            }
+          });
+        }
+
+        return sendResponse({
+          res,
+          status: 404,
+          payload: {
+            status: 404,
+            error: 'The meetup image does not exist'
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The requested meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request, please check request and try again'
+        }
+      });
+    }
   }
 };
