@@ -179,7 +179,7 @@ export default {
   async deleteMeetup(req, res) {
     const { meetupId } = req.params;
     try {
-      const meetupResults = await Meetup.findByPk(meetupId);
+      const meetupResults = await Meetup.findById(meetupId);
       const meetupRecord = meetupResults.rows[0];
 
       if (meetupRecord) {
@@ -270,7 +270,7 @@ export default {
   async addTagsToMeetup(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupResult = await Meetup.findByPk(meetupId);
+      const meetupResult = await Meetup.findById(meetupId);
       const meetup = meetupResult.rows[0];
 
       const { tags } = req.body;
@@ -335,7 +335,7 @@ export default {
     try {
       const { meetupId } = req.params;
 
-      const meetupResult = await Meetup.findByPk(meetupId);
+      const meetupResult = await Meetup.findById(meetupId);
       const meetups = meetupResult.rows;
       if (arrayHasValues(meetups)) {
         req.files.forEach(async (file) => {
@@ -394,7 +394,7 @@ export default {
   async getAllMeetupImages(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupByIdResult = await Meetup.findByPk(meetupId);
+      const meetupByIdResult = await Meetup.findById(meetupId);
       if (arrayHasValues(meetupByIdResult.rows)) {
         const meetupImagesResult = await Image.find({ meetup: meetupId });
         const images = meetupImagesResult.rows;

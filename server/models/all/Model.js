@@ -1,6 +1,6 @@
 
 import db from '../../db';
-import { getLastElement } from '../../utils';
+import { getLastElement, arrayHasValues } from '../../utils';
 
 /**
  * @class Model
@@ -18,18 +18,18 @@ class Model {
   }
 
   /**
-     * @method findByPk
-     * @param {Number} pk
+     * @method findById
+     * @param {Number} id Primary key value
      * @returns {Promise} Resolves to the found record or rejects with an error
      */
-  async findByPk(pk) {
-    if (!pk) {
+  async findById(id) {
+    if (!id) {
       return Promise.reject(new Error('Please specify a primary key column value'));
     }
 
     return db.queryDb({
       text: `SELECT * FROM ${this._name} WHERE id=$1`,
-      values: [pk]
+      values: [id]
     });
   }
 
@@ -140,6 +140,14 @@ class Model {
   /* eslint-disable */
   async findOneAndUpdate(pk) {
 
+  }
+
+  async recordExist(id) {
+    const recordResult = await this.findById(id);
+    if (arrayHasValues(recordResult.rows)) {
+      return true;
+    }
+    return false;
   }
 
   /**

@@ -26,6 +26,25 @@ class Question extends Model {
       values: [title, body, meetupId, userId]
     });
   }
+
+  /**
+   * @param {Number} questionId
+   * @returns {Promise} Resolves true if question Exist, false otherwise
+   */
+  async questionExist(questionId) {
+    return this.recordExist(questionId);
+  }
+
+  /**
+   * @method getVotes
+   * @param {Number} questionId
+   * @returns {Number} Total votes of this question
+   */
+  async getVotes(questionId) {
+    const questionResult = await this.findById(questionId);
+    const question = questionResult.rows[0];
+    return question.votes;
+  }
 }
 
 export default new Question();
