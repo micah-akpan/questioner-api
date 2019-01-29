@@ -456,7 +456,7 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe('GET /meetups/<meetup-id>/images', () => {
+  describe.skip('GET /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, images)
