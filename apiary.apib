@@ -1,0 +1,570 @@
+FORMAT: 1A
+HOST: https://my-maintenance-tracker.herokuapp.com/api/v1
+
+#Questioner
+
+Questioner is a question crowdsourcing tool that provides support for meetup organizers, with features that help them prioritize questions asked by potential attendees.
+
+# Group Meetups
+
+## Meetups [/meetups]
+
+### List All Meetups [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "title": "meetup 1",
+                    "location": "meetup location 1",
+                    "happeningOn": "2/3/2019",
+                    "tags": ["tag1", "tag2", "tag3"]
+                }, 
+                {
+                    
+                    "id": 2
+                    "title": "meetup 2",
+                    "location": "meetup location 2",
+                    "happeningOn": "2/3/2019",
+                    "tags": ["tag1", "tag2", "tag3"]
+                }, 
+                {
+                    
+                    "id": 3,
+                    "title": "meetup 3",
+                    "location": "meetup location 2",
+                    "happeningOn": "2/3/2019",
+                    "tags": ["tag1", "tag2", "tag3"]
+                }, 
+            ]
+        }
+
+### Create a New Meetup [POST]
+
+You may create your own meetup using this action. It takes a JSON
+object containing a meetup.
+
++ Request (application/json)
+
+        {
+            "topic": "meetup topic 1",
+            "location": "meetup location 1",
+            "happeningOn": "2019-01-14T21:49:42.928Z",
+            "tags": "tag1,tag2,tag3"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "status": 201,
+                "data": [
+                  {
+                    "topic": "meetup topic",
+                    "location": "meetup location",
+                    "happenignOn": "2/2/2019",
+                    "tags": ["tag1", "tag2", "tag3"]
+                  }
+                ]
+            }
+
+
+
+## Meetup [/meetups/{meetup_id}]
+
++ Parameters
+    + meetup_id (number) - ID of the Meetup in the form of an integer
+
+### Fetch a Single Meetup [GET]
++ Response 200 (application/json)
+
+            {
+                "status": 200,
+                "data": [
+                    {
+                        "id": 1,
+                        "topic": "meetup 1",
+                        "location": "meetup location 1",
+                        "happeningOn": "2/3/2019",
+                        "tags": ['tag1', 'tag2', 'tag3']
+                    }, 
+                   
+                ]
+            }
+
+### Delete a Single Meetup [DELETE]
++ Response 200 (application/json)
+
+        [
+            {
+                "status": 200,
+                "data": [
+                    "Meetup with id: 1 has been deleted successfully
+                ]
+            }
+        ]
+
+## Upcoming Meetups [/meetups/upcoming/]
+
+### List Upcoming Meetups [GET]
++ Response 200 (application/json)
+
+        [
+            {
+                "status": 200,
+                "data": [
+                    {
+                        "id": 1,
+                        "topic": "meetup 1",
+                        "location": "meetup location 1",
+                        "happeningOn": "2/3/2019",
+                        "tags": ["tag1", "tag2", "tag3"]
+                    }, 
+                   
+                ]
+            }
+        ]
+
+
+## Meetup Images [/meetups/{meetup_id}/images]
+
++ Parameters
+    + meetup_id (number) - ID of the Meetup in the form of an integer
+
+### Add Meetup Images [POST]
+
++ Request (application/json)
+
+        {
+          "images": ["image1.jpg", "image2.jpg"]
+        }
+        
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                   "meetup": 1,
+                   "topic": "meetup topic",
+                   "images": ["image1.jpg", "image2.jpg"]
+                }
+            ]
+        }
+
+## Meetup Tags [/meetups/{meetup_id}/tags]
+
++ Parameters
+    + meetup_id (number) - ID Of the Meetup in the form of an integer
+
+### Add Meetups Tags [POST]
+
++ Request (application/json)
+
+        {
+          "tags": "tag1,tag2,tag3"
+        }
+        
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                   "meetup": 1,
+                   "topic": "meetup topic",
+                   "tags": ["tag1", "tag2", "tag3"]
+                }
+            ]
+        }
+        
+# Group Questions
+
+## Questions [/questions/]
+
+### List all Questions [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "title": "my new question  title 2",
+                    "body": "new question body new",
+                    "createdby": 1,
+                    "meetup": 2,
+                    "votes": 1,
+                    "createdon": "2019-01-14T23:00:00.000Z"
+                },
+                
+                {
+                    "id": 2,
+                    "title": "my new question  title 2",
+                    "body": "new question body new",
+                    "createdby": 1,
+                    "meetup": 2,
+                    "votes": 0,
+                    "createdon": "2019-01-14T23:00:00.000Z"
+                },
+                
+                {
+                    "id": 3,
+                    "title": "my new question  title 2",
+                    "body": "new question body new",
+                    "createdby": 1,
+                    "meetup": 2,
+                    "votes": 1,
+                    "createdon": "2019-01-14T23:00:00.000Z"
+                }
+            ]
+        }
+        
+### Create a New Question [POST]
+
++ Request (application/json) 
+
+        {
+           "meetupId": 1,
+           "title": "question 1",
+           "body": "question 1 body"
+        }
+        
++ Response 201 (application/json)
+
+        {
+          "status": 201,
+          "data": [
+                {
+                  "user": 1,
+                  "title": "question 1",
+                  "body": "question 1 body",
+                  "meetup": 1
+                }
+            ]
+        }
+        
+
+## Question [/questions/{question_id}/]
+
++ Parameters
+    + question_id (number) - ID Of the question in the form of an integer
+
+### Fetch a Question [GET]
++ Response 200 (application/json)
+
+        {
+          "status": 201,
+          "data": [
+                {
+                  "user": 1,
+                  "title": "question 1",
+                  "body": "question 1 body",
+                  "meetup": 1
+                }
+            ]
+        }
+
+
+## Question Upvote [/questions/{question_id}/upvote]
+
+### Upvote a Question [PATCH]
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                  {
+                    "meetup": 1,
+                    "title": "question title",
+                    "body": "question body",
+                    "votes": 1
+                  }
+            ]
+        }
+        
+
+## Question Downvote [/questions/{question_id}/downvote]
+
+### Downvote a Question [PATCH]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                  {
+                    "meetup": 1,
+                    "title": "question title",
+                    "body": "question body",
+                    "votes": 0
+                  }
+            ]
+        }
+        
+## Meetup Questions [/meetups/{meetup_id}/questions/]
+
++ Parameters
+    + meetup_id (number) - ID Of the Meetup in the form of an integer
+
+
+### List all Meetups Questions [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "createdby": 1,
+                    "meetup": 1,
+                    "title": "my_question",
+                    "body": "my_question_body"
+                },
+                
+                {
+                    "id": 2,
+                    "createdby": 1,
+                    "meetup": 1,
+                    "title": "my_question",
+                    "body": "my_question_body"
+                }
+            ]
+        }
+
+
+### Meetup Question [/meetups/{meetup_id}/questions/{question_id}/]
+
++ Parameters
+    + meetup_id (number) - ID Of the Meetup in the form of an integer
+    + question_id (number) - ID of the question in the form of an integer
+
+### List a Meetup question [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "createdby": 1,
+                    "meetup": 1,
+                    "title": "my_question",
+                    "body": "my_question_body"
+                }
+            ]
+        }
+        
+### Update a Meetup Question [PATCH]
+
++ Request (application/json)
+
+        {
+            "title": "my new title",
+            "body": "my new body"
+        }
+        
+
++ Response 200 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                    "title": "my new title",
+                    "body": "my new body",
+                    "user": 1,
+                    "meetup": 1
+                }
+            ]
+        }
+        
+        
+### DELETE a Meetup Question [DELETE]
+        
+
++ Response 200 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                "Question 1 has been deleted successfully"
+            ]
+        }
+           
+        
+# Group Comments
+
+## Comments [/comments/]
+
+### Create a Comment [POST]
+
++ Request (application/json)
+
+        {
+            "commentText": "my comment",
+            "questionId": 1
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                  {
+                    "question": 1,
+                    "title": "question title",
+                    "body": "question body",
+                    "comment": "my comment"
+                  }
+            ]
+        }
+        
+# Group Rsvps
+
+## Rsvps [/meetups/{meetup_id}/rsvps]
+
++ Parameters
+    + meetup_id (number) - ID Of the Meetup in the form of an integer
+
+### List all RSVPs [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "user": 1,
+                    "meetup": 2,
+                    "response": "maybe"
+                },
+        
+                {
+                    "id": 2,
+                    "user": 1,
+                    "meetup": 2,
+                    "response": "yes"
+                }
+            ]
+        }
+
+### Make a RSVP [POST]
+
++ Request (application/json)
+
+         {
+            "userId": 1
+            "response": "yes"
+        }
+        
+
++ Response 201 (application/json)
+
+        {
+            "meetup": 1,
+            "topic": "about x",
+            "status": "yes"
+        }
+
+
+## Rsvp [/meetups/{meetup_id}/rsvps/{rsvp_id}]
++ Parameters
+    + meetup_id (number) - ID Of the Meetup in the form of an integer
+    + rsvp_id(number) - ID of the Rsvp in the form of an integer
+
+### Get a RSVP [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "user": 1,
+                    "meetup": 2,
+                    "response": "maybe"
+                }
+            ]
+        }
+
+
+# Group Users
+
+## Sign Up  [/auth/signup/]
+
+### Create a new User [POST]
+
++ Request (application/json)
+
+        {
+            "firstname": "arya",
+            "lastname": "stark",
+            "email": "aryastark@gmail.com",
+            "password": "arya1234"
+        }
+        
++ Response 201 (application/json)
+
+        {
+           "status": 201,
+           "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true
+                        }
+                }
+                            
+        }
+
+
+## Login User [/auth/login/]
+
+### Login [POST]
+
++ Request (application/json)
+
+        {
+            "email": "aryastark@gmail.com",
+            "password": "$abcdefghijklkjdaxnlwfnklakjldaka"
+        }
+        
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true
+                        }
+                }
+        }            
+
