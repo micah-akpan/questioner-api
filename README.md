@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/emrys8/questioner-api.svg?branch=develop)](https://travis-ci.com/emrys8/questioner-api) [![Coverage Status](https://coveralls.io/repos/github/emrys8/questioner-api/badge.svg?branch=develop)](https://coveralls.io/github/emrys8/questioner-api?branch=develop) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.com/emrys8/questioner-api.svg?branch=develop)](https://travis-ci.com/emrys8/questioner-api) [![Coverage Status](https://coveralls.io/repos/github/emrys8/questioner-api/badge.svg?branch=develop)](https://coveralls.io/github/emrys8/questioner-api?branch=develop) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Maintainability](https://api.codeclimate.com/v1/badges/1186e8979e40ee4ebb81/maintainability)](https://codeclimate.com/github/emrys8/questioner-api/maintainability)
 
 
 # Questioner
