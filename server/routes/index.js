@@ -16,6 +16,10 @@ router.get('/', (req, res) => res.send({
   message: 'Welcome to the Questioner API'
 }));
 
+router.get('/api/v1/docs', (req, res) => res.redirect(
+  'https://questionerapi.docs.apiary.io'
+));
+
 router.use('/api/v1', trimBody, userRouter);
 router.use('/api/v1', trimBody, checkToken, meetupRouter);
 router.use('/api/v1', trimBody, checkToken, rsvpRouter);

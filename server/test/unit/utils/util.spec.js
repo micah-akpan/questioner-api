@@ -13,7 +13,8 @@ import {
   uniq,
   replaceNullValue,
   wordToPosition,
-  toCamelCase
+  toCamelCase,
+  getLastElement
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -231,6 +232,18 @@ describe.only('Utils', () => {
     it('should return a camelcased version of a word', () => {
       const words = ['happening', 'on', 'created', 'at'];
       toCamelCase(words, 'createdat').should.equal('createdAt');
+    });
+  });
+
+  describe('getLastElement', () => {
+    it('should return the last element of an array', () => {
+      const values = ['a', 'b'];
+      getLastElement(values).should.equal('b');
+    });
+
+    it('should return the last element of an array', () => {
+      const values = [{ a: 1 }, { a: 10 }];
+      getLastElement(values).should.deep.equal({ a: 10 });
     });
   });
 });

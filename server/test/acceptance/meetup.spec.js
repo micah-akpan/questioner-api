@@ -456,6 +456,23 @@ describe.only('Meetups API', () => {
     });
   });
 
+  describe.skip('GET /meetups/<meetup-id>/images', () => {
+    before(async () => {
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn, images)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['meetup sample', 'meetup location', getFutureDate(3), ['image1.jpg']]
+      });
+    });
+
+    it('should return all meetup images', (done) => {
+      agent
+        .get('/meetups/1/images')
+        .set('Authorization', `Bearer ${userTestToken}`)
+        .expect(200, done);
+    });
+  });
+
   after(async () => {
     await db.dropTable({ tableName: 'Upvote' });
     await db.dropTable({ tableName: 'Downvote' });

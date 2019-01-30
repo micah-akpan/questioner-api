@@ -1,7 +1,7 @@
 import 'chai/register-should';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import Model from '../../../models/all';
+import Model from '../../../models/all/Model';
 
 chai.use(chaiAsPromised);
 

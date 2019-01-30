@@ -4,6 +4,7 @@ import { search } from './helpers/search';
 import { sendResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 import RecordTransformer from './helpers/RecordTransformer';
+import { Meetup, Image, Question } from '../models/all';
 
 export default {
   async getAllMeetups(req, res) {
@@ -11,11 +12,11 @@ export default {
       if (objectHasProps(req.query)) {
         const { searchTerm } = req.query;
 
-        const meetups = await db.queryDb({
-          text: 'SELECT id, topic, location, happeningon as "happeningOn", tags FROM Meetup'
+        const meetupResults = await db.queryDb({
+          text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup'
         });
 
-        const meetupRecords = meetups.rows;
+        const meetupRecords = meetupResults.rows;
 
         const byTopic = search(meetupRecords, 'topic', searchTerm);
         const byLocation = search(meetupRecords, 'location', searchTerm);
@@ -23,11 +24,7 @@ export default {
 
         const allMeetups = [...byTopic, ...byLocation, ...byTag];
 
-        let filteredMeetups = _.uniqBy(allMeetups, 'id');
-
-        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'nulls-to-empty-array');
-
-        filteredMeetups = RecordTransformer.transform(filteredMeetups, 'tags', 'inner-nulls-with-empty-string');
+        const filteredMeetups = _.uniqBy(allMeetups, 'id');
 
         if (allMeetups.length) {
           return sendResponse({
@@ -49,21 +46,17 @@ export default {
           }
         });
       }
-      const meetups = await db.queryDb({
+      const meetupResults = await db.queryDb({
         text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
       });
-      let meetupRecords = meetups.rows;
-
-      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'nulls-to-empty-array');
-
-      meetupRecords = RecordTransformer.transform(meetupRecords, 'tags', 'inner-nulls-with-empty-string');
+      const meetups = meetupResults.rows;
 
       return sendResponse({
         res,
         status: 200,
         payload: {
           status: 200,
-          data: meetupRecords
+          data: meetups
         }
       });
     } catch (e) {
@@ -84,12 +77,10 @@ export default {
         location, topic, happeningOn, tags
       } = req.body;
 
-      const meetupByLocation = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE location=$1 AND happeningOn=$2',
-        values: [location, happeningOn]
-      });
+      const meetupByLocationResult = await Meetup.find({ location, happeningOn }, 'AND');
+      const meetups = meetupByLocationResult.rows;
 
-      if (arrayHasValues(meetupByLocation.rows)) {
+      if (arrayHasValues(meetups)) {
         return sendResponse({
           res,
           status: 409,
@@ -110,20 +101,6 @@ export default {
           }
         });
       }
-
-      /* eslint-disable */
-      // This parses the str and forms into a
-      // a compatible postgres array insertion string
-      let allTags = '{';
-      tags.forEach((tag, i) => {
-        if (i === tags.length - 1) {
-          allTags += tag;
-          allTags += '}';
-        } else {
-          allTags += tag;
-          allTags += ', ';
-        }
-      })
 
       const uniqueTags = uniq(tags);
 
@@ -162,14 +139,11 @@ export default {
   async getSingleMeetup(req, res) {
     try {
       const result = await db.queryDb({
-        text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup WHERE id=$1',
+        text: `SELECT id, topic, location, happeningOn as "happeningOn", 
+               tags FROM Meetup WHERE id=$1`,
         values: [req.params.meetupId]
       });
-
-      let meetups = RecordTransformer.transform(result.rows, 'tags', 'nulls-to-empty-array');
-
-      meetups = RecordTransformer.transform(result.rows, 'tags', 'inner-nulls-with-empty-string');
-
+      const meetups = RecordTransformer.transform(result.rows, 'tags', 'nulls-to-empty-array');
       const meetupRecord = meetups[0];
 
       if (meetupRecord) {
@@ -205,28 +179,19 @@ export default {
   async deleteMeetup(req, res) {
     const { meetupId } = req.params;
     try {
-      const results = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [meetupId]
-      });
+      const meetupResults = await Meetup.findById(meetupId);
+      const meetupRecord = meetupResults.rows[0];
 
-      if (arrayHasValues(results.rows)) {
-        const meetupRecord = results.rows[0];
-
-        const questionsResult = await db.queryDb({
-          text: 'SELECT * FROM Question WHERE meetup=$1',
-          values: [meetupRecord.id]
-        });
-
-        if (arrayHasValues(questionsResult.rows)) {
-          // there are questions of this meetup
+      if (meetupRecord) {
+        const questionsResult = await Question.find({ meetup: 1 });
+        const questions = questionsResult.rows;
+        if (arrayHasValues(questions)) {
+          // There are questions of this meetup
           await db.queryDb({
             text: 'DELETE FROM Question WHERE meetup=$1',
             values: [meetupRecord.id]
           });
         }
-
-
         await db.queryDb({
           text: 'DELETE FROM Meetup WHERE id=$1',
           values: [meetupId]
@@ -265,12 +230,11 @@ export default {
   async getUpcomingMeetups(req, res) {
     try {
       const results = await db.queryDb({
-        text: 'SELECT id, topic as title, location, happeningOn, tags FROM Meetup WHERE happeningOn >= NOW()'
+        text: `SELECT id, topic as title, location, happeningOn, tags FROM Meetup 
+               WHERE happeningOn >= NOW()`
       });
 
-      let upComingMeetups = RecordTransformer.transform(results.rows, 'tags', 'nulls-to-empty-array');
-
-      upComingMeetups = RecordTransformer.transform(upComingMeetups, 'tags', 'inner-nulls-with-empty-string');
+      const upComingMeetups = results.rows;
 
       if (arrayHasValues(upComingMeetups)) {
         return sendResponse({
@@ -305,14 +269,13 @@ export default {
 
   async addTagsToMeetup(req, res) {
     try {
-      const meetupResult = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [req.params.meetupId]
-      });
+      const { meetupId } = req.params;
+      const meetupResult = await Meetup.findById(meetupId);
+      const meetup = meetupResult.rows[0];
 
       const { tags } = req.body;
 
-      if (meetupResult.rows.length > 0) {
+      if (meetup) {
         if (tags.length > 5) {
           return sendResponse({
             res,
@@ -323,9 +286,9 @@ export default {
             }
           });
         }
-        const newTags = meetupResult.rows[0].tags
-          .concat(tags)
-          .filter(tag => tag !== null);
+
+        meetup.tags = meetup.tags === null ? [] : meetup.tags;
+        const newTags = meetup.tags.concat(tags);
 
         const uniqueTags = uniq(newTags);
 
@@ -333,14 +296,10 @@ export default {
           text: `UPDATE Meetup
                  SET tags=$1
                  WHERE id=$2 RETURNING id as meetup,topic,tags`,
-          values: [uniqueTags, req.params.meetupId]
+          values: [uniqueTags, meetupId]
         });
 
         const meetupRecord = result.rows[0];
-
-        const parsedTags = meetupRecord.tags.map(tag => (tag === null ? '' : tag));
-
-        meetupRecord.tags = parsedTags;
 
         return sendResponse({
           res,
@@ -374,36 +333,29 @@ export default {
 
   async addImagesToMeetup(req, res) {
     try {
-      const meetupResult = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [req.params.meetupId]
-      });
+      const { meetupId } = req.params;
 
-      if (arrayHasValues(meetupResult.rows)) {
-        if (req.files.length === 0) {
-          return sendResponse({
-            res,
-            status: 422,
-            payload: {
-              status: 422,
-              error: 'You must provide at least one image'
-            }
+      const meetupResult = await Meetup.findById(meetupId);
+      const meetups = meetupResult.rows;
+      if (arrayHasValues(meetups)) {
+        req.files.forEach(async (file) => {
+          await db.queryDb({
+            text: `INSERT INTO Image (imageUrl, meetup)
+                   VALUES ($1, $2)`,
+            values: [file.secure_url, meetupId]
           });
-        }
+        });
 
-        const [image1 = '', image2 = '', image3 = '', image4 = ''] = req.files;
-        const images = `{${image1.secure_url}, ${image2.secure_url}, ${image3.secure_url}, ${image4.secure_url}}`;
+        const images = req.files.map(file => file.secure_url);
+
         const result = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
                  WHERE id=$2 RETURNING id as meetup, topic, images`,
-          values: [images, req.params.meetupId]
+          values: [images, meetupId]
         });
 
         const meetupRecord = result.rows[0];
-        const parsedImages = meetupRecord.images.map(image => (image === 'undefined' ? '' : image));
-
-        meetupRecord.images = parsedImages;
 
         return sendResponse({
           res,
@@ -421,6 +373,110 @@ export default {
         payload: {
           status: 404,
           error: 'You cannot add images to this meetup, because the meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request, please check request and try again'
+        }
+      });
+    }
+  },
+
+  async getAllMeetupTags(req, res) {
+    return res.status(404).send('Not Implemented');
+  },
+
+  async getAllMeetupImages(req, res) {
+    try {
+      const { meetupId } = req.params;
+      const meetupByIdResult = await Meetup.findById(meetupId);
+      if (arrayHasValues(meetupByIdResult.rows)) {
+        const meetupImagesResult = await Image.find({ meetup: meetupId });
+        const images = meetupImagesResult.rows;
+
+        if (arrayHasValues(images)) {
+          return sendResponse({
+            res,
+            status: 200,
+            payload: {
+              status: 200,
+              data: images
+            }
+          });
+        }
+
+        return sendResponse({
+          res,
+          status: 404,
+          payload: {
+            status: 404,
+            error: 'There are no images for this meetup at the moment'
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'This meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendResponse({
+        res,
+        status: 500,
+        payload: {
+          status: 500,
+          error: 'Invalid request, please check request and try again'
+        }
+      });
+    }
+  },
+
+  async getSingleMeetupImage(req, res) {
+    try {
+      const { meetupId, imageId } = req.params;
+      const meetupExist = await Meetup.recordExist(meetupId);
+      if (meetupExist) {
+        const imageResult = await db.queryDb({
+          text: 'SELECT * FROM Image WHERE id=$1',
+          values: [imageId]
+        });
+        const image = imageResult.rows[0];
+        if (image) {
+          return sendResponse({
+            res,
+            status: 200,
+            payload: {
+              status: 200,
+              data: [image]
+            }
+          });
+        }
+
+        return sendResponse({
+          res,
+          status: 404,
+          payload: {
+            status: 404,
+            error: 'The meetup image does not exist'
+          }
+        });
+      }
+
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The requested meetup does not exist'
         }
       });
     } catch (e) {

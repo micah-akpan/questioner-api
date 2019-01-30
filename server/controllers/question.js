@@ -1,6 +1,6 @@
 import { arrayHasValues } from '../utils';
 import db from '../db';
-import Question from '../models/all/Question';
+import { Question, Meetup, Upvote } from '../models/all';
 import { sendResponse } from './helpers';
 
 export default {
@@ -10,14 +10,9 @@ export default {
         title, body, meetupId
       } = req.body;
 
-      const meetupResult = await db.queryDb({
-        text: 'SELECT * FROM Meetup WHERE id=$1',
-        values: [meetupId]
-      });
-
-      if (arrayHasValues(meetupResult.rows)) {
-        // meetup exist
-        const userId = req.decodedToken.userId || req.body.userId;
+      const meetupExist = await Meetup.recordExist(meetupId);
+      if (meetupExist) {
+        const { userId } = req.decodedToken || req.body;
         const questionResult = await db.queryDb({
           text: `INSERT INTO Question (title, body, meetup, createdBy)
                  VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
@@ -57,41 +52,26 @@ export default {
   async upvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
-      const userId = req.decodedToken.userId || req.body.userId;
+      const { userId } = req.decodedToken || req.body;
 
-      const questionResult = await db.queryDb({
-        text: 'SELECT id, createdBy as user, votes, meetup, title, body FROM Question WHERE id=$1',
-        values: [questionId]
-      });
+      const questionExist = await Question.questionExist(questionId);
 
-      const question = questionResult.rows[0];
+      if (questionExist) {
+        const votes = await Question.getVotes(questionId);
+        const voteExist = await Upvote.voteExist(userId, questionId);
 
-
-      if (question) {
-        const { votes } = question;
-
-        const voteResult = await db.queryDb({
-          text: `SELECT * FROM Upvote 
-                 WHERE "user"=$1 AND question=$2`,
-          values: [userId, question.id]
-        });
-
-        if (arrayHasValues(voteResult.rows)) {
+        if (voteExist) {
           return sendResponse({
             res,
             status: 409,
             payload: {
               status: 409,
-              error: 'This user has already upvoted this question. You cannot upvote a question more than once'
+              error: 'You have already upvoted this question. You cannot upvote a question more than once'
             }
           });
         }
 
-        await db.queryDb({
-          text: `INSERT INTO Upvote ("user", question)
-                 VALUES ($1, $2)`,
-          values: [userId, question.id]
-        });
+        await Upvote.create(userId, questionId);
 
         const questionResults = await db.queryDb({
           text: `UPDATE Question

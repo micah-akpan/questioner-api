@@ -49,7 +49,7 @@ app.use('/', indexRouter);
 // catch 404 error and forward to
 // error handler
 app.use((req, res, next) => {
-  const error = new Error('Not Found');
+  const error = new Error('This Route is Not Available On this server');
   error.status = 404;
   next(error);
 });

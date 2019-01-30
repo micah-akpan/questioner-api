@@ -62,7 +62,7 @@ export default (useJoiError = false) => {
              * @description Returns a
              * custom Error based
              * on a substring found in the error
-             * message: 'msg'
+             * message: `msg`
              */
             const makeCustomError = msg => ({
               status: 400,

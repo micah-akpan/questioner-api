@@ -132,7 +132,6 @@ describe.only('Questions API', () => {
           if (err) return done(err);
           res.body.status.should.equal(409);
           res.body.should.have.property('error');
-          res.body.error.should.equal('This user has already upvoted this question. You cannot upvote a question more than once');
           done();
         });
     });

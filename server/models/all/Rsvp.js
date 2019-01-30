@@ -1,4 +1,4 @@
-import Model from '.';
+import Model from './Model';
 
 /**
  * @class Rsvp
