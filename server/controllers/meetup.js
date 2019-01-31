@@ -13,7 +13,7 @@ export default {
         const { searchTerm } = req.query;
 
         const meetupResults = await db.queryDb({
-          text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup'
+          text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags, images FROM Meetup'
         });
 
         const meetupRecords = meetupResults.rows;
@@ -47,7 +47,7 @@ export default {
         });
       }
       const meetupResults = await db.queryDb({
-        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
+        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags, images FROM Meetup'
       });
       const meetups = meetupResults.rows;
 
