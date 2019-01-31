@@ -40,10 +40,12 @@ class Model {
    */
   async findAll(options) {
     const { orderBy, order } = options;
-    // order [enum: asc|desc]
     if (Object.keys(options).length > 0) {
       switch (order) {
         case 'desc': {
+          console.log('....got here');
+          console.log(`name = ${this._name}`);
+          console.log(`orderby = ${orderBy}`);
           return this._db.queryDb({
             text: `SELECT * FROM ${this._name} ORDER BY $1 DESC`,
             values: [orderBy]

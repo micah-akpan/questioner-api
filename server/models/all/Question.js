@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Model from './Model';
 
 /**
@@ -44,6 +45,27 @@ class Question extends Model {
     const questionResult = await this.findById(questionId);
     const question = questionResult.rows[0];
     return question.votes;
+  }
+
+  /**
+   * @method sortQuestionByVotes
+   * @returns { Promise<Array> } An array of questions
+   */
+  async sortQuestionByVotes() {
+    const questionsResult = await this._db.queryDb({
+      text: 'SELECT id, title, body, meetup, votes, createdby as "createdBy", createdon as "createdOn" FROM Question ORDER BY votes DESC'
+    });
+
+    return questionsResult.rows;
+  }
+
+  async findById(questionId) {
+    const results = await this._db.queryDb({
+      text: 'SELECT * FROM Question WHERE id=$1',
+      values: [questionId]
+    });
+
+    return results.rows[0];
   }
 }
 

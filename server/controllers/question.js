@@ -1,7 +1,9 @@
-import { arrayHasValues } from '../utils';
 import db from '../db';
-import { Question, Meetup, Upvote } from '../models/all';
+import {
+  Question, Meetup, Upvote, Downvote, Comment
+} from '../models/all';
 import { sendResponse, sendServerErrorResponse } from './helpers';
+import { arrayHasValues } from '../utils';
 
 export default {
   async createQuestion(req, res) {
@@ -97,31 +99,21 @@ export default {
   async downvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
-      const userId = req.decodedToken.userId || req.body.userId;
-      const results = await db.queryDb({
-        text: 'SELECT id, createdBy as user, meetup, title, body, votes FROM Question WHERE id=$1',
-        values: [questionId]
-      });
+      const { userId } = req.decodedToken || req.body;
 
-      let question = results.rows[0];
+      const questionExist = await Question.questionExist(questionId);
 
+      if (questionExist) {
+        const votes = await Question.getVotes(questionId);
+        const voteExist = await Downvote.voteExist(userId, questionId);
 
-      if (question) {
-        const { votes } = question;
-
-        const voteResult = await db.queryDb({
-          text: `SELECT * FROM Downvote 
-                 WHERE "user"=$1 AND question=$2`,
-          values: [userId, question.id]
-        });
-
-        if (arrayHasValues(voteResult.rows)) {
+        if (voteExist) {
           return sendResponse({
             res,
             status: 409,
             payload: {
               status: 409,
-              error: 'This user has already downvoted this question. You cannot downvote a question more than once'
+              error: 'You have downvoted this question. You cannot downvote a question more than once'
             }
           });
         }
@@ -129,10 +121,10 @@ export default {
         await db.queryDb({
           text: `INSERT INTO Downvote ("user", question)
                  VALUES ($1, $2)`,
-          values: [userId, question.id]
+          values: [userId, questionId]
         });
 
-        question = await db.queryDb({
+        const question = await db.queryDb({
           text: `UPDATE Question
                  SET votes = $1
                  WHERE id = $2 RETURNING meetup, title, body, votes`,
@@ -164,11 +156,8 @@ export default {
 
   async getAllQuestions(req, res) {
     try {
-      const results = await Question.findAll({ orderBy: 'votes', order: 'desc' });
-
-      const questions = results.rows;
-
-      if (questions.length > 0) {
+      const questions = await Question.sortQuestionByVotes();
+      if (arrayHasValues(questions)) {
         return sendResponse({
           res,
           status: 200,
@@ -178,44 +167,26 @@ export default {
           }
         });
       }
-
-      return sendResponse({
-        res,
-        status: 404,
-        payload: {
-          status: 404,
-          error: 'There are no questions for this meetup at the moment'
-        }
-      });
     } catch (e) {
       return sendServerErrorResponse(res);
     }
   },
 
-  async addComments(req, res) {
+  async postComments(req, res) {
     try {
       const { questionId, comment } = req.body;
+      const question = await Question.findById(questionId);
 
-      const results = await db.queryDb({
-        text: 'SELECT * FROM Question WHERE id=$1',
-        values: [questionId]
-      });
-
-      if (results.rows.length > 0) {
+      if (question) {
         const newComment = {
           question: questionId,
-          title: results.rows[0].title,
-          body: results.rows[0].body,
+          title: question.title,
+          body: question.body,
           comment
         };
 
-        const addCommentsQuery = {
-          text: `INSERT INTO Comment (body, question)
-               VALUES ($1, $2) RETURNING *`,
-          values: [comment, questionId]
-        };
+        await Comment.create({ comment, questionId });
 
-        await db.queryDb(addCommentsQuery);
         return sendResponse({
           res,
           status: 201,

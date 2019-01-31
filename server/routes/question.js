@@ -22,6 +22,6 @@ router.patch('/questions/:questionId/downvote',
 
 router.post('/comments',
   validateRequest,
-  questionController.addComments);
+  questionController.postComments);
 
 export default router;
