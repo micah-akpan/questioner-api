@@ -2,7 +2,7 @@ import 'chai/register-should';
 import sinon from 'sinon';
 import Misc from '../../../../middlewares/misc';
 
-describe.only('Misc middleware', () => {
+describe('Misc middleware', () => {
   describe('trimBody()', () => {
     it('should trim request body', () => {
       const req = {

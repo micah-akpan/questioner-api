@@ -5,7 +5,7 @@ import { app } from '../../app';
 import db from '../../db';
 import { createTestToken } from '../../utils';
 
-describe.only('User API', () => {
+describe('User API', () => {
   const agent = request(app);
   const testUser = {
     email: 'testuser@gmail.com',

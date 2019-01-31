@@ -27,39 +27,12 @@ class Model {
       return Promise.reject(new Error('Please specify a primary key column value'));
     }
 
-    return db.queryDb({
+    const queryResult = await db.queryDb({
       text: `SELECT * FROM ${this._name} WHERE id=$1`,
       values: [id]
     });
-  }
 
-  /**
-   * @method findAll
-   * @param {*} options
-   * @returns {Promise} Resolves to the found records
-   */
-  async findAll(options) {
-    const { orderBy, order } = options;
-    if (Object.keys(options).length > 0) {
-      switch (order) {
-        case 'desc': {
-          console.log('....got here');
-          console.log(`name = ${this._name}`);
-          console.log(`orderby = ${orderBy}`);
-          return this._db.queryDb({
-            text: `SELECT * FROM ${this._name} ORDER BY $1 DESC`,
-            values: [orderBy]
-          });
-        }
-
-        default: {
-          return this._db.queryDb({
-            text: `SELECT * FROM ${this._name} ORDER BY ASC`,
-            values: [orderBy]
-          });
-        }
-      }
-    }
+    return queryResult.rows;
   }
 
   /**

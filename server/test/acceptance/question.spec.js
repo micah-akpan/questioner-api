@@ -6,7 +6,7 @@ import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe.only('Questions API', () => {
+describe('Questions API', () => {
   const adminTestToken = createTestToken({ admin: true });
   const userTestToken = createTestToken({ admin: false });
 

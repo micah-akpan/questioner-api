@@ -1,7 +1,7 @@
 import 'chai/register-should';
 import { search } from '../../../controllers/helpers/search';
 
-describe.only('search()', () => {
+describe('search()', () => {
   describe('Search by topic and other criteria', () => {
     it('should return a list of matched data', () => {
       const data = [

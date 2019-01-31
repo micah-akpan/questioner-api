@@ -7,7 +7,7 @@ import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe.only('RSVP API', () => {
+describe('RSVP API', () => {
   const userTestToken = createTestToken({ admin: true });
   before(async () => {
     await db.dropTable({ tableName: 'Rsvp' });

@@ -1,7 +1,7 @@
 import 'chai/register-should';
 import RecordTransformer from '../../../controllers/helpers/RecordTransformer';
 
-describe.only('RecordTransformer', () => {
+describe('RecordTransformer', () => {
   const testRecords = [
     {
       id: 1, name: 'my name', likes: null, dislikes: ['something', null, null]
