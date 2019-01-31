@@ -5,6 +5,101 @@ HOST: https://questionerv1.herokuapp.com/api/v1
 
 Questioner is a question crowdsourcing tool that provides support for meetup organizers, with features that help them prioritize questions asked by potential attendees.
 
+# Group Users
+## Sign Up  [/auth/signup]
+
+### Sign Up as a new User [POST]
+You can sign up using this action
+
++ Request (application/json)
+
+        {
+            "firstname": "arya",
+            "lastname": "stark",
+            "email": "aryastark@gmail.com",
+            "password": "arya1234"
+        }
+        
++ Response 201 (application/json)
+
+        {
+           "status": 201,
+           "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true,
+                            "phoneNumber": "803-333-3333"
+                        }
+                }
+                            
+        }
+
+
++ Response 409 (application/json)
+
+        {
+            "status": 409,
+            "error": "The email you provided is already used by another user"
+        }
+
+## Login [/auth/login]
+
+### Login as an existing user [POST]
+You can login using this action
+
++ Request (application/json)
+
+        {
+            "email": "aryastark@gmail.com",
+            "password": "arya1234"
+        }
+        
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true,
+                            "phoneNumber": "803-333-3333"
+                        }
+                }
+        }            
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "error": "You entered an incorrect password, please check and try again"         
+        }
+
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "error": "The email you entered does not belong to any account"
+        }
+
 # Group Meetups
 
 ## Meetups [/meetups]
@@ -496,75 +591,3 @@ object containing a meetup.
                 }
             ]
         }
-
-
-# Group Users
-
-## Sign Up  [/auth/signup/]
-
-### Create a new User [POST]
-
-+ Request (application/json)
-
-        {
-            "firstname": "arya",
-            "lastname": "stark",
-            "email": "aryastark@gmail.com",
-            "password": "arya1234"
-        }
-        
-+ Response 201 (application/json)
-
-        {
-           "status": 201,
-           "data": [
-                {
-                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
-                    "user": {
-                            "id": 1,
-                            "firstname": "arya",
-                            "lastname": "stark",
-                            "email": "aryastark@gmail.com",
-                            "username": "arya",
-                            "othername": "myname",
-                            "isAdmin": false,
-                            "createdOn": "1/1/2019",
-                            "registered": true
-                        }
-                }
-                            
-        }
-
-
-## Login User [/auth/login/]
-
-### Login [POST]
-
-+ Request (application/json)
-
-        {
-            "email": "aryastark@gmail.com",
-            "password": "$abcdefghijklkjdaxnlwfnklakjldaka"
-        }
-        
-+ Response 201 (application/json)
-
-        {
-            "status": 201,
-            "data": [
-                {
-                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
-                    "user": {
-                            "id": 1,
-                            "firstname": "arya",
-                            "lastname": "stark",
-                            "email": "aryastark@gmail.com",
-                            "username": "arya",
-                            "othername": "myname",
-                            "isAdmin": false,
-                            "createdOn": "1/1/2019",
-                            "registered": true
-                        }
-                }
-        }            
-
