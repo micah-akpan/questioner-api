@@ -1,4 +1,5 @@
 import Model from './Model';
+import db from '../../db';
 import { arrayHasValues } from '../../utils';
 
 /**
@@ -9,7 +10,7 @@ class Upvote extends Model {
    * @constructor
    */
   constructor() {
-    super('Upvote');
+    super('Upvote', db);
   }
 
   /**
@@ -19,11 +20,15 @@ class Upvote extends Model {
    * @return {Promise<Boolean>} A promise that resolves to true if vote exist, false otherwise
    */
   async voteExist(userId, questionId) {
-    const voteResult = await this.find({ '"user"': userId, question: questionId }, 'AND');
+    const voteResult = await this.find({
+      where: {
+        '"user"': userId,
+        question: questionId
+      }
+    });
     if (arrayHasValues(voteResult.rows)) {
       return true;
     }
-
     return false;
   }
 

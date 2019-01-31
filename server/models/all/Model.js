@@ -1,6 +1,4 @@
-
-import db from '../../db';
-import { getLastElement, arrayHasValues } from '../../utils';
+import { getLastElement } from '../../utils';
 
 /**
  * @class Model
@@ -12,7 +10,7 @@ class Model {
      * @param {String} modelName
      * @param {*} db
      */
-  constructor(modelName) {
+  constructor(modelName, db) {
     this._name = modelName;
     this._db = db;
   }
@@ -27,32 +25,31 @@ class Model {
       return Promise.reject(new Error('Please specify a primary key column value'));
     }
 
-    const queryResult = await db.queryDb({
+    const queryResult = await this._db.queryDb({
       text: `SELECT * FROM ${this._name} WHERE id=$1`,
       values: [id]
     });
-
-    return queryResult.rows;
+    return queryResult.rows[0];
   }
 
   /**
      * @method findOneAndDelete
-     * @param {Number} pk
+     * @param {Number} id
      * @returns {Promise} Resolves to a delete op query result or rejects with an error
      * if 'pk' is not provided or invalid
      */
-  async findOneAndDelete(pk) {
-    if (!pk) {
+  async findOneAndDelete(id) {
+    if (!id) {
       return Promise.reject(new Error('Please specify a primary key column value'));
     }
 
-    const results = await this._db.queryDb({
+    const queryResult = await this._db.queryDb({
       text: `SELECT * FROM ${this._name} WHERE id=$1`,
-      values: [pk]
+      values: [id]
     });
 
-    if (results.rows.length > 0) {
-      return db.queryDb({
+    if (queryResult.rows.length > 0) {
+      return this._db.queryDb({
         text: `DELETE FROM ${this._name} WHERE id=$1`
       });
     }
@@ -60,29 +57,18 @@ class Model {
 
   /**
    * @method find
-   * @param {*} fields An hash of column names to filter by
-   * @param {String} op OR|AND
+   * @param {*} criteria
    * @returns {Promise} Returns a Promise that resolves to the
    * result of the query
    */
-  async find(fields, op) {
-    const columnNames = Object.keys(fields);
-    const _supportedOps = ['OR', 'AND'];
+  async find(criteria) {
+    const { where } = criteria;
+    const columnNames = Object.keys(where);
 
-    if (columnNames.length > 1) {
-      // Multiple query fields with no operator
-      if (typeof op !== 'string') {
-        return Promise.reject(new Error('Query operator must be a string'));
-      }
+    const queryString = this.makeQueryString(columnNames);
+    const queryValues = columnNames.map(columnName => where[columnName]);
 
-      if (!(_supportedOps.includes(op))) {
-        return Promise.reject(new Error('Please provide a valid operator(OR|AND)'));
-      }
-    }
-
-    const queryString = this.makeQueryString(columnNames, op);
-    const queryValues = columnNames.map(columnName => fields[columnName]);
-    return db.queryDb({
+    return this._db.queryDb({
       text: queryString,
       values: queryValues
     });
@@ -91,15 +77,15 @@ class Model {
   /**
    * @func makeQueryString
    * @param {*} columnNames columnNames is an array of table column names
-   * @param {String} op OR|AND
    * @returns {String} A query string
    */
-  makeQueryString(columnNames, op) {
+  makeQueryString(columnNames) {
     let queryString = `SELECT * FROM ${this._name} WHERE `;
     let count = 1; // keeps track of the prepared query variables
+    const defaultOp = 'AND';
     columnNames.forEach((columnName) => {
       queryString += `${columnName}=$${count} ${getLastElement(columnNames) !== columnName
-        ? op : ''} `;
+        ? defaultOp : ''} `;
       count += 1;
     });
 
@@ -107,36 +93,27 @@ class Model {
   }
 
   /**
-     * @method findOneAndUpdate
-     * @param {Number} pk
-     * @returns {Promise} Resolves to the update query op result or rejects with error
-     * if 'pk' is not provided or is invalid
-     */
-  /* eslint-disable */
-  async findOneAndUpdate(pk) {
-
-  }
-
+   * @method recordExist
+   * @param {Number} id Primary key value
+   * @returns {Promise<Boolean>} Returns true if record exist, false otherwise
+   */
   async recordExist(id) {
-    const recordResult = await this.findById(id);
-    if (arrayHasValues(recordResult.rows)) {
+    const record = await this.findById(id);
+    if (record) {
       return true;
     }
     return false;
   }
 
+  /* eslint-disable */
   /**
      * @method create
      * @param {*} payload
-     * @returns {Promise} Resolves to the create query op result or rejects with error
-     * if 'pk' is not provided or is invalid
+     * @returns {Promise} Resolves to the create query op result 
+     * or rejects with error if 'pk' is not provided or is invalid
      */
   async create(payload) {
-    return new Promise((resolve, reject) => {
-      if (!payload) {
-        reject(new Error('Please provide a payload'))
-      }
-    })
+
   }
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Model from './Model';
-
+import db from '../../db';
 /**
  * @class Question
  */
@@ -9,7 +9,7 @@ class Question extends Model {
    * @constructor
    */
   constructor() {
-    super('Question');
+    super('Question', db);
   }
 
   /**
@@ -42,8 +42,7 @@ class Question extends Model {
    * @returns {Number} Total votes of this question
    */
   async getVotes(questionId) {
-    const questionResult = await this.findById(questionId);
-    const question = questionResult.rows[0];
+    const question = await this.findById(questionId);
     return question.votes;
   }
 

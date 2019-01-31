@@ -1,4 +1,5 @@
 import Model from './Model';
+import db from '../../db';
 import { arrayHasValues } from '../../utils';
 
 /**
@@ -9,7 +10,7 @@ class Downvote extends Model {
      * @constructor
      */
   constructor() {
-    super('Downvote');
+    super('Downvote', db);
   }
 
   /**
@@ -19,14 +20,16 @@ class Downvote extends Model {
    * @returns {Promise<Boolean>} Resolves to true if vote exist, false otherwise
    */
   async voteExist(userId, questionId) {
-    // TODO: Refactor this method into a new class
-    const voteResult = await this.find({ '"user"': userId, question: questionId }, 'AND');
-    console.log(this._name);
-    console.log(voteResult.rows);
+    const voteResult = await this.find({
+      where: {
+        '"user"': userId,
+        question: questionId
+      }
+    });
+
     if (arrayHasValues(voteResult.rows)) {
       return true;
     }
-
     return false;
   }
 }

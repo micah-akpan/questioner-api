@@ -1,5 +1,5 @@
 import Model from './Model';
-
+import db from '../../db';
 /**
  * @class User
  */
@@ -8,7 +8,7 @@ class User extends Model {
      * @constructor
      */
   constructor() {
-    super('User');
+    super('User', db);
   }
 }
 
