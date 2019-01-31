@@ -5,8 +5,8 @@ import rsvpRouter from './rsvp';
 import userRouter from './user';
 import userAdminRouter from './admin-users';
 import commentRouter from './comment';
-import Auth from '../middlewares/auth';
-import Misc from '../middlewares/misc';
+import meetupQuestionRouter from './meetup-question';
+import { Auth, Misc } from '../middlewares';
 
 const { checkToken } = Auth;
 const { trimBody } = Misc;
@@ -27,5 +27,6 @@ router.use('/api/v1', trimBody, checkToken, rsvpRouter);
 router.use('/api/v1', trimBody, checkToken, questionRouter);
 router.use('/api/v1', trimBody, checkToken, userAdminRouter);
 router.use('/api/v1', trimBody, checkToken, commentRouter);
+router.use('/api/v1', trimBody, checkToken, meetupQuestionRouter);
 
 export default router;

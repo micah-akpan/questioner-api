@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
-import { sendResponse } from './helpers';
+import { sendResponse, sendServerErrorResponse } from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
 import RecordTransformer from './helpers/RecordTransformer';
 import { Meetup, Image, Question } from '../models/all';
@@ -60,14 +60,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -125,14 +118,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          data: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -165,14 +151,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -216,14 +195,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -256,14 +228,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -320,14 +285,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -376,14 +334,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -429,14 +380,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -480,14 +424,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
-  }
+  },
 };
