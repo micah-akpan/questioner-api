@@ -20,8 +20,4 @@ router.patch('/questions/:questionId/downvote',
   checkParams,
   questionController.downvoteQuestion);
 
-router.post('/comments',
-  validateRequest,
-  questionController.postComments);
-
 export default router;
