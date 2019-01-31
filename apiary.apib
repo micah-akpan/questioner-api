@@ -343,7 +343,7 @@ You can add meetups to this meetup using this action
         
 # Group Questions
 
-## Questions [/questions/]
+## Questions [/questions]
 
 ### List all Questions [GET]
 
@@ -354,32 +354,32 @@ You can add meetups to this meetup using this action
             "data": [
                 {
                     "id": 1,
-                    "title": "my new question  title 2",
+                    "title": "my new question  title 1",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
-                    "votes": 1,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdBy": 1,
+                    "meetup": 1,
+                    "votes": 0,
+                    "createdOn": "2/1/2019"
                 },
                 
                 {
                     "id": 2,
                     "title": "my new question  title 2",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
+                    "createdBy": 1,
+                    "meetup": 1,
                     "votes": 0,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdOn": "2/1/2019"
                 },
                 
                 {
                     "id": 3,
-                    "title": "my new question  title 2",
+                    "title": "my new question  title 3",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
-                    "votes": 1,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdBy": 1,
+                    "meetup": 1,
+                    "votes": 0,
+                    "createdOn": "2/1/2019"
                 }
             ]
         }
@@ -390,8 +390,8 @@ You can add meetups to this meetup using this action
 
         {
            "meetupId": 1,
-           "title": "question 1",
-           "body": "question 1 body"
+           "title": "question sample title",
+           "body": "question sample body"
         }
         
 + Response 201 (application/json)
@@ -401,8 +401,8 @@ You can add meetups to this meetup using this action
           "data": [
                 {
                   "user": 1,
-                  "title": "question 1",
-                  "body": "question 1 body",
+                  "title": "question sample title",
+                  "body": "question sample body",
                   "meetup": 1
                 }
             ]
@@ -429,6 +429,12 @@ You can add meetups to this meetup using this action
             ]
         }
 
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The meetup with id: 1 does not exist"
+        }
 
 ## Question Upvote [/questions/{question_id}/upvote]
 
