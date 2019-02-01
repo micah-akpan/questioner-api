@@ -6,7 +6,7 @@ import { getFutureDate, createTestToken } from '../../utils';
 
 const agent = request(app);
 
-describe('Meetups API', () => {
+describe.only('Meetups API', () => {
   const adminTestToken = createTestToken({ admin: true });
   const userTestToken = createTestToken({ admin: false });
   before('Setup', async () => {

@@ -4,7 +4,7 @@ import httpMocks from 'node-mocks-http';
 import Auth from '../../../../middlewares/auth';
 import { createTestToken } from '../../../../utils';
 
-describe('Auth Middlewares', () => {
+describe.only('Auth Middlewares', () => {
   let testToken = '';
   let authHeader = null;
   let req = {};

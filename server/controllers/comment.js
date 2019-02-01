@@ -32,7 +32,7 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: 'You cannot post comments on this question because the question does not exist'
+          error: 'The requested question does not exist'
         }
       });
     } catch (e) {

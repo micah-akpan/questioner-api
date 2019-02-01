@@ -2,7 +2,7 @@ import 'chai/register-should';
 import jwt from 'jsonwebtoken';
 import userHelpers from '../../../controllers/helpers/user';
 
-describe('User Helpers', () => {
+describe.only('User Helpers', () => {
   let userHelper = null;
   before(() => {
     // db mock

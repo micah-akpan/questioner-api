@@ -1,5 +1,6 @@
 /* eslint-disable */
 import Model from './Model';
+import db from '../../db';
 
 /**
  * @class Comment
@@ -9,7 +10,7 @@ class Comment extends Model {
    * @constructor
    */
   constructor() {
-    super('Comment');
+    super('Comment', db);
   }
 
   async create(payload) {
