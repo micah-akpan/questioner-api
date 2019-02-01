@@ -1,12 +1,10 @@
-import express from 'express';
+import { Router } from 'express';
 import meetupController from '../controllers/meetup';
-import questionController from '../controllers/question';
-import schemaValidator from '../middlewares/schema/schemaValidator';
-import Auth from '../middlewares/auth';
-import Upload from '../middlewares/uploads';
-import Misc from '../middlewares/misc';
+import {
+  Auth, Upload, Misc, schemaValidator
+} from '../middlewares';
 
-const router = express.Router();
+const router = Router();
 
 const { isAdmin } = Auth;
 const { checkParams } = Misc;
@@ -29,10 +27,6 @@ router
   .get(checkParams, meetupController.getSingleMeetup)
   .delete(checkParams, isAdmin, meetupController.deleteMeetup);
 
-router.get('/meetups/:meetupId/questions',
-  checkParams,
-  questionController.getQuestions);
-
 router.route('/meetups/:meetupId/tags')
   .get(checkParams, meetupController.getAllMeetupTags)
   .post(
@@ -53,11 +47,5 @@ router.route('/meetups/:meetupId/images')
 
 router.route('/meetups/:meetupId/images/:imageId')
   .get(checkParams, meetupController.getSingleMeetupImage);
-
-router
-  .route('/meetups/:meetupId/questions/:questionId')
-  .get(checkParams, questionController.getSingleMeetupQuestion)
-  .patch(checkParams, questionController.updateMeetupQuestion)
-  .delete(checkParams, isAdmin, questionController.deleteMeetupQuestion);
 
 export default router;

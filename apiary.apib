@@ -5,6 +5,101 @@ HOST: https://questionerv1.herokuapp.com/api/v1
 
 Questioner is a question crowdsourcing tool that provides support for meetup organizers, with features that help them prioritize questions asked by potential attendees.
 
+# Group Users
+## Sign Up  [/auth/signup]
+
+### Sign Up as a new User [POST]
+You can sign up using this action
+
++ Request (application/json)
+
+        {
+            "firstname": "arya",
+            "lastname": "stark",
+            "email": "aryastark@gmail.com",
+            "password": "arya1234"
+        }
+        
++ Response 201 (application/json)
+
+        {
+           "status": 201,
+           "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true,
+                            "phoneNumber": "803-333-3333"
+                        }
+                }
+                            
+        }
+
+
++ Response 409 (application/json)
+
+        {
+            "status": 409,
+            "error": "The email you provided is already used by another user"
+        }
+
+## Login [/auth/login]
+
+### Login as an existing user [POST]
+You can login using this action
+
++ Request (application/json)
+
+        {
+            "email": "aryastark@gmail.com",
+            "password": "arya1234"
+        }
+        
++ Response 201 (application/json)
+
+        {
+            "status": 201,
+            "data": [
+                {
+                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
+                    "user": {
+                            "id": 1,
+                            "firstname": "arya",
+                            "lastname": "stark",
+                            "email": "aryastark@gmail.com",
+                            "username": "arya",
+                            "othername": "myname",
+                            "isAdmin": false,
+                            "createdOn": "1/1/2019",
+                            "registered": true,
+                            "phoneNumber": "803-333-3333"
+                        }
+                }
+        }            
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "error": "You entered an incorrect password, please check and try again"         
+        }
+
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "error": "The email you entered does not belong to any account"
+        }
+
 # Group Meetups
 
 ## Meetups [/meetups]
@@ -44,7 +139,7 @@ Questioner is a question crowdsourcing tool that provides support for meetup org
 
 ### Create a New Meetup [POST]
 
-You may create your own meetup using this action. It takes a JSON
+You can create a meetup using this action. It takes a JSON
 object containing a meetup.
 
 + Request (application/json)
@@ -52,95 +147,121 @@ object containing a meetup.
         {
             "topic": "meetup topic 1",
             "location": "meetup location 1",
-            "happeningOn": "2019-01-14T21:49:42.928Z",
-            "tags": "tag1,tag2,tag3"
+            "happeningOn": "1/2/2020",
+            "tags": ["tag1","tag2","tag3"],
+            "description": "sample description"
         }
 
 + Response 201 (application/json)
 
-    + Body
-
-            {
-                "status": 201,
-                "data": [
-                  {
+        {
+            "status": 201,
+            "data": [
+                {
                     "topic": "meetup topic",
                     "location": "meetup location",
                     "happenignOn": "2/2/2019",
                     "tags": ["tag1", "tag2", "tag3"]
-                  }
-                ]
-            }
+                }
+            ]
+        }
 
++ Response 409 (application/json)
 
+        {
+            "status": 409,
+            "error": "A meetup is scheduled on the same day at the same location"
+        }
+
++ Response 422 (application/json)
+
+        {
+            "status": 422,
+            "error": "You cannot add more than 5 tags to this meetup"
+        }
 
 ## Meetup [/meetups/{meetup_id}]
 
 + Parameters
-    + meetup_id (number) - ID of the Meetup in the form of an integer
+    + meetup_id (number, required) - ID of the Meetup in the form of an integer
 
 ### Fetch a Single Meetup [GET]
 + Response 200 (application/json)
 
-            {
-                "status": 200,
-                "data": [
-                    {
-                        "id": 1,
-                        "topic": "meetup 1",
-                        "location": "meetup location 1",
-                        "happeningOn": "2/3/2019",
-                        "tags": ['tag1', 'tag2', 'tag3']
-                    }, 
-                   
-                ]
-            }
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "topic": "meetup 1",
+                    "location": "meetup location 1",
+                    "happeningOn": "2/3/2019",
+                    "tags": ['tag1', 'tag2', 'tag3']
+                }, 
+                
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested meetup does not exist"
+        }
 
 ### Delete a Single Meetup [DELETE]
 + Response 200 (application/json)
 
-        [
-            {
-                "status": 200,
-                "data": [
-                    "Meetup with id: 1 has been deleted successfully
-                ]
-            }
-        ]
+        {
+            "status": 200,
+            "data": [ "Meetup with id: 1 has been deleted successfully" ]
+        }
 
-## Upcoming Meetups [/meetups/upcoming/]
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The meetup cannot be deleted because it doesn\'t exist."
+        }
+
+## Upcoming Meetups [/meetups/upcoming]
 
 ### List Upcoming Meetups [GET]
 + Response 200 (application/json)
 
-        [
-            {
-                "status": 200,
-                "data": [
-                    {
-                        "id": 1,
-                        "topic": "meetup 1",
-                        "location": "meetup location 1",
-                        "happeningOn": "2/3/2019",
-                        "tags": ["tag1", "tag2", "tag3"]
-                    }, 
-                   
-                ]
-            }
-        ]
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "topic": "meetup 1",
+                    "location": "meetup location 1",
+                    "happeningOn": "2/3/2019",
+                    "tags": ["tag1", "tag2", "tag3"]
+                }, 
+                
+            ]
+        }
 
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "There are no upcoming meetups at the moment"
+        }
 
 ## Meetup Images [/meetups/{meetup_id}/images]
 
 + Parameters
-    + meetup_id (number) - ID of the Meetup in the form of an integer
+    + meetup_id (number, required) - ID of the Meetup in the form of an integer
 
 ### Add Meetup Images [POST]
+You can add images to meetups using this action
 
 + Request (application/json)
 
         {
-          "images": ["image1.jpg", "image2.jpg"]
+          "images": ["sample1.jpg", "sample2.jpg"]
         }
         
 + Response 201 (application/json)
@@ -151,9 +272,46 @@ object containing a meetup.
                 {
                    "meetup": 1,
                    "topic": "meetup topic",
-                   "images": ["image1.jpg", "image2.jpg"]
+                   "images": ["sample1.jpg", "sample2.jpg"]
                 }
             ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "You cannot add images to this meetup, because the meetup does not exist"
+        }
+
+### Fetch all Meetup Images [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "200",
+            "data": [
+                {
+                    "id": 1,
+                    "imageUrl": "sample.jpg",
+                    "meetup": 1
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "There are no images for this meetup at the moment"
+        }
+
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "This meetup does not exist"
         }
 
 ## Meetup Tags [/meetups/{meetup_id}/tags]
@@ -162,11 +320,12 @@ object containing a meetup.
     + meetup_id (number) - ID Of the Meetup in the form of an integer
 
 ### Add Meetups Tags [POST]
+You can add meetups to this meetup using this action
 
 + Request (application/json)
 
         {
-          "tags": "tag1,tag2,tag3"
+          "tags": ["tag1", "tag2", "tag3"]
         }
         
 + Response 201 (application/json)
@@ -184,7 +343,7 @@ object containing a meetup.
         
 # Group Questions
 
-## Questions [/questions/]
+## Questions [/questions]
 
 ### List all Questions [GET]
 
@@ -195,32 +354,32 @@ object containing a meetup.
             "data": [
                 {
                     "id": 1,
-                    "title": "my new question  title 2",
+                    "title": "my new question  title 1",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
-                    "votes": 1,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdBy": 1,
+                    "meetup": 1,
+                    "votes": 0,
+                    "createdOn": "2/1/2019"
                 },
                 
                 {
                     "id": 2,
                     "title": "my new question  title 2",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
+                    "createdBy": 1,
+                    "meetup": 1,
                     "votes": 0,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdOn": "2/1/2019"
                 },
                 
                 {
                     "id": 3,
-                    "title": "my new question  title 2",
+                    "title": "my new question  title 3",
                     "body": "new question body new",
-                    "createdby": 1,
-                    "meetup": 2,
-                    "votes": 1,
-                    "createdon": "2019-01-14T23:00:00.000Z"
+                    "createdBy": 1,
+                    "meetup": 1,
+                    "votes": 0,
+                    "createdOn": "2/1/2019"
                 }
             ]
         }
@@ -231,8 +390,8 @@ object containing a meetup.
 
         {
            "meetupId": 1,
-           "title": "question 1",
-           "body": "question 1 body"
+           "title": "question sample title",
+           "body": "question sample body"
         }
         
 + Response 201 (application/json)
@@ -242,8 +401,8 @@ object containing a meetup.
           "data": [
                 {
                   "user": 1,
-                  "title": "question 1",
-                  "body": "question 1 body",
+                  "title": "question sample title",
+                  "body": "question sample body",
                   "meetup": 1
                 }
             ]
@@ -270,6 +429,12 @@ object containing a meetup.
             ]
         }
 
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The meetup with id: 1 does not exist"
+        }
 
 ## Question Upvote [/questions/{question_id}/upvote]
 
@@ -496,75 +661,3 @@ object containing a meetup.
                 }
             ]
         }
-
-
-# Group Users
-
-## Sign Up  [/auth/signup/]
-
-### Create a new User [POST]
-
-+ Request (application/json)
-
-        {
-            "firstname": "arya",
-            "lastname": "stark",
-            "email": "aryastark@gmail.com",
-            "password": "arya1234"
-        }
-        
-+ Response 201 (application/json)
-
-        {
-           "status": 201,
-           "data": [
-                {
-                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
-                    "user": {
-                            "id": 1,
-                            "firstname": "arya",
-                            "lastname": "stark",
-                            "email": "aryastark@gmail.com",
-                            "username": "arya",
-                            "othername": "myname",
-                            "isAdmin": false,
-                            "createdOn": "1/1/2019",
-                            "registered": true
-                        }
-                }
-                            
-        }
-
-
-## Login User [/auth/login/]
-
-### Login [POST]
-
-+ Request (application/json)
-
-        {
-            "email": "aryastark@gmail.com",
-            "password": "$abcdefghijklkjdaxnlwfnklakjldaka"
-        }
-        
-+ Response 201 (application/json)
-
-        {
-            "status": 201,
-            "data": [
-                {
-                    "token": "abcdefghi.abckedfhgiklmnopqrstuvwxyz.abcdefghi",
-                    "user": {
-                            "id": 1,
-                            "firstname": "arya",
-                            "lastname": "stark",
-                            "email": "aryastark@gmail.com",
-                            "username": "arya",
-                            "othername": "myname",
-                            "isAdmin": false,
-                            "createdOn": "1/1/2019",
-                            "registered": true
-                        }
-                }
-        }            
-

@@ -1,9 +1,13 @@
 import _ from 'lodash';
 import db from '../db';
 import { search } from './helpers/search';
-import { sendResponse } from './helpers';
+import {
+  sendResponse,
+  sendServerErrorResponse,
+  nullToEmptyArray,
+  stripInnerNulls
+} from './helpers';
 import { arrayHasValues, objectHasProps, uniq } from '../utils';
-import RecordTransformer from './helpers/RecordTransformer';
 import { Meetup, Image, Question } from '../models/all';
 
 export default {
@@ -60,25 +64,22 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async createNewMeetup(req, res) {
     try {
       const {
-        location, topic, happeningOn, tags
+        location, topic, happeningOn, tags = []
       } = req.body;
 
-      const meetupByLocationResult = await Meetup.find({ location, happeningOn }, 'AND');
-      const meetups = meetupByLocationResult.rows;
+      const meetups = await Meetup.find({
+        where: {
+          location,
+          happeningOn
+        }
+      });
 
       if (arrayHasValues(meetups)) {
         return sendResponse({
@@ -104,17 +105,16 @@ export default {
 
       const uniqueTags = uniq(tags);
 
-      const newMeetup = await db.queryDb({
+      const newMeetupQueryResult = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
                VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn as "happeningOn", tags`,
         values: [topic, location, happeningOn, uniqueTags]
       });
 
-      let meetup = RecordTransformer.transform(newMeetup.rows, 'tags', 'nulls-to-empty-array');
+      let meetupResult = nullToEmptyArray(newMeetupQueryResult.rows);
+      meetupResult = stripInnerNulls(newMeetupQueryResult.rows);
 
-      meetup = RecordTransformer.transform(newMeetup.rows, 'tags', 'inner-nulls-with-empty-string');
-
-      const meetupRecord = meetup[0];
+      const meetupRecord = meetupResult[0];
 
       return sendResponse({
         res,
@@ -125,26 +125,19 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          data: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async getSingleMeetup(req, res) {
     try {
-      const result = await db.queryDb({
+      const meetupQueryResult = await db.queryDb({
         text: `SELECT id, topic, location, happeningOn as "happeningOn", 
                tags FROM Meetup WHERE id=$1`,
         values: [req.params.meetupId]
       });
-      const meetups = RecordTransformer.transform(result.rows, 'tags', 'nulls-to-empty-array');
-      const meetupRecord = meetups[0];
+
+      const meetupRecord = meetupQueryResult.rows[0];
 
       if (meetupRecord) {
         return sendResponse({
@@ -165,28 +158,18 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async deleteMeetup(req, res) {
-    const { meetupId } = req.params;
     try {
-      const meetupResults = await Meetup.findById(meetupId);
-      const meetupRecord = meetupResults.rows[0];
+      const { meetupId } = req.params;
+      const meetupRecord = await Meetup.findById(meetupId);
 
       if (meetupRecord) {
-        const questionsResult = await Question.find({ meetup: 1 });
-        const questions = questionsResult.rows;
+        const questions = await Question.find({ where: { meetup: 1 } });
         if (arrayHasValues(questions)) {
-          // There are questions of this meetup
           await db.queryDb({
             text: 'DELETE FROM Question WHERE meetup=$1',
             values: [meetupRecord.id]
@@ -216,25 +199,18 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async getUpcomingMeetups(req, res) {
     try {
-      const results = await db.queryDb({
-        text: `SELECT id, topic as title, location, happeningOn, tags FROM Meetup 
+      const meetupQueryResult = await db.queryDb({
+        text: `SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup 
                WHERE happeningOn >= NOW()`
       });
 
-      const upComingMeetups = results.rows;
+      const upComingMeetups = meetupQueryResult.rows;
 
       if (arrayHasValues(upComingMeetups)) {
         return sendResponse({
@@ -256,27 +232,20 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async addTagsToMeetup(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupResult = await Meetup.findById(meetupId);
-      const meetup = meetupResult.rows[0];
+      const { tags = [] } = req.body;
 
-      const { tags } = req.body;
+      const meetupRecord = await Meetup.findById(meetupId);
+      const MAX_TAGS_PER_MEETUP = 5;
 
-      if (meetup) {
-        if (tags.length > 5) {
+      if (meetupRecord) {
+        if (tags.length > MAX_TAGS_PER_MEETUP) {
           return sendResponse({
             res,
             status: 422,
@@ -287,26 +256,25 @@ export default {
           });
         }
 
-        meetup.tags = meetup.tags === null ? [] : meetup.tags;
-        const newTags = meetup.tags.concat(tags);
+        const newTags = meetupRecord.tags.concat(tags);
 
         const uniqueTags = uniq(newTags);
 
-        const result = await db.queryDb({
+        const updateTagsQueryResult = await db.queryDb({
           text: `UPDATE Meetup
                  SET tags=$1
                  WHERE id=$2 RETURNING id as meetup,topic,tags`,
           values: [uniqueTags, meetupId]
         });
 
-        const meetupRecord = result.rows[0];
+        const updatedMeetupRecord = updateTagsQueryResult.rows[0];
 
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [meetupRecord]
+            data: [updatedMeetupRecord]
           }
         });
       }
@@ -320,24 +288,21 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
+  },
+
+  async getAllMeetupTags(req, res) {
+    return res.status(404).send('Not Implemented');
   },
 
   async addImagesToMeetup(req, res) {
     try {
       const { meetupId } = req.params;
 
-      const meetupResult = await Meetup.findById(meetupId);
-      const meetups = meetupResult.rows;
-      if (arrayHasValues(meetups)) {
+      const meetupRecord = await Meetup.findById(meetupId);
+
+      if (meetupRecord) {
         req.files.forEach(async (file) => {
           await db.queryDb({
             text: `INSERT INTO Image (imageUrl, meetup)
@@ -347,22 +312,24 @@ export default {
         });
 
         const images = req.files.map(file => file.secure_url);
+        const allImages = meetupRecord.images.concat(images);
+        const uniqueImages = uniq(allImages);
 
-        const result = await db.queryDb({
+        const updateImagesQueryResult = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
                  WHERE id=$2 RETURNING id as meetup, topic, images`,
-          values: [images, meetupId]
+          values: [uniqueImages, meetupId]
         });
 
-        const meetupRecord = result.rows[0];
+        const updatedMeetupRecord = updateImagesQueryResult.rows[0];
 
         return sendResponse({
           res,
           status: 201,
           payload: {
             status: 201,
-            data: [meetupRecord]
+            data: [updatedMeetupRecord]
           }
         });
       }
@@ -372,34 +339,27 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: 'You cannot add images to this meetup, because the meetup does not exist'
+          error: 'You cannot add images to this meetup because the meetup does not exist'
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
-  },
-
-  async getAllMeetupTags(req, res) {
-    return res.status(404).send('Not Implemented');
   },
 
   async getAllMeetupImages(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupByIdResult = await Meetup.findById(meetupId);
-      if (arrayHasValues(meetupByIdResult.rows)) {
-        const meetupImagesResult = await Image.find({ meetup: meetupId });
-        const images = meetupImagesResult.rows;
+      const meetupRecord = await Meetup.findById(meetupId);
+      if (meetupRecord) {
+        const meetupImages = await Image.find({ where: { meetup: meetupId } });
 
-        if (arrayHasValues(images)) {
+        if (meetupImages) {
+          const images = meetupImages.map((image) => {
+            image.imageUrl = image.imageurl;
+            delete image.imageurl;
+            return image;
+          });
           return sendResponse({
             res,
             status: 200,
@@ -429,14 +389,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -480,14 +433,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   }
 };

@@ -206,7 +206,7 @@ describe.only('Questions API', () => {
           if (err) return done(err);
           res.body.status.should.equal(409);
           res.body.should.have.property('error');
-          res.body.error.should.equal('This user has already downvoted this question. You cannot downvote a question more than once');
+          res.body.error.should.equal('You have already downvoted this question');
           done();
         });
     });

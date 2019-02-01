@@ -139,7 +139,7 @@ export default {
         status: 401,
         payload: {
           status: 401,
-          error: 'The email you entered does not belong to any account.'
+          error: 'The email you entered does not belong to any account'
         }
       });
     } catch (e) {

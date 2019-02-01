@@ -1,5 +1,5 @@
 import Model from './Model';
-
+import db from '../../db';
 /**
  * @class Rsvp
  */
@@ -9,7 +9,7 @@ class Rsvp extends Model {
    * @param {String} modelName
    */
   constructor() {
-    super('Rsvp');
+    super('Rsvp', db);
   }
 }
 
