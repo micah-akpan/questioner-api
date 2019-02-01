@@ -20,13 +20,13 @@ class Upvote extends Model {
    * @return {Promise<Boolean>} A promise that resolves to true if vote exist, false otherwise
    */
   async voteExist(userId, questionId) {
-    const voteResult = await this.find({
+    const votes = await this.find({
       where: {
         '"user"': userId,
         question: questionId
       }
     });
-    if (arrayHasValues(voteResult.rows)) {
+    if (arrayHasValues(votes)) {
       return true;
     }
     return false;

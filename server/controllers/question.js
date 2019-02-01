@@ -61,7 +61,7 @@ export default {
             status: 409,
             payload: {
               status: 409,
-              error: 'You have already upvoted this question. You cannot upvote a question more than once'
+              error: 'You have already upvoted this question'
             }
           });
         }
@@ -93,7 +93,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendServerErrorResponse(res);
     }
   },
@@ -114,7 +113,7 @@ export default {
             status: 409,
             payload: {
               status: 409,
-              error: 'You have downvoted this question. You cannot downvote a question more than once'
+              error: 'You have already downvoted this question'
             }
           });
         }
