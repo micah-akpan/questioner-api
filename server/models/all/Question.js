@@ -50,7 +50,7 @@ class Question extends Model {
    * @method sortQuestionByVotes
    * @returns { Promise<Array> } An array of questions
    */
-  async sortQuestionByVotes() {
+  async findAndSortByVotes() {
     const questionsResult = await this._db.queryDb({
       text: 'SELECT id, title, body, meetup, votes, createdby as "createdBy", createdon as "createdOn" FROM Question ORDER BY votes DESC'
     });

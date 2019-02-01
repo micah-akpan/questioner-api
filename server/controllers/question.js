@@ -156,7 +156,7 @@ export default {
 
   async getAllQuestions(req, res) {
     try {
-      const questions = await Question.sortQuestionByVotes();
+      const questions = await Question.findAndSortByVotes();
       if (arrayHasValues(questions)) {
         return sendResponse({
           res,
