@@ -1,47 +1,39 @@
 import db from '../db';
+import { Meetup, Rsvp } from '../models/all';
 
 export default {
   async makeRsvp(req, res) {
     try {
       const { meetupId } = req.params;
-      const meetupResults = await db.queryDb({
-        text: `SELECT * FROM Meetup
-               WHERE id=$1`,
-        values: [meetupId]
-      });
+      const meetup = await Meetup.findById(meetupId);
 
       const { response } = req.body;
       const { userId } = req.decodedToken || req.body;
 
-      const meetupRecord = meetupResults.rows[0];
+      if (meetup) {
+        const rsvps = await Rsvp.find({ where: { '"user"': userId } });
 
-      if (meetupRecord) {
-        const userAlreadyRsvpedResult = await db.queryDb({
-          text: 'SELECT * FROM Rsvp WHERE "user"=$1',
-          values: [userId]
-        });
-
-        if (userAlreadyRsvpedResult.rows.length > 0) {
-          // user already rsvped
+        if (rsvps.length) {
+          // user already rsvped for this meetup
           return res.status(409)
             .send({
               status: 409,
               error: 'You have already rsvped for this meetup'
             });
         }
-        const rsvpResults = await db.queryDb({
+        const rsvpQueryResult = await db.queryDb({
           text: `INSERT INTO Rsvp ("user", meetup, response)
                  VALUES ($1, $2, $3) RETURNING *`,
           values: [userId, meetupId, response]
         });
 
-
-        const { id, topic } = meetupRecord;
+        const rsvp = rsvpQueryResult.rows[0];
+        const { id, topic } = meetup;
 
         const newRsvp = {
           meetup: id,
           topic,
-          status: rsvpResults.rows[0].response
+          status: rsvp.response
         };
 
         return res.status(201)
@@ -54,7 +46,7 @@ export default {
       return res.status(404)
         .send({
           status: 404,
-          error: `The requested meetup with the id: ${req.params.meetupId} does not exist`
+          error: 'The requested meetup does not exist'
         });
     } catch (e) {
       return res.status(500)
