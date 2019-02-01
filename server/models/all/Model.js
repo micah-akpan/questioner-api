@@ -68,10 +68,12 @@ class Model {
     const queryString = this.makeQueryString(columnNames);
     const queryValues = columnNames.map(columnName => where[columnName]);
 
-    return this._db.queryDb({
+    const queryResult = await this._db.queryDb({
       text: queryString,
       values: queryValues
     });
+
+    return queryResult.rows;
   }
 
   /**
