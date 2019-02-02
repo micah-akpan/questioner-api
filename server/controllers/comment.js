@@ -47,13 +47,18 @@ export default {
       const questionExist = await Question.questionExist(questionId);
       if (questionExist) {
         const comments = await Comment.find({ where: { question: questionId } });
+        const allComments = comments.map((comment) => {
+          comment.createdOn = comment.createdon;
+          delete comment.createdon;
+          return comment;
+        });
         if (arrayHasValues(comments)) {
           return sendResponse({
             res,
             status: 200,
             payload: {
               status: 200,
-              data: comments
+              data: allComments
             }
           });
         }
