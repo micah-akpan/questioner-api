@@ -16,6 +16,7 @@ router
   .post(
     isAdmin,
     validateRequest,
+    Upload.single('image'),
     meetupController.createNewMeetup
   )
   .get(meetupController.getAllMeetups);

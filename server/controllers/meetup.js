@@ -51,7 +51,7 @@ export default {
         });
       }
       const meetupResults = await db.queryDb({
-        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
+        text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags, images FROM Meetup'
       });
       const meetups = meetupResults.rows;
 
@@ -104,11 +104,12 @@ export default {
       }
 
       const uniqueTags = uniq(tags);
+      const images = [].concat(req.file.secure_url);
 
       const newMeetupQueryResult = await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
-               VALUES ($1, $2, $3, $4) RETURNING topic, location, happeningOn as "happeningOn", tags`,
-        values: [topic, location, happeningOn, uniqueTags]
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
+               VALUES ($1, $2, $3, $4, $5) RETURNING topic, location, happeningOn as "happeningOn", tags`,
+        values: [topic, location, happeningOn, uniqueTags, images]
       });
 
       let meetupResult = nullToEmptyArray(newMeetupQueryResult.rows);
