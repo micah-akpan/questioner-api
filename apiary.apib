@@ -183,6 +183,92 @@ Admins can use retrieve details of a particular user using this actionS
             ]
         }
 
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "This user does not exist at the moment"
+        }
+
+### Update User Data [PATCH]
+
++ Request (application/json)
+
+        {
+            "username": "winterfell",
+            "bio": "born in winterfell"
+        }
+
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "firstname": "Arya",
+                    "lastname": "Stark",
+                    "othername": ""
+                    "email": "aryastark@gmail.com",
+                    "username": "winterfell",
+                    "registered": "1/1/2019",
+                    "isAdmin": false,
+                    "phoneNumber": "(803)-5555-3333",
+                    "bio": "born in winterfell",
+                    "birthday": "1/1/2000",
+                    "avatar": "profile.jpeg"
+                }
+            ]
+        }
+
+
++ Response 422 (application/json)
+
+        {
+            "status": 422,
+            "error": "You can only update your own personal data"
+        }
+
+
++ Response 409 (application/json)
+
+        {
+            "status": 409,
+            "error": "The username you provided is already used by another user"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "This user does not have an account"
+        }
+### Delete a User [DELETE]
+Admins and Users can use delete user accounts using this action
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": ["User account has been deactivated successfully"]
+        }
+
++ Response 422 (application/json)
+
+        {
+            "status": 422,
+            "error": "You can only deactivate your own account"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "A use with this accoutn does not exist"
+        }
+
+
 # Group Meetups
 
 ## Meetups [/meetups]
