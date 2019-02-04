@@ -49,6 +49,23 @@ export default {
       const { questionId } = req.params;
       const { userId } = req.decodedToken || req.body;
 
+      const questionByUser = await Question.find({
+        where: {
+          createdBy: userId
+        }
+      });
+
+      if (questionByUser.createdby === userId) {
+        return sendResponse({
+          res,
+          status: 422,
+          payload: {
+            status: 422,
+            error: 'You cannot upvote your own question'
+          }
+        });
+      }
+
       const questionExist = await Question.questionExist(questionId);
 
       if (questionExist) {
@@ -115,6 +132,23 @@ export default {
     try {
       const { questionId } = req.params;
       const { userId } = req.decodedToken || req.body;
+
+      const questionByUser = await Question.find({
+        where: {
+          createdBy: userId
+        }
+      });
+
+      if (questionByUser.createdby === userId) {
+        return sendResponse({
+          res,
+          status: 422,
+          payload: {
+            status: 422,
+            error: 'You cannot downvote your own question'
+          }
+        });
+      }
 
       const questionExist = await Question.questionExist(questionId);
 
