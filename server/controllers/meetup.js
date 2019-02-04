@@ -71,8 +71,14 @@ export default {
   async createNewMeetup(req, res) {
     try {
       const {
-        location, topic, happeningOn, tags = []
+        location, topic, happeningOn
       } = req.body;
+
+      let { tags = [] } = req.body;
+
+      if (typeof tags === 'string') {
+        tags = tags.split(',');
+      }
 
       const meetups = await Meetup.find({
         where: {
