@@ -155,6 +155,7 @@ Admins can view a list of users using this action
 
 
 ## User [/users/{user_id}]
+
 + Parameters
     + user_id (number, required) - ID of the User in the form of an integer
 
@@ -265,7 +266,7 @@ Admins and Users can use delete user accounts using this action
 
         {
             "status": 404,
-            "error": "A use with this accoutn does not exist"
+            "error": "A use with this account does not exist"
         }
 
 
@@ -489,6 +490,7 @@ You can add images to meetups using this action
 
 
 ## Meetup Image [/meetups/{meetup_id}/images/{image_id}]
+
 + Parameters
     + meetup_id (number, required) - ID of the Meetup in the form of an integer
     + image_id (number, required) - ID of the Image in the form of an integer
@@ -737,7 +739,7 @@ User can create a meetup question using this action
     + meetup_id (number) - ID Of the Meetup in the form of an integer
     + question_id (number) - ID of the question in the form of an integer
 
-### List a Meetup question [GET]
+### Fetch a Meetup question [GET]
 
 + Response 200 (application/json)
 
@@ -827,7 +829,7 @@ User can create a meetup question using this action
 + Response 201 (application/json)
 
         {
-            "status": 200,
+            "status": 201,
             "data": [
                   {
                     "question": 1,
@@ -837,13 +839,40 @@ User can create a meetup question using this action
                   }
             ]
         }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            error: "The requested question does not exist"
+        }
         
 # Group Rsvps
 
 ## Rsvps [/meetups/{meetup_id}/rsvps]
 
 + Parameters
-    + meetup_id (number) - ID Of the Meetup in the form of an integer
+    + meetup_id (number, required) - ID Of the Meetup in the form of an integer
+
+
+### Make a RSVP [POST]
+User should be able to make rsvps for a meetup using this action
+
++ Request (application/json)
+
+         {
+            "userId": 1
+            "response": "yes"
+        }
+        
+
++ Response 201 (application/json)
+
+        {
+            "meetup": 1,
+            "topic": "about x",
+            "status": "yes"
+        }
 
 ### List all RSVPs [GET]
 
@@ -868,31 +897,20 @@ User can create a meetup question using this action
             ]
         }
 
-### Make a RSVP [POST]
-
-+ Request (application/json)
-
-         {
-            "userId": 1
-            "response": "yes"
-        }
-        
-
-+ Response 201 (application/json)
++ Response 404 (application/json)
 
         {
-            "meetup": 1,
-            "topic": "about x",
-            "status": "yes"
+            "status": 404,
+            "error": "There are no RSVPs for this meetup at the moment"
         }
 
-
 ## Rsvp [/meetups/{meetup_id}/rsvps/{rsvp_id}]
-+ Parameters
-    + meetup_id (number) - ID Of the Meetup in the form of an integer
-    + rsvp_id(number) - ID of the Rsvp in the form of an integer
 
-### Get a RSVP [GET]
++ Parameters
+    + meetup_id (number, required) - ID Of the Meetup in the form of an integer
+    + rsvp_id(number, required) - ID of the Rsvp in the form of an integer
+
+### Fetch a single rsvp [GET]
 
 + Response 200 (application/json)
 
@@ -902,8 +920,41 @@ User can create a meetup question using this action
                 {
                     "id": 1,
                     "user": 1,
-                    "meetup": 2,
+                    "meetup": 1,
                     "response": "maybe"
                 }
             ]
         }
+
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The rsvp for the requested meetup does not exist"
+        }
+
+### Update Rsvp [PATCH]
+
++ Request (application/json)
+
+        {
+            "response": "yes"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": 1
+            "meetup": 1,
+            "user": 1,
+            "response": "yes"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "You have not rsvped for this meetup"
+        }
+
