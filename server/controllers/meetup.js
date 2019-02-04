@@ -53,6 +53,7 @@ export default {
       const meetupResults = await db.queryDb({
         text: 'SELECT id, topic as title, location, happeningOn as "happeningOn", tags FROM Meetup'
       });
+
       const meetups = meetupResults.rows;
 
       return sendResponse({
