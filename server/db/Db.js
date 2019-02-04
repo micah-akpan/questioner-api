@@ -72,7 +72,7 @@ class Db {
    * @returns {*} Closes database connection
    */
   async close() {
-    await this._dbClient.close();
+    await this._dbClient.end();
   }
 }
 
