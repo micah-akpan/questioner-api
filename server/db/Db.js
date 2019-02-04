@@ -10,8 +10,10 @@ class Db {
    * @param {*} dbClient a DB client that supports the interface
    */
   constructor(dbClient) {
-    this.dbClient = dbClient;
-    this.tableQueries = tableQueries;
+    this._dbClient = dbClient;
+    this._tableQueries = tableQueries;
+    this._tableNames = ['User', 'Meetup', 'Question', 'Comment',
+      'Rsvp', 'Upvote', 'Downvote', 'Image'];
   }
 
   /**
@@ -20,7 +22,7 @@ class Db {
    * @returns {Promise<QueryResult>} Returns a promise of the results of the query operation
    */
   queryDb(query) {
-    return this.dbClient.query(query);
+    return this._dbClient.query(query);
   }
 
   /**
@@ -28,17 +30,12 @@ class Db {
    * @returns {String} Database tables sync success/failure message
    */
   async sync() {
+    /* eslint-disable no-await-in-loop */
     try {
-      await this.createTable('User');
-      await this.createTable('Meetup');
-      await this.createTable('Question');
-      await this.createTable('Comment');
-      await this.createTable('Rsvp');
-      await this.createTable('Upvote');
-      await this.createTable('Downvote');
-      await this.createTable('Image');
+      for (const tableName of this._tableNames) {
+        await this.createTable(tableName);
+      }
     } catch (e) {
-      console.log(e);
       return Promise.reject(new Error('Table synchronization failed'));
     }
 
@@ -51,8 +48,8 @@ class Db {
    * @returns {Promise} Returns a Promise that resolves to a table result or to a failure message
    */
   createTable(tableName) {
-    const createTableQuery = this.tableQueries[tableName];
-    return this.dbClient.query(createTableQuery);
+    const createTableQuery = this._tableQueries[tableName];
+    return this._dbClient.query(createTableQuery);
   }
 
   /**
@@ -65,9 +62,9 @@ class Db {
       // interpolation ideal here
       // since we are not feeding into this function
       // data from the 'user'
-      return this.dbClient.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
+      return this._dbClient.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
     }
-    return this.dbClient.query(`DROP TABLE ${tableName}`);
+    return this._dbClient.query(`DROP TABLE ${tableName}`);
   }
 }
 
