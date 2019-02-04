@@ -390,7 +390,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: [`User ${userId} account has been deactivated successfully`]
+            data: [`User account has been deactivated successfully`]
           }
         });
       }
