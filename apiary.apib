@@ -380,6 +380,8 @@ object containing a meetup.
         }
 
 ### Delete a Single Meetup [DELETE]
+Admins can delete a meetup using this action
+
 + Response 200 (application/json)
 
         {
@@ -496,8 +498,29 @@ You can add images to meetups using this action
 
         {
             "status": 200,
-            "data": []
+            "data": [
+                {
+                    "id": 1,
+                    "imageUrl": "sample.jpg",
+                    "meetup": 1
+                }
+            ]
         }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The meetup image does not exist"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested meetup does not exist"
+        }
+
 
 ## Meetup Tags [/meetups/{meetup_id}/tags]
 
@@ -505,7 +528,7 @@ You can add images to meetups using this action
     + meetup_id (number) - ID Of the Meetup in the form of an integer
 
 ### Add Meetups Tags [POST]
-You can add tags to this meetup using this action
+You can add tags to meetups using this action
 
 + Request (application/json)
 
@@ -525,7 +548,41 @@ You can add tags to this meetup using this action
                 }
             ]
         }
-        
+
++ Response 422 (application/json)
+
+        {
+            "status": 422,
+            "error": "You cannot add more than 5 tags to this meetup"
+        }
+
++ Response 422 (application/json)
+
+        {
+            "status": 422,
+            "error": "You cannot add tags to this meetup, because the meetup does not exist"
+        }
+
+### Fetch All Meetup Tags [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                   "meetup": 1,
+                   "topic": "meetup topic",
+                   "tags": ["tag1", "tag2", "tag3"]
+                },
+
+                {
+                   "meetup": 1,
+                   "topic": "meetup topic",
+                   "tags": ["tag4", "tag5"]
+                }
+            ]
+        }
 # Group Questions
 
 ## Questions [/questions]
