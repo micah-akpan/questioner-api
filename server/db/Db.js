@@ -49,7 +49,7 @@ class Db {
    */
   createTable(tableName) {
     const createTableQuery = this._tableQueries[tableName];
-    return this._dbClient.query(createTableQuery);
+    return this.queryDb(createTableQuery);
   }
 
   /**
