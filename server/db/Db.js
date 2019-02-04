@@ -66,6 +66,14 @@ class Db {
     }
     return this._dbClient.query(`DROP TABLE ${tableName}`);
   }
+
+  /**
+   * @method close
+   * @returns {*} Closes database connection
+   */
+  async close() {
+    await this._dbClient.close();
+  }
 }
 
 export default Db;
