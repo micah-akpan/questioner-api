@@ -5,7 +5,7 @@ HOST: https://questionerv1.herokuapp.com/api/v1
 
 Questioner is a question crowdsourcing tool that provides support for meetup organizers, with features that help them prioritize questions asked by potential attendees.
 
-# Group Users
+# Group Auth
 ## Sign Up  [/auth/signup]
 
 ### Sign Up as a new User [POST]
@@ -98,6 +98,89 @@ You can login using this action
         {
             "status": 401,
             "error": "The email you entered does not belong to any account"
+        }
+
+
+# Group Users
+
+## Users [/users]
+
+### List all Users [GET]
+Admins can view a list of users using this action
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "firstname": "Arya",
+                    "lastname": "Stark",
+                    "othername": ""
+                    "email": "aryastark@gmail.com",
+                    "username": "aryastark1",
+                    "registered": "1/1/2019",
+                    "isAdmin": false,
+                    "phoneNumber": "(803)-5555-3333",
+                    "bio": "Winter is coming",
+                    "birthday": "1/1/2000",
+                    "avatar": "profile.jpeg"
+                },
+
+                {
+                    "id": 2,
+                    "firstname": "Tyrion",
+                    "lastname": "Lannister",
+                    "othername": ""
+                    "email": "tyrionlannister@gmail.com",
+                    "username": "tyrion443",
+                    "registered": "1/1/2019",
+                    "isAdmin": false,
+                    "phoneNumber": "(803)-5555-4444",
+                    "bio": "Born in casterly rock",
+                    "birthday": "1/1/1988",
+                    "avatar": "profile.jpeg"
+                }
+            ]
+        }
+
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "No registered users at the moment"
+        }
+
+
+## User [/users/{user_id}]
++ Parameters
+    + user_id (number, required) - ID of the User in the form of an integer
+
+### List a Single User [GET]
+Admins can use retrieve details of a particular user using this actionS
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "firstname": "Arya",
+                    "lastname": "Stark",
+                    "othername": ""
+                    "email": "aryastark@gmail.com",
+                    "username": "aryastark1",
+                    "registered": "1/1/2019",
+                    "isAdmin": false,
+                    "phoneNumber": "(803)-5555-3333",
+                    "bio": "Winter is coming",
+                    "birthday": "1/1/2000",
+                    "avatar": "profile.jpeg"
+                }
+            ]
         }
 
 # Group Meetups
