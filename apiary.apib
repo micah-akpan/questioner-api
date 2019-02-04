@@ -627,6 +627,7 @@ You can add tags to meetups using this action
         }
         
 ### Create a New Question [POST]
+User can create a meetup question using this action
 
 + Request (application/json) 
 
@@ -650,27 +651,6 @@ You can add tags to meetups using this action
             ]
         }
         
-
-## Question [/questions/{question_id}/]
-
-+ Parameters
-    + question_id (number) - ID Of the question in the form of an integer
-
-### Fetch a Question [GET]
-+ Response 200 (application/json)
-
-        {
-          "status": 201,
-          "data": [
-                {
-                  "user": 1,
-                  "title": "question 1",
-                  "body": "question 1 body",
-                  "meetup": 1
-                }
-            ]
-        }
-
 + Response 404 (application/json)
 
         {
@@ -694,9 +674,8 @@ You can add tags to meetups using this action
                   }
             ]
         }
-        
 
-## Question Downvote [/questions/{question_id}/downvote]
+## Question Downvote [/questons/{question_id}/upvote]
 
 ### Downvote a Question [PATCH]
 
@@ -714,10 +693,10 @@ You can add tags to meetups using this action
             ]
         }
         
-## Meetup Questions [/meetups/{meetup_id}/questions/]
+## Meetup Questions [/meetups/{meetup_id}/questions]
 
 + Parameters
-    + meetup_id (number) - ID Of the Meetup in the form of an integer
+    + meetup_id (number, required) - ID Of the Meetup in the form of an integer
 
 
 ### List all Meetups Questions [GET]
@@ -729,24 +708,30 @@ You can add tags to meetups using this action
             "data": [
                 {
                     "id": 1,
-                    "createdby": 1,
+                    "createdBy": 1,
                     "meetup": 1,
-                    "title": "my_question",
-                    "body": "my_question_body"
+                    "title": "sample title 1",
+                    "body": "sample body 1"
                 },
                 
                 {
                     "id": 2,
-                    "createdby": 1,
+                    "createdBy": 1,
                     "meetup": 1,
-                    "title": "my_question",
-                    "body": "my_question_body"
+                    "title": "sample title 2",
+                    "body": "sample body 2"
                 }
             ]
         }
 
++ Response 404 (application/json)
 
-### Meetup Question [/meetups/{meetup_id}/questions/{question_id}/]
+        {
+            "status": 404,
+            "error": "There are no questions for this meetup at the moment"
+        }
+
+## Meetup Question [/meetups/{meetup_id}/questions/{question_id}]
 
 + Parameters
     + meetup_id (number) - ID Of the Meetup in the form of an integer
@@ -761,14 +746,21 @@ You can add tags to meetups using this action
             "data": [
                 {
                     "id": 1,
-                    "createdby": 1,
+                    "createdBy": 1,
                     "meetup": 1,
-                    "title": "my_question",
-                    "body": "my_question_body"
-                }
+                    "title": "sample question title",
+                    "body": "sample question body"
+                
             ]
         }
-        
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested question does not exist"
+        }
+
 ### Update a Meetup Question [PATCH]
 
 + Request (application/json)
@@ -792,7 +784,13 @@ You can add tags to meetups using this action
                 }
             ]
         }
-        
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested question does not exist"
+        }
         
 ### DELETE a Meetup Question [DELETE]
         
@@ -802,10 +800,16 @@ You can add tags to meetups using this action
         {
             "status": 201,
             "data": [
-                "Question 1 has been deleted successfully"
+                "Question with id: 1 has been deleted successfully"
             ]
         }
-           
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested question cannot be deleted because it doesn't exist"
+        }
         
 # Group Comments
 
