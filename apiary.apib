@@ -483,6 +483,21 @@ You can add images to meetups using this action
             "status": 404,
             "error": "This meetup does not exist"
         }
+    
+
+
+## Meetup Image [/meetups/{meetup_id}/images/{image_id}]
++ Parameters
+    + meetup_id (number, required) - ID of the Meetup in the form of an integer
+    + image_id (number, required) - ID of the Image in the form of an integer
+
+### Fetch a Single Meetup Image [GET]
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": []
+        }
 
 ## Meetup Tags [/meetups/{meetup_id}/tags]
 
