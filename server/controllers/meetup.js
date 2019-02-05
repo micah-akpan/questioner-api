@@ -110,7 +110,7 @@ export default {
       }
 
       const uniqueTags = uniq(tags);
-      const images = [].concat(req.file.secure_url);
+      const images = [].concat(req.file && req.file.secure_url);
 
       const newMeetupQueryResult = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
@@ -132,6 +132,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendServerErrorResponse(res);
     }
   },
