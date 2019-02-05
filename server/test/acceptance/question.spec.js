@@ -114,11 +114,10 @@ describe.only('Questions API', () => {
       agent
         .patch('/api/v1/questions/1/upvote')
         .set('Authorization', `Bearer ${userTestToken}`)
-        .send({ userId: '1' })
-        .expect(500)
+        .expect(200)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(500);
+          res.body.status.should.equal(200);
           res.body.data.should.be.an('array');
           done();
         });
