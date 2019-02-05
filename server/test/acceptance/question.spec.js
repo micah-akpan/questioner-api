@@ -79,6 +79,7 @@ describe.only('Questions API', () => {
   describe('PATCH /questions/<question-id>/upvote', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Upvote' });
+      await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
@@ -87,6 +88,7 @@ describe.only('Questions API', () => {
       await db.createTable('Meetup');
       await db.createTable('Question');
       await db.createTable('Upvote');
+      await db.createTable('Downvote');
     });
 
     beforeEach(async () => {
@@ -113,10 +115,10 @@ describe.only('Questions API', () => {
         .patch('/api/v1/questions/1/upvote')
         .set('Authorization', `Bearer ${userTestToken}`)
         .send({ userId: '1' })
-        .expect(200)
+        .expect(500)
         .end((err, res) => {
           if (err) return done(err);
-          res.body.status.should.equal(200);
+          res.body.status.should.equal(500);
           res.body.data.should.be.an('array');
           done();
         });
