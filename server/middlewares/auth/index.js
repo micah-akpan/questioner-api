@@ -11,6 +11,7 @@ export default {
 
       jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
+          res.set('WWW-Authenticate', 'Bearer realm="Access to protected routes", charset="UTF-8"');
           return res.status(401)
             .send({
               status: 401,

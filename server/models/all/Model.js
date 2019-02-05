@@ -57,9 +57,10 @@ class Model {
 
   /**
    * @method find
-   * @param {*} criteria
-   * @returns {Promise} Returns a Promise that resolves to the
-   * result of the query
+   * @param {*} criteria a hash with where object
+   * @returns {Promise} Returns a Promise that
+   * resolves to an array of records based on value
+   * in `where` object in `criteria`
    */
   async find(criteria) {
     const { where } = criteria;
