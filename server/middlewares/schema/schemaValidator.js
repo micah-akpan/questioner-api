@@ -70,11 +70,10 @@ export default (useJoiError = false) => {
             });
 
             const customError = makeCustomError(errorMsg);
-            res.status(customError.status).send(_useJoiError ? JoiError : customError);
-          } else {
-            req.body = data;
-            next();
+            return res.status(customError.status).send(_useJoiError ? JoiError : customError);
           }
+          req.body = data;
+          next();
         });
       }
     }

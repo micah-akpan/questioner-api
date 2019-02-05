@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '../db';
-import { sendResponse } from './helpers';
+import { sendResponse, sendServerErrorResponse } from './helpers';
 import { arrayHasValues, replaceNullValue, omitProps } from '../utils';
 import userHelpers from './helpers/user';
+import { User } from '../models/all';
 
 const userHelper = userHelpers(db, jwt);
 
@@ -20,13 +21,12 @@ export default {
         email, password, firstname, lastname,
       } = req.body;
 
-      const userByEmailResult = await db.queryDb({
+      const { rows } = await db.queryDb({
         text: 'SELECT  * FROM "User" WHERE email=$1',
         values: [email]
       });
 
-      if (arrayHasValues(userByEmailResult.rows)) {
-        // user exist
+      if (arrayHasValues(rows)) {
         return sendResponse({
           res,
           status: 409,
@@ -37,16 +37,11 @@ export default {
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const newTableResult = await db.queryDb({
-        text: `INSERT INTO "User" (email,password,firstname,lastname)
-                         VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
-                         email, othername, phonenumber as "phoneNumber", registered,
-                         isadmin as "isAdmin", birthday, bio`,
-        values: [email, hashedPassword, firstname, lastname]
+      const passwordHash = await bcrypt.hash(password, 10);
+      const newUserQueryResult = await User.create({
+        email, password: passwordHash, firstname, lastname
       });
-      const userRecord = replaceNullValue(newTableResult.rows[0], '');
+      const userRecord = replaceNullValue(newUserQueryResult.rows[0], '');
 
       const userAuthToken = userHelper.obtainToken({
         payload: {
@@ -66,14 +61,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -87,7 +75,7 @@ export default {
     try {
       const { email, password } = req.body;
 
-      const userResult = await db.queryDb({
+      const { rows } = await db.queryDb({
         text: `SELECT id, firstname, lastname, 
             email, othername, phonenumber as "phoneNumber",
             registered, isadmin as "isAdmin", birthday, bio FROM "User" 
@@ -95,14 +83,13 @@ export default {
         values: [email]
       });
 
-      if (arrayHasValues(userResult.rows)) {
-        // user with this email exist
-        const result = await userHelper.getUserPassword({ condition: 'email', value: email });
-        const { encryptedpassword } = result.rows[0];
+      if (arrayHasValues(rows)) {
+        const users = await User.find({ where: { email } });
+        const encryptedPassword = users[0].password;
 
-        const match = await bcrypt.compare(password, encryptedpassword);
+        const match = await bcrypt.compare(password, encryptedPassword);
 
-        const userRecord = replaceNullValue(userResult.rows[0], '');
+        const userRecord = replaceNullValue(rows[0], '');
 
         const userAuthToken = userHelper.obtainToken({
           payload: {
@@ -143,26 +130,16 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
   async getUser(req, res) {
     try {
-      const usersResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE id=$1',
-        values: [req.params.userId]
-      });
+      const user = await User.findById(req.params.userId);
 
-      if (arrayHasValues(usersResult.rows)) {
-        const records = usersResult.rows
+      if (user) {
+        const records = [user]
           .map(row => replaceNullValue(row))
           .map(row => omitProps(row, ['password']))
           .map((row) => {
@@ -192,14 +169,7 @@ export default {
         }
       });
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request. Please try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -210,8 +180,10 @@ export default {
         text: 'SELECT * FROM "User" WHERE isAdmin=FALSE'
       });
 
-      if (arrayHasValues(usersResult.rows)) {
-        const users = usersResult.rows
+      const users = await User.find({ where: { isAdmin: 'FALSE' } });
+
+      if (arrayHasValues(users)) {
+        const records = users
           .map(row => replaceNullValue(row))
           .map(row => omitProps(row, ['password']))
           .map(row => {
@@ -226,7 +198,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: users
+            data: records
           }
         })
       }
@@ -240,14 +212,7 @@ export default {
         }
       })
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      })
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -274,12 +239,12 @@ export default {
 
       // enforcing unique usernames
       // at the controller level
-      const userByUsernameResult = await db.queryDb({
+      const { rows } = await db.queryDb({
         text: 'SELECT * FROM "User" WHERE username=$1 AND id <> $2',
         values: [username, userId]
       });
 
-      if (arrayHasValues(userByUsernameResult.rows)) {
+      if (arrayHasValues(rows)) {
         return sendResponse({
           res,
           status: 409,
@@ -295,9 +260,9 @@ export default {
         values: [userId]
       });
 
-      if (arrayHasValues(userByIdResult.rows)) {
-        const user = userByIdResult.rows[0];
+      const user = await User.findById(userId);
 
+      if (user) {
         const encryptedPassword = password && await bcrypt.hash(password, 10);
 
         const userData = {
@@ -313,7 +278,7 @@ export default {
           avatar: req.file && req.file.secure_url || user.avatar
         };
 
-        const updateUserResult = await db.queryDb({
+        const { rows } = await db.queryDb({
           text: `UPDATE "User"
                  SET firstname=$1,lastname=$2, email=$3,
                      password=$4, username=$5, birthday=$6,
@@ -327,7 +292,7 @@ export default {
           userData.avatar, userId]
         });
 
-        const userRecord = replaceNullValue(updateUserResult.rows[0], '');
+        const userRecord = replaceNullValue(rows[0], '');
 
         return sendResponse({
           res,
@@ -348,14 +313,7 @@ export default {
         }
       })
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request, please check request and try again'
-        }
-      })
+      return sendServerErrorResponse(res);
     }
   },
 
@@ -390,7 +348,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: [`User ${userId} account has been deactivated successfully`]
+            data: [`User account has been deactivated successfully`]
           }
         });
       }
@@ -405,14 +363,7 @@ export default {
       });
 
     } catch (e) {
-      return sendResponse({
-        res,
-        status: 500,
-        payload: {
-          status: 500,
-          error: 'Invalid request. Please check request and try again'
-        }
-      });
+      return sendServerErrorResponse(res);
     }
   }
 };

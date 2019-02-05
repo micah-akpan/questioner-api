@@ -76,7 +76,7 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: 'The meetup you requested does not exist'
+          error: 'The requested question does not exist'
         }
       });
     } catch (e) {
@@ -106,7 +106,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: [`The question with id: ${questionId} has been deleted successfully`]
+            data: [`Question with id: ${questionId} has been deleted successfully`]
           }
         });
       }

@@ -3,6 +3,32 @@ import { Meetup, Rsvp } from '../models/all';
 import { sendResponse, sendServerErrorResponse } from './helpers';
 
 export default {
+  async getRsvps(req, res) {
+    try {
+      const rsvps = await Rsvp.find({ where: { meetup: req.params.meetupId } });
+      if (rsvps.length > 0) {
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: rsvps
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'There are no RSVPs for this meetup at the moment'
+        }
+      });
+    } catch (e) {
+      return sendServerErrorResponse(res);
+    }
+  },
+
   async makeRsvp(req, res) {
     try {
       const { meetupId } = req.params;
@@ -99,32 +125,6 @@ export default {
         payload: {
           status: 404,
           error: 'You have not rsvped for this meetup'
-        }
-      });
-    } catch (e) {
-      return sendServerErrorResponse(res);
-    }
-  },
-
-  async getRsvps(req, res) {
-    try {
-      const rsvps = await Rsvp.find({ where: { meetup: req.params.meetupId } });
-      if (rsvps.length > 0) {
-        return sendResponse({
-          res,
-          status: 200,
-          payload: {
-            status: 200,
-            data: rsvps
-          }
-        });
-      }
-      return sendResponse({
-        res,
-        status: 404,
-        payload: {
-          status: 404,
-          error: 'There are no RSVPs for this meetup at the moment'
         }
       });
     } catch (e) {
