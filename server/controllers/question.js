@@ -40,7 +40,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendServerErrorResponse(res);
     }
   },
@@ -49,6 +48,23 @@ export default {
     try {
       const { questionId } = req.params;
       const { userId } = req.decodedToken || req.body;
+
+      const questionByUser = await Question.find({
+        where: {
+          createdBy: userId
+        }
+      });
+
+      if (questionByUser.createdby === userId) {
+        return sendResponse({
+          res,
+          status: 422,
+          payload: {
+            status: 422,
+            error: 'You cannot upvote your own question'
+          }
+        });
+      }
 
       const questionExist = await Question.questionExist(questionId);
 
@@ -76,6 +92,21 @@ export default {
           values: [votes + 1, questionId]
         });
 
+        const userHasDownvoted = await Downvote.find({
+          where: {
+            '"user"': userId
+          }
+        });
+
+        if (arrayHasValues(userHasDownvoted)) {
+          // User has downvoted this question
+          // Enable user to downvote this question if user upvoted earlier
+          await db.queryDb({
+            text: 'DELETE FROM Downvote WHERE "user"=$1',
+            values: [userId]
+          });
+        }
+
         return sendResponse({
           res,
           status: 200,
@@ -101,6 +132,23 @@ export default {
     try {
       const { questionId } = req.params;
       const { userId } = req.decodedToken || req.body;
+
+      const questionByUser = await Question.find({
+        where: {
+          createdBy: userId
+        }
+      });
+
+      if (questionByUser.createdby === userId) {
+        return sendResponse({
+          res,
+          status: 422,
+          payload: {
+            status: 422,
+            error: 'You cannot downvote your own question'
+          }
+        });
+      }
 
       const questionExist = await Question.questionExist(questionId);
 
@@ -131,6 +179,21 @@ export default {
                  WHERE id = $2 RETURNING meetup, title, body, votes`,
           values: [votes > 0 ? votes - 1 : 0, questionId]
         });
+
+        const userHasUpvoted = await Upvote.find({
+          where: {
+            '"user"': userId
+          }
+        });
+
+        if (arrayHasValues(userHasUpvoted)) {
+          // User has upvoted this question
+          // Enable user to upvote this question if user downvoted earlier
+          await db.queryDb({
+            text: 'DELETE FROM Upvote WHERE "user"=$1',
+            values: [userId]
+          });
+        }
 
         return sendResponse({
           res,

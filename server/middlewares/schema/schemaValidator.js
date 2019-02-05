@@ -70,7 +70,6 @@ export default (useJoiError = false) => {
             });
 
             const customError = makeCustomError(errorMsg);
-
             return res.status(customError.status).send(_useJoiError ? JoiError : customError);
           }
           req.body = data;
