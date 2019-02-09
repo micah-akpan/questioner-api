@@ -14,11 +14,11 @@ class Comment extends Model {
   }
 
   async create(payload) {
-    const { comment, questionId } = payload;
+    const { comment, questionId, userId } = payload;
     const commentResult = await this._db.queryDb({
-      text: `INSERT INTO Comment (body, question)
-               VALUES ($1, $2) RETURNING *`,
-      values: [comment, questionId]
+      text: `INSERT INTO Comment (body, question, createdBy)
+               VALUES ($1, $2, $3) RETURNING *`,
+      values: [comment, questionId, userId]
     });
 
     return commentResult.rows[0];
