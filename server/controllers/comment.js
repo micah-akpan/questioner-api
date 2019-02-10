@@ -72,7 +72,7 @@ export default {
           status: 404,
           payload: {
             status: 404,
-            error: 'The requested comment does not exist'
+            error: 'There are no comments for this question at the moment'
           }
         });
       }
