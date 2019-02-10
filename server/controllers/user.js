@@ -175,24 +175,19 @@ export default {
 
   async getAllUsers(req, res) {
     try {
-      /* eslint-disable */
-      const usersResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE isAdmin=FALSE'
-      });
-
       const users = await User.find({ where: { isAdmin: 'FALSE' } });
 
       if (arrayHasValues(users)) {
         const records = users
           .map(row => replaceNullValue(row))
           .map(row => omitProps(row, ['password']))
-          .map(row => {
+          .map((row) => {
             row.isAdmin = row.isadmin;
             row.phoneNumber = row.phonenumber;
             delete row.isadmin;
             delete row.phonenumber;
             return row;
-          })
+          });
         return sendResponse({
           res,
           status: 200,
@@ -200,7 +195,7 @@ export default {
             status: 200,
             data: records
           }
-        })
+        });
       }
 
       return sendResponse({
@@ -210,7 +205,7 @@ export default {
           status: 404,
           error: 'No registered users at the moment'
         }
-      })
+      });
     } catch (e) {
       return sendServerErrorResponse(res);
     }
@@ -234,7 +229,7 @@ export default {
             status: 422,
             error: 'You can only update your own personal data'
           }
-        })
+        });
       }
 
       // enforcing unique usernames
@@ -252,13 +247,8 @@ export default {
             status: 409,
             error: 'The username you provided is already used by another user'
           }
-        })
+        });
       }
-
-      const userByIdResult = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE id=$1',
-        values: [userId]
-      });
 
       const user = await User.findById(userId);
 
@@ -275,10 +265,10 @@ export default {
           birthday: birthday || user.birthday,
           phoneNumber: phoneNumber || user.phonenumber,
           bio: bio || user.bio,
-          avatar: req.file && req.file.secure_url || user.avatar
+          avatar: (req.file && req.file.secure_url) || user.avatar
         };
 
-        const { rows } = await db.queryDb({
+        const userQueryResult = await db.queryDb({
           text: `UPDATE "User"
                  SET firstname=$1,lastname=$2, email=$3,
                      password=$4, username=$5, birthday=$6,
@@ -287,12 +277,12 @@ export default {
                  email, phoneNumber as "phoneNumber", othername,
                  username, isadmin as "isAdmin", birthday, bio, avatar`,
           values: [userData.firstname, userData.lastname, userData.email,
-          userData.password, userData.username, userData.birthday,
-          userData.othername, userData.phoneNumber, userData.bio,
-          userData.avatar, userId]
+            userData.password, userData.username, userData.birthday,
+            userData.othername, userData.phoneNumber, userData.bio,
+            userData.avatar, userId]
         });
 
-        const userRecord = replaceNullValue(rows[0], '');
+        const userRecord = replaceNullValue(userQueryResult.rows[0], '');
 
         return sendResponse({
           res,
@@ -301,7 +291,7 @@ export default {
             status: 200,
             data: [userRecord]
           }
-        })
+        });
       }
 
       return sendResponse({
@@ -311,7 +301,7 @@ export default {
           status: 404,
           error: 'This user does not have an account'
         }
-      })
+      });
     } catch (e) {
       return sendServerErrorResponse(res);
     }
@@ -335,7 +325,7 @@ export default {
               status: 422,
               error: 'You can only deactivate your own account'
             }
-          })
+          });
         }
 
         await db.queryDb({
@@ -348,7 +338,7 @@ export default {
           status: 200,
           payload: {
             status: 200,
-            data: [`User account has been deactivated successfully`]
+            data: ['User account has been deactivated successfully']
           }
         });
       }
@@ -358,10 +348,9 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: `A user with this account does not exist`
+          error: 'A user with this account does not exist'
         }
       });
-
     } catch (e) {
       return sendServerErrorResponse(res);
     }

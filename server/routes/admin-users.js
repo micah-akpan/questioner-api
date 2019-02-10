@@ -22,7 +22,7 @@ router.get('/users',
 
 
 router.route('/users/:userId')
-  .get(checkParams, isAdmin, userController.getUser)
+  .get(checkParams, userController.getUser)
   .patch(
     checkParams,
     validateRequest,
