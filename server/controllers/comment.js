@@ -6,6 +6,7 @@ export default {
   async createComment(req, res) {
     try {
       const { questionId, comment } = req.body;
+      const { userId } = req.decodedToken || req.body;
       const question = await Question.findById(questionId);
 
       if (question) {
@@ -16,7 +17,7 @@ export default {
           comment
         };
 
-        await Comment.create({ comment, questionId });
+        await Comment.create({ comment, questionId, userId });
 
         return sendResponse({
           res,
@@ -37,6 +38,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendServerErrorResponse(res);
     }
   },
@@ -49,7 +51,9 @@ export default {
         const comments = await Comment.find({ where: { question: questionId } });
         const allComments = comments.map((comment) => {
           comment.createdOn = comment.createdon;
+          comment.createdBy = comment.createdby;
           delete comment.createdon;
+          delete comment.createdby;
           return comment;
         });
         if (arrayHasValues(comments)) {
@@ -68,7 +72,7 @@ export default {
           status: 404,
           payload: {
             status: 404,
-            error: 'The requested comment does not exist'
+            error: 'There are no comments for this question at the moment'
           }
         });
       }

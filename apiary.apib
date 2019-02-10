@@ -818,6 +818,7 @@ User can create a meetup question using this action
 ## Comments [/comments]
 
 ### Create a Comment [POST]
+You can create a comment using this action
 
 + Request (application/json)
 
@@ -845,6 +846,38 @@ User can create a meetup question using this action
         {
             "status": 404,
             error: "The requested question does not exist"
+        }
+
+
+### List all Comments [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "id": 1,
+                    "question": 1,
+                    "comment": "sample comment",
+                    "createdBy": 1,
+                    "createdOn": "1/1/2019"
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "There are no comments for this question at the moment"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested question does not exist"
         }
         
 # Group Rsvps
