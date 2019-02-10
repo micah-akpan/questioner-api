@@ -37,8 +37,8 @@ describe.only('Comments API', () => {
       values: ['sample topic', 'sample location', 1, 1]
     });
     await db.queryDb({
-      text: `INSERT INTO Comment (body, question)
-             VALUES ('sample body', 1)`
+      text: `INSERT INTO Comment (body, question, createdBy)
+             VALUES ('sample body', 1, 1)`
     });
   });
   describe('GET /questions/<question-id>/comments', () => {
