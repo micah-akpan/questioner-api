@@ -7,7 +7,9 @@ import {
   nullToEmptyArray,
   stripInnerNulls
 } from './helpers';
-import { arrayHasValues, objectHasProps, uniq } from '../utils';
+import {
+  arrayHasValues, objectHasProps, uniq, omitProps
+} from '../utils';
 import { Meetup, Image, Question } from '../models/all';
 
 export default {
@@ -110,17 +112,25 @@ export default {
         });
       }
 
-      const uniqueTags = uniq(tags);
-      const images = [].concat(req.file && req.file.secure_url);
+      const imageUrl = (req.file && req.file.secure_url) || '';
 
-      const newMeetupQueryResult = await db.queryDb({
+      const uniqueTags = uniq(tags);
+      const images = [].concat(imageUrl);
+
+      const { rows } = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
-               VALUES ($1, $2, $3, $4, $5) RETURNING topic, location, happeningOn as "happeningOn", tags`,
+               VALUES ($1, $2, $3, $4, $5) RETURNING id, topic, location, happeningOn as "happeningOn", tags`,
         values: [topic, location, happeningOn, uniqueTags, images]
       });
 
-      let meetupResult = nullToEmptyArray(newMeetupQueryResult.rows);
-      meetupResult = stripInnerNulls(newMeetupQueryResult.rows);
+      db.queryDb({
+        text: `INSERT INTO Image (imageUrl, meetup)
+               VALUES ($1, $2)`,
+        values: [imageUrl, rows[0].id]
+      });
+
+      let meetupResult = nullToEmptyArray(rows);
+      meetupResult = stripInnerNulls(rows);
 
       const meetupRecord = meetupResult[0];
 
@@ -129,7 +139,7 @@ export default {
         status: 201,
         payload: {
           status: 201,
-          data: [meetupRecord]
+          data: [omitProps(meetupRecord, ['id'])]
         }
       });
     } catch (e) {
