@@ -338,7 +338,7 @@ export default {
             status: 422,
             payload: {
               status: 422,
-              error: 'You have reached the maximum number (5) of images to add to a meetup'
+              error: 'This meetup have reached the maximum number (5) of images to add to a meetup'
             }
           })
         }
