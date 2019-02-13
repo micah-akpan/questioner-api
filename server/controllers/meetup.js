@@ -331,7 +331,30 @@ export default {
         }
 
         const images = req.files.map(file => file.secure_url);
+
+        if (meetupRecord.images.length === 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'You have reached the maximum number (5) of images to add to a meetup'
+            }
+          })
+        }
+
         const allImages = meetupRecord.images.concat(images);
+        if (allImages.length > 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: `This meetup have exceeded the maximum number (5) of images.
+                    ${meetupRecord.images.length} images are already in this meetup`
+            }
+          })
+        }
         const uniqueImages = uniq(allImages);
 
         const updateImagesQueryResult = await db.queryDb({

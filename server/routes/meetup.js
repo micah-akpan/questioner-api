@@ -42,7 +42,7 @@ router.route('/meetups/:meetupId/images')
   .post(
     checkParams,
     isAdmin,
-    Upload.array('meetupPhotos', 4),
+    Upload.array('meetupPhotos', 5),
     meetupController.addImagesToMeetup
   );
 
