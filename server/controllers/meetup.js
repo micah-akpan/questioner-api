@@ -321,13 +321,14 @@ export default {
       const meetupRecord = await Meetup.findById(meetupId);
 
       if (meetupRecord) {
-        req.files.forEach(async (file) => {
+        /* eslint-disable */
+        for (const file of req.files) {
           await db.queryDb({
             text: `INSERT INTO Image (imageUrl, meetup)
                    VALUES ($1, $2)`,
             values: [file.secure_url, meetupId]
           });
-        });
+        }
 
         const images = req.files.map(file => file.secure_url);
         const allImages = meetupRecord.images.concat(images);
