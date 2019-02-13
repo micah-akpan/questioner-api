@@ -7,7 +7,9 @@ import {
   nullToEmptyArray,
   stripInnerNulls
 } from './helpers';
-import { arrayHasValues, objectHasProps, uniq } from '../utils';
+import {
+  arrayHasValues, objectHasProps, uniq, omitProps
+} from '../utils';
 import { Meetup, Image, Question } from '../models/all';
 
 export default {
@@ -110,17 +112,25 @@ export default {
         });
       }
 
-      const uniqueTags = uniq(tags);
-      const images = [].concat(req.file && req.file.secure_url);
+      const imageUrl = (req.file && req.file.secure_url) || '';
 
-      const newMeetupQueryResult = await db.queryDb({
+      const uniqueTags = uniq(tags);
+      const images = [].concat(imageUrl);
+
+      const { rows } = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
-               VALUES ($1, $2, $3, $4, $5) RETURNING topic, location, happeningOn as "happeningOn", tags`,
+               VALUES ($1, $2, $3, $4, $5) RETURNING id, topic, location, happeningOn as "happeningOn", tags`,
         values: [topic, location, happeningOn, uniqueTags, images]
       });
 
-      let meetupResult = nullToEmptyArray(newMeetupQueryResult.rows);
-      meetupResult = stripInnerNulls(newMeetupQueryResult.rows);
+      db.queryDb({
+        text: `INSERT INTO Image (imageUrl, meetup)
+               VALUES ($1, $2)`,
+        values: [imageUrl, rows[0].id]
+      });
+
+      let meetupResult = nullToEmptyArray(rows);
+      meetupResult = stripInnerNulls(rows);
 
       const meetupRecord = meetupResult[0];
 
@@ -129,7 +139,7 @@ export default {
         status: 201,
         payload: {
           status: 201,
-          data: [meetupRecord]
+          data: [omitProps(meetupRecord, ['id'])]
         }
       });
     } catch (e) {
@@ -311,16 +321,40 @@ export default {
       const meetupRecord = await Meetup.findById(meetupId);
 
       if (meetupRecord) {
-        req.files.forEach(async (file) => {
+        /* eslint-disable */
+        for (const file of req.files) {
           await db.queryDb({
             text: `INSERT INTO Image (imageUrl, meetup)
                    VALUES ($1, $2)`,
             values: [file.secure_url, meetupId]
           });
-        });
+        }
 
         const images = req.files.map(file => file.secure_url);
+
+        if (meetupRecord.images.length === 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This meetup have reached the maximum number (5) of images to add to a meetup'
+            }
+          })
+        }
+
         const allImages = meetupRecord.images.concat(images);
+        if (allImages.length > 5) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: `This meetup have exceeded the maximum number (5) of images.
+                    ${meetupRecord.images.length} images are already in this meetup`
+            }
+          })
+        }
         const uniqueImages = uniq(allImages);
 
         const updateImagesQueryResult = await db.queryDb({

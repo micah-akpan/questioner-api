@@ -26,7 +26,7 @@ router.route('/users/:userId')
   .patch(
     checkParams,
     validateRequest,
-    Upload.single('user-avatar'),
+    Upload.single('avatar'),
     userController.updateUserProfile
   )
   .delete(checkParams, userController.deleteUser);
