@@ -239,6 +239,13 @@ Admins can use retrieve details of a particular user using this actionS
             "error": "The username you provided is already used by another user"
         }
 
++ Response 409 (application/json)
+
+        {
+            "status": 409,
+            "error": "The email you provided is already used by another user"
+        }
+
 + Response 404 (application/json)
 
         {

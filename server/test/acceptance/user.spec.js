@@ -123,38 +123,77 @@ describe.only('User API', () => {
       await db.createTable('User');
     });
 
-    beforeEach(async () => {
-      await db.queryDb({
-        text: `INSERT INTO "User" (firstname, lastname, email, password)
-               VALUES ($1, $2, $3, $4)`,
-        values: ['user1', 'user1', 'user1@email.com', 'user1234']
+    describe('handle valid update request', () => {
+      beforeEach(async () => {
+        await db.queryDb({
+          text: `INSERT INTO "User" (firstname, lastname, email, password, username)
+                 VALUES ('user1','user1', 'user1@email.com', 'user1234', 'usera')`
+        });
+      });
+
+      it('should update user\'s profile', (done) => {
+        agent
+          .patch('/api/v1/users/1')
+          .set('Authorization', `Bearer ${testToken}`)
+          .send({
+            firstname: 'userA'
+          })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.data.should.be.an('array');
+            res.body.data[0].firstname.should.equal('userA');
+            done();
+          });
+      });
+
+      after(async () => {
+        await db.dropTable({ tableName: '"User"' });
       });
     });
 
-    it.skip('should update user\'s profile', (done) => {
-      const imageBuffer = Buffer.from(`${process.cwd()}/server/assets/yoyo.jpeg`);
-      agent
-        .patch('/api/v1/users/1')
-        .set('Authorization', `Bearer ${testToken}`)
-        .field({
-          firstname: 'userA',
-          lastname: 'userA',
-          email: 'userA@email.com',
-          password: 'user1234'
-        })
-        .attach('user-avatar', imageBuffer)
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err);
-          res.body.status.should.equal(200);
-          res.body.data.should.be.an('array');
-          res.body.data[0].firstname.should.equal('userA');
-          done();
+    describe('handle invalid request', () => {
+      before(async () => {
+        await db.createTable('User');
+        await db.queryDb({
+          text: `INSERT INTO "User" (firstname, lastname, email, password, username)
+                 VALUES ('user1','user1', 'user1@email.com', 'user1234', 'usera'),
+                 ('user2', 'user2', 'user2@email.com', 'user2222', 'userb')`
         });
-    });
+      });
+      it('should not update another user\'s profile', (done) => {
+        const authToken = createTestToken({ userId: 2 });
+        agent
+          .patch('/api/v1/users/1')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            username: 'new username'
+          })
+          .expect(422, done);
+      });
 
-    after(async () => {
-      await db.dropTable({ tableName: '"User"' });
+      it('should not update user\'s email if user with email exist', (done) => {
+        const authToken = createTestToken({ userId: 2 });
+        agent
+          .patch('/api/v1/users/2')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            email: 'user1@email.com'
+          })
+          .expect(409, done);
+      });
+
+      it('should not update user\'s username if user with username exist', (done) => {
+        const authToken = createTestToken({ userId: 2 });
+        agent
+          .patch('/api/v1/users/2')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            username: 'usera'
+          })
+          .expect(409, done);
+      });
     });
   });
 
