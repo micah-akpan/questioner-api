@@ -22,18 +22,6 @@ class Db {
    * @returns {Promise<QueryResult>} Returns a promise of the results of the query operation
    */
   queryDb(query) {
-    // const client = await this._dbClient.connect();
-    // let queryResult = null;
-    // try {
-    //    queryResult = await client.query(query);
-    // } catch(e) {
-    //   // console.log(e.stack);
-    // } finally {
-    //   client.release();
-    // }
-
-    // return queryResult;
-
     return this._dbClient.query(query);
   }
 

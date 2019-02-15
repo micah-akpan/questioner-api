@@ -14,15 +14,11 @@ describe.only('Meetups API', () => {
   const adminTestToken = createTestToken({ admin: true });
   const userTestToken = createTestToken({ admin: false });
   before('Setup', async () => {
-    await db.dropTable({ tableName: 'Upvote' });
-    await db.dropTable({ tableName: 'Downvote' });
-    await db.dropTable({ tableName: 'Comment' });
-    await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
     await db.dropTable({ tableName: '"User"' });
 
     await db.createTable('Meetup');
+    await db.createTable('Image');
   });
 
   describe('POST /meetups', () => {

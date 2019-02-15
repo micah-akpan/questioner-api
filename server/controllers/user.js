@@ -232,20 +232,29 @@ export default {
         });
       }
 
-      // enforcing unique usernames
-      // at the controller level
-      const { rows } = await db.queryDb({
-        text: 'SELECT * FROM "User" WHERE username=$1 AND id <> $2',
-        values: [username, userId]
-      });
+      // enforcing unique usernames/email
+      // at the controller level as welL
+      const userByEmailExist = await userHelper.anotherUserWithEmailExist(email, userId);
+      const userByUsernameExist = await userHelper.anotherUserWithUsernameExist(username, userId);
 
-      if (arrayHasValues(rows)) {
+      if (userByUsernameExist) {
         return sendResponse({
           res,
           status: 409,
           payload: {
             status: 409,
             error: 'The username you provided is already used by another user'
+          }
+        });
+      }
+
+      if (userByEmailExist) {
+        return sendResponse({
+          res,
+          status: 409,
+          payload: {
+            status: 409,
+            error: 'The email you provided is already used by another user'
           }
         });
       }
