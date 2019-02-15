@@ -1,12 +1,8 @@
 import 'chai/register-should';
 import request from 'supertest';
-import fs from 'fs';
-import Promisify from 'bluebird';
 import { app } from '../../app';
 import db from '../../db';
 import { getFutureDate, createTestToken } from '../../utils';
-
-Promisify.promisifyAll(fs);
 
 const agent = request(app);
 
@@ -418,11 +414,7 @@ describe.only('Meetups API', () => {
 
   describe.skip('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
-      await db.dropTable({ tableName: 'Rsvp' });
-      await db.dropTable({ tableName: 'Comment' });
-      await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
-      await db.dropTable({ tableName: '"User"' });
 
       await db.createTable('Meetup');
 
@@ -456,31 +448,29 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe.skip('GET /meetups/<meetup-id>/images', () => {
+  describe('GET /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, images)
                VALUES ($1, $2, $3, $4)`,
-        values: ['meetup sample', 'meetup location', getFutureDate(3), ['image1.jpg']]
+        values: ['meetup sample', 'meetup location', getFutureDate(3), ['sample.img']]
       });
     });
 
     it('should return all meetup images', (done) => {
       agent
-        .get('/meetups/1/images')
+        .get('/api/v1/meetups/1/images')
         .set('Authorization', `Bearer ${userTestToken}`)
-        .expect(200, done);
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          done();
+        });
     });
   });
 
   after(async () => {
-    await db.dropTable({ tableName: 'Upvote' });
-    await db.dropTable({ tableName: 'Downvote' });
-    await db.dropTable({ tableName: 'Rsvp' });
-    await db.dropTable({ tableName: 'Comment' });
-
-    await db.dropTable({ tableName: 'Question' });
     await db.dropTable({ tableName: 'Meetup' });
-    await db.dropTable({ tableName: '"User"' });
   });
 });

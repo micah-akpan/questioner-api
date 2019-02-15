@@ -7,6 +7,9 @@ import {
   nullToEmptyArray,
   stripInnerNulls
 } from './helpers';
+
+import uploadHelper from '../helpers/upload';
+
 import {
   arrayHasValues, objectHasProps, uniq, omitProps
 } from '../utils';
@@ -112,22 +115,26 @@ export default {
         });
       }
 
-      const imageUrl = (req.file && req.file.secure_url) || '';
+      let image = {};
+      if (req.file) {
+        image = await uploadHelper.uploadImage(req.file.path);
+      }
 
       const uniqueTags = uniq(tags);
-      const images = [].concat(imageUrl);
 
       const { rows } = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
                VALUES ($1, $2, $3, $4, $5) RETURNING id, topic, location, happeningOn as "happeningOn", tags`,
-        values: [topic, location, happeningOn, uniqueTags, images]
+        values: [topic, location, happeningOn, uniqueTags, [image.secure_url] || []]
       });
 
-      db.queryDb({
-        text: `INSERT INTO Image (imageUrl, meetup)
-               VALUES ($1, $2)`,
-        values: [imageUrl, rows[0].id]
-      });
+      if (req.file) {
+        await db.queryDb({
+          text: `INSERT INTO Image (imageUrl, meetup)
+                 VALUES ($1, $2)`,
+          values: [image.secure_url, rows[0].id]
+        });
+      }
 
       let meetupResult = nullToEmptyArray(rows);
       meetupResult = stripInnerNulls(rows);
@@ -317,12 +324,41 @@ export default {
   async addImagesToMeetup(req, res) {
     try {
       const { meetupId } = req.params;
-
+      const files = req.files.map(file => file.path);
       const meetupRecord = await Meetup.findById(meetupId);
+      const MAX_IMAGES_PER_MEETUP = 10;
 
       if (meetupRecord) {
-        /* eslint-disable */
-        for (const file of req.files) {
+        const images = req.files.map(file => file.path);
+
+        if (meetupRecord.images.length === MAX_IMAGES_PER_MEETUP) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'This meetup have reached the maximum number (10) of images'
+            }
+          });
+        }
+
+        const allImages = meetupRecord.images.concat(images);
+
+        if (allImages.length > MAX_IMAGES_PER_MEETUP) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'You cannot have more than 10 images in a meetup'
+            }
+          });
+        }
+
+        const uploadedImages = await uploadHelper.uploadImages(files);
+
+        /* eslint-disable no-await-in-loop */
+        for (const file of uploadedImages) {
           await db.queryDb({
             text: `INSERT INTO Image (imageUrl, meetup)
                    VALUES ($1, $2)`,
@@ -330,38 +366,14 @@ export default {
           });
         }
 
-        const images = req.files.map(file => file.secure_url);
-
-        if (meetupRecord.images.length === 5) {
-          return sendResponse({
-            res,
-            status: 422,
-            payload: {
-              status: 422,
-              error: 'This meetup have reached the maximum number (5) of images to add to a meetup'
-            }
-          })
-        }
-
-        const allImages = meetupRecord.images.concat(images);
-        if (allImages.length > 5) {
-          return sendResponse({
-            res,
-            status: 422,
-            payload: {
-              status: 422,
-              error: `This meetup have exceeded the maximum number (5) of images.
-                    ${meetupRecord.images.length} images are already in this meetup`
-            }
-          })
-        }
-        const uniqueImages = uniq(allImages);
+        const allMeetupImages = await Image.find({ where: { meetup: meetupId } });
+        const imagesUrl = allMeetupImages.map(image => image.imageurl);
 
         const updateImagesQueryResult = await db.queryDb({
           text: `UPDATE Meetup
                  SET images=$1
                  WHERE id=$2 RETURNING id as meetup, topic, images`,
-          values: [uniqueImages, meetupId]
+          values: [imagesUrl, meetupId]
         });
 
         const updatedMeetupRecord = updateImagesQueryResult.rows[0];
@@ -381,7 +393,7 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: 'You cannot add images to this meetup because the meetup does not exist'
+          error: 'The requested meetup does not exist'
         }
       });
     } catch (e) {

@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "bluebird": "^3.5.3",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
@@ -58,6 +57,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.2.0",
     "bcrypt": "^3.0.3",
+    "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.13.2",
     "cors": "^2.8.5",

@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import multerUpload from '../middlewares/uploads/upload';
 import meetupController from '../controllers/meetup';
 import {
-  Auth, Upload, Misc, schemaValidator
+  Auth, Misc, schemaValidator
 } from '../middlewares';
 
 const router = Router();
@@ -16,7 +17,7 @@ router
   .post(
     isAdmin,
     validateRequest,
-    Upload.single('image'),
+    multerUpload.single('image'),
     meetupController.createNewMeetup
   )
   .get(meetupController.getAllMeetups);
@@ -42,7 +43,7 @@ router.route('/meetups/:meetupId/images')
   .post(
     checkParams,
     isAdmin,
-    Upload.array('meetupPhotos', 5),
+    multerUpload.array('meetupPhotos', 5),
     meetupController.addImagesToMeetup
   );
 
