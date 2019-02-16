@@ -1,4 +1,6 @@
+import path from 'path';
 import jwt from 'jsonwebtoken';
+
 /**
  * @func omitProps
  * @param {Object} obj
@@ -164,17 +166,17 @@ export const wordToPosition = (words, word) => {
  * @returns {String} A camelcased version of `word`
  */
 export const toCamelCase = (words, word) => {
-    const wordHash = wordToPosition(words, word);
+  const wordHash = wordToPosition(words, word);
 
-    let newStr = '';
-    for (const prop in wordHash) {
-      if (Object.prototype.hasOwnProperty.call(wordHash, prop)) {
-        newStr += wordHash[prop] === 0 ? prop : `${prop[0].toUpperCase()}${prop.substring(1)}`;
-      }
+  let newStr = '';
+  for (const prop in wordHash) {
+    if (Object.prototype.hasOwnProperty.call(wordHash, prop)) {
+      newStr += wordHash[prop] === 0 ? prop : `${prop[0].toUpperCase()}${prop.substring(1)}`;
     }
+  }
 
-    return newStr;
-}
+  return newStr;
+};
 
 /**
  * @func getLastElement
@@ -183,6 +185,13 @@ export const toCamelCase = (words, word) => {
  * @description Returns the last element in `array`
  */
 export const getLastElement = (array) => array[array.length - 1];
+
+/* @func stripPathName
+ * @param {String} filePath
+ * @returns {String} Returns the basename of
+ * `filePath` without extension name
+*/
+export const stripPathName = filePath => path.basename(filePath, path.extname(filePath));
 
 export default {
   omitProps,
@@ -193,5 +202,6 @@ export default {
   getIndex,
   createTestToken,
   parseStr,
-  uniq
+  uniq,
+  stripPathName
 };

@@ -14,7 +14,8 @@ import {
   replaceNullValue,
   wordToPosition,
   toCamelCase,
-  getLastElement
+  getLastElement,
+  stripPathName
 } from '../../../utils';
 
 describe.only('Utils', () => {
@@ -235,7 +236,7 @@ describe.only('Utils', () => {
     });
   });
 
-  describe('getLastElement', () => {
+  describe('getLastElement()', () => {
     it('should return the last element of an array', () => {
       const values = ['a', 'b'];
       getLastElement(values).should.equal('b');
@@ -244,6 +245,16 @@ describe.only('Utils', () => {
     it('should return the last element of an array', () => {
       const values = [{ a: 1 }, { a: 10 }];
       getLastElement(values).should.deep.equal({ a: 10 });
+    });
+  });
+
+  describe('stripPathName()', () => {
+    it('should strip path names', () => {
+      stripPathName('/path/to/myfile.js').should.equal('myfile');
+    });
+
+    it('should strip path names', () => {
+      stripPathName('/path/to/mypic.jpeg').should.equal('mypic');
     });
   });
 });
