@@ -76,6 +76,18 @@ describe.only('Meetups API', () => {
           });
       });
 
+      it('should return an error if user is not admin', (done) => {
+        agent
+          .post('/api/v1/meetups')
+          .set('Authorization', `Bearer ${userTestToken}`)
+          .expect(403)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.error.should.equal('The requested action is only for admins');
+            done();
+          });
+      });
+
       it.skip('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
@@ -355,12 +367,18 @@ describe.only('Meetups API', () => {
 
       await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
-              VALUES ($1, $2, $3, $4)`,
+              VALUES ($1, $2, $3, $4),
+              ($5, $6, $7, $8)`,
         values: [
           'meetup sample 1',
           'meetup sample location',
           getFutureDate(2),
-          '{ "tag1"}']
+          '{"tag1"}',
+          'meetup sample 2',
+          'meetup sample location 2',
+          getFutureDate(),
+          '{"tag2","tag3","tag4","tag5","tag6"}'
+        ]
       });
     });
 
@@ -391,6 +409,22 @@ describe.only('Meetups API', () => {
         .end((err, res) => {
           if (err) return done(err);
           res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('snould not adds to a meetup if it already has 5 tags', (done) => {
+      agent
+        .post('/api/v1/meetups/2/tags')
+        .set({ Authorization: `Bearer ${adminTestToken}` })
+        .send({
+          tags: ['meetup2']
+        })
+        .expect(422)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.should.have.property('error');
+          res.body.error.should.equal('Maximum tags a meetup can have is 5');
           done();
         });
     });
