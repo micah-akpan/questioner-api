@@ -583,7 +583,14 @@ You can add tags to meetups using this action
 
         {
             "status": 422,
-            "error": "You cannot add tags to this meetup, because the meetup does not exist"
+            "error": "Maximum tags a meetup can have is 5"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested meetup does not exist"
         }
 
 ### Fetch All Meetup Tags [GET]

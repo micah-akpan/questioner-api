@@ -281,6 +281,17 @@ export default {
           });
         }
 
+        if (meetupRecord.tags.length >= MAX_TAGS_PER_MEETUP) {
+          return sendResponse({
+            res,
+            status: 422,
+            payload: {
+              status: 422,
+              error: 'Maximum tags a meetup can have is 5'
+            }
+          });
+        }
+
         const newTags = meetupRecord.tags.concat(tags);
 
         const uniqueTags = uniq(newTags);
@@ -309,7 +320,7 @@ export default {
         status: 404,
         payload: {
           status: 404,
-          error: 'You cannot add tags to this meetup, because the meetup does not exist'
+          error: 'The requested meetup does not exist'
         }
       });
     } catch (e) {
