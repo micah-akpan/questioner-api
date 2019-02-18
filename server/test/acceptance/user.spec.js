@@ -166,7 +166,7 @@ describe.only('User API', () => {
           });
       });
 
-      it('should update user\'s profile', (done) => {
+      it.skip('should update user\'s profile', (done) => {
         const token = createTestToken({ userId: 3 });
         const image = `${process.cwd()}/server/assets/yoyo.jpeg`;
         agent
