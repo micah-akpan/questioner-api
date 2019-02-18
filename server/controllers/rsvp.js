@@ -35,7 +35,7 @@ export default {
       const meetup = await Meetup.findById(meetupId);
 
       const { response } = req.body;
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       if (meetup) {
         const rsvps = await Rsvp.find({ where: { '"user"': userId } });
@@ -89,7 +89,7 @@ export default {
   async updateRsvp(req, res) {
     try {
       const { meetupId, rsvpId } = req.params;
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       const rsvps = await Rsvp.find({
         where: {

@@ -14,7 +14,7 @@ export default {
 
       const meetupExist = await Meetup.recordExist(meetupId);
       if (meetupExist) {
-        const { userId } = req.decodedToken || req.body;
+        const { userId } = req.decodedToken;
         const questionResult = await db.queryDb({
           text: `INSERT INTO Question (title, body, meetup, createdBy)
                  VALUES ($1, $2, $3, $4) RETURNING createdBy as user, meetup, title, body`,
@@ -47,7 +47,7 @@ export default {
   async upvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       const questionByUser = await Question.find({
         where: {
@@ -131,7 +131,7 @@ export default {
   async downvoteQuestion(req, res) {
     try {
       const { questionId } = req.params;
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       const questionByUser = await Question.find({
         where: {

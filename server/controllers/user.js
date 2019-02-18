@@ -219,7 +219,7 @@ export default {
         phoneNumber, bio
       } = req.body;
 
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       if (userId !== Number(req.params.userId)) {
         return sendResponse({
@@ -318,7 +318,7 @@ export default {
 
   async deleteUser(req, res) {
     try {
-      const { userId } = req.decodedToken || req.body;
+      const { userId } = req.decodedToken;
 
       const result = await db.queryDb({
         text: 'SELECT * FROM "User" WHERE id=$1',

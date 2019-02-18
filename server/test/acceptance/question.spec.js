@@ -78,8 +78,8 @@ describe.only('Questions API', () => {
 
   describe('PATCH /questions/<question-id>/upvote', () => {
     before(async () => {
-      await db.dropTable({ tableName: 'Upvote' });
-      await db.dropTable({ tableName: 'Downvote' });
+      // await db.dropTable({ tableName: 'Upvote' });
+      // await db.dropTable({ tableName: 'Downvote' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
@@ -154,6 +154,7 @@ describe.only('Questions API', () => {
   describe('PATCH /api/v1/questions/<question-id>/downvote', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Downvote' });
+      await db.dropTable({ tableName: 'Upvote' });
       await db.dropTable({ tableName: 'Question' });
       await db.dropTable({ tableName: 'Meetup' });
       await db.dropTable({ tableName: '"User"' });
@@ -161,6 +162,7 @@ describe.only('Questions API', () => {
       await db.createTable('User');
       await db.createTable('Meetup');
       await db.createTable('Question');
+      await db.createTable('Upvote');
       await db.createTable('Downvote');
     });
 
@@ -182,11 +184,29 @@ describe.only('Questions API', () => {
                VALUES ($1, $2, $3, $4)`,
         values: ['question 1', 'question body', 1, 1]
       });
+
+      await db.queryDb({
+        text: `INSERT INTO Question (title, body, createdBy, meetup, votes)
+               VALUES ($1, $2, $3, $4, $5)`,
+        values: ['question 2', 'question body 2', 1, 1, 1]
+      });
     });
     it('should downvote a question', (done) => {
       agent
         .patch('/api/v1/questions/1/downvote')
-        .send({ userId: '1' })
+        .set('Authorization', `Bearer ${userTestToken}`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          done();
+        });
+    });
+
+    it('should downvote a question', (done) => {
+      agent
+        .patch('/api/v1/questions/2/downvote')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -200,7 +220,6 @@ describe.only('Questions API', () => {
     it('should not downvote a question already downvoted by the same user', (done) => {
       agent
         .patch('/api/v1/questions/1/downvote')
-        .send({ userId: '1' })
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(409)
         .end((err, res) => {
