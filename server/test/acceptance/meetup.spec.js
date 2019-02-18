@@ -57,25 +57,6 @@ describe.only('Meetups API', () => {
           });
       });
 
-      it('should return an error if tags is not in array form', (done) => {
-        agent
-          .post('/api/v1/meetups')
-          .set('Authorization', `Bearer ${adminTestToken}`)
-          .expect(400)
-          .send({
-            topic: 'Meetup 1',
-            location: 'Meetup Location',
-            happeningOn: getFutureDate(10),
-            tags: 'meetup1'
-          })
-          .end((err, res) => {
-            if (err) return done(err);
-            res.body.should.have.property('error');
-            res.body.error.should.equal('tags must be an array');
-            done();
-          });
-      });
-
       it('should return an error if user is not admin', (done) => {
         agent
           .post('/api/v1/meetups')
@@ -501,6 +482,60 @@ describe.only('Meetups API', () => {
           res.body.status.should.equal(200);
           done();
         });
+    });
+  });
+
+  describe('PUT /meetups/<meetup-id>', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.createTable('Meetup');
+    });
+
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn)
+               VALUES ($1, $2, $3)`,
+        values: ['sample meetup topic', 'sample meetup location', getFutureDate()]
+      });
+    });
+
+    describe('handle valid data', () => {
+      it('should update meetup', (done) => {
+        agent
+          .put('/api/v1/meetups/1')
+          .set('access-token', adminTestToken)
+          .send({
+            topic: 'updated topic',
+            location: 'updated location'
+          })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.should.have.property('data');
+            res.body.data.should.be.an('array');
+            res.body.data[0].topic.should.equal('updated topic');
+            done();
+          });
+      });
+    });
+
+    describe('handle invalid data', () => {
+      it('should return an error response for a non-existing meetup', (done) => {
+        agent
+          .put('/api/v1/meetups/99999')
+          .set('access-token', adminTestToken)
+          .send({
+            topic: 'updated topic'
+          })
+          .expect(404)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(404);
+            res.body.should.have.property('error');
+            done();
+          });
+      });
     });
   });
 

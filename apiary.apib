@@ -387,6 +387,37 @@ object containing a meetup.
             "error": "The requested meetup does not exist"
         }
 
+### Update a Single Meetup [PUT]
+Admin can update a meetup using this action
+
++ Request (application/json)
+
+        {
+            "topic": "new topic"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "data": [
+                {
+                    "topic": "new topic",
+                    "location": "meetup location 1",
+                    "happeningOn": "2/3/2019",
+                    "tags": ['tag1', 'tag2', 'tag3'],
+                    "images": []
+                }
+            ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "error": "The requested meetup does not exist"
+        }
+
 ### Delete a Single Meetup [DELETE]
 Admins can delete a meetup using this action
 
