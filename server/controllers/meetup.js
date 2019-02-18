@@ -80,11 +80,7 @@ export default {
         location, topic, happeningOn
       } = req.body;
 
-      let { tags = [] } = req.body;
-
-      if (typeof tags === 'string') {
-        tags = tags.split(',');
-      }
+      const { tags = [] } = req.body;
 
       const meetups = await Meetup.find({
         where: {
@@ -150,7 +146,6 @@ export default {
         }
       });
     } catch (e) {
-      console.log(e);
       return sendServerErrorResponse(res);
     }
   },

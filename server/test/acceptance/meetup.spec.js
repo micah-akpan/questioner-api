@@ -23,13 +23,13 @@ describe.only('Meetups API', () => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
-          .expect(201)
           .send({
             topic: 'Meetup 1',
             location: 'Meetup Location',
             happeningOn: getFutureDate(),
             tags: []
           })
+          .expect(201)
           .end((err, res) => {
             if (err) return done(err);
             res.body.data.should.be.an('array');
@@ -132,17 +132,19 @@ describe.only('Meetups API', () => {
 
     beforeEach(async () => {
       await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn)
-               VALUES ($1, $2, $3),
-               ($4, $5, $6) RETURNING *`,
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags)
+               VALUES ($1, $2, $3, $4),
+               ($5, $6, $7, $8) RETURNING *`,
         values: [
           'meetup topic',
           'meetup location',
           getFutureDate(),
+          ['mtag1'],
 
           'next topic',
           'next location',
-          getFutureDate()
+          getFutureDate(),
+          ['mtag2']
         ]
       });
     });
@@ -161,7 +163,8 @@ describe.only('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v1/meetups?searchTerm=meetup topic')
+        .get('/api/v1/meetups')
+        .query({ searchTerm: 'meetup topic' })
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -175,7 +178,23 @@ describe.only('Meetups API', () => {
 
     it('should return a list of matched meetups', (done) => {
       agent
-        .get('/api/v1/meetups?searchTerm=next location')
+        .get('/api/v1/meetups')
+        .query({ searchTerm: 'next location' })
+        .set('Authorization', `Bearer ${userTestToken}`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          res.body.data.should.be.an('array');
+          res.body.data.length.should.be.greaterThan(0);
+          done();
+        });
+    });
+
+    it('should return a list of matched meetups', (done) => {
+      agent
+        .get('/api/v1/meetups')
+        .query({ searchTerm: 'mtag1' })
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
@@ -427,19 +446,19 @@ describe.only('Meetups API', () => {
     });
   });
 
-  describe.skip('POST /meetups/<meetup-id>/images', () => {
+  describe('POST /meetups/<meetup-id>/images', () => {
     before(async () => {
       await db.dropTable({ tableName: 'Meetup' });
-
       await db.createTable('Meetup');
 
       await db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn)
-              VALUES ($1, $2, $3)`,
+        text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
+              VALUES ($1, $2, $3, $4, $5)`,
         values: [
           'meetup sample 1',
           'meetup sample location',
-          getFutureDate(2)]
+          getFutureDate(2),
+          [], []]
       });
     });
 
@@ -475,6 +494,40 @@ describe.only('Meetups API', () => {
     it('should return all meetup images', (done) => {
       agent
         .get('/api/v1/meetups/1/images')
+        .set('Authorization', `Bearer ${userTestToken}`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          res.body.status.should.equal(200);
+          done();
+        });
+    });
+  });
+
+  describe('GET /meetups/<meetup-id>/images/<image-id>', () => {
+    before(async () => {
+      await db.dropTable({ tableName: 'Meetup' });
+      await db.dropTable({ tableName: 'Image' });
+
+      await db.createTable('Meetup');
+      await db.createTable('Image');
+    });
+    beforeEach(async () => {
+      await db.queryDb({
+        text: `INSERT INTO Meetup (topic, location, happeningOn, images)
+               VALUES ($1, $2, $3, $4)`,
+        values: ['meetup sample', 'meetup location', getFutureDate(3), ['sample.jpg']]
+      });
+
+      await db.queryDb({
+        text: `INSERT INTO Image (imageUrl, meetup)
+               VALUES ('sample.jpg', 1)`
+      });
+    });
+
+    it('should return a single meetup image', (done) => {
+      agent
+        .get('/api/v1/meetups/1/images/1')
         .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {

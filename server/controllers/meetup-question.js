@@ -41,11 +41,12 @@ export default {
   async updateMeetupQuestion(req, res) {
     try {
       const { meetupId, questionId } = req.params;
+      const { userId } = req.decodedToken;
       const { title, body } = req.body;
       const results = await db.queryDb({
         text: `SELECT * FROM Question
                WHERE id=$1 AND createdBy=$2 AND meetup=$3`,
-        values: [questionId, req.body.userId, meetupId]
+        values: [questionId, userId, meetupId]
       });
 
       const questionRecord = results.rows[0];

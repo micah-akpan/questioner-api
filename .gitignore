@@ -68,3 +68,4 @@ typings/
 
 # App's static assets
 assets/
+server/assets

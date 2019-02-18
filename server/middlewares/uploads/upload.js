@@ -3,7 +3,7 @@ import path from 'path';
 import { stripPathName } from '../../utils';
 
 const storage = multer.diskStorage({
-  destination: './assets',
+  destination: './server/assets',
   filename: (req, file, cb) => {
     const newFileName = `${stripPathName(file.originalname)}-${Date.now()}${path.extname(file.originalname)}`;
 

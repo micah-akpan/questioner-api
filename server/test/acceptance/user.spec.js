@@ -148,6 +148,46 @@ describe.only('User API', () => {
           });
       });
 
+      it('should update user\'s profile', (done) => {
+        const token = createTestToken({ userId: 2 });
+        agent
+          .patch('/api/v1/users/2')
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            lastname: 'userA'
+          })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.data.should.be.an('array');
+            res.body.data[0].lastname.should.equal('userA');
+            done();
+          });
+      });
+
+      it('should update user\'s profile', (done) => {
+        const token = createTestToken({ userId: 3 });
+        const image = `${process.cwd()}/server/assets/yoyo.jpeg`;
+        agent
+          .patch('/api/v1/users/3')
+          .set('Authorization', `Bearer ${token}`)
+          .attach('avatar', image)
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.status.should.equal(200);
+            res.body.data.should.be.an('array');
+            done();
+          });
+      });
+
+      afterEach(async () => {
+        await db.queryDb({
+          text: 'DELETE FROM "User"'
+        });
+      });
+
       after(async () => {
         await db.dropTable({ tableName: '"User"' });
       });
