@@ -150,6 +150,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log(e);
       return sendServerErrorResponse(res);
     }
   },
@@ -171,6 +172,47 @@ export default {
           payload: {
             status: 200,
             data: [meetupRecord]
+          }
+        });
+      }
+      return sendResponse({
+        res,
+        status: 404,
+        payload: {
+          status: 404,
+          error: 'The requested meetup does not exist'
+        }
+      });
+    } catch (e) {
+      return sendServerErrorResponse(res);
+    }
+  },
+
+  async updateMeetup(req, res) {
+    try {
+      const { topic, location, happeningOn } = req.body;
+      const { meetupId } = req.params;
+      const meetup = await Meetup.findById(meetupId);
+      if (meetup) {
+        const newMeetupData = {
+          topic: topic || meetup.topic,
+          location: location || meetup.location,
+          happeningOn: happeningOn || meetup.happeningon
+        };
+        const { rows } = await db.queryDb({
+          text: `UPDATE Meetup
+                 SET topic=$1, location=$2, happeningOn=$3
+                 WHERE id=$4 RETURNING *`,
+          values: [newMeetupData.topic, newMeetupData.location, newMeetupData.happeningOn, meetupId]
+        });
+
+        const updatedMeetup = rows[0];
+        return sendResponse({
+          res,
+          status: 200,
+          payload: {
+            status: 200,
+            data: [updatedMeetup]
           }
         });
       }

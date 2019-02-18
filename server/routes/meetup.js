@@ -16,8 +16,8 @@ router
   .route('/meetups')
   .post(
     isAdmin,
-    validateRequest,
     multerUpload.single('image'),
+    validateRequest,
     meetupController.createNewMeetup
   )
   .get(meetupController.getAllMeetups);
@@ -27,6 +27,7 @@ router.get('/meetups/upcoming', meetupController.getUpcomingMeetups);
 router
   .route('/meetups/:meetupId')
   .get(checkParams, meetupController.getSingleMeetup)
+  .put(checkParams, isAdmin, meetupController.updateMeetup)
   .delete(checkParams, isAdmin, meetupController.deleteMeetup);
 
 router.route('/meetups/:meetupId/tags')

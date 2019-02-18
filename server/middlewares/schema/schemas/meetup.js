@@ -1,10 +1,10 @@
 import Joi from 'joi';
 
 const meetupDataSchema = Joi.object().keys({
-  topic: Joi.string().strict(),
-  happeningOn: Joi.date().min('now'),
-  location: Joi.string(),
-  tags: Joi.array(),
+  topic: Joi.string().strict().required(),
+  happeningOn: Joi.date().min('now').required(),
+  location: Joi.string().required(),
+  tags: Joi.any(),
   images: Joi.array()
 });
 
