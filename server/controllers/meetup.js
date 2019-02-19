@@ -80,7 +80,9 @@ export default {
         location, topic, happeningOn
       } = req.body;
 
-      const { tags = [] } = req.body;
+      let { tags = [] } = req.body;
+
+      tags = typeof tags === 'string' ? tags.split(',') : tags;
 
       const meetups = await Meetup.find({
         where: {

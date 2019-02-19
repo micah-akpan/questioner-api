@@ -37,6 +37,25 @@ describe.only('Meetups API', () => {
             done();
           });
       });
+
+      it('should create a meetup', (done) => {
+        agent
+          .post('/api/v1/meetups')
+          .set('Authorization', `Bearer ${adminTestToken}`)
+          .send({
+            topic: 'Meetup 1',
+            location: 'Meetup Location 2',
+            happeningOn: getFutureDate(),
+            tags: 'sample,meetup1'
+          })
+          .expect(201)
+          .end((err, res) => {
+            if (err) return done(err);
+            res.body.data.should.be.an('array');
+            res.body.status.should.equal(201);
+            done();
+          });
+      });
     });
 
     describe('handle invalid or missing data', () => {
@@ -462,7 +481,7 @@ describe.only('Meetups API', () => {
       });
     });
 
-    it.skip('should add images to a meetup', (done) => {
+    it('should add images to a meetup', (done) => {
       agent
         .post('/api/v1/meetups/1/images')
         .set('access-token', adminTestToken)
