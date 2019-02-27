@@ -128,8 +128,8 @@ export default {
   async getMeetupQuestions(req, res) {
     try {
       const result = await db.queryDb({
-        text: `SELECT * FROM Question WHERE meetup=$1
-               ORDER BY votes DESC`,
+        text: `SELECT id, title, body, createdOn as "createdOn", createdby as "user", meetup, votes FROM Question 
+        WHERE meetup=$1ORDER BY votes DESC`,
         values: [req.params.meetupId]
       });
 

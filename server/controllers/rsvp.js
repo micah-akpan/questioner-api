@@ -38,7 +38,12 @@ export default {
       const { userId } = req.decodedToken;
 
       if (meetup) {
-        const rsvps = await Rsvp.find({ where: { '"user"': userId } });
+        const rsvps = await Rsvp.find({
+          where: {
+            '"user"': userId,
+            meetup: meetupId
+          }
+        });
 
         if (rsvps.length) {
           return sendResponse({
