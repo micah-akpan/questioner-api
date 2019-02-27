@@ -52,7 +52,7 @@ class Question extends Model {
    */
   async findAndSortByVotes() {
     const questionsResult = await this._db.queryDb({
-      text: 'SELECT id, title, body, meetup, votes, createdby as "createdBy", createdon as "createdOn" FROM Question ORDER BY votes DESC'
+      text: 'SELECT id, title, body, meetup, votes, createdby as user, createdon as "createdOn" FROM Question ORDER BY votes DESC'
     });
 
     return questionsResult.rows;
