@@ -59,7 +59,7 @@ describe.only('Meetups API', () => {
     });
 
     describe('handle invalid or missing data', () => {
-      it.skip('should not create a meetup if required fields are missing', (done) => {
+      it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
@@ -88,7 +88,7 @@ describe.only('Meetups API', () => {
           });
       });
 
-      it.skip('should not create a meetup if required fields are missing', (done) => {
+      it('should not create a meetup if required fields are missing', (done) => {
         agent
           .post('/api/v1/meetups')
           .set('Authorization', `Bearer ${adminTestToken}`)
@@ -170,7 +170,6 @@ describe.only('Meetups API', () => {
     it('should return a list of meetups', (done) => {
       agent
         .get('/api/v1/meetups')
-        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -184,7 +183,6 @@ describe.only('Meetups API', () => {
       agent
         .get('/api/v1/meetups')
         .query({ searchTerm: 'meetup topic' })
-        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -199,7 +197,6 @@ describe.only('Meetups API', () => {
       agent
         .get('/api/v1/meetups')
         .query({ searchTerm: 'next location' })
-        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -214,7 +211,6 @@ describe.only('Meetups API', () => {
       agent
         .get('/api/v1/meetups')
         .query({ searchTerm: 'mtag1' })
-        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200)
         .end((err, res) => {
           if (err) return done(err);
@@ -363,7 +359,6 @@ describe.only('Meetups API', () => {
     it('should return a list of upcoming meetups', (done) => {
       agent
         .get('/api/v1/meetups/upcoming')
-        .set('Authorization', `Bearer ${userTestToken}`)
         .expect(200, done);
     });
 

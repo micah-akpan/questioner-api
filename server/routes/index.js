@@ -22,7 +22,7 @@ router.get('/api/v1/docs', (req, res) => res.redirect(
 ));
 
 router.use('/api/v1', trimBody, userRouter);
-router.use('/api/v1', trimBody, checkToken, meetupRouter);
+router.use('/api/v1', trimBody, meetupRouter);
 router.use('/api/v1', trimBody, checkToken, rsvpRouter);
 router.use('/api/v1', trimBody, checkToken, questionRouter);
 router.use('/api/v1', trimBody, checkToken, userAdminRouter);
