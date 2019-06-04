@@ -1,6 +1,7 @@
 import dbClient from '.';
 import tableQueries from '../models/schemas';
 import data from '../seed';
+import wLogger from '../helpers/index';
 
 /* eslint-disable */
 const migrate = async () => {
@@ -20,16 +21,26 @@ const migrate = async () => {
     for (let table of Object.keys(data)) {
       await dbClient.bulkInsert(table, data[table])
     }
+    return Promise.resolve('Data Migration was successful');
   } catch (ex) {
-    console.log(ex);
+    wLogger.log({
+      level: 'error',
+      message: ex.toString()
+    })
   }
 }
 
 migrate()
   .then(result => {
-    console.log(result)
+    wLogger.log({
+      level: 'info',
+      message: result
+    });
     process.exit(0);
   })
-  .catch((err) => {
-    console.log(err);
+  .catch((ex) => {
+    wLogger.log({
+      level: 'error',
+      message: ex.toString()
+    })
   });
