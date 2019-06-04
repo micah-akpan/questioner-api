@@ -1,5 +1,5 @@
 import tableQueries from '../models/schemas';
-
+import { getPreparedStatementValues, getPreparedStatementColumns } from '../helpers';
 /**
  * @class Db
  * @description DB specific operations
@@ -67,6 +67,38 @@ class Db {
     return this._dbClient.query(`DROP TABLE ${tableName}`);
   }
 
+  /* eslint-disable */
+  truncate(tableName) {
+    return this._dbClient.query(`DELETE FROM ${tableName}`);
+  }
+
+  /**
+   * @method bulkInsert
+   * @param {string} tableName 
+   * @param {array} data
+   * @returns {Promise} Resolves to a string 
+   * confirming the successful operation of the
+   * bulk insert operation
+   */
+  async bulkInsert(tableName, data) {
+    try {
+      const extractPropValues = (obj) => {
+        return Object.values(obj);
+      }
+      /* eslint-disable no-await-in-loop */
+      const columns = Object.keys(data[0]);
+      for (const datum of data) {
+        await this._dbClient.query({
+          text: `INSERT INTO ${tableName} ${getPreparedStatementColumns(columns)}
+                 VALUES ${getPreparedStatementValues(columns)}`,
+          values: extractPropValues(datum)
+        })
+      }
+      return Promise.resolve('Bulk insert completed...')
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
   /**
    * @method close
    * @returns {*} Closes database connection
