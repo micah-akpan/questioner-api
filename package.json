@@ -12,7 +12,9 @@
     "test": "NODE_ENV=test nyc --reporter=text mocha --require @babel/register --recursive ./server/test/**/** --timeout 60000 --exit",
     "clean:assets": "node server/utils/clean.js",
     "posttest": "yarn clean:assets",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "heroku-postbuild": "yarn migrate",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "migrate": "node --require @babel/register ./server/db/migrate.js"
   },
   "husky": {
     "hooks": {
