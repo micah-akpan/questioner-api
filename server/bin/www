@@ -1,12 +1,15 @@
+/* eslint-disable no-console */
 const http = require('http');
 const { app } = require('../app');
+const { useGraphqlPlayground, GRAPHQL_PATH } = require('../config');
 
 const server = http.createServer(app);
-const PORT = parseInt(process.env.PORT || 9999, 10);
+const PORT = parseInt(process.env.PORT || 4000, 10);
 
 app.set('port', PORT);
 
 server.listen(PORT, () => {
-  console.log(`Server listening to connections on http://localhost:${PORT}`);
+  console.log(`> GraphQL ready on ${GRAPHQL_PATH}`);
+  console.log(`> GraphQL Playground is ${useGraphqlPlayground ? '' : 'not '}enabled`);
+  console.log(`> Server listening to connections on http://localhost:${PORT}`);
 });
-

@@ -3,9 +3,14 @@ import logger from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import { config } from 'dotenv';
+import { ApolloServer } from 'apollo-server-express';
+import { graphqlUploadExpress } from 'graphql-upload';
 import wLogger from './helpers';
 import indexRouter from './routes';
 import db from './db';
+import { GRAPHQL_PATH, useGraphqlPlayground } from './config';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
 
 config();
 
@@ -43,6 +48,22 @@ app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+const apolloServer = new ApolloServer({
+  context({ req }) {
+    return {
+      db,
+      req,
+    };
+  },
+  typeDefs,
+  resolvers,
+  introspection: true,
+  playground: useGraphqlPlayground,
+  uploads: false // we will be using graphql-upload library for uploading multipart data
+});
+app.use(graphqlUploadExpress());
+apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH });
 
 app.use('/', indexRouter);
 

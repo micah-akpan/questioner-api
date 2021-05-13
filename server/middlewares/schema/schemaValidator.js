@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import Schemas from './schemas';
-import { isBoolean, hasProp, getProp } from '../../utils';
+import schemas from './schemas';
+import { isBoolean, hasProp } from '../../utils';
 
 export default (useJoiError = false) => {
   const _useJoiError = isBoolean(useJoiError) && useJoiError;
@@ -17,11 +17,11 @@ export default (useJoiError = false) => {
 
     const _supportedMethods = ['post', 'patch', 'put'];
 
-    if (_supportedMethods.includes(method) && hasProp(Schemas, path)) {
-      const _schema = getProp(Schemas, path);
+    if (_supportedMethods.includes(method) && hasProp(schemas, path)) {
+      const schema = schemas[path];
 
-      if (_schema) {
-        return Joi.validate(req.body, _schema, _validationOptions, (err, data) => {
+      if (schema) {
+        return Joi.validate(req.body, schema, _validationOptions, (err, data) => {
           if (err) {
             const JoiError = {
               status: 422,

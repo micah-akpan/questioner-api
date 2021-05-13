@@ -130,6 +130,7 @@ export default {
         }
       });
     } catch (e) {
+      console.log('e: ', e);
       return sendServerErrorResponse(res);
     }
   },

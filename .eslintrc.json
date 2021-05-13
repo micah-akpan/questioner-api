@@ -26,7 +26,7 @@
       }
     ],
     "require-jsdoc": [
-      "error",
+      "warn",
       {
         "require": {
           "FunctionDeclaration": true,
@@ -37,7 +37,9 @@
     ],
     "no-unused-expressions": 0,
     "no-restricted-syntax": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "no-restricted-imports": 2,
+    "import/prefer-default-export": 2
   },
 
   "plugins": ["prettier"]

@@ -4,7 +4,6 @@ import {
   getFutureDate,
   isBoolean,
   hasProp,
-  getProp,
   getIndex,
   createTestToken,
   arrayHasValues,
@@ -95,15 +94,6 @@ describe.only('Utils', () => {
         a: 1,
         b: 2
       }, 'c').should.equal(false);
-    });
-  });
-
-  describe('getProp()', () => {
-    it('should return props value for an object', () => {
-      getProp({
-        a: 1,
-        b: 2
-      }, 'a').should.equal(1);
     });
   });
 

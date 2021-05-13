@@ -38,7 +38,6 @@ class Db {
     } catch (e) {
       return Promise.reject(new Error('Table synchronization failed'));
     }
-
     return Promise.resolve('All tables synced to the database');
   }
 

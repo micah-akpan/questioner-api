@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import multerUpload from '../middlewares/uploads/upload';
+// import multerUpload from '../middlewares/uploads/upload';
 import meetupController from '../controllers/meetup';
 import {
   Auth, Misc, schemaValidator
 } from '../middlewares';
+import multerUpload from '../middlewares/uploads';
 
 const router = Router();
 
