@@ -1,9 +1,15 @@
 import uniqBy from 'lodash/uniqBy';
 import { GraphQLScalarType } from 'graphql';
 import { GraphQLUpload } from 'graphql-upload';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { Meetup } from '../models/all';
 import { search } from '../controllers/helpers/search';
 import uploadHelper from '../helpers/upload';
+import userHelpers from '../controllers/helpers/user';
+import DB from '../db';
+
+const userHelper = userHelpers(DB, jwt);
 
 export default {
   Query: {
@@ -78,6 +84,70 @@ export default {
     async createQuestion(_, { title, body, meetupId }, context) {
       console.log('req user: ', context.req.user);
       return null;
+    },
+
+    async login(_, { email, password }, { db }) {
+      const { rows } = await db.queryDb({
+        text: `SELECT id, firstname, lastname, 
+            email, password, othername, phonenumber as "phoneNumber",
+            registered, isadmin as "isAdmin", birthday, bio FROM "User" 
+            WHERE email=$1`,
+        values: [email]
+      });
+
+      if (rows.length) {
+        const user = rows[0];
+        const encryptedPassword = user.password;
+
+        const match = await bcrypt.compare(password, encryptedPassword);
+        if (match) {
+          const token = userHelper.obtainToken({
+            payload: {
+              admin: user.isAdmin,
+              userId: user.id
+            }
+          });
+          return {
+            token,
+            user
+          };
+        }
+        throw new Error('Invalid password');
+      }
+
+      throw new Error('No such user found');
+    },
+
+    async signup(_, {
+      firstname, lastname, password, email
+    }, { db }) {
+      const { rows } = await db.queryDb({
+        text: 'SELECT  * FROM "User" WHERE email=$1',
+        values: [email]
+      });
+
+      if (rows.length) {
+        throw new Error('User already exist');
+      }
+
+      const passwordHash = await bcrypt.hash(password, 10);
+      const { rows: [newUser] } = await db.queryDb({
+        text: `INSERT INTO "User" (email,password,firstname,lastname)
+              VALUES ($1, $2, $3, $4) RETURNING id, firstname, lastname, 
+              email, othername, phonenumber as "phoneNumber", registered,
+              isadmin as "isAdmin", birthday, bio`,
+        values: [email, passwordHash, firstname, lastname]
+      });
+      const token = userHelper.obtainToken({
+        payload: {
+          admin: newUser.isAdmin,
+          userId: newUser.id
+        }
+      });
+      return {
+        token,
+        newUser
+      };
     }
   },
 

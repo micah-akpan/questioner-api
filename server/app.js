@@ -5,17 +5,17 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
 import { graphqlUploadExpress } from 'graphql-upload';
+import fs from 'fs';
+import path from 'path';
 import wLogger from './helpers';
 import indexRouter from './routes';
 import db from './db';
 import { GRAPHQL_PATH, useGraphqlPlayground } from './config';
-import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 
 config();
 
 export const app = express();
-
 app.set('json spaces', 2);
 
 const env = app.get('env');
@@ -43,7 +43,6 @@ if (env === 'development') {
 }
 
 app.use(cors());
-
 app.use(helmet());
 
 app.use(express.urlencoded({ extended: false }));
@@ -56,9 +55,11 @@ const apolloServer = new ApolloServer({
       req,
     };
   },
-  typeDefs,
+  typeDefs: fs.readFileSync(
+    path.join(__dirname, 'graphql', 'schema.graphql'),
+    'utf-8'
+  ),
   resolvers,
-  introspection: true,
   playground: useGraphqlPlayground,
   uploads: false // we will be using graphql-upload library for uploading multipart data
 });
