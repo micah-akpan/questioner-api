@@ -114,8 +114,10 @@ export default {
       }
 
       let image = {};
+
       if (req.file) {
-        image = await uploadHelper.uploadImage(req.file.path);
+        image = req.file.secure_url;
+        // image = await uploadHelper.uploadImage(req.file.path);
       }
 
       const uniqueTags = uniq(tags);
@@ -123,14 +125,14 @@ export default {
       const { rows } = await db.queryDb({
         text: `INSERT INTO Meetup (topic, location, happeningOn, tags, images)
                VALUES ($1, $2, $3, $4, $5) RETURNING id, topic, location, happeningOn as "happeningOn", tags`,
-        values: [topic, location, happeningOn, uniqueTags, [image.secure_url] || []]
+        values: [topic, location, happeningOn, uniqueTags, [image] || []]
       });
 
       if (req.file) {
         await db.queryDb({
           text: `INSERT INTO Image (imageUrl, meetup)
                  VALUES ($1, $2)`,
-          values: [image.secure_url, rows[0].id]
+          values: [image, rows[0].id]
         });
       }
 

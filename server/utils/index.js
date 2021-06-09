@@ -55,14 +55,6 @@ export const isBoolean = value => typeof value === 'boolean' || value instanceof
 export const hasProp = (object, prop) => Object.prototype.hasOwnProperty.call(object, prop);
 
 /**
- * @func getProp
- * @param {*} object
- * @param {String} prop
- * @return {*} The value of object[prop]
- */
-export const getProp = (object, prop) => object[prop];
-
-/**
  * @func getIndex
  * @param {Array} array
  * @param {String} prop
@@ -198,7 +190,6 @@ export default {
   getFutureDate,
   isBoolean,
   hasProp,
-  getProp,
   getIndex,
   createTestToken,
   parseStr,
