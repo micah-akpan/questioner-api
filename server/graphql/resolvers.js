@@ -1,35 +1,42 @@
-import uniqBy from 'lodash/uniqBy';
+import bcrypt from 'bcrypt';
 import { GraphQLScalarType } from 'graphql';
 import { GraphQLUpload } from 'graphql-upload';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Meetup } from '../models/all';
-import { search } from '../controllers/helpers/search';
-import uploadHelper from '../helpers/upload';
 import userHelpers from '../controllers/helpers/user';
 import DB from '../db';
+import uploadHelper from '../helpers/upload';
+import { Meetup } from '../models/all';
 
 const userHelper = userHelpers(DB, jwt);
 
 export default {
   Query: {
-    async meetups(_, { searchTerm }, context) {
-      // this should support pagination
-      const { rows } = await context.db.queryDb({
-        text: 'SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup'
-      });
-      const term = searchTerm || 'All';
-      if (term === 'All') {
+    async meetups(_, {
+      filter, take = 5, orderBy = 'happeningOn'
+    }, { db }) {
+      if (!filter) {
+        const { rows } = await db.queryDb({
+          text: `
+                  SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup
+                  ORDER BY $1
+                  LIMIT $2;
+                `,
+          values: [orderBy, take]
+        });
         return rows;
       }
-      const byTopic = search(rows, 'topic', term);
-      const byLocation = search(rows, 'location', term);
-      const byTag = search(rows, 'tags', term);
 
-      const allMeetups = [...byTopic, ...byLocation, ...byTag];
-      const filteredMeetups = uniqBy(allMeetups, 'id');
+      const { rows } = await db.queryDb({
+        text: `
+              SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup 
+              WHERE topic=$1 OR location=$2
+              ORDER BY $3
+              LIMIT $4;
+            `,
+        values: [filter, filter, orderBy, take]
+      });
 
-      return filteredMeetups;
+      return rows;
     },
 
     async questions(_, _args, { db }) {
