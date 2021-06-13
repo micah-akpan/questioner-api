@@ -7,7 +7,7 @@ import Comment from './comments';
 import Image from './images';
 import Rsvp from './rsvps';
 
-// The order of the properties
+// The order of the tables
 // in this object matters for now
 // until a better alternative arrives
 export default {

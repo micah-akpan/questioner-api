@@ -4,14 +4,20 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
-import { graphqlUploadExpress } from 'graphql-upload';
+import { graphqlUploadExpress, GraphQLUpload } from 'graphql-upload';
 import fs from 'fs';
 import path from 'path';
 import wLogger from './helpers';
 import indexRouter from './routes';
 import db from './db';
 import { GRAPHQL_PATH, useGraphqlPlayground } from './config';
-import resolvers from './graphql/resolvers';
+import Query from './graphql/resolvers/Query';
+import Mutation from './graphql/resolvers/Mutation';
+
+
+const resolvers = {
+  Query, Mutation, Date, Upload: GraphQLUpload
+};
 
 config();
 
