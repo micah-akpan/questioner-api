@@ -18,7 +18,7 @@ export default {
         const { rows } = await db.queryDb({
           text: `
                   SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup
-                  ORDER BY $1
+                  ORDER BY $1 DESC
                   LIMIT $2;
                 `,
           values: [orderBy, take]
@@ -29,11 +29,11 @@ export default {
       const { rows } = await db.queryDb({
         text: `
               SELECT id, topic, location, happeningOn as "happeningOn", tags FROM Meetup 
-              WHERE topic=$1 OR location=$2
-              ORDER BY $3
+              WHERE LOWER(topic) LIKE LOWER($1) OR LOWER(location) LIKE LOWER($2)
+              ORDER BY $3 DESC
               LIMIT $4;
             `,
-        values: [filter, filter, orderBy, take]
+        values: [`%${filter}%`, `%${filter}%`, orderBy, take]
       });
 
       return rows;
