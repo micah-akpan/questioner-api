@@ -1,5 +1,10 @@
 type Query {
-  meetups (searchTerm: String): [Meetup]
+  meetups (
+    filter: String
+    take: Int
+    orderBy: String
+  ): [Meetup]
+
   meetup(id: Int!): Meetup!
   upcomingMeetups: [Meetup]!
 
@@ -89,4 +94,15 @@ type FileData {
   filename: String!
   mimetype: String!
   path: String
+}
+
+input MeetupOrder {
+  topic: Sort
+  happeningOn: Sort
+  createdOn: Sort
+}
+
+enum Sort {
+  asc
+  desc
 }
