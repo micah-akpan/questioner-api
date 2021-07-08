@@ -16,8 +16,7 @@ type Query {
 }
 
 type Mutation {
-  createMeetup(topic: String!, location: String!, happeningOn: Float, imageUrl: String!): Meetup!
-  uploadMeetupImage(avatar: Upload!, topic: String): FileData
+  createMeetup(topic: String, location: String, happeningOn: Float, image: Upload!): Meetup
   createQuestion(title: String!, body: String!, meetupId: Int!): Question
 
   login(email: String!, password: String!): AuthPayload
@@ -30,9 +29,9 @@ type AuthPayload {
 }
 
 type Meetup {
-  id: Int!
-  topic: String!
-  location: String!
+  id: Int
+  topic: String
+  location: String
 
   happeningOn: Date
   createdOn: Date

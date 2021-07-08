@@ -4,14 +4,22 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { ApolloServer } from 'apollo-server-express';
-import { graphqlUploadExpress } from 'graphql-upload';
+import { graphqlUploadExpress, GraphQLUpload } from 'graphql-upload';
 import fs from 'fs';
 import path from 'path';
 import wLogger from './helpers';
 import indexRouter from './routes';
 import db from './db';
 import { GRAPHQL_PATH, useGraphqlPlayground } from './config';
-import resolvers from './graphql/resolvers';
+import Query from './graphql/resolvers/Query';
+import Mutation from './graphql/resolvers/Mutation';
+import MeetupService from './services/MeetupService';
+import QuestionService from './services/QuestionService';
+
+
+const resolvers = {
+  Query, Mutation, Date, Upload: GraphQLUpload
+};
 
 config();
 
@@ -48,11 +56,16 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const meetupService = new MeetupService(db);
+const questionService = new QuestionService(db);
+
 const apolloServer = new ApolloServer({
   context({ req }) {
     return {
       db,
       req,
+      meetupService,
+      questionService
     };
   },
   typeDefs: fs.readFileSync(
