@@ -12,7 +12,7 @@ const userHelper = userHelpers(DB, jwt);
 export default {
   async createMeetup(_, {
     topic, location, happeningOn, image,
-  }, context) {
+  }, { meetupService }) {
     const when = new Date(happeningOn);
     // TODO: Set the constraints for no duplicate location and happeningOn at the
     // model level
@@ -40,10 +40,8 @@ export default {
 
       const meetupImageUrl = `${BASE_S3_URI}/${S3_BUCKET_DIRECTORY}/${fileNameKey}`;
 
-      const { rows: [newMeetup] } = await context.db.queryDb({
-        text: `INSERT INTO Meetup (topic, location, happeningOn, images)
-                 VALUES ($1, $2, $3, $4) RETURNING id, topic, location, happeningOn`,
-        values: [topic, location, when, [meetupImageUrl]]
+      const newMeetup = await meetupService.createMeetup({
+        topic, place: location, date: when, image: meetupImageUrl
       });
       return newMeetup;
     } catch (err) {

@@ -9,4 +9,5 @@ export const APP_PORT = APP_DEV_PORT || 4000;
 export const GRAPHQL_PATH = '/graphql';
 export const GRAPHIQL_PATH = '/graphiql';
 export const useGraphqlPlayground = true;
-export const BASE_S3_URI = `https://${AWS_S3_BUCKET_NAME}.amazonaws.com`;
+
+export const BASE_S3_URI = `https://${AWS_S3_BUCKET_NAME}.s3.us-east-2.amazonaws.com`;

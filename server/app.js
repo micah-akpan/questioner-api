@@ -13,6 +13,8 @@ import db from './db';
 import { GRAPHQL_PATH, useGraphqlPlayground } from './config';
 import Query from './graphql/resolvers/Query';
 import Mutation from './graphql/resolvers/Mutation';
+import MeetupService from './services/MeetupService';
+import QuestionService from './services/QuestionService';
 
 
 const resolvers = {
@@ -54,11 +56,16 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const meetupService = new MeetupService(db);
+const questionService = new QuestionService(db);
+
 const apolloServer = new ApolloServer({
   context({ req }) {
     return {
       db,
       req,
+      meetupService,
+      questionService
     };
   },
   typeDefs: fs.readFileSync(
