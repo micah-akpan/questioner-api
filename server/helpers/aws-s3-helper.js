@@ -12,10 +12,10 @@ export const configClient = () => {
 };
 
 export const getUploadedStream = stream => new Promise((resolve, reject) => {
-  let data = Buffer.from([]);
+  const data = [];
   stream.on('data', (chunk) => {
-    data += chunk;
+    data.push(chunk);
   });
-  stream.on('end', () => resolve(data));
+  stream.on('end', () => resolve(Buffer.concat(data)));
   stream.on('error', error => reject(error));
 });

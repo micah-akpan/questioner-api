@@ -1,5 +1,6 @@
 class QuestionService {
   #db = null
+
   constructor(database) {
     this.db = database;
   }
